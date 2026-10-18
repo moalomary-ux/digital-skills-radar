@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-dga-bg font-sans text-dga-ink antialiased;
+  }
+  ::selection {
+    background: rgba(27, 131, 84, 0.22);
+  }
+}
+
+@layer components {
+  /* DGA card — white, 16px radius, hairline border, measured shadow */
+  .glass {
+    @apply rounded-card border border-dga-line bg-white shadow-card;
+  }
+  .glass-strong {
+    @apply rounded-card border border-dga-line bg-white shadow-card-lg;
+  }
+  /* green headline accent */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #167248, #1b8354 55%, #0e9f6e);
+  }
+  .gradient-amber {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #dba102, #b98a02);
+  }
+  /* DGA button — 4px radius */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn bg-dga-green px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-dga-green-dark;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn border border-dga-line bg-white px-5 py-2.5 font-medium text-dga-black transition-all duration-200 hover:border-dga-green hover:text-dga-green-dark;
+  }
+  /* DGA pill tag — 50px radius, 12px */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-pill border border-dga-line bg-white px-2.5 py-0.5 text-tag font-medium text-dga-muted;
+  }
+  .chip-info {
+    @apply inline-flex items-center gap-1.5 rounded-pill border border-dga-tag-info-border bg-dga-tag-info-bg px-2.5 py-0.5 text-tag font-medium text-dga-tag-info-text;
+  }
+  .chip-ok {
+    @apply inline-flex items-center gap-1.5 rounded-pill border border-transparent bg-dga-tag-ok-bg px-2.5 py-0.5 text-tag font-medium text-dga-tag-ok-text;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-dga-green-dark;
+  }
+}
+
+/* Radar SVG draw-in */
+.radar-poly {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.radar-animate {
+  animation: radarGrow 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.radar-animate-late {
+  animation: radarGrow 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+/* Dot-constellation motif (hero/section edges) */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+.dot-grid-green {
+  background-image: radial-gradient(rgba(27, 131, 84, 0.14) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+/* Saudi geometric band (diamond/triangle strip) on green feature panels */
+.saudi-band {
+  height: 14px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(219, 161, 2, 0.85) 0 6px,
+    transparent 6px 14px,
+    rgba(255, 255, 255, 0.5) 14px 18px,
+    transparent 18px 28px
+  );
+}
+
+a {
+  @apply text-dga-green-dark underline-offset-4 hover:underline;
+}
+
+/* Print: clean report output */
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .glass,
+  .glass-strong {
+    box-shadow: none !important;
+  }
+  .gradient-text,
+  .gradient-amber {
+    background: none !important;
+    color: #167248 !important;
+    -webkit-text-fill-color: #167248;
+  }
+}
