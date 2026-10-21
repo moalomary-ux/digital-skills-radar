@@ -1,7 +1,6 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "leader": "Claude Fable 5.1 (session cf769935)",
   "state": "PHASE-1 multi-model review running",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
@@ -11,9 +10,23 @@
     "routes": "gpt-5.5 no longer supported on this Codex login (400); OpenRouter key 401 'User not found'; astra OK; sol-personal launched; kimi launched; deepseek v4 pro = reasoning model, 16k output cap -> split calls; minimax launched"
   },
   "decisions": [
-    {"id": "D1", "date": "2026-10-21", "text": "Working folder /Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/repo (git clone of origin) seeded with the handover v8 tree; reviews in ../reviews", "status": "applied"},
-    {"id": "D2", "date": "2026-10-21", "text": "Hosting: GitHub Pages with custom domain omary.me (apex) — DNS A records -> GitHub Pages IPs, www CNAME -> moalomary-ux.github.io; VPS1 self-hosting kept as documented alternative (would require changing DEEMA's gateway)", "status": "proposed, apply at deploy time"}
+    {
+      "id": "D1",
+      "date": "2026-10-21",
+      "text": "Working folder /Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/repo (git clone of origin) seeded with the handover v8 tree; reviews in ../reviews",
+      "status": "applied"
+    },
+    {
+      "id": "D2",
+      "date": "2026-10-21",
+      "text": "Hosting: GitHub Pages with custom domain omary.me (apex) — DNS A records -> GitHub Pages IPs, www CNAME -> moalomary-ux.github.io; VPS1 self-hosting kept as documented alternative (would require changing DEEMA's gateway)",
+      "status": "proposed, apply at deploy time"
+    }
   ],
-  "outputs": {"reviews_dir": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/reviews"},
-  "next_step": "Synthesize reviews -> DECISION.md + PLAN.md (work packets) -> build via omary.py / builders -> independent review + visual QA -> deploy + DNS -> report"
+  "outputs": {
+    "reviews_dir": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/reviews"
+  },
+  "next_step": "Synthesize reviews -> DECISION.md + PLAN.md (work packets) -> build via omary.py / builders -> independent review + visual QA -> deploy + DNS -> report",
+  "leader_session_note": "Claude Fable 5.1 (session cf769935)",
+  "leader": "fable"
 }
