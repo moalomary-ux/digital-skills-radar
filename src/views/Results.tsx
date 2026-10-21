@@ -1,102 +1,147 @@
-import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useApp } from '../store'
+import type { ResultRecord } from '../store'
 import { domains } from '../data/domains'
-import { resolveRoleName, resolveTargets } from '../data/roleLibrary'
-import { levelForScore, stageForScore } from '../data/levels'
-import { horizonMeta, techClusterById, techsForDomain } from '../data/technologies'
-import { careers, categoryById, signalMeta, skillVocab } from '../data/careers'
-import { questionsForDomain } from '../data/learning'
+import type { Domain, L } from '../data/types'
+import { libraryRoleById, LIB_PREFIX, resolveRoleName } from '../data/roleLibrary'
+import { levelForScore, levelForTarget, scaleOptions } from '../data/levels'
+import { statementsByDomain } from '../data/statements'
+import { scenarioFor } from '../data/scenarios'
 import { trackById } from '../data/tracks'
-import { pathwayForDomain } from '../data/pathways'
-import type { TrackId } from '../data/tracks'
+import {
+  agreementLabel,
+  assessDomains,
+  isCategoryId,
+  MIN_KNOWLEDGE_ATTEMPTS,
+  priorities as computePriorities,
+  reasonLabel,
+  summaryLine,
+  targetsForRecord,
+} from '../lib/priorities'
+import type { Agreement, DomainEvidence, Priority, Reason } from '../lib/priorities'
+import { encodeResult, formatCode } from '../lib/resultCode'
+import { downloadText, formatLongDate } from '../lib/ics'
 import RadarChart from '../components/RadarChart'
 import Disclaimer from '../components/Disclaimer'
-import type { L } from '../data/types'
 import Icon from '../components/Icon'
 
-type Agreement = 'consistent' | 'self_higher' | 'quiz_higher'
+/* ------------------------------------------------------------------ helpers */
 
-/**
- * Agreement between self-reported level and knowledge-check correctness
- * (expert-review P0-1: the indicator must compare the two, not count
- * correct answers alone). Normalized self-report (score/4) is compared
- * with quiz performance (correct/3); a gap > 0.2 is flagged in both
- * directions — over- AND under-estimation.
- */
-function agreementMeta(a: Agreement) {
-  return {
-    consistent: { ar: 'متسق', en: 'Consistent', color: '#1B8354' },
-    self_higher: { ar: 'تقديرك أعلى من التحقق', en: 'Self-rating above quiz', color: '#8A6A00' },
-    quiz_higher: { ar: 'التحقق أعلى من تقديرك', en: 'Quiz above self-rating', color: '#1849A9' },
-  }[a]
+function Num({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return (
+    <bdi dir="ltr" className={`tabular-nums ${className}`}>
+      {children}
+    </bdi>
+  )
 }
 
-function computeAgreement(selfScore: number, correct: number, total: number): Agreement {
-  const diff = selfScore / 4 - correct / total
-  if (diff > 0.2) return 'self_higher'
-  if (diff < -0.2) return 'quiz_higher'
-  return 'consistent'
+/** Signed delta with a real minus sign, always rendered left-to-right («+0.4», «−0.2»). */
+function Signed({ value }: { value: number }) {
+  const v = Math.round(value * 10) / 10
+  const text = v > 0 ? `+${v.toFixed(1)}` : v < 0 ? `−${Math.abs(v).toFixed(1)}` : '0.0'
+  return <Num className={v > 0 ? 'text-dga-green-dark' : v < 0 ? 'text-rose-700' : 'text-dga-muted'}>{text}</Num>
 }
+
+const reasonStyle: Record<Reason, string> = {
+  both_below_target: 'bg-[#FEE4E2] text-[#B42318]',
+  self_below_target: 'bg-dga-tag-info-bg text-dga-tag-info-text',
+  judgment_below_self: 'bg-[#FEF3D8] text-[#8A6A00]',
+  inflated: 'bg-[#FEF3D8] text-[#8A6A00]',
+  maintain: 'bg-dga-tag-ok-bg text-dga-tag-ok-text',
+}
+
+const agreementStyle: Record<Agreement, string> = {
+  consistent: 'text-dga-green-dark',
+  self_higher: 'text-[#8A6A00]',
+  check_higher: 'text-dga-tag-info-text',
+}
+
+/** Knowledge check in plain words: "x correct of y attempted", or why it is not judged. */
+export function KnowledgeText({ e }: { e: Pick<DomainEvidence, 'knowledge' | 'agreement'> }) {
+  const { t } = useApp()
+  const k = e.knowledge
+  if (!k) return <span className="text-dga-muted">{t({ ar: 'لم تُجب عن أسئلته', en: 'Not attempted' })}</span>
+  if (k.attempted === null) {
+    return (
+      <span>
+        <Num>{k.correct}</Num> {t({ ar: 'صحيحة (عدد المحاولات غير محفوظ)', en: 'correct (attempts not recorded)' })}
+      </span>
+    )
+  }
+  return (
+    <span>
+      <Num>{k.correct}</Num> {t({ ar: 'صحيحة من', en: 'correct of' })} <Num>{k.attempted}</Num>
+      {k.attempted < MIN_KNOWLEDGE_ATTEMPTS && <span className="ms-1 text-dga-muted">· {t({ ar: 'لم يُستكمل التحقق', en: 'check incomplete' })}</span>}
+    </span>
+  )
+}
+
+/** Category name, precise role (if any) — never a person's name. */
+export function roleLine(rec: ResultRecord): { category: L | null; role: L | null } {
+  const category = isCategoryId(rec.trackId) ? trackById(rec.trackId)!.name : null
+  const lib = rec.roleId.startsWith(LIB_PREFIX) ? libraryRoleById(rec.roleId.slice(LIB_PREFIX.length)) : undefined
+  return { category, role: lib ? lib.name : category ? null : resolveRoleName(rec.roleId) }
+}
+
+/* -------------------------------------------------------------- radar layer CSS */
+
+// RadarChart (not owned by this view) has no layer props for self/target; its polygons are
+// hidden by attribute selectors. Wave 3 should add `show*` props (see packet note).
+const layerCss = `
+.rl-hide-self svg polygon[fill="url(#gradCurrent)"], .rl-hide-self svg circle[fill="#0E9F6E"] { display: none; }
+.rl-hide-target svg polygon[fill="url(#gradTarget)"], .rl-hide-target svg circle[fill="#DBA102"] { display: none; }
+`
+
+// Geometry mirrored from RadarChart (viewBox 620, centre 310/316, radius 196).
+const RC = { size: 620, cx: 310, cy: 316, R: 196 }
+
+function KnowledgeMarkers({ evidence, lang }: { evidence: DomainEvidence[]; lang: 'ar' | 'en' }) {
+  const dirSign = lang === 'ar' ? -1 : 1
+  return (
+    <svg viewBox={`0 0 ${RC.size} ${RC.size}`} className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
+      {evidence.map((e, i) => {
+        const k = e.knowledge
+        if (!k || k.attempted === null || k.attempted < MIN_KNOWLEDGE_ATTEMPTS) return null
+        const angle = ((-90 + dirSign * i * (360 / evidence.length)) * Math.PI) / 180
+        const r = (k.correct / k.attempted) * RC.R
+        const x = RC.cx + r * Math.cos(angle)
+        const y = RC.cy + r * Math.sin(angle)
+        return <rect key={e.domainId} x={x - 6} y={y - 6} width="12" height="12" transform={`rotate(45 ${x} ${y})`} fill="#212539" stroke="#fff" strokeWidth="2" />
+      })}
+    </svg>
+  )
+}
+
+/* ------------------------------------------------------------------ page */
+
+type LayerKey = 'self' | 'judgment' | 'knowledge' | 'target'
 
 export default function Results() {
-  const { t, lang, go, history, resetDraft, clearHistory, openTech, openCareer, openDomainAt } = useApp()
-
+  const { t, lang, go, history, resetDraft, clearHistory, setTrackId, setRoleId } = useApp()
   const latest = history[history.length - 1]
   const previous = history.length > 1 ? history[history.length - 2] : null
+  const [selected, setSelected] = useState<string | null>(null)
+  const [layers, setLayers] = useState<Record<LayerKey, boolean>>({ self: true, judgment: true, knowledge: true, target: true })
+  const [compare, setCompare] = useState(1) // 0 = previous result, 1 = this result
+  const [copyState, setCopyState] = useState<'idle' | 'ok' | 'manual'>('idle')
+  const [exportNote, setExportNote] = useState('')
+  const codeInputRef = useRef<HTMLInputElement>(null)
+  const detailRef = useRef<HTMLDivElement>(null)
+  const animRef = useRef<number | null>(null)
 
   const data = useMemo(() => {
     if (!latest) return null
-    const targetsMap = resolveTargets(latest.roleId)
-    const values = domains.map((d) => latest.scores[d.id] ?? 0)
-    const targets = domains.map((d) => targetsMap[d.id] ?? 2)
-    const prev = previous ? domains.map((d) => previous.scores[d.id] ?? 0) : undefined
-    const gaps = domains
-      .map((d, i) => ({
-        domain: d,
-        score: values[i],
-        target: targets[i],
-        gap: targets[i] - values[i],
-        delta: prev ? values[i] - prev[i] : undefined,
-      }))
-      .sort((a, b) => b.gap - a.gap)
-    return { values, targets, prev, gaps, stage: stageForScore(latest.overall) }
+    const targets = targetsForRecord(latest)
+    const evidence = assessDomains(latest, targets, domains)
+    const prio = computePriorities(latest, targets, domains)
+    const prevScores = previous ? domains.map((d) => previous.scores[d.id] ?? 0) : undefined
+    return { targets, evidence, prio, prevScores, code: encodeResult(latest) }
   }, [latest, previous])
 
-  // innovation link: technologies tied to the 2 weakest domains
-  const innovationTechs = useMemo(() => {
-    if (!data) return []
-    const weakest = data.gaps.slice(0, 2).map((g) => g.domain.id)
-    const seen = new Set<string>()
-    return weakest
-      .flatMap((d) => techsForDomain(d))
-      .filter((x) => (seen.has(x.id) ? false : (seen.add(x.id), true)))
-      .sort((a, b) => b.trl - a.trl)
-      .slice(0, 5)
-  }, [data])
-
-  // careers matching the user's 2 strongest domains (growing/transforming first)
-  const matchingCareers = useMemo(() => {
-    if (!data) return []
-    const strongest = domains
-      .map((d, i) => ({ id: d.id, score: data.values[i] }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 2)
-      .map((x) => x.id)
-    const signalRank = { GROWING: 0, TRANSFORMING: 1, DECLINING: 2 } as const
-    return careers
-      .map((c) => ({
-        career: c,
-        overlap: c.keySkills.filter((k) => {
-          const dom = skillVocab[k]?.domainId
-          return dom !== null && strongest.includes(dom)
-        }).length,
-      }))
-      .filter((x) => x.overlap > 0)
-      .sort((a, b) => signalRank[a.career.signal] - signalRank[b.career.signal] || b.overlap - a.overlap)
-      .slice(0, 3)
-      .map((x) => x.career)
-  }, [data])
+  useEffect(() => () => {
+    if (animRef.current !== null) cancelAnimationFrame(animRef.current)
+  }, [])
 
   if (!latest || !data) {
     return (
@@ -104,10 +149,8 @@ export default function Results() {
         <div className="glass p-10">
           <Icon name="radar" className="mx-auto h-10 w-10 text-dga-green" />
           <h1 className="mt-4 text-2xl font-bold">{t({ ar: 'لا توجد نتائج بعد', en: 'No results yet' })}</h1>
-          <p className="mt-3 text-dga-muted">
-            {t({ ar: 'أكمل التقييم أولًا ليظهر رادارك هنا.', en: 'Complete the assessment first and your radar will appear here.' })}
-          </p>
-          <button onClick={() => go('wizard')} className="btn-primary mt-6">
+          <p className="mt-3 text-dga-muted">{t({ ar: 'أكمل التقييم أولًا لتظهر أولوياتك هنا.', en: 'Complete the assessment first and your priorities will appear here.' })}</p>
+          <button type="button" onClick={() => go('wizard')} className="btn-primary mt-6">
             {t({ ar: 'ابدأ التقييم', en: 'Start the assessment' })}
           </button>
         </div>
@@ -115,479 +158,494 @@ export default function Results() {
     )
   }
 
-  const dateStr = new Date(latest.date).toLocaleDateString(lang === 'ar' ? 'ar-SA-u-nu-latn' : 'en-GB', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-  const hasCalibration = latest.calibration && Object.keys(latest.calibration).length > 0
+  const { evidence, prio, prevScores, code } = data
+  const { category, role } = roleLine(latest)
+  const dateStr = formatLongDate(new Date(latest.date), lang)
+  const selfValues = evidence.map((e) => e.selfScore)
+  const shownValues = prevScores ? selfValues.map((v, i) => prevScores[i] + (v - prevScores[i]) * compare) : selfValues
+  const judgmentValues = evidence.some((e) => e.judgment4 !== undefined) ? evidence.map((e) => e.judgment4 ?? 0) : undefined
+  const hasJudgmentGaps = evidence.some((e) => e.judgment4 === undefined)
+  const selectedEv = evidence.find((e) => e.domainId === selected) ?? null
+  const forward = lang === 'ar' ? '←' : '→'
 
-  // ── v6-B: four separations — self-report / judgment / knowledge / priority ──
-  const scenarioScores = latest.scenario ?? null
-  const judgmentValues = scenarioScores
-    ? domains.map((d) => (scenarioScores[d.id] !== undefined ? (scenarioScores[d.id] / 3) * 4 : 0))
-    : undefined
-
-  /**
-   * Development-priority rules (documented, rule-based, honest):
-   *  - self ≥ 2.5 while judgment < 2 → "تحقق من التضخيم" (self-report exceeds evidence)
-   *  - target − max(self, judgment) ≥ 1.5 with both weak (<2) → "أولوية قصوى"
-   *  - remaining gap ≥ 0.75 → "أولوية تطوير"; otherwise → "على المسار"
-   *  - no scenario evidence → "لم يُقَس بعد"
-   */
-  type Priority = { id: string; name: L; color: string; bg: string }
-  const priorityMeta: Record<string, Priority> = {
-    inflation: { id: 'inflation', name: { ar: 'تحقق من التضخيم', en: 'Check possible inflation' }, color: '#8A6A00', bg: '#FEF3D8' },
-    urgent: { id: 'urgent', name: { ar: 'أولوية قصوى', en: 'Top priority' }, color: '#B42318', bg: '#FEE4E2' },
-    develop: { id: 'develop', name: { ar: 'أولوية تطوير', en: 'Development priority' }, color: '#1849A9', bg: '#EFF8FF' },
-    ontrack: { id: 'ontrack', name: { ar: 'على المسار', en: 'On track' }, color: '#255C2B', bg: '#E2F5E5' },
-    unmeasured: { id: 'unmeasured', name: { ar: 'لم يُقَس بعد', en: 'Not measured yet' }, color: '#4D5761', bg: '#F2F4F7' },
+  const selectDomain = (id: string, focus = false) => {
+    setSelected(id)
+    if (focus) requestAnimationFrame(() => detailRef.current?.focus({ preventScroll: false }))
   }
-  const priorities = domains.map((d, i) => {
-    const self = data.values[i]
-    const scen = judgmentValues ? judgmentValues[i] : undefined
-    const target = data.targets[i]
-    let p: Priority
-    if (scen === undefined || !scenarioScores || scenarioScores[d.id] === undefined) p = priorityMeta.unmeasured
-    else if (self >= 2.5 && scen < 2) p = priorityMeta.inflation
-    else if (target - Math.max(self, scen) >= 1.5 && self < 2 && scen < 2) p = priorityMeta.urgent
-    else if (target - Math.max(self, scen) >= 0.75) p = priorityMeta.develop
-    else p = priorityMeta.ontrack
-    return { domain: d, self, scen, target, priority: p, gap: target - Math.max(self, scen ?? self) }
-  })
 
-  // headline sentence (the review's acceptance model): task + skill + starting evidence + first step
-  const rankedPriorities = priorities
-    .filter((p) => p.priority.id !== 'ontrack' && p.priority.id !== 'unmeasured')
-    .sort((a, b) => b.gap - a.gap)
-  const headlineDomain = rankedPriorities[0]?.domain ?? null
-  const headlineBehavior = headlineDomain
-    ? (() => {
-        const pw = pathwayForDomain(headlineDomain.id)
-        const self = data.values[domains.findIndex((d) => d.id === headlineDomain.id)]
-        const from = Math.max(1, Math.min(3, Math.round(self)))
-        const tr = pw.transitions.find((x) => x.from === from) ?? pw.transitions[pw.transitions.length - 1]
-        return tr.behaviors[0]
-      })()
-    : null
+  const playCompare = () => {
+    if (!prevScores) return
+    if (animRef.current !== null) cancelAnimationFrame(animRef.current)
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      setCompare(compare < 1 ? 1 : 0)
+      return
+    }
+    const from = compare >= 1 ? 0 : compare
+    const startAt = performance.now()
+    const dur = 1200
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - startAt) / dur)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setCompare(from + (1 - from) * eased)
+      if (p < 1) animRef.current = requestAnimationFrame(tick)
+      else animRef.current = null
+    }
+    setCompare(from)
+    animRef.current = requestAnimationFrame(tick)
+  }
+
+  const copyCode = async () => {
+    const text = formatCode(code)
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('no clipboard')
+      await navigator.clipboard.writeText(text)
+      setCopyState('ok')
+    } catch {
+      setCopyState('manual')
+      codeInputRef.current?.focus()
+      codeInputRef.current?.select()
+    }
+  }
+
+  const exportJson = () => {
+    const payload = { format: 'digital-skills-radar/result', schema: latest.v ?? 1, exportedAt: new Date().toISOString(), result: latest }
+    const ok = downloadText(`skills-radar-${latest.date.slice(0, 10)}.json`, JSON.stringify(payload, null, 2), 'application/json')
+    setExportNote(ok ? t({ ar: 'نُزّل ملف JSON بنتيجتك.', en: 'Your result was downloaded as JSON.' }) : t({ ar: 'تعذّر التنزيل في هذا المتصفح.', en: 'Download is not available in this browser.' }))
+  }
+
+  const retake = () => {
+    resetDraft()
+    if (isCategoryId(latest.trackId)) setTrackId(latest.trackId)
+    if (latest.roleId.startsWith(LIB_PREFIX)) setRoleId(latest.roleId)
+    go('wizard')
+  }
+
+  const layerButtons: { key: LayerKey; label: L; swatch: ReactNode; available: boolean }[] = [
+    { key: 'self', label: { ar: 'تقديري الذاتي', en: 'My self-rating' }, swatch: <span className="h-2.5 w-2.5 rounded-full bg-dga-green" />, available: true },
+    { key: 'judgment', label: { ar: 'مواقف الحكم', en: 'Judgment scenarios' }, swatch: <span className="h-0 w-4 border-t-2 border-dashed border-[#1849A9]" />, available: !!judgmentValues },
+    { key: 'knowledge', label: { ar: 'التحقق المعرفي', en: 'Knowledge check' }, swatch: <span className="h-2.5 w-2.5 rotate-45 bg-dga-ink" />, available: evidence.some((e) => e.knowledge && e.knowledge.attempted !== null && e.knowledge.attempted >= MIN_KNOWLEDGE_ATTEMPTS) },
+    { key: 'target', label: { ar: 'المستهدف', en: 'Target' }, swatch: <span className="h-2.5 w-2.5 rounded-full bg-dga-amber" />, available: true },
+  ]
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+      <style>{layerCss}</style>
+
       {/* header */}
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="eyebrow">{t({ ar: 'نتيجتك', en: 'Your result' })}</p>
-          <h1 className="mt-2 text-3xl font-bold">{t({ ar: 'رادار مهاراتك الرقمية', en: 'Your digital skills radar' })}</h1>
+          <h1 className="mt-2 text-3xl font-bold">{t({ ar: 'أولويات تطويرك المقترحة', en: 'Your suggested development priorities' })}</h1>
           <p className="mt-2 text-sm text-dga-muted">
-            {t(resolveRoleName(latest.roleId))} · {dateStr}
+            {category && <>{t({ ar: 'فئة الدور: ', en: 'Role category: ' })}{t(category)}</>}
+            {role && <>{category ? ' · ' : ''}{t({ ar: 'الدور: ', en: 'Role: ' })}{t(role)}</>}
+            {' · '}
+            {dateStr}
           </p>
-          {latest.trackId && trackById(latest.trackId as TrackId) && (
-            <p className="mt-1.5 flex items-center gap-2 text-xs">
-              <span className="chip-info">
-                {t({ ar: 'المسار: ', en: 'Track: ' })}
-                {t(trackById(latest.trackId as TrackId)!.name)}
-              </span>
-              <span className="text-dga-muted">{t(trackById(latest.trackId as TrackId)!.proves)}</span>
-            </p>
+        </div>
+      </div>
+
+      <Disclaimer />
+
+      {/* headline from the engine */}
+      <p className="mt-5 rounded-card border-s-4 border-dga-green bg-white p-5 text-base font-semibold leading-loose text-dga-ink shadow-card" data-testid="summary-line">
+        {summaryLine(prio, lang)}
+      </p>
+
+      {/* the 3 priorities */}
+      <section className="mt-6" aria-labelledby="prio-h">
+        <h2 id="prio-h" className="text-xl font-bold">{t({ ar: 'أولوياتك الثلاث وسبب كل منها', en: 'Your three priorities and why' })}</h2>
+        <ol className="mt-4 grid gap-4 lg:grid-cols-3" data-testid="priority-list">
+          {prio.map((p) => (
+            <PriorityCard key={p.domainId} p={p} ev={evidence.find((e) => e.domainId === p.domainId)!} onDetails={() => selectDomain(p.domainId, true)} />
+          ))}
+        </ol>
+      </section>
+
+      {/* actions */}
+      <div className="no-print mt-6 flex flex-wrap gap-3">
+        <button type="button" onClick={() => go('report')} className="btn-primary px-5 py-2.5 text-sm">
+          {t({ ar: 'ورقة حوار التطوير', en: 'Development conversation sheet' })}
+        </button>
+        <button type="button" onClick={() => go('pathways')} className="btn-primary px-5 py-2.5 text-sm">
+          {t({ ar: 'خطتي', en: 'My plan' })}
+          <span aria-hidden>{forward}</span>
+        </button>
+        <button type="button" onClick={copyCode} className="btn-ghost px-5 py-2.5 text-sm">
+          {t({ ar: 'نسخ رمز النتيجة', en: 'Copy result code' })}
+        </button>
+        <button type="button" onClick={exportJson} className="btn-ghost px-5 py-2.5 text-sm">
+          {t({ ar: 'تصدير JSON', en: 'Export JSON' })}
+        </button>
+        <button type="button" onClick={retake} className="btn-ghost px-5 py-2.5 text-sm">
+          {t({ ar: 'إعادة التقييم', en: 'Retake the assessment' })}
+        </button>
+      </div>
+      <p className="mt-2 min-h-[1.25rem] text-xs text-dga-muted" role="status" aria-live="polite">
+        {exportNote}
+      </p>
+
+      {/* interactive radar + domain levels + detail */}
+      <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" aria-labelledby="radar-h">
+        <div className="glass-strong p-4 sm:p-6">
+          <h2 id="radar-h" className="text-lg font-bold">{t({ ar: 'رادارك: طبقات الأدلة', en: 'Your radar: evidence layers' })}</h2>
+          <div className="no-print mt-3 flex flex-wrap gap-2" role="group" aria-label={t({ ar: 'إظهار الطبقات وإخفاؤها', en: 'Show or hide layers' })}>
+            {layerButtons.map((b) => (
+              <button
+                key={b.key}
+                type="button"
+                aria-pressed={layers[b.key] && b.available}
+                disabled={!b.available}
+                onClick={() => setLayers((l) => ({ ...l, [b.key]: !l[b.key] }))}
+                className={`inline-flex items-center gap-2 rounded-pill border px-3 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                  layers[b.key] && b.available ? 'border-dga-green bg-dga-green/10 font-semibold text-dga-green-dark' : 'border-dga-line bg-white text-dga-muted'
+                }`}
+              >
+                <span className="inline-flex w-4 justify-center" aria-hidden>{b.swatch}</span>
+                {t(b.label)}
+              </button>
+            ))}
+          </div>
+
+          <div className={`mx-auto mt-2 max-w-[560px] px-6 [&_svg]:overflow-visible ${layers.self ? '' : 'rl-hide-self'} ${layers.target ? '' : 'rl-hide-target'}`}>
+            <div className="relative">
+            <RadarChart
+              labels={domains.map((d) => d.shortName)}
+              values={shownValues}
+              targets={evidence.map((e) => e.target)}
+              previous={prevScores}
+              judgment={layers.judgment ? judgmentValues : undefined}
+              lang={lang}
+              interactive
+              onAxisClick={(i) => selectDomain(domains[i].id, true)}
+              onHoverLabel={(i) => {
+                if (i !== null) setSelected(domains[i].id)
+              }}
+            />
+            {layers.knowledge && <KnowledgeMarkers evidence={evidence} lang={lang} />}
+            </div>
+          </div>
+          {hasJudgmentGaps && judgmentValues && layers.judgment && (
+            <p className="text-[11px] text-dga-muted">{t({ ar: 'المجالات بلا موقف حكم تظهر عند المركز في طبقة المواقف.', en: 'Domains without a scenario sit at the centre of the scenario layer.' })}</p>
+          )}
+
+          {prevScores && (
+            <div className="no-print mt-4 rounded-btn border border-dga-line bg-dga-bg p-3">
+              <label htmlFor="compare-range" className="text-xs font-bold text-dga-ink">
+                {t({ ar: 'قارن بتقييمك السابق', en: 'Compare with your previous assessment' })}
+                <span className="ms-2 font-normal text-dga-muted">({formatLongDate(new Date(previous!.date), lang)})</span>
+              </label>
+              <div className="mt-2 flex items-center gap-3">
+                <span className="text-[11px] text-dga-muted">{t({ ar: 'السابق', en: 'Previous' })}</span>
+                <input
+                  id="compare-range"
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={Math.round(compare * 100)}
+                  onChange={(e) => setCompare(Number(e.target.value) / 100)}
+                  aria-valuetext={compare >= 1 ? t({ ar: 'التقييم الحالي', en: 'Current assessment' }) : compare <= 0 ? t({ ar: 'التقييم السابق', en: 'Previous assessment' }) : `${Math.round(compare * 100)}%`}
+                  className="flex-1 accent-dga-green"
+                />
+                <span className="text-[11px] text-dga-muted">{t({ ar: 'الحالي', en: 'Current' })}</span>
+                <button type="button" onClick={playCompare} className="btn-ghost px-3 py-1 text-xs">
+                  {t({ ar: 'شغّل المقارنة', en: 'Play the comparison' })}
+                </button>
+              </div>
+            </div>
           )}
         </div>
-        <div className="no-print flex flex-wrap gap-3">
-          <button onClick={() => window.print()} className="btn-ghost px-5 py-2.5 text-sm">
-            {t({ ar: 'طباعة / حفظ PDF', en: 'Print / Save PDF' })}
-          </button>
-          <button
-            onClick={() => {
-              resetDraft()
-              go('wizard')
-            }}
-            className="btn-ghost px-5 py-2.5 text-sm"
-          >
-            {t({ ar: 'إعادة التقييم', en: 'Retake assessment' })}
-          </button>
-          <button
-            onClick={() => {
-              if (window.confirm(t({ ar: 'حذف كل النتائج المحفوظة؟', en: 'Delete all saved results?' }))) clearHistory()
-            }}
-            className="btn-ghost px-5 py-2.5 text-sm text-rose-600 hover:border-rose-400"
-          >
-            {t({ ar: 'مسح السجل', en: 'Clear history' })}
-          </button>
-        </div>
-      </div>
 
-      {/* honest-scope disclaimer before any result output */}
-      <Disclaimer compact={false} />
-
-      {/* v6-B headline: the review's acceptance sentence model */}
-      {headlineDomain && headlineBehavior && (
-        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="glass-strong mt-4 border-s-4 !border-s-dga-green p-6">
-          <p className="text-sm leading-loose text-dga-ink">
-            <span className="font-bold text-dga-green-dark">{t({ ar: 'خلاصتك العملية: ', en: 'Your actionable summary: ' })}</span>
-            {t({
-              ar: `مهمتك القابلة للتحسين الآن هي مهام «${headlineDomain.name.ar}»، والمهارة الأهم لها هي «${headlineDomain.shortName.ar}»، ودليل نقطة بدايتك أن تقديرك الذاتي ${(data.values[domains.findIndex((d) => d.id === headlineDomain.id)]).toFixed(1)} من 4 بينما فهمك الموقفي ${(judgmentValues ? judgmentValues[domains.findIndex((d) => d.id === headlineDomain.id)] : 0).toFixed(1)} من 4، وخطوتك الأولى: `,
-              en: `Your most improvable task area now is “${headlineDomain.name.en}”, its most important skill is “${headlineDomain.shortName.en}”, your starting evidence: self-estimate ${(data.values[domains.findIndex((d) => d.id === headlineDomain.id)]).toFixed(1)} of 4 vs situational judgment ${(judgmentValues ? judgmentValues[domains.findIndex((d) => d.id === headlineDomain.id)] : 0).toFixed(1)} of 4, and your first step: `,
-            })}
-            <span className="font-semibold">{t(headlineBehavior)}</span>
-          </p>
-        </motion.div>
-      )}
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-        {/* radar card */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="glass-strong p-4 sm:p-6">
-          <RadarChart
-            labels={domains.map((d) => d.shortName)}
-            values={data.values}
-            targets={data.targets}
-            previous={data.prev}
-            judgment={judgmentValues}
-            lang={lang}
-            interactive
-            animate
-            onAxisClick={(i) => openDomainAt(domains[i].id)}
-          />
-          <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-dga-muted">
-            {t({ ar: 'أ · تقديري لنفسي  +  ب · فهمي للمواقف', en: 'A · My self-estimate  +  B · My situational judgment' })}
-          </p>
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-dga-muted">
-            <span className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-dga-green" />
-              {t({ ar: 'مستواك الحالي (تقرير ذاتي)', en: 'Current level (self-report)' })}
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-dga-amber" />
-              {t({ ar: 'المستهدف لدورك', en: 'Role target' })}
-            </span>
-            {data.prev && (
-              <span className="flex items-center gap-2">
-                <span className="h-0.5 w-4 border-t-2 border-dashed border-slate-400" />
-                {t({ ar: 'التقييم السابق', en: 'Previous assessment' })}
-              </span>
-            )}
-            {judgmentValues && (
-              <span className="flex items-center gap-2">
-                <span className="h-0.5 w-4 border-t-2 border-dashed border-[#1849A9]" />
-                {t({ ar: 'فهمك الموقفي (سيناريوهات)', en: 'Situational judgment (scenarios)' })}
-              </span>
-            )}
-            <span className="text-dga-muted">{t({ ar: '· انقر اسم مجال للخريطة التفاعلية', en: '· click a domain name for the interactive map' })}</span>
-          </div>
-        </motion.div>
-
-        {/* stage + domain chips */}
-        <div className="space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="glass p-7 text-center"
-          >
-            <p className="text-xs font-semibold uppercase tracking-widest text-dga-muted">
-              {t({ ar: 'مرحلتك العامة', en: 'Your overall stage' })}
-            </p>
-            <p className="gradient-text mt-3 text-5xl font-black">{t(data.stage.name)}</p>
-            <p className="mt-2 text-sm text-dga-green">
-              {t({ ar: 'المتوسط العام: ', en: 'Overall average: ' })}
-              <bdi className="font-mono font-bold" dir="ltr">
-                {latest.overall.toFixed(1)}
-              </bdi>{' '}
-              {t({ ar: 'من', en: 'of' })}{' '}
-              <bdi className="font-mono font-bold" dir="ltr">
-                4.0
-              </bdi>
-            </p>
-            <p className="mt-1.5 text-[11px] text-dga-muted">
-              {t({ ar: 'تقدير ذاتي إرشادي — غير متحقق منه سيكومتريًا', en: 'Indicative self-estimate — not psychometrically validated' })}
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-dga-ink">{t(data.stage.description)}</p>
-            {previous && (
-              <p className={`mt-3 text-xs font-semibold ${latest.overall >= previous.overall ? 'text-dga-green-dark' : 'text-rose-600'}`}>
-                {latest.overall >= previous.overall ? '▲' : '▼'}{' '}
-                {t({
-                  ar: `${Math.abs(latest.overall - previous.overall).toFixed(1)} نقطة عن التقييم السابق`,
-                  en: `${Math.abs(latest.overall - previous.overall).toFixed(1)} pts vs previous assessment`,
-                })}
-              </p>
-            )}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass p-6"
-          >
-            <h2 className="mb-1 text-sm font-bold text-dga-ink">{t({ ar: 'ج · تحققي المعرفي — مستوياتك حسب المجال', en: 'C · My knowledge check — levels by domain' })}</h2>
-            <p className="mb-4 text-[11px] text-dga-muted">{t({ ar: 'الاتساق يقارن تقديرك الذاتي بإجابات التحقق في الاتجاهين.', en: 'Agreement compares your self-estimate with knowledge-check answers in both directions.' })}</p>
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              {domains.map((d, i) => {
-                const lvl = levelForScore(data.values[i])
-                const cal = latest.calibration?.[d.id]
-                const qTotal = questionsForDomain(d.id).length
-                const agree: Agreement | null = cal === undefined ? null : computeAgreement(data.values[i], cal, qTotal)
+        <div className="space-y-4">
+          <div className="glass p-5">
+            <h2 className="text-sm font-bold text-dga-ink">{t({ ar: 'مستوياتك في المجالات الثمانية', en: 'Your levels in the eight domains' })}</h2>
+            <p className="mt-1 text-[11px] text-dga-muted">{t({ ar: 'اختر مجالًا لترى تفاصيله.', en: 'Choose a domain to see its details.' })}</p>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2" data-testid="domain-levels">
+              {evidence.map((e, i) => {
+                const d = domains[i]
+                const on = selected === e.domainId
                 return (
-                  <div key={d.id} onClick={() => openDomainAt(d.id)} className="flex cursor-pointer items-center justify-between gap-2 rounded-xl border border-dga-line bg-dga-bg px-3.5 py-2.5 transition-colors hover:border-dga-green">
-                    <span className="flex items-center gap-2 text-xs font-medium text-dga-black">
-                      <Icon name={d.icon} className="h-4 w-4 text-dga-green" />
-                      {t(d.shortName)}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      {agree && (
-                        <span
-                          className="flex items-center gap-1 text-[10px]"
-                          style={{ color: agreementMeta(agree).color }}
-                          title={t(agreementMeta(agree))}
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full" style={{ background: agreementMeta(agree).color }} />
-                          {t(agreementMeta(agree))}
-                        </span>
-                      )}
-                      <span className="chip border-dga-amber/40 bg-dga-amber/10 text-[11px] text-dga-amber-tx">
-                        {t(lvl.name)} · {data.values[i].toFixed(1)}
+                  <li key={e.domainId}>
+                    <button
+                      type="button"
+                      aria-pressed={on}
+                      aria-controls="domain-detail"
+                      onClick={() => selectDomain(e.domainId, true)}
+                      className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2 text-start transition-colors ${
+                        on ? 'border-dga-green bg-dga-green/10' : 'border-dga-line bg-dga-bg hover:border-dga-green'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2 text-xs font-medium text-dga-black">
+                        <Icon name={d.icon} className="h-4 w-4 text-dga-green" />
+                        {t(d.shortName)}
                       </span>
-                    </span>
-                  </div>
+                      <span className="chip shrink-0 border-dga-amber/40 bg-dga-amber/10 text-[11px] text-dga-amber-tx">
+                        {t(levelForScore(e.selfScore).name)} · <Num>{e.selfScore.toFixed(1)}</Num>
+                      </span>
+                    </button>
+                  </li>
                 )
               })}
-            </div>
-            {hasCalibration && (
-              <p className="mt-4 rounded-lg bg-dga-bg p-3 text-[11.5px] leading-relaxed text-dga-muted">
+            </ul>
+          </div>
+
+          <div id="domain-detail" ref={detailRef} tabIndex={-1} aria-live="polite" className="glass p-5 outline-none focus-visible:ring-2 focus-visible:ring-dga-green">
+            {selectedEv ? (
+              <DomainDetail ev={selectedEv} domain={domains.find((d) => d.id === selectedEv.domainId)!} rec={latest} prev={previous} prio={prio.find((p) => p.domainId === selectedEv.domainId)} />
+            ) : (
+              <p className="text-sm text-dga-muted">
                 {t({
-                  ar: 'مؤشر الاتساق يقارن تقديرك الذاتي مع إجاباتك على أسئلة التحقق في الاتجاهين: «تقديرك أعلى» قد يعني تفاؤلًا ذاتيًا شائعًا، و«التحقق أعلى» قد يعني أنك تبخس قدرتك. أسئلة التحقق تقيس المعرفة التأسيسية فقط — لا تثبت المهارة ولا تنفيها.',
-                  en: 'The agreement indicator compares your self-rating with your knowledge-check answers in both directions: "self-rating above quiz" may reflect common self-assessment optimism, and "quiz above self-rating" may mean you undersell yourself. Knowledge checks cover foundational knowledge only — they neither prove nor disprove skill.',
+                  ar: 'اختر مجالًا من القائمة أو من اسمه على الرادار لترى: مستواك، وإجاباتك عن العبارات، ونتيجة موقف الحكم، والتحقق المعرفي.',
+                  en: 'Choose a domain from the list or its name on the radar to see your level, your statement answers, the scenario outcome and the knowledge check.',
                 })}
               </p>
             )}
-          </motion.div>
-        </div>
-      </div>
-
-      {/* gap analysis */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="mt-8"
-      >
-        <div className="mb-5 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">{t({ ar: 'بماذا تحتاج أن تركز؟', en: 'What should you focus on?' })}</h2>
-            <p className="mt-1 text-sm text-dga-muted">
-              {t({ ar: 'الفجوات مرتبة من الأكبر إلى الأصغر — الفجوة = المستهدف − الحالي.', en: 'Gaps sorted largest first — gap = target − current.' })}
-            </p>
           </div>
-          <button onClick={() => go('pathways')} className="no-print btn-primary px-5 py-2.5 text-sm">
-            {t({ ar: 'مسارات التطوير', en: 'Development pathways' })}
-            <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
-          </button>
         </div>
+      </section>
 
-        <div className="space-y-3">
-          {data.gaps.map((g, i) => {
-            const closed = g.gap <= 0
-            const pct = Math.max(0, Math.min(100, (g.gap / 4) * 100))
-            return (
-              <div key={g.domain.id} className="glass flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap">
-                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-bold ${closed ? 'bg-dga-green/10 text-dga-green-dark' : 'bg-dga-amber/15 text-dga-amber-tx'}`}>
-                  {closed ? '✓' : i + 1}
-                </span>
-                <div className="min-w-[180px] flex-1">
-                  <p className="text-sm font-semibold">{t(g.domain.name)}</p>
-                  <p className="text-xs text-dga-muted">
-                    {t({ ar: 'الحالي', en: 'Current' })} {g.score.toFixed(1)} · {t({ ar: 'المستهدف', en: 'Target' })} {g.target}
-                    {g.delta !== undefined && (
-                      <span className={g.delta >= 0 ? 'text-dga-green-dark' : 'text-rose-600'}>
-                        {' '}
-                        · {g.delta >= 0 ? '+' : ''}
-                        {g.delta.toFixed(1)}
-                      </span>
-                    )}
-                  </p>
-                </div>
-                <div className="w-full sm:w-64">
-                  <div className="h-2 overflow-hidden rounded-full bg-dga-bg">
-                    <div
-                      className={`h-full rounded-full ${closed ? 'bg-dga-green' : 'bg-gradient-to-r from-dga-green to-dga-green-ink'}`}
-                      style={{ width: closed ? '100%' : `${pct}%` }}
-                    />
-                  </div>
-                </div>
-                <span className={`w-20 text-end text-sm font-bold ${closed ? 'text-dga-green-dark' : 'text-dga-black'}`}>
-                  {closed ? t({ ar: 'مكتمل', en: 'Met' }) : `+${g.gap.toFixed(1)}`}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      </motion.section>
-
-      {/* v6-B panel د: development priority */}
-      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35 }} className="mt-10">
-        <h2 className="text-2xl font-bold">{t({ ar: 'د · أولويتي التطويرية', en: 'D · My development priority' })}</h2>
-        <p className="mt-1 max-w-2xl text-sm text-dga-muted">
+      {/* evidence layers side by side (text equivalent of the radar) */}
+      <section className="mt-8" aria-labelledby="layers-h">
+        <h2 id="layers-h" className="text-xl font-bold">{t({ ar: 'طبقات الأدلة جنبًا إلى جنب', en: 'Evidence layers side by side' })}</h2>
+        <p className="mt-1 max-w-3xl text-sm text-dga-muted">
+          {t({ ar: 'التقدير الذاتي على مقياس ', en: 'Self-rating on a scale of ' })}
+          <Num>0–4</Num>
+          {t({ ar: '، وموقف الحكم على مقياس ', en: ', the judgment scenario on ' })}
+          <Num>0–3</Num>
           {t({
-            ar: 'قاعدة معلنة: «تقدير مرتفع + فهم مواقف ضعيف» تُوسم كتضخيم محتمل؛ «فجوة كبيرة مع ضعف الدليلين» أولوية قصوى. القاعدة تحريرية موثقة في صفحة المنهجية.',
-            en: 'A declared rule: “high self-report + weak judgment” flags possible inflation; “large gap with both evidence layers weak” marks top priority. The rule is editorial and documented on the Methodology page.',
+            ar: '، والتحقق المعرفي عدد الإجابات الصحيحة مما أجبت عنه. لا يُحكم على الاتساق قبل ',
+            en: ', and the knowledge check as correct answers out of those attempted. Consistency is not judged before ',
+          })}
+          <Num>{MIN_KNOWLEDGE_ATTEMPTS}</Num>
+          {t({ ar: ' إجابات في المجال.', en: ' answers in a domain.' })}
+        </p>
+        <div className="mt-4 overflow-x-auto rounded-card border border-dga-line bg-white">
+          <table className="w-full min-w-[720px] text-start text-sm" data-testid="evidence-table">
+            <thead className="bg-dga-bg text-xs text-dga-muted">
+              <tr>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'المجال', en: 'Domain' })}</th>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'التقدير الذاتي', en: 'Self-rating' })}</th>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'موقف الحكم', en: 'Scenario' })}</th>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'التحقق المعرفي', en: 'Knowledge check' })}</th>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'الاتساق', en: 'Consistency' })}</th>
+                <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'المستهدف', en: 'Target' })}</th>
+                {prevScores && <th scope="col" className="px-3 py-2 text-start font-semibold">{t({ ar: 'التغيّر عن السابق', en: 'Change vs previous' })}</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {evidence.map((e, i) => (
+                <tr key={e.domainId} className="border-t border-dga-line">
+                  <th scope="row" className="px-3 py-2 text-start font-medium text-dga-black">{t(domains[i].shortName)}</th>
+                  <td className="px-3 py-2">
+                    <Num>{e.selfScore.toFixed(1)}</Num> <span className="text-dga-muted">· {t(levelForScore(e.selfScore).name)}</span>
+                  </td>
+                  <td className="px-3 py-2">
+                    {e.scenarioScore !== undefined ? (
+                      <>
+                        <Num>{e.scenarioScore}</Num> {t({ ar: 'من', en: 'of' })} <Num>3</Num>
+                      </>
+                    ) : (
+                      <span className="text-dga-muted">{t({ ar: 'لا موقف', en: 'No scenario' })}</span>
+                    )}
+                  </td>
+                  <td className="px-3 py-2"><KnowledgeText e={e} /></td>
+                  <td className="px-3 py-2">
+                    {e.agreement ? <span className={agreementStyle[e.agreement]}>{t(agreementLabel[e.agreement])}</span> : <span className="text-dga-muted">—</span>}
+                  </td>
+                  <td className="px-3 py-2">{t(levelForTarget(e.target).name)}</td>
+                  {prevScores && (
+                    <td className="px-3 py-2">
+                      <Signed value={e.selfScore - prevScores[i]} />
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* result code */}
+      <section className="mt-8 glass p-6" aria-labelledby="code-h">
+        <h2 id="code-h" className="text-lg font-bold">{t({ ar: 'رمز النتيجة', en: 'Result code' })}</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-dga-ink">
+          {t({
+            ar: 'يحتوي الرمز على: فئة دورك (لا دورك الدقيق)، ودرجات تقديرك الذاتي في المجالات الثمانية مقرّبة إلى نصف درجة، ونتيجة كل موقف حكم، وعلامة اتساق التحقق المعرفي، وشهر التقييم. لا يحتوي اسمك ولا جهتك ولا إجاباتك التفصيلية. مشاركته قرارك وحدك، ولا يُرسل إلى أي خادم.',
+            en: 'The code holds: your role category (not your precise role), your self-ratings in the eight domains rounded to half a point, each scenario outcome, the knowledge-check consistency flag, and the month of the assessment. It holds no name, no entity and no detailed answers. Sharing it is your choice alone, and it is never sent to any server.',
           })}
         </p>
-        <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-          {priorities.map((p) => (
-            <div key={p.domain.id} className="glass p-4">
-              <div className="flex items-center gap-2">
-                <Icon name={p.domain.icon} className="h-4 w-4 text-dga-green" />
-                <p className="flex-1 text-xs font-semibold text-dga-black">{t(p.domain.shortName)}</p>
-              </div>
-              <span className="mt-2.5 inline-block rounded-pill px-2.5 py-0.5 text-tag font-bold" style={{ background: p.priority.bg, color: p.priority.color }}>
-                {t(p.priority.name)}
-              </span>
-              <p className="mt-2 font-mono text-[10.5px] text-dga-muted" dir="ltr">
-                {p.self.toFixed(1)} / {p.scen !== undefined ? p.scen.toFixed(1) : '—'} / {p.target}
-              </p>
-              <p className="text-[9.5px] text-dga-muted">{t({ ar: 'ذاتي / موقف / مستهدف', en: 'self / judgment / target' })}</p>
-            </div>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* innovation link */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="mt-12"
-      >
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold">
-              {t({ ar: 'تقنيات ', en: 'Technologies ' })}
-              <span className="gradient-text">{t({ ar: 'تنتظر مهاراتك', en: 'waiting for your skills' })}</span>
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-dga-muted">
-              {t({
-                ar: 'هذه التقنيات من رادار التقنيات مرتبطة بأضعف مجالين لديك — كل خطوة في مسارك التعلّمي تقرّب جهتك من تبنيها.',
-                en: 'These tech-radar technologies are linked to your two weakest domains — every step in your learning pathway brings your organization closer to adopting them.',
-              })}
-            </p>
-          </div>
-          <button onClick={() => go('tech-radar')} className="no-print btn-ghost shrink-0 px-5 py-2.5 text-sm">
-            {t({ ar: 'رادار التقنيات الكامل', en: 'Full tech radar' })}
-            <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <label htmlFor="result-code" className="sr-only">{t({ ar: 'رمز النتيجة', en: 'Result code' })}</label>
+          <input
+            id="result-code"
+            ref={codeInputRef}
+            readOnly
+            dir="ltr"
+            value={formatCode(code)}
+            onFocus={(e) => e.currentTarget.select()}
+            className="w-full max-w-xs rounded-btn border border-dga-line bg-dga-bg px-3 py-2 font-mono text-sm tracking-wider text-dga-black sm:w-auto"
+            data-testid="result-code"
+          />
+          <button type="button" onClick={copyCode} className="btn-ghost no-print px-4 py-2 text-sm">
+            {t({ ar: 'نسخ رمز النتيجة', en: 'Copy result code' })}
           </button>
+          <span role="status" aria-live="polite" className="text-xs text-dga-green-dark">
+            {copyState === 'ok' && t({ ar: 'نُسخ الرمز.', en: 'Code copied.' })}
+            {copyState === 'manual' && t({ ar: 'حدّدنا الرمز؛ انسخه يدويًا.', en: 'The code is selected; copy it manually.' })}
+          </span>
         </div>
+      </section>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {innovationTechs.map((tech, i) => (
-            <motion.button
-              key={tech.id}
-              onClick={() => openTech(tech.id)}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.07 }}
-              className="glass group p-5 text-start transition-all duration-300 hover:border-dga-amber"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="chip text-[10px] text-dga-muted">{t(techClusterById(tech.clusterId).name)}</span>
-                <span className="font-mono text-xs font-bold text-dga-green">TRL {tech.trl}</span>
-              </div>
-              <h3 className="mt-3 font-bold leading-snug group-hover:text-dga-green">{t(tech.name)}</h3>
-              <div className="mt-3 flex items-center gap-2 text-[11px]">
-                <span
-                  className="chip"
-                  style={{ borderColor: `${horizonMeta[tech.horizon].color}55`, color: horizonMeta[tech.horizon].color }}
-                >
-                  {t(horizonMeta[tech.horizon].name)}
-                </span>
-                <span className="text-dga-muted">
-                  {tech.domainIds.map((d) => t(domains.find((x) => x.id === d)!.shortName)).join(' · ')}
-                </span>
-              </div>
-            </motion.button>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* P1-12: the journey's single prominent next step */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.35 }}
-        className="mt-12"
-      >
-        <div className="glass-strong overflow-hidden">
-          <div className="bg-dga-green p-6 text-center text-white sm:p-8">
-            <h2 className="text-2xl font-bold">{t({ ar: 'خطوتك التالية الوحيدة الآن', en: 'Your single next step now' })}</h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-white/85">
-              {t({
-                ar: 'النتيجة بلا خطة رقم جميل فقط — افتح مسارات التطوير وابدأ أسبوعك الأول اليوم.',
-                en: 'A result without a plan is just a nice number — open the development pathways and start week one today.',
-              })}
-            </p>
-            <button
-              onClick={() => go('pathways')}
-              className="mt-5 inline-flex items-center gap-2 rounded-btn bg-dga-amber px-8 py-3.5 text-base font-bold text-dga-black transition-colors hover:bg-[#c89302]"
-            >
-              {t({ ar: 'ابدأ خطتك لـ90 يومًا', en: 'Start your 90-day plan' })}
-              <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
-            </button>
-          </div>
-          <div className="saudi-band" aria-hidden />
-        </div>
-      </motion.section>
-
-      {/* careers matching the user's strongest domains */}
-      {matchingCareers.length > 0 && (
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-12"
+      <div className="no-print mt-8 flex justify-end">
+        <button
+          type="button"
+          onClick={() => {
+            if (window.confirm(t({ ar: 'حذف كل النتائج المحفوظة في هذا المتصفح؟', en: 'Delete all results saved in this browser?' }))) clearHistory()
+          }}
+          className="text-xs text-rose-700 underline-offset-4 hover:underline"
         >
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">
-                {t({ ar: 'مهن ', en: 'Careers ' })}
-                <span className="gradient-text">{t({ ar: 'تليق بنقاط قوتك', en: 'that fit your strengths' })}</span>
-              </h2>
-              <p className="mt-1 max-w-2xl text-sm text-dga-muted">
-                {t({
-                  ar: 'بناءً على أقوى مجالين في رادارك — مهن تستخدم هذه المهارات وتزدهر في سوق الغد.',
-                  en: 'Based on the two strongest domains in your radar — careers that use these skills and thrive in tomorrow’s market.',
-                })}
-              </p>
-            </div>
-            <button onClick={() => go('careers')} className="no-print btn-ghost shrink-0 px-5 py-2.5 text-sm">
-              {t({ ar: 'كل المهن الخمسين', en: 'All 50 careers' })}
-              <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
-            </button>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {matchingCareers.map((c, i) => {
-              const sig = signalMeta[c.signal]
-              return (
-                <motion.button
-                  key={c.id}
-                  onClick={() => openCareer(c.id)}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.07 }}
-                  className="glass group p-5 text-start transition-all duration-300 hover:border-dga-green"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="chip text-[10px]">{t(categoryById(c.category).name)}</span>
-                    <span className="rounded-pill px-2.5 py-0.5 text-tag font-bold" style={{ background: sig.bg, color: sig.color }}>
-                      {t(sig.name)}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-bold leading-snug group-hover:text-dga-green-dark">{t(c.name)}</h3>
-                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-dga-muted">{t(c.verdict)}</p>
-                </motion.button>
-              )
-            })}
-          </div>
-        </motion.section>
+          {t({ ar: 'مسح نتائجي من هذا المتصفح', en: 'Delete my results from this browser' })}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ parts */
+
+function EvidenceChips({ ev }: { ev: DomainEvidence }) {
+  const { t } = useApp()
+  return (
+    <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+      <div>
+        <dt className="text-dga-muted">{t({ ar: 'التقدير الذاتي', en: 'Self-rating' })}</dt>
+        <dd className="font-semibold text-dga-black">
+          <Num>{`${ev.selfScore.toFixed(1)} / 4`}</Num>
+        </dd>
+      </div>
+      <div>
+        <dt className="text-dga-muted">{t({ ar: 'موقف الحكم', en: 'Scenario' })}</dt>
+        <dd className="font-semibold text-dga-black">
+          {ev.scenarioScore !== undefined ? (
+            <Num>{`${ev.scenarioScore} / 3`}</Num>
+          ) : (
+            t({ ar: 'لا موقف', en: 'None' })
+          )}
+        </dd>
+      </div>
+      <div>
+        <dt className="text-dga-muted">{t({ ar: 'التحقق المعرفي', en: 'Knowledge check' })}</dt>
+        <dd className="font-semibold text-dga-black">
+          <KnowledgeText e={ev} />
+        </dd>
+      </div>
+      <div>
+        <dt className="text-dga-muted">{t({ ar: 'المستهدف', en: 'Target' })}</dt>
+        <dd className="font-semibold text-dga-amber-tx">{t(levelForTarget(ev.target).name)}</dd>
+      </div>
+    </dl>
+  )
+}
+
+function PriorityCard({ p, ev, onDetails }: { p: Priority; ev: DomainEvidence; onDetails: () => void }) {
+  const { t } = useApp()
+  return (
+    <li className="glass flex flex-col p-5" data-domain={p.domainId}>
+      <div className="flex items-start gap-3">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-dga-green text-sm font-bold text-white" aria-hidden>
+          {p.rank}
+        </span>
+        <div className="min-w-0">
+          <h3 className="font-bold leading-snug text-dga-black">
+            <span className="sr-only">{t({ ar: `الأولوية ${p.rank}: `, en: `Priority ${p.rank}: ` })}</span>
+            {t(p.domainName)}
+          </h3>
+          <span className={`mt-1.5 inline-block rounded-pill px-2.5 py-0.5 text-tag font-bold ${reasonStyle[p.reason]}`}>{t(reasonLabel[p.reason])}</span>
+        </div>
+      </div>
+      <p className="mt-3 text-sm leading-relaxed text-dga-ink">{t(p.text)}</p>
+      <EvidenceChips ev={ev} />
+      <button type="button" onClick={onDetails} className="no-print mt-4 self-start text-xs font-semibold text-dga-green-dark underline-offset-4 hover:underline" aria-controls="domain-detail">
+        {t({ ar: 'تفاصيل المجال', en: 'Domain details' })}
+      </button>
+    </li>
+  )
+}
+
+function DomainDetail({ ev, domain, rec, prev, prio }: { ev: DomainEvidence; domain: Domain; rec: ResultRecord; prev: ResultRecord | null; prio?: Priority }) {
+  const { t } = useApp()
+  const sts = statementsByDomain(domain.id)
+  const sc = isCategoryId(rec.trackId) ? scenarioFor(rec.trackId, domain.id) : undefined
+  const choice = sc && rec.scenarioChoices ? rec.scenarioChoices[sc.id] : undefined
+  const chosen = sc && choice !== undefined ? sc.options[choice] : undefined
+  return (
+    <div>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="flex items-center gap-2 text-base font-bold text-dga-black">
+          <Icon name={domain.icon} className="h-5 w-5 text-dga-green" />
+          {t(domain.name)}
+        </h3>
+        <span className="chip-ok">
+          {t({ ar: 'مستواك: ', en: 'Your level: ' })}
+          {t(levelForScore(ev.selfScore).name)}
+        </span>
+      </div>
+      <p className="mt-2 text-xs text-dga-muted">
+        {prio ? (
+          <>
+            {t({ ar: 'الأولوية ', en: 'Priority ' })}
+            <Num>{prio.rank}</Num> · {t(reasonLabel[prio.reason])}
+          </>
+        ) : (
+          t(reasonLabel[ev.reason])
+        )}
+        {prev && prev.scores[domain.id] !== undefined && (
+          <>
+            {' · '}
+            {t({ ar: 'التغيّر عن السابق ', en: 'Change vs previous ' })}
+            <Signed value={ev.selfScore - prev.scores[domain.id]} />
+          </>
+        )}
+      </p>
+      <EvidenceChips ev={ev} />
+
+      <h4 className="mt-4 text-xs font-bold text-dga-ink">{t({ ar: 'إجاباتك عن العبارات', en: 'Your statement answers' })}</h4>
+      <ul className="mt-2 space-y-1.5">
+        {sts.map((s) => {
+          const v = rec.answers[s.id]
+          const opt = scaleOptions.find((o) => o.value === v)
+          return (
+            <li key={s.id} className="text-xs leading-relaxed">
+              <span className="text-dga-ink">{t(s.text)}</span>{' '}
+              <span className="font-semibold text-dga-green-dark">
+                — {opt ? t(opt.label) : t({ ar: 'لم تُحفظ الإجابة', en: 'answer not saved' })}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+
+      <h4 className="mt-4 text-xs font-bold text-dga-ink">{t({ ar: 'موقف الحكم', en: 'Judgment scenario' })}</h4>
+      {ev.scenarioScore === undefined ? (
+        <p className="mt-1 text-xs text-dga-muted">{t({ ar: 'لا توجد إجابة موقف في هذا المجال.', en: 'No scenario answer in this domain.' })}</p>
+      ) : (
+        <div className="mt-1 text-xs leading-relaxed">
+          <p>
+            {t({ ar: 'درجة تصرفك ', en: 'Your response scored ' })}
+            <Num>{ev.scenarioScore}</Num> {t({ ar: 'من', en: 'of' })} <Num>3</Num>
+            {chosen && <> — «{t(chosen.text)}»</>}
+          </p>
+          {chosen && <p className="mt-1 text-dga-muted">{t(chosen.rationale)}</p>}
+        </div>
       )}
+
+      <h4 className="mt-4 text-xs font-bold text-dga-ink">{t({ ar: 'التحقق المعرفي', en: 'Knowledge check' })}</h4>
+      <p className="mt-1 text-xs">
+        <KnowledgeText e={ev} />
+        {ev.agreement && <span className={`ms-2 ${agreementStyle[ev.agreement]}`}>· {t(agreementLabel[ev.agreement])}</span>}
+      </p>
     </div>
   )
 }

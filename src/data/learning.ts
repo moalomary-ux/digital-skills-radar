@@ -1,10 +1,12 @@
 import type { L } from './types'
+import { levelValueForScore } from './levels'
 
 /**
  * Learning Engine dataset — converted from research/learning-engine.md.
  * 48 learning resources (2 per domain × level transition), three 13-week
- * 90-day plan templates, and 24 calibration questions.
- * Domain keys normalized to app ids.
+ * plan templates («خطتك للأيام الـ90 المقبلة»), and the knowledge-check bank
+ * («تحقق معرفي», 5 questions per domain). Domain keys normalized to app ids.
+ * Level words follow the single vocabulary in levels.ts: وعي · تطبيق · إتقان · ريادة.
  */
 
 export type TransitionKey = '1_to_2' | '2_to_3' | '3_to_4'
@@ -18,9 +20,9 @@ export interface LearningResource {
 }
 
 export const transitionNames: Record<TransitionKey, L> = {
-  '1_to_2': { ar: 'وعي ← تطبيق', en: 'Awareness → Working' },
-  '2_to_3': { ar: 'تطبيق ← ممارس', en: 'Working → Practitioner' },
-  '3_to_4': { ar: 'ممارس ← خبير', en: 'Practitioner → Expert' },
+  '1_to_2': { ar: 'من الوعي إلى التطبيق', en: 'Awareness → Application' },
+  '2_to_3': { ar: 'من التطبيق إلى الإتقان', en: 'Application → Proficiency' },
+  '3_to_4': { ar: 'من الإتقان إلى الريادة', en: 'Proficiency → Leadership' },
 }
 
 export const learningResources: Record<string, Record<TransitionKey, [LearningResource, LearningResource]>> = {
@@ -234,7 +236,7 @@ export const learningResources: Record<string, Record<TransitionKey, [LearningRe
         language: 'en',
       },
       {
-        title: { ar: 'برنامج قدراتك (قدرات-تقنية) لتنمية القدرات في الحكومة الرقمية', en: 'QTech (Qudrat-Tech) Digital Skills Program — Digital Government Capacity Development' },
+        title: { ar: 'برنامج قدراتك لتنمية القدرات في الحكومة الرقمية', en: 'Digital-government capacity programme (برنامج قدراتك)' },
         provider: 'Digital Government Authority (DGA), Saudi Arabia',
         type: 'program',
         url: 'https://my.gov.sa/en/content/179',
@@ -426,11 +428,15 @@ export const learningResources: Record<string, Record<TransitionKey, [LearningRe
   },
 }
 
-/** Pick the transition key for a domain score (0-4). */
+/**
+ * Pick the transition key for a domain score (0-4), using the SAME thresholds as
+ * `levelForScore` (1.25 / 2.25 / 3.25): the current level decides the next step.
+ * At «ريادة» (level 4) the plan stays on the last transition (sustain and lead).
+ */
 export function transitionForScore(score: number): TransitionKey {
-  const rounded = Math.max(1, Math.min(4, Math.round(score)))
-  if (rounded >= 4) return '3_to_4'
-  return (`${rounded}_to_${rounded + 1}`) as TransitionKey
+  const level = levelValueForScore(score)
+  if (level >= 4) return '3_to_4'
+  return (`${level}_to_${level + 1}`) as TransitionKey
 }
 
 // ── PART 2 — 90-day plan templates (13 weekly milestones per transition) ────
@@ -439,6 +445,8 @@ export function transitionForScore(score: number): TransitionKey {
 export interface PlanWeek {
   w: number
   text: L
+  /** a checkpoint week (data flag; never detected from the display text) */
+  checkpoint?: boolean
 }
 
 export interface PlanTemplate {
@@ -460,14 +468,14 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       { w: 3, text: { ar: 'رافق ممارساً لنصف يوم واكتب ملاحظة من صفحة واحدة حول كيفية تطبيق المهارة.', en: 'Shadow a practitioner for half a day and write a one-page observation note on how the skill is applied.' } },
       { w: 4, text: { ar: 'واصل {{resource_1}}؛ وأعد تنفيذ مثال عملي واحد كاملاً (درس تطبيقي أو مختبر أو تمرين موجّه).', en: 'Continue {{resource_1}}; reproduce one worked example end-to-end (tutorial, lab or guided exercise).' } },
       { w: 5, text: { ar: 'جهّز الأدوات أو البيئة التجريبية الأساسية لمجال {{domain_ar}} وأكمل مهمة عملية موجّهة واحدة.', en: 'Set up the basic toolset/sandbox for {{domain_en}} and complete one guided hands-on task.' } },
-      { w: 6, text: { ar: 'نقطة تحقق — اجتز اختبار المعرفة للمجال (المجموعة الأولى) وراجع الفجوات مع زميل.', en: 'Checkpoint — pass the domain knowledge-check quiz (set 1) and review gaps with a colleague.' } },
-      { w: 7, text: { ar: 'طبّق المهارة في مهمة واقعية صغيرة في العمل بمساندة؛ ووثّق ما أنجزته وما احتجت فيه إلى مساعدة.', en: 'Apply the skill to a small real task at work with support; document what you did and what you needed help with.' } },
+      { w: 6, text: { ar: 'أجب عن أسئلة التحقق المعرفي للمجال وراجع ما فاتك مع زميل.', en: 'Answer the domain knowledge-check questions and review what you missed with a colleague.' } },
+      { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع مديرك — ثم طبّق المهارة في مهمة واقعية صغيرة بمساندة، ووثّق ما أنجزته وما احتجت فيه إلى مساعدة.', en: 'Mid-plan review with your manager — then apply the skill to a small real task with support, and document what you did and what you needed help with.' } },
       { w: 8, text: { ar: 'انضم إلى مجتمع الممارسة أو القناة الداخلية ذات الصلة؛ واطرح سؤالاً واحداً وأجب عن سؤال.', en: 'Join the relevant community of practice or internal channel; ask one question and answer one.' } },
       { w: 9, text: { ar: 'سجّل في {{resource_2}}؛ وأكمل وحداته الأساسية أو احجز موعد اختبار الشهادة.', en: 'Enrol in {{resource_2}}; complete its core module(s) or book the certification exam date.' } },
       { w: 10, text: { ar: 'مهمة تطبيقية ثانية بمساندة أقل — سلّمها واجمع ملاحظات من مالك المهمة.', en: 'Second applied task, less support — deliver it and collect feedback from the task owner.' } },
       { w: 11, text: { ar: 'الترسيخ — أنهِ مقرري {{resource_1}} و{{resource_2}}؛ وحدّث مسردك إلى أربعين مصطلحاً.', en: 'Consolidate — finish {{resource_1}} and {{resource_2}} coursework; update your glossary to 40 terms.' } },
       { w: 12, text: { ar: 'اكتب سجل تأمل — ما أصبحت قادراً على فعله بمساندة، مع روابط أدلة لكل ادعاء.', en: 'Write a reflection log — what you can now do with support, with evidence links for each claim.' } },
-      { w: 13, text: { ar: 'التقييم — اعرض المهمتين التطبيقيتين على مديرك، وأكمل اختبار المعرفة (المجموعة الثانية)، وسجّل أدلة مستوى التطبيق في الرادار.', en: 'Assessment — demo the two applied tasks to your manager, complete the knowledge-check quiz (set 2), and log Working-level evidence in the Radar.' } },
+      { w: 13, checkpoint: true, text: { ar: 'المراجعة الختامية — اعرض المهمتين التطبيقيتين على مديرك، وأعد التقييم الذاتي في الرادار لترى أثر الخطة على مستوى «تطبيق».', en: 'Final review — show the two applied tasks to your manager, and retake the self-assessment in the Radar to see the plan’s effect at the Application level.' } },
     ],
   },
   '2_to_3': {
@@ -477,19 +485,19 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       en: 'Move from applying {{domain_en}} with support to applying it independently and sharing knowledge with others.',
     },
     weeks: [
-      { w: 1, text: { ar: 'تحليل الفجوات — قيّم نفسك مقابل أوصاف مستوى الممارس، واختر ثلاث فجوات ذات أولوية، واتفق عليها مع مديرك.', en: 'Gap analysis — score yourself against Practitioner descriptors, pick 3 priority gaps, agree them with your manager.' } },
-      { w: 2, text: { ar: 'سجّل في {{resource_1}}؛ وابنِ جدول دراسة مرتبطاً بفجواتك الثلاث.', en: 'Enrol in {{resource_1}}; build a study schedule mapped to your three gaps.' } },
+      { w: 1, text: { ar: 'نقطة البداية — قارن عملك بوصف مستوى «إتقان»، واختر ثلاثة جوانب للتطوير، واتفق عليها مع مديرك.', en: 'Starting point — compare your work with the Proficiency level description, pick 3 areas to develop, and agree them with your manager.' } },
+      { w: 2, text: { ar: 'سجّل في {{resource_1}}؛ وابنِ جدول دراسة مرتبطاً بالجوانب الثلاثة.', en: 'Enrol in {{resource_1}}; build a study schedule mapped to your three areas.' } },
       { w: 3, text: { ar: 'كتلة دراسة معمقة 1 — أكمل الوحدة المتقدمة الأولى؛ وأنتج مخرَجاً واحداً (تحليلاً أو تصميماً أو إعداداً).', en: 'Deep study block 1 — complete the first advanced module; produce one artefact (analysis, design, or configuration).' } },
       { w: 4, text: { ar: 'كتلة دراسة معمقة 2 — طبّق أسلوب الوحدة على مشكلة عمل حقيقية لا على تمرين تعليمي.', en: 'Deep study block 2 — apply the module technique to a live work problem, not a tutorial.' } },
       { w: 5, text: { ar: 'امتلك مخرَجاً حقيقياً كاملاً في {{domain_ar}} — حدد نطاقه ونفذه واعرضه دون مساندة مباشرة.', en: 'Own a real deliverable end-to-end in {{domain_en}} — scope it, do it, present it, with no hand-holding.' } },
-      { w: 6, text: { ar: 'مراجعة الأقران — اطلب من ممارس نقد مخرَجك؛ وسجّل الملاحظات ونفّذها.', en: 'Peer review — have a Practitioner critique your deliverable; log and act on feedback.' } },
-      { w: 7, text: { ar: 'نقطة تحقق — اختبار المعرفة (المجموعة الثانية)؛ وأعد دراسة أي وحدة سجّلت فيها ضعفاً.', en: 'Checkpoint — knowledge-check quiz (set 2); revisit any module you scored weakly on.' } },
+      { w: 6, text: { ar: 'مراجعة الأقران — اطلب من زميل متمكّن نقد مخرَجك؛ وسجّل الملاحظات ونفّذها.', en: 'Peer review — ask an experienced colleague to critique your deliverable; log and act on the feedback.' } },
+      { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع مديرك — ثم أجب عن أسئلة التحقق المعرفي للمجال، وأعد دراسة أي وحدة أخطأت في أسئلتها.', en: 'Mid-plan review with your manager — then answer the domain knowledge-check questions and revisit any module whose questions you missed.' } },
       { w: 8, text: { ar: 'إعادة التعليم — قدّم جلسة مشاركة معرفة لثلاثين دقيقة لفريقك حول أسلوب أصبحت تستخدمه باستقلالية.', en: 'Teach-back — run a 30-minute knowledge-sharing session for your team on one technique you now use independently.' } },
-      { w: 9, text: { ar: 'سجّل في {{resource_2}} (أو اجتز اختبارها)؛ وقد مسار عمل صغيراً ضمن مبادرة أكبر.', en: 'Enrol in {{resource_2}} (or sit its exam); lead a small workstream or sub-task within a larger initiative.' } },
+      { w: 9, text: { ar: 'سجّل في {{resource_2}} (أو احجز موعد شهادتها)؛ وقد جزءاً صغيراً من العمل ضمن مبادرة أكبر.', en: 'Enrol in {{resource_2}} (or book its certification); lead a small workstream or sub-task within a larger initiative.' } },
       { w: 10, text: { ar: 'تعاون بين الفرق — اعمل مع زميل من تخصص آخر لحل مشكلة مشتركة واحدة.', en: 'Cross-team collaboration — pair with a colleague from another discipline and resolve one shared problem.' } },
       { w: 11, text: { ar: 'القياس — اجمع أدلة قبل/بعد (مقاييس، ملاحظات مستخدمين، جودة) لمخرجات الأسبوعين 5 و9.', en: 'Measure — collect before/after evidence (metrics, user feedback, quality) for your W5 and W9 deliverables.' } },
-      { w: 12, text: { ar: 'تجميع الملف — جمّع المخرجات والملاحظات والمقاييس في ملف أدلة بمستوى الممارس.', en: 'Portfolio assembly — compile artefacts, feedback and metrics into a Practitioner evidence portfolio.' } },
-      { w: 13, text: { ar: 'التقييم — مراجعة ملف أدائك أمام ممارس أقدم؛ وتأكيد التطبيق المستقل وتسجيل مستوى الممارس في الرادار.', en: 'Assessment — panel-style review of your portfolio with a senior practitioner; confirm independent application and log Practitioner level in the Radar.' } },
+      { w: 12, text: { ar: 'تجميع الملف — جمّع المخرجات والملاحظات والمقاييس في ملف أدلة لمستوى «إتقان».', en: 'Portfolio assembly — compile artefacts, feedback and metrics into a Proficiency-level evidence portfolio.' } },
+      { w: 13, checkpoint: true, text: { ar: 'المراجعة الختامية — راجع ملف أدلتك مع زميل أقدم ومديرك، ثم أعد التقييم الذاتي في الرادار.', en: 'Final review — go through your evidence portfolio with a senior colleague and your manager, then retake the self-assessment in the Radar.' } },
     ],
   },
   '3_to_4': {
@@ -499,19 +507,19 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       en: 'Move from independent practice to leading best practice in {{domain_en}} — setting standards, teaching and influencing the organisation.',
     },
     weeks: [
-      { w: 1, text: { ar: 'حدد هدف الخبير — ارسم معنى "قيادة أفضل الممارسات" في جهتك؛ واحصل على راعٍ أقدم.', en: 'Define the Expert target — map what "leading best practice" means for your organisation; secure a senior sponsor.' } },
+      { w: 1, text: { ar: 'حدد هدف «الريادة» — صف معنى قيادة أفضل الممارسات في جهتك؛ واحصل على راعٍ أقدم.', en: 'Define the Leadership target — describe what leading best practice means for your organisation; secure a senior sponsor.' } },
       { w: 2, text: { ar: 'حدد مبادرة على مستوى الجهة في {{domain_ar}} ستقودها خلال هذا الربع.', en: 'Identify an organisation-level initiative in {{domain_en}} you will lead over the quarter.' } },
       { w: 3, text: { ar: 'كتلة بحث — قارن ثلاثة نماذج خارجية (أطر، دراسات حالة، معايير) ولخّص الممارسات القابلة للنقل.', en: 'Research block — benchmark 3 external exemplars (frameworks, case studies, standards) and summarise transferable practice.' } },
       { w: 4, text: { ar: 'اصغ مساهمة في معايير الجهة أو دليلها الإرشادي لمجال {{domain_ar}}.', en: "Draft a contribution to the organisation's standards or playbook for {{domain_en}}." } },
       { w: 5, text: { ar: 'قد جلسة للفريق — يسّر ورشة عمل أو اجتماع مراجعة معماري/تصميمي يطبق معيارك المقترح.', en: 'Lead a team session — facilitate a workshop or design/review authority meeting applying your draft standard.' } },
-      { w: 6, text: { ar: 'سجّل في {{resource_1}} / حدد موعد تقييمها — استهدف الشهادة أو البرنامج بمستوى الخبير.', en: 'Enrol in {{resource_1}} / schedule its assessment — target the expert-level credential or programme.' } },
-      { w: 7, text: { ar: 'انشر الإرشاد الداخلي — أصدر النسخة الأولى من مذكرتك الإرشادية أو معيارك؛ وادعُ إلى تعليقات منظمة.', en: 'Publish internal guidance — release v1 of your guidance note or standard; invite structured comment.' } },
+      { w: 6, text: { ar: 'سجّل في {{resource_1}} أو حدد موعد تقييمها — استهدف برنامجاً أو شهادة بمستوى متقدم.', en: 'Enrol in {{resource_1}} or schedule its assessment — target an advanced-level programme or credential.' } },
+      { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع راعيك ومديرك — ثم أصدر النسخة الأولى من مذكرتك الإرشادية أو معيارك، وادعُ إلى تعليقات منظمة.', en: 'Mid-plan review with your sponsor and manager — then release v1 of your guidance note or standard and invite structured comment.' } },
       { w: 8, text: { ar: 'درّب ممارسَين — جلسات تدريب كل أسبوعين؛ ووثّق تقدمهما كدليل على قدرتك التعليمية.', en: 'Coach two practitioners — run fortnightly coaching; document their progress as evidence of teaching.' } },
       { w: 9, text: { ar: 'مثّل المجال — اعرض موقف {{domain_ar}} أو تحليل مخاطره في منتدى حوكمة أو معمارية.', en: 'Represent the domain — present {{domain_en}} position or risk analysis at a governance or architecture forum.' } },
       { w: 10, text: { ar: 'مساهمة خارجية — قدّم عرضاً أو انشر مقالاً أو ساهم في مجتمع ممارسة خارج جهتك.', en: 'External contribution — give a talk, publish an article, or contribute to a community of practice beyond your entity.' } },
       { w: 11, text: { ar: 'قِس الأثر — حدد أثر مبادرتك كمياً (التبني، الجودة، المخاطر، التكلفة) وارفع تقريراً إلى راعيك.', en: 'Measure impact — quantify the effect of your initiative (adoption, quality, risk, cost) and report to your sponsor.' } },
       { w: 12, text: { ar: 'المراجعة مع الراعي — حسّن المعيار إلى نسخته الثانية؛ وسجّل الدروس؛ وحدد الدفعة التالية التي ستطورها.', en: 'Review with sponsor — refine the standard to v2; capture lessons; define the next cohort you will develop.' } },
-      { w: 13, text: { ar: 'تقييم الخبير — دافع عن ملفك (المبادرة، المعيار، التدريب، المساهمة الخارجية) أمام لجنة قيادية؛ وسجّل مستوى الخبير في الرادار.', en: 'Expert assessment — defend your portfolio (initiative, standard, coaching, external contribution) before a senior panel; log Expert level in the Radar.' } },
+      { w: 13, checkpoint: true, text: { ar: 'المراجعة الختامية — اعرض ملفك (المبادرة، المعيار، التوجيه، المساهمة الخارجية) على راعيك ومديرك، ثم أعد التقييم الذاتي في الرادار.', en: 'Final review — present your portfolio (initiative, standard, coaching, external contribution) to your sponsor and manager, then retake the self-assessment in the Radar.' } },
     ],
   },
 }
@@ -531,10 +539,11 @@ export function fillPlanText(
     .replaceAll('{{resource_2}}', resource2Title)
 }
 
-// ── PART 3 — Knowledge-check questions (3 per domain = 24) ──────────────────
-// Purpose: calibrate self-assessment scores. A self-rated level that
-// contradicts quiz performance should be adjusted downward; consistent
-// performance supports it.
+// ── PART 3 — Knowledge-check questions («تحقق معرفي», 5 per domain = 40) ─────
+// Purpose: a reflection prompt beside the self-rating. Results store how many
+// questions were attempted and how many were correct per domain; agreement with
+// the self-rating is judged only after at least 3 attempts in that domain
+// (claim `method-knowledge-min-attempts`). It never proves or disproves a skill.
 
 export interface CalibrationOption {
   key: string
@@ -777,14 +786,14 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'agile_delivery_q1', domainId: 'agile', format: 'mcq',
     q: { ar: 'أي مما يلي ليس من الفعاليات الرسمية في إطار سكرم (Scrum)؟', en: 'Which of the following is NOT an official Scrum event?' },
     options: [
-      { key: 'a', text: { ar: 'تخطيط العدو (Sprint Planning)', en: 'Sprint Planning' } },
+      { key: 'a', text: { ar: 'تخطيط السبرنت (Sprint Planning)', en: 'Sprint Planning' } },
       { key: 'b', text: { ar: 'الاجتماع اليومي (Daily Scrum)', en: 'Daily Scrum' } },
-      { key: 'c', text: { ar: 'مراجعة العدو (Sprint Review)', en: 'Sprint Review' } },
+      { key: 'c', text: { ar: 'مراجعة السبرنت (Sprint Review)', en: 'Sprint Review' } },
       { key: 'd', text: { ar: 'مجلس التوجيه الفصلي', en: 'Quarterly Steering Board' } },
     ],
     answer: 'd',
     explanation: {
-      ar: 'يعرّف سكرم خمس فعاليات: العدو، وتخطيط العدو، والاجتماع اليومي، ومراجعة العدو، والاسترجاع (Retrospective) — أما مجلس التوجيه فهو آلية حوكمة خارج إطار سكرم.',
+      ar: 'يعرّف سكرم خمس فعاليات: السبرنت، وتخطيط السبرنت، والاجتماع اليومي، ومراجعة السبرنت، والاسترجاع (Retrospective) — أما مجلس التوجيه فهو آلية حوكمة خارج إطار سكرم.',
       en: 'Scrum defines five events: the Sprint, Sprint Planning, Daily Scrum, Sprint Review and Sprint Retrospective — a steering board is a governance mechanism outside Scrum.',
     },
   },
@@ -1133,51 +1142,45 @@ export const calibrationQuestions: CalibrationQuestion[] = [
 export const questionsForDomain = (domainId: string): CalibrationQuestion[] =>
   calibrationQuestions.filter((q) => q.domainId === domainId)
 
-// ── Saudi national learning & employment support (expert-review P1) ─────────
-// Free/عبد-funded national rails that make the recommended paths affordable.
+// ── Learning routes for government employees ────────────────────────────────
+// Only providers relevant to civil servants. Student / job-seeker / private-sector
+// schemes (graduate on-the-job training, HRDF certificate reimbursement, the
+// government job-application platform) were removed in v9: this is a development
+// tool for employees, never linked to recruitment, appraisal or promotion.
 
 export interface NationalProgram {
   id: string
   name: L
   description: L
-  url: string
+  /** omitted for internal routes (e.g. your entity's own L&D unit) */
+  url?: string
 }
 
 export const nationalPrograms: NationalProgram[] = [
   {
-    id: 'drob',
-    name: { ar: 'منصة دروب', en: 'Doroob Platform' },
+    id: 'sda',
+    name: { ar: 'الأكاديمية السعودية الرقمية', en: 'Saudi Digital Academy' },
     description: {
-      ar: 'المنصة الوطنية للتدريب المجاني عن بُعد — مقررات قصيرة معتمدة في التقنية واللغة والمهارات المهنية، مجانية بالكامل للسعوديين.',
-      en: 'The national free e-training platform — short accredited courses in tech, language and professional skills, fully free for Saudis.',
+      ar: 'برامج ومعسكرات في المهارات الرقمية والقيادة الرقمية؛ تحقق من شروط القبول لكل برنامج قبل التسجيل.',
+      en: 'Programmes and camps in digital skills and digital leadership; check each programme’s entry conditions before enrolling.',
     },
-    url: 'https://doroob.sa',
+    url: 'https://sda.edu.sa',
   },
   {
-    id: 'tamheer',
-    name: { ar: 'برنامج تمهير', en: 'Tamheer Program' },
+    id: 'dga-qudratak',
+    name: { ar: 'برنامج قدراتك — هيئة الحكومة الرقمية', en: 'Digital Government Authority — «برنامج قدراتك»' },
     description: {
-      ar: 'تدريب أثناء العمل بمكافأة شهرية لحديثي التخرج — جسر حقيقي من الدراسة إلى أول وظيفة.',
-      en: 'On-the-job training with a monthly stipend for fresh graduates — a real bridge from study to the first job.',
+      ar: 'برنامج لتنمية قدرات الحكومة الرقمية موجّه إلى الجهات الحكومية وموظفيها؛ يُطلب عبر جهتك.',
+      en: 'A digital-government capacity programme for government entities and their staff; requested through your entity.',
     },
-    url: 'https://eservices.taqat.sa',
+    url: 'https://my.gov.sa/en/content/179',
   },
   {
-    id: 'cert_support',
-    name: { ar: 'دعم الشهادات الاحترافية (هدف)', en: 'Professional Certificate Support (Hadaf)' },
+    id: 'entity-ld',
+    name: { ar: 'وحدة التدريب والتطوير في جهتك', en: 'Your entity’s training and development unit' },
     description: {
-      ar: 'صندوق الموارد البشرية يعوّض رسوم الشهادات الدولية المعتمدة (AWS وCompTIA وPMP وغيرها) بعد اجتيازها — تحقق من قائمة الشهادات المدعومة قبل الدفع.',
-      en: 'The HR Development Fund reimburses fees for accredited international certificates (AWS, CompTIA, PMP and more) after passing — check the supported list before paying.',
+      ar: 'اعرض عليها ورقة حوار التطوير: هي الطريق المعتاد لطلب وقت التعلم وتمويل الدورات والشهادات ضمن خطة جهتك.',
+      en: 'Show them your development conversation sheet: it is the usual route to request learning time and funding for courses and certificates within your entity’s plan.',
     },
-    url: 'https://hrdf.gov.sa',
-  },
-  {
-    id: 'jadarat',
-    name: { ar: 'منصة جدارات', en: 'Jadarat Platform' },
-    description: {
-      ar: 'المنصة الوطنية الموحدة للوظائف الحكومية — للترشح والمفاضلة على الوظائف العامة.',
-      en: 'The unified national platform for government jobs — application and selection for public-sector roles.',
-    },
-    url: 'https://jadarat.sa',
   },
 ]
