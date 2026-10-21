@@ -12,6 +12,12 @@ export interface ClaimSource {
   /** page, table, sheet or section locator inside the source */
   locator?: string
   year?: number
+  /**
+   * Publication status, kept apart from the source class (`kind`): an internal
+   * administrative workbook can be an authoritative record without being a public publication.
+   * Omitted = published / publicly available.
+   */
+  access?: 'public' | 'internal'
 }
 
 /**

@@ -1,211 +1,802 @@
-import { motion } from 'framer-motion'
+import type { MouseEvent, ReactNode } from 'react'
 import { useApp } from '../store'
 import type { L } from '../data/types'
+import { levels } from '../data/levels'
+import { tracks } from '../data/tracks'
+import { domainById } from '../data/domains'
+import { categoryWeightRows } from '../data/claims/method'
+import Claim, { ClaimText, EvidenceLink } from '../components/Claim'
 
 /**
- * Methodology & governance — the page that lets a reviewer defend every number
- * (GovTech review P2). Published, honest, versioned.
+ * Methodology (v9, packet P5a): what the self-assessment is and is not, the scale, the evidence
+ * layers, how priorities are derived, the technology list, the government-entity data and its
+ * reconciliation, the consulting-category mapping, privacy, independence, limits, cadence and the
+ * release history. Every figure on this page is a registered claim (`src/data/claims/method.ts`).
  */
-export default function Methodology() {
+
+interface Section {
+  id: string
+  title: L
+}
+
+const SECTIONS: Section[] = [
+  { id: 'm-what', title: { ar: 'ما هذا التقييم، وما ليس هو', en: 'What this assessment is, and is not' } },
+  { id: 'm-scale', title: { ar: 'المقياس: أربعة مستويات', en: 'The scale: four levels' } },
+  { id: 'm-layers', title: { ar: 'مواقف الحكم المهني والتحقق المعرفي', en: 'Professional-judgment scenarios and the knowledge check' } },
+  { id: 'm-priorities', title: { ar: 'كيف تُشتق أولويات التطوير؟', en: 'How are development priorities derived?' } },
+  { id: 'm-tech', title: { ar: 'تقنيات تغيّر العمل الحكومي', en: 'Technologies changing government work' } },
+  { id: 'm-gov', title: { ar: 'بيانات الجهات الحكومية ومصدرها', en: 'Government-entity data and its source' } },
+  { id: 'm-mapping', title: { ar: 'ربط فئات الاستشارات بالمجالات', en: 'Mapping consulting categories to domains' } },
+  { id: 'm-privacy', title: { ar: 'الخصوصية', en: 'Privacy' } },
+  { id: 'm-independence', title: { ar: 'بيان الاستقلال', en: 'Independence statement' } },
+  { id: 'm-limits', title: { ar: 'الحدود المعروفة', en: 'Known limitations' } },
+  { id: 'm-cadence', title: { ar: 'إيقاع التحديث', en: 'Update cadence' } },
+  { id: 'm-changelog', title: { ar: 'سجل الإصدارات', en: 'Release history' } },
+]
+
+const sectionTitle = (id: string): L => SECTIONS.find((s) => s.id === id)!.title
+
+/** Release history for readers: one line per release, in the binding glossary. */
+const CHANGELOG: { v: string; date: string; items: L[] }[] = [
+  {
+    v: 'v9',
+    date: '2026-10-22',
+    items: [
+      {
+        ar: 'إعادة بناء حول دعم قرار تطوير القوى العاملة الحكومية: خمسة محاور بأهداف المستخدم، ورابط حقيقي لكل صفحة بالعربية والإنجليزية.',
+        en: 'Rebuilt around decision support for government workforce development: five user-goal sections and a real link for every page in Arabic and English.',
+      },
+      {
+        ar: 'محرك أولويات واحد تقرأ منه النتائج والخطة والتقرير المطبوع، وإصلاح مرحلة مواقف الحكم المهني في رحلة التقييم.',
+        en: 'One priority engine read by the results, the plan and the printed report, and a fix to the professional-judgment step of the assessment.',
+      },
+      {
+        ar: 'سجل ادعاءات موحد وصفحة «سجل الأدلة»: لكل رقم مصدره ونوعه والثقة فيه وتاريخ مراجعته، مع فحص آلي للمحتوى والمصطلحات.',
+        en: 'A single claims registry and the “evidence register” page: every figure carries its source, type, confidence and review date, with automated content and terminology checks.',
+      },
+      {
+        ar: 'بيانات الجهات في البناء العام مجاميع وطنية وقطاعية فقط، بلا سجلات لكل جهة ولا شعارات ولا ترتيب.',
+        en: 'Government-entity data in the public build is national and sector aggregates only: no per-entity records, no logos, no rankings.',
+      },
+      {
+        ar: 'قاموس مصطلحات ملزم، وتصحيح حقائق المعايير: عدد مهارات SFIA 9، والمقابلة مع DigComp مواءمة تحريرية لا تطابق مباشر.',
+        en: 'A binding glossary, and corrected standards facts: the SFIA 9 skill count, and DigComp alignment stated as an editorial crosswalk rather than a direct mapping.',
+      },
+      {
+        ar: 'إخراج أدوات التوجيه المهني للأفراد من هذا الإصدار، وحفظها في أرشيف الإصدار السابق.',
+        en: 'Career-guidance tools for individuals removed from this release and kept in the archive of the previous release.',
+      },
+      {
+        ar: 'خطوط مستضافة مع الموقع، فلا طلبات إلى جهات خارجية عند التحميل.',
+        en: 'Fonts hosted with the site, so no requests go to third parties on load.',
+      },
+    ],
+  },
+  {
+    v: 'v8',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'ربط فئات الاستشارات بالمجالات الثمانية بجدول أوزان تحريري معلن، وصفحات تفصيلية للقطاعات والجهات (أُخرجت صفحات الجهات من البناء العام في الإصدار 9).',
+        en: 'Consulting categories linked to the eight domains through a declared editorial weight table, with detail pages for sectors and entities (entity pages left the public build in v9).',
+      },
+    ],
+  },
+  {
+    v: 'v7',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'عروض مبنية على سجلات خدمات التمكين: المؤشرات الوطنية، والقطاعات، ودليل الجهات.',
+        en: 'Views built on the enablement service records: national indicators, sectors and the entity directory.',
+      },
+    ],
+  },
+  {
+    v: 'v6-B',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'مواقف الحكم المهني طبقةً مستقلة عن التقييم الذاتي، وسجل مستقل لكل مهارة، وقسم المؤشرات الدولية المرتبطة.',
+        en: 'Professional-judgment scenarios as a layer independent of self-assessment, a separate record for every skill, and the related international indices.',
+      },
+    ],
+  },
+  {
+    v: 'v6',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'صار السؤال المنظم للأداة تطوير القوى العاملة الحكومية، وأُضيفت فئات الدور، ووُحّدت عتبات المستويات.',
+        en: 'The organizing question became government workforce development; role categories were added and level thresholds unified.',
+      },
+    ],
+  },
+  {
+    v: 'v4',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'طبقة مهارات المستقبل، ودليل التبني المؤسسي، وشارات نوع المصدر.',
+        en: 'The future-skills layer, the institutional adoption guide and source-type badges.',
+      },
+    ],
+  },
+  {
+    v: 'v3.2',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'جولتا مراجعة خبيرة: مؤشر اتساق بين التقدير الذاتي والتحقق المعرفي، وحذف الأرقام غير المسندة، وتحسينات الإتاحة.',
+        en: 'Two expert-review rounds: a consistency indicator between self-rating and the knowledge check, removal of unsourced figures, and accessibility improvements.',
+      },
+    ],
+  },
+  {
+    v: 'v3',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'مسار للأفراد والأسر، وهوية بصرية خضراء.',
+        en: 'A track for individuals and families, and a green visual identity.',
+      },
+    ],
+  },
+  {
+    v: 'v2',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'قائمة التقنيات بمقياس الجاهزية، ومكتبة أدوار مرجعية إلى SFIA، وموارد تعلم وأسئلة تحقق معرفي.',
+        en: 'The technology list with a readiness scale, a role library referenced to SFIA, learning resources and knowledge-check questions.',
+      },
+    ],
+  },
+  {
+    v: 'v1',
+    date: '2026-10',
+    items: [
+      {
+        ar: 'الإطلاق: الرادار بمجالاته ومهاراته، وخطط التطوير، وصفحة المعايير.',
+        en: 'Launch: the radar with its domains and skills, development plans and the standards page.',
+      },
+    ],
+  },
+]
+
+/* ----------------------------------------------------------------- pieces */
+
+function Block({ id, children }: { id: string; children: ReactNode }) {
   const { t } = useApp()
+  return (
+    <section id={id} aria-labelledby={`${id}-h`} className="glass scroll-mt-24 p-6 sm:p-7">
+      <h2 id={`${id}-h`} tabIndex={-1} className="flex items-center gap-3 text-lg font-bold text-dga-black focus:outline-none sm:text-xl">
+        <span className="h-5 w-1.5 shrink-0 rounded-pill bg-dga-green" aria-hidden />
+        {t(sectionTitle(id))}
+      </h2>
+      <div className="mt-4 space-y-4 text-sm leading-loose text-dga-ink">{children}</div>
+    </section>
+  )
+}
 
-  const sections: { title: { ar: string; en: string }; body: { ar: string; en: string } }[] = [
-    {
-      title: { ar: 'ما الذي يقيسه TRL في هذا الرادار؟', en: 'What does TRL measure on this radar?' },
-      body: {
-        ar: 'قرار منهجي معلن: درجة TRL هنا تقيس النضج العالمي للتقنية (وفق مقياس ناسا 1–9 وإشارات غارتنر والمنتدى الاقتصادي العالمي وOECD)، لا نضج تبنيها في السعودية. أفق التبني (الآن/قريبًا/بعيد) هو البعد المنفصل الذي يقرّب الحكم من السياق الوطني. عملية التقييم: مراجعة تحريرية مكتبية لكل تقنية مقابل إشارات مسماة، مع تسجيل المسوّغ لكل درجة؛ آخر مراجعة: أكتوبر 2026، وشملت إعادة تقييم ست تقنيات بمقدار ±1 موثقة في مسوّغاتها.',
-        en: 'A declared methodological decision: TRL here measures the technology’s global maturity (per the NASA 1–9 scale and signals from Gartner, WEF and OECD), not its adoption maturity in Saudi Arabia. The adoption horizon (now/near/far) is the separate dimension that localizes the judgment. Rating process: an editorial desk review of each technology against named signals, with a written rationale per rating; last review: October 2026, which re-rated six technologies by ±1, documented in their rationales.',
-      },
-    },
-    {
-      title: { ar: 'كيف صُنّفت المهن الثلاثون؟', en: 'How were the 30 careers classified?' },
-      body: {
-        ar: 'تراتبية مصادر معلنة: (1) تقارير دولية محكّمة (WEF مستقبل الوظائف 2025، منظمة العمل الدولية 2025، OECD، McKinsey، صندوق النقد)؛ (2) بيانات وطنية رسمية (الهيئة العامة للإحصاء، البنك الدولي/الموارد البشرية)؛ (3) استطلاعات تجارية موسومة صراحة (Coursera، LinkedIn، TestGorilla)؛ (4) أرقام ذاتية الإبلاغ من مزودين موسومة كذلك (توظيف طويق ~80%). إشارات «يزدهر/يتحوّل/يندثر» أحكام تحريرية مبنية على تقاطع هذه المصادر — ليست قياسًا رسميًا.',
-        en: 'A declared source hierarchy: (1) peer-reviewed international reports (WEF FoJ 2025, ILO 2025, OECD, McKinsey, IMF); (2) official national data (GASTAT, World Bank/HRSD); (3) commercial surveys, explicitly tagged (Coursera, LinkedIn, TestGorilla); (4) provider self-reported figures, tagged as such (Tuwaiq’s ~80% placement). The growing/transforming/declining signals are editorial judgments built from the intersection of these sources — not an official measurement.',
-      },
-    },
-    {
-      title: { ar: 'منهجية درجات المهارات', en: 'Skills-scoring methodology' },
-      body: {
-        ar: 'درجة المجال = متوسط عباراته الخمس (0–4). عتبات موحدة للمستوى والمرحلة: أقل من 1.25 وعي/تأسيسي، 1.25–2.24 تطبيق/نامٍ، 2.25–3.24 ممارس/متمكّن، 3.25 فأكثر خبير/رائد. هذه عتبات تحريرية معلنة — لم تُعايَر تجريبيًا بعد (لا عينة معيارية ولا جلسة تحديد معايير). التقييم أداة تأمل ذاتي مهيكلة: تقيس تقدير المستخدم لقدرته لا أداءه الفعلي، ولا يجوز استخدامها في التوظيف أو المفاضلة أو أي قرار عالي المخاطر. أسئلة التحقق تقيس المعرفة التأسيسية فقط وتُقارن بالتقدير الذاتي في الاتجاهين (تضخيمًا وتقليلًا).',
-        en: 'Domain score = the mean of its five statements (0–4). One shared threshold set for level and stage: below 1.25 Awareness/Foundation, 1.25–2.24 Working/Developing, 2.25–3.24 Practitioner/Proficient, 3.25+ Expert/Leading. These are declared editorial thresholds — not yet empirically calibrated (no normative sample, no standard-setting session). The assessment is a structured self-reflection tool: it measures the user’s estimate of their ability, not actual performance, and must not be used for hiring, selection or any high-stakes decision. Knowledge checks cover foundational knowledge only and are compared with self-ratings in both directions (over- and under-estimation).',
-      },
-    },
-    {
-      title: { ar: 'سياسة الإسناد والأرقام', en: 'Provenance & figures policy' },
-      body: {
-        ar: 'كل بطاقة مهنة تعرض سطر مصدرها وملاحظة الطلب السعودي. مقياس التعرض للأتمتة نوعي بثلاث درجات — لا نعرض نسبًا مئوية لا مصدر لها. التوقعات الكمية موسومة «متوقعة». لا ننشر رقمًا بلا مصدر مسمى؛ وما لا يمكن إسناده يُحذف أو يُوسم. رموز ISCO-08 في بطاقات المهن تقريبية وموسومة كذلك، ورموز SFIA مدققة مقابل القائمة الرسمية المنشورة لـSFIA 9.',
-        en: 'Every career card carries its source line and Saudi-demand note. The automation-exposure meter is a qualitative three-band guide — we show no unsourced percentages. Quantitative projections are tagged “expected”. We publish no figure without a named source; what cannot be sourced is removed or flagged. ISCO-08 codes on career cards are approximate and marked as such, and SFIA codes are audited against the official published SFIA 9 list.',
-      },
-    },
-    {
-      title: { ar: 'الحدود المعروفة', en: 'Known limitations' },
-      body: {
-        ar: 'نقولها صراحة: (1) التغطية 50 مهنة — توسعت في v4 نحو قطاعات رؤية 2030 (سياحة، طيران، تعدين، ألعاب، فضاء…) لكنها ما زالت انتقائية؛ (2) لا بيانات أجور أو شواغر سعودية تفصيلية بعد (قيد العمل من مصادر رسمية)؛ (3) التوقعات أفقها 2030 بينما طالب اليوم يدخل السوق نحو 2030–2032؛ (4) لا تحقق سيكومتري بعد؛ (5) الترجمات العربية لحقول رادار التقنيات تحريرية بمراجعة داخلية؛ (6) المنصة نموذج مفاهيمي مستقل غير تابع لأي جهة رسمية.',
-        en: 'Said plainly: (1) coverage is 50 careers — v4 expanded into Vision 2030 sectors (tourism, aviation, mining, gaming, space…) but it remains selective; (2) no detailed Saudi wage or vacancy figures yet (in progress from official sources); (3) projections look at 2030 while today’s student enters the market around 2030–2032; (4) no psychometric validation yet; (5) Arabic translations of tech-radar fields are editorial, internally reviewed; (6) the platform is an independent concept prototype, not affiliated with any official entity.',
-      },
-    },
-    {
-      title: { ar: 'إيقاع التحديث', en: 'Update cadence' },
-      body: {
-        ar: 'التزام معلن: مراجعة نصف سنوية لرادار التقنيات (التقنيات تتحرك)، وربع سنوية للأرقام السعودية المتحركة (بطالة، مشاركة، برامج)، وسنوية لمكتبة الأدوار والمهن — مع سجل تغييرات منشور أدناه.',
-        en: 'A declared commitment: semiannual review of the technology radar (technologies move), quarterly review of fast-moving Saudi figures (unemployment, participation, programs), and annual review of the role and career libraries — with the published changelog below.',
-      },
-    },
-    {
-      title: { ar: 'مصدر بيانات الجهات الحكومية (v7)', en: 'Government entity data provenance (v7)' },
-      body: {
-        ar: 'عروض v7 (الأثر، القطاعات، الدليل) مبنية على سجلين رسميين: دليل الجهات والقطاعات (sectors.xlsx) وسجلات الخدمات (services.xlsx). طابقت أسماء الجهات بين السجلين 421/421 (100%). ملاحظة موثقة: يرد في نص المنهجية المرافق للمصدر رقما 7,935 تدريبًا و2,918 استشارة، بينما مجاميع الجداول نفسها بعد إعادة الاحتساب هي 7,915 و2,873 — وقد اعتمدنا أرقام الجداول في كل العروض، مع إظهار هذه الملاحظة في صفحة الأثر نفسها. الشعارات: 485 ملف PNG رسميًا (486 مرساة بملف واحد مكرر بين جهتين)، وتظهر بدائل حرفية عند غياب الشعار.',
-        en: 'The v7 views (impact, sectors, directory) are built on two official records: the entity & sector directory (sectors.xlsx) and the service records (services.xlsx). Entity name match across the two records: 421/421 (100%). Documented note: the accompanying methodology prose mentions 7,935 training and 2,918 consulting records, while the recomputed sheet totals are 7,915 and 2,873 — we adopt the sheet totals across all views, and the note is surfaced on the impact page itself. Logos: 485 official PNGs (486 anchored, one file shared by two entities), with monogram fallbacks where a logo is absent.',
-      },
-    },
-    {
-      title: { ar: 'جدول ربط الفئات بالمجالات (v8)', en: 'Category-to-domain mapping table (v8)' },
-      body: {
-        ar: 'مشتقات «المهارات الأكثر طلبًا» في v8 محسوبة — لا مفترضة: كل سجل خدمة استشارية في ورقة «تفصيل الخدمات الاستشارية» يحمل فئته، فتُجمع السجلات لكل جهة ثم لكل قطاع، وتُوزَّع على المجالات الثمانية بأوزان موثقة: 1 الاستراتيجيات الرقمية → سياسات وحوكمة 0.7 + قيادة 0.3؛ 2 تخطيط وتمكين البنية التقنية → سحابة وبنية 0.7 + أمن سيبراني 0.3؛ 3 الابتكار والتقنيات الناشئة → تقنيات ناشئة 0.8 + ذكاء وبيانات 0.2؛ 4 التميز المؤسسي واستمرارية الأعمال → منتجات رشيقة 0.6 + قيادة 0.4؛ 5 الاستثمار والخدمات الرقمية → تصميم خدمات 0.6 + سياسات 0.4؛ 6 البيانات والتكامل → ذكاء وبيانات 0.8 + سحابة 0.2؛ 7 مؤشرات الأداء الرقمي → ذكاء وبيانات 0.6 + منتجات رشيقة 0.4؛ 8 التميز والتنافسية → قيادة 0.6 + سياسات 0.4. تُطبع النسب بعد إعادة تطبيع أعلى ثلاثة مجالات لتجمع 100%. الربط تحريري موثق (هذا الجدول هو مرجعه) وقابل للمراجعة؛ المدخلات كلها سجلات حقيقية. مطابقة أسماء الجهات في ورقتي التفصيل: 372/372 استشارات و322/322 تدريب (100%).',
-        en: 'The v8 “most-demanded skills” derivations are computed, not assumed: every consulting record in the “service detail” sheet carries its category; records are aggregated per entity then per sector, and distributed onto the eight domains with documented weights: 1 Digital strategies → policy .7 + leadership .3; 2 Tech-infrastructure planning & enablement → cloud .7 + cyber .3; 3 Innovation & emerging tech → emerging .8 + AI/data .2; 4 Organizational excellence & business continuity → agile .6 + leadership .4; 5 Investment & digital services → service-design .6 + policy .4; 6 Data & integration → AI/data .8 + cloud .2; 7 Digital performance indicators → AI/data .6 + agile .4; 8 Excellence & competitiveness → leadership .6 + policy .4. Percentages are printed after renormalizing the top three domains to sum to 100%. The mapping is editorial but documented (this table is its reference) and reviewable; all inputs are real records. Entity name match in the two detail sheets: 372/372 consulting and 322/322 training (100%).',
-      },
-    },
+function Note({ children, tone = 'amber' }: { children: ReactNode; tone?: 'amber' | 'green' }) {
+  return (
+    <p
+      className={`rounded-btn border-s-2 p-3 text-[13px] leading-relaxed ${
+        tone === 'amber' ? 'border-dga-amber bg-amber-50/60 text-dga-ink' : 'border-dga-green bg-dga-green/5 text-dga-ink'
+      }`}
+    >
+      {children}
+    </p>
+  )
+}
+
+function Bullets({ items }: { items: ReactNode[] }) {
+  return (
+    <ul className="space-y-2">
+      {items.map((item, i) => (
+        <li key={i} className="flex gap-2">
+          <span className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-dga-green" aria-hidden />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/** Scale bar: segment widths follow the editorial thresholds on the 0–4 range. */
+const SEGMENTS = [31.25, 25, 25, 18.75]
+const SEGMENT_TONES = ['bg-dga-green/20', 'bg-dga-green/45', 'bg-dga-green/70', 'bg-dga-green-deep']
+
+function ScaleBar() {
+  const { t } = useApp()
+  return (
+    <figure className="pt-1">
+      <div className="flex h-10 w-full overflow-hidden rounded-btn border border-dga-line" dir="ltr" aria-hidden>
+        {levels.map((l, i) => (
+          <div
+            key={l.value}
+            style={{ width: `${SEGMENTS[i]}%` }}
+            className={`${SEGMENT_TONES[i]} flex items-center justify-center border-e border-white/70 text-xs font-bold last:border-e-0 ${
+              i === 3 ? 'text-white' : 'text-dga-green-ink'
+            }`}
+          >
+            {t(l.name)}
+          </div>
+        ))}
+      </div>
+      <figcaption className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {levels.map((l) => (
+          <span key={l.value} className="block rounded-btn border border-dga-line bg-white p-3 text-xs leading-relaxed">
+            <span className="block font-bold text-dga-green-dark">{t(l.name)}</span>
+            <span className="text-dga-muted">{t(l.description)}</span>
+          </span>
+        ))}
+      </figcaption>
+    </figure>
+  )
+}
+
+function PriorityDiagram() {
+  const { t, lang } = useApp()
+  const inputs: L[] = [
+    { ar: 'تقديرك الذاتي لكل مجال', en: 'Your self-rating per domain' },
+    { ar: 'فهمك لمواقف الحكم المهني', en: 'Your professional-judgment responses' },
+    { ar: 'التحقق المعرفي: ما أجبت عنه وما صحّ منه', en: 'Knowledge check: answered and correct' },
+    { ar: 'المستهدف التطويري الاسترشادي لفئة دورك', en: 'The indicative development target for your role category' },
   ]
+  const arrow = lang === 'ar' ? '←' : '→'
+  return (
+    <figure className="rounded-card border border-dga-line bg-dga-bg p-4">
+      <figcaption className="sr-only">
+        {t({
+          ar: 'أربعة مدخلات تدخل محرك أولويات واحدًا، فيخرج منه عدد محدود من أولويات التطوير المقترحة لكل منها سبب.',
+          en: 'Four inputs feed one priority engine, which outputs a small number of suggested development priorities, each with a reason.',
+        })}
+      </figcaption>
+      <div className="grid items-center gap-3 lg:grid-cols-[1.4fr,auto,1fr,auto,1fr]">
+        <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+          {inputs.map((x, i) => (
+            <li key={i} className="rounded-btn border border-dga-line bg-white px-3 py-2 text-xs font-semibold text-dga-ink">
+              {t(x)}
+            </li>
+          ))}
+        </ul>
+        <span className="hidden text-center text-xl text-dga-muted lg:block" aria-hidden>
+          {arrow}
+        </span>
+        <div className="rounded-btn bg-dga-green px-4 py-5 text-center text-sm font-bold text-white">
+          {t({ ar: 'محرك أولويات واحد', en: 'One priority engine' })}
+          <span className="mt-1 block text-xs font-normal text-white/85">
+            {t({ ar: 'تقرأ منه النتائج والخطة والتقرير', en: 'Read by results, plan and report' })}
+          </span>
+        </div>
+        <span className="hidden text-center text-xl text-dga-muted lg:block" aria-hidden>
+          {arrow}
+        </span>
+        <div className="rounded-btn border-2 border-dga-green bg-white px-4 py-4 text-center text-sm font-semibold text-dga-green-dark">
+          <ClaimText
+            text={t({
+              ar: '{{method-priorities-max}} على الأكثر، لكل منها سبب معلن',
+              en: '{{method-priorities-max}} at most, each with a stated reason',
+            })}
+          />
+        </div>
+      </div>
+    </figure>
+  )
+}
 
-  const changelog: { v: string; date: L; items: L[] }[] = [
-    {
-      v: 'v1',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'الإطلاق: رادار المهارات (8 مجالات × 40 عبارة)، 3 ملفات أدوار، مسارات 90 يومًا، صفحة المعايير.', en: 'Launch: skills radar (8 domains × 40 statements), 3 role profiles, 90-day pathways, standards page.' },
-      ],
-    },
-    {
-      v: 'v2',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'رادار 48 تقنية في 6 مجموعات بمقياس TRL؛ مكتبة 20 دورًا مرجّعة إلى SFIA؛ محرك تعلم (48 موردًا + قوالب خطط + 24 سؤال تحقق)؛ وربط النتائج بالتقنيات.', en: '48-technology radar in 6 TRL clusters; 20-role SFIA-referenced library; learning engine (48 resources + plan templates + 24 knowledge checks); results-to-technology linking.' },
-      ],
-    },
-    {
-      v: 'v3',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'إعادة التموضع نحو الأفراد والأسر: 30 مهنة بإشارات مستقبلية وأدلة، اختبار توجيه بخمسة أسئلة، قوائم WEF، مقال المهارات مقابل الشهادة، وهوية بصرية خضراء مستلهمة من المواقع الحكومية السعودية.', en: 'Pivot to individuals and families: 30 careers with future signals and evidence, a 5-question guidance quiz, WEF lists, the skills-vs-degree explainer, and a green visual identity inspired by Saudi government sites.' },
-      ],
-    },
-    {
-      v: 'v3.2',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'جولة المراجعة الخبيرة الأولى: مؤشر اتساق حقيقي (تقدير ذاتي × تحقق)، تحوط «متوقعة» للأرقام، حذف الأرقام غير المسندة، معالجة النتيجة الفارغة، إصلاحات خوارزمية التوجيه، إتاحة WCAG، إخلاء مسؤولية بارز، توحيد عتبات المستويات.', en: 'First expert-review round: a real agreement indicator (self-rating × knowledge check), “expected” hedging on figures, removal of unsourced numbers, empty-state handling, quiz-algorithm fixes, WCAG accessibility, a prominent disclaimer, unified level thresholds.' },
-        { ar: 'الجولة الثانية: شاشة الدور (طالب/والد/موظف/متغير)، ميول RIASEC باختيارين، ملاحظات القبول والتكلفة، مسارات TVTC الصريحة، تقسيم التعرض (ذكاء توليدي/روبوتي) والأفق الزمني، تدقيق SFIA وتعريب رادار التقنيات كاملًا، إعادة تقييم 6 تقنيات، 4 أدوار جديدة، جسر الموجه البشري، توسيع بنك التحقق إلى 5 أسئلة لكل مجال، وإعادة صياغة العبارات الأربعين بسلوك واحد لكل بند.', en: 'Second round: persona screen (student/parent/employee/changer), RIASEC interests with two picks, admission & cost notes, explicit TVTC tracks, exposure split (GenAI/robotic) and time horizon, SFIA audit and full Arabic tech radar, 6 re-rated technologies, 4 new roles, the human-counselor bridge, knowledge-check bank expanded to 5 per domain, and the 40 statements rewritten to one behavior each.' },
-      ],
-    },
-    {
-      v: 'v4',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'إصدار الجاهزية الوطنية: توسعة المهن إلى 50 (سياحة، ترفيه، طيران، رياضة، ألعاب، ثقافة، لوجستيات، تعدين، مياه، زراعة ذكية، بحري، عقار، إعلام، فضاء، تقنية مالية، امتثال، أمن تشغيلي، معلوماتية صحية، رعاية مسنين) مع إسناد ورموز ISCO تقريبية لكل منها.', en: 'National-readiness release: careers expanded to 50 (tourism, events, aviation, sports, gaming, culture, logistics, mining, water, agritech, maritime, real estate, media, space, fintech, compliance, OT security, health informatics, elderly care) — each with provenance and approximate ISCO codes.' },
-        { ar: 'طبقة مهارات المستقبل: مسارات طلب 2026←2030 للمجالات الثمانية، و15 مهارة دقيقة ناشئة، و10 مهام متراجعة بقاعدة «المهمة لا المهنة»؛ ودليل التبني المؤسسي للجهات الحكومية (حوكمة، مؤشرات، تكامل مع جدارات والأكاديميات، خصوصية PDPL).', en: 'Future-skills layer: 2026→2030 demand trajectories for the eight domains, 15 emerging micro-skills, and 10 declining tasks under the task-not-job rule; the institutional adoption playbook for government entities (governance, KPIs, Jadarat/academy integration, PDPL privacy).' },
-        { ar: 'شارات ثقة على المصادر (رسمي/استطلاع/ذاتي) وزر الخطوة التالية الوحيد بعد النتائج.', en: 'Trust badges on sources (official/survey/self-reported) and the single prominent next step after results.' },
-      ],
-    },
-    {
-      v: 'v6',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'إعادة ضبط جوهرية بعد تدقيق خارجي: السؤال المنظم صار تطوير القوى العاملة الحكومية؛ الرئيسية أعيد بناؤها بأربعة مداخل (موظف/مختص/مدير/تنفيذي) ومسار الأفراد أصبح خدمة عامة ثانوية واضحة.', en: 'A fundamental reset after an external audit: the organizing question is now government-workforce development; the home was rebuilt with four entrances (employee/specialist/manager/executive) and the citizen track is a clearly subordinate public service.' },
-        { ar: 'إصلاح سبعة عيوب موثقة بالتجربة الحية: خلل حدود المراحل (مع اختبار حدودي منشور في scripts/)، خلط مواضع إجابات التحقق (كان الخيار الثاني صحيحًا في 30/40)، قفل الإجابة بعد إظهارها، مستهدفات خاصة بكل مهنة من الخمسين بدل ملف عام واحد، خطط للفجوات الفعلية فقط مع توحيد «90 يومًا = 13 أسبوعًا»، اتساق حدود استخدام صفحة الجهات، وإصلاح زر قائمة البطاقات على سطح المكتب.', en: 'Seven live-tested defects fixed: the stage-boundary bug (with a published boundary test in scripts/), knowledge-check answer-position shuffling (option 2 was correct in 30/40), answer locking after reveal, per-career target profiles for all 50 careers instead of one generic profile, plans generated only for real gaps with unified “90 days = 13 weeks” framing, entities-page usage-boundary consistency, and the desktop card-list toggle fix.' },
-        { ar: 'نموذج المسارات الخمسة (توعوي / أساسي تطبيقي / تخصصي / قيادة الفرق والتحول / تنفيذي واستراتيجي) كمفهوم أولي: يُختار في بداية التقييم ويظهر في النتائج — مستوى الإتقان يبقى محورًا مستقلًا، وتفرع الأسئلة لكل مسار في الإصدار القادم.', en: 'The five-track model (awareness / applied / specialist / team & transformation leadership / executive & strategic) as a first-class concept: chosen at assessment start, shown on results — proficiency stays an independent axis, and per-track scenario branching lands in the next release.' },
-        { ar: 'إعادة تأطير مستكشف المهن إلى «كيف تتطور الأدوار والمهام؟» مع تخفيف إضافي للأحكام القاطعة على مستقبل المهن.', en: 'The careers explorer reframed to “How do roles and tasks evolve?”, with further softening of categorical verdicts on career futures.' },
-      ],
-    },
-    {
-      v: 'v6-B',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'الجولة الثانية من v6 — النواة التي طلبها التدقيق: أربعون موقف حكم مهني (5 مسارات × 8 مجالات) بدرجات نضج جزئية ومبررات فورية ومقفلة — تقيس «فهم الموقف» كطبقة دليل مستقلة عن التقرير الذاتي. ملاحظة صادقة: المواقف تحريرية ولم تُختبر ميدانيًا بعد مع جهات تجريبية.', en: 'v6 round two — the core the audit demanded: 40 professional-judgment scenarios (5 tracks × 8 domains) with partial-credit maturity scoring and instant locked rationales — measuring “situational judgment” as an evidence layer independent of self-report. Honest note: the scenarios are editorial and not yet field-validated with pilot entities.' },
-        { ar: 'النتائج صارت أربع طبقات منفصلة صراحة: تقديري لنفسي، وفهمي للمواقف، وتحققي المعرفي، وأولويتي التطويرية — بقاعدة معلنة («تقدير مرتفع + فهم ضعيف = تضخيم محتمل»)، والجملة الختامية تتبع نموذج التدقيق: المهمة القابلة للتحسين + المهارة الأهم + دليل نقطة البداية + الخطوة الأولى.', en: 'Results are now four explicitly separated layers: self-estimate, situational judgment, knowledge check, and development priority — with a declared rule (“high self-report + weak judgment = possible inflation”), and the closing sentence follows the audit’s model: the improvable task + the key skill + starting-point evidence + the first step.' },
-        { ar: 'سجل المهارات: أربعون سجلًا مهاريًا مستقلًا بنسخة وتاريخ مراجعة (تعريف، جمهور، مهمة مثال، أساس دليل، متطلبات سابقة، عبارة تقييم مرتبطة) — ينفذ توصية «كل مهارة سجلًا مستقلًا». وقسم المؤشرات العالمية الجديد يربط المنصة بـ GTMI وOECD DGI وOURdata وEGDI/OSI وITU GCI وIMD بصدق (بما فيه ما لا تقيسه).', en: 'Skill registry: forty independent versioned, review-dated skill records (definition, audience, example task, evidence basis, prerequisites, linked assessment item) — implementing “every skill is its own record”. The new global-indices section honestly links the platform to GTMI, OECD DGI, OURdata, EGDI/OSI, ITU GCI and IMD — including what they do not measure.' },
-      ],
-    },
-    {
-      v: 'v7',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: 'ثلاثة عروض جديدة مبنية على بيانات حكومية حقيقية: «أثر تمكين الجهات» (مؤشرات ومخططات SVG: التدريب السنوي 2021–2026 مع توسيم 2026 سنة جزئية، الركائز الاستراتيجية الست، فئات الاستشارات الثمان، أعلى 10 جهات، الانتشار حسب المنطقة)، و«القطاعات الحكومية» (31 بطاقة قطاع مع عرض تفصيلي منبثق لجهات كل قطاع)، و«دليل الجهات» (682 جهة ببحث عربي/إنجليزي وتصفية بالقطاع والنوع والنطاق والمنطقة والشعار والاستفادة، بترقيم 48 بطاقة/صفحة).', en: 'Three new views built on real government data: “Enablement Impact” (KPIs and SVG charts: yearly training 2021–2026 with 2026 flagged as partial, the six strategic pillars, the eight consulting categories, top-10 entities, regional coverage), “Government Sectors” (31 sector cards with an inline per-sector entity detail), and “Entity Directory” (682 entities with Arabic/English search, sector/type/scope/region/logo/served filters, 48-card pagination).' },
-        { ar: 'الشعارات: 485 ملف PNG رسميًا يُحمَّل كسولًا (lazy) مع بديل حرف أول الاسم عند غياب الشعار أو فشل تحميله — وتُحل المسارات على base النشر.', en: 'Logos: 485 official PNGs lazy-loaded with a name-monogram fallback when a logo is missing or fails to load — paths resolved against the deploy base.' },
-        { ar: 'تكامل: روابط في قائمة «أدوات متخصصة» والتذييل، وبطاقات بارزة في صفحة «للجهات الحكومية»، وشريط أثر بالأرقام الحقيقية في الرئيسية بعد شريط إحصاءات WEF.', en: 'Integration: links in the “Pro tools” menu and the footer, prominent cards on the “For Government Entities” page, and a real-figures impact strip on the home page after the WEF stats strip.' },
-      ],
-    },
-    {
-      v: 'v8',
-      date: { ar: 'أكتوبر 2026', en: 'October 2026' },
-      items: [
-        { ar: '«اربط وطوّر» — ربط ذكي بين القطاعات والمهارات: استخرجنا من ورقة «تفصيل الخدمات الاستشارية» مصفوفة جهة×فئة كاملة (372 جهة، 2,873 سجلًا، مطابقة أسماء 100%) ومن ورقة «التدريب حسب السنة» سلاسل سنوية لكل جهة (322 جهة، مجاميع مطابقة للإجمالي الوطني 7,915).', en: '“Link & develop” — intelligent sector↔skills linkage: a full entity×category matrix extracted from the consulting-detail sheet (372 entities, 2,873 records, 100% name match) and per-entity yearly training series from the training-by-year sheet (322 entities, totals matching the national 7,915).' },
-        { ar: 'ملف سوق مهاري محسوب لكل قطاع: تُجمّع الفئات الاستشارية الفعلية لجهات القطاع وتُوزَّع على المجالات الثمانية بجدول أوزان موثق في المنهجية، ثم تُعرض أعلى ثلاثة مجالات بنسب مئوية في تفاصيل القطاع مع جملة استدلال وزر «قيّس جاهزيتك لأولويات القطاع».', en: 'A computed skill-demand profile per sector: the sector entities’ actual consulting categories are aggregated and distributed across the eight domains via the documented weight table, then the top three domains are shown as percentages in the sector detail with an insight sentence and a “measure your readiness for sector priorities” CTA.' },
-        { ar: 'صفحة تفصيلية لكل جهة (682): الشعار، التصنيف الكامل، سجل الاستفادة مع مخطط التدريب السنوي الخاص بالجهة، أبرز الخدمات الاستشارية حرفيًا، وقسم «ما الذي تحتاجه جهتك؟» المشتق من فئات الجهة نفسها — مع انتقال مباشر من الدليل ومن تفاصيل القطاع، وأعمدة فئات الأثر أصبحت قابلة للنقر وتفتح القطاعات مرتبة حسب الطلب على الفئة.', en: 'A detail page for every entity (682): logo, full classification, utilization record with the entity’s own yearly-training chart, verbatim top consulting services, and a “what does your entity need?” section derived from the entity’s own categories — with direct click-through from the directory and sector detail, and clickable Impact category bars opening sectors ranked by category demand.' },
-      ],
-    },
+/* ------------------------------------------------------------------- page */
+
+export default function Methodology() {
+  const { t, lang } = useApp()
+
+  const jump = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    e.preventDefault()
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    ;(document.getElementById(`${id}-h`) as HTMLElement | null)?.focus({ preventScroll: true })
+  }
+
+  const keyFigures: { id: string; label: L }[] = [
+    { id: 'method-domains-count', label: { ar: 'للقدرات الرقمية في العمل الحكومي', en: 'of digital capability in government work' } },
+    { id: 'method-skills-count', label: { ar: 'لكل منها عبارة تقييم ذاتي', en: 'each with a self-assessment statement' } },
+    { id: 'method-levels-count', label: { ar: 'على مقياس واحد', en: 'on one scale' } },
+    { id: 'method-scenarios-count', label: { ar: 'للحكم المهني', en: 'of professional judgment' } },
+    { id: 'method-knowledge-count', label: { ar: 'للتحقق المعرفي', en: 'for the knowledge check' } },
   ]
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <p className="eyebrow">{t({ ar: 'الحوكمة والشفافية', en: 'Governance & transparency' })}</p>
-      <h1 className="mt-2 text-h1 font-bold text-dga-green-deep">{t({ ar: 'المنهجية', en: 'Methodology' })}</h1>
-      <p className="mt-3 leading-relaxed text-dga-muted">
-        {t({
-          ar: 'كيف نبني أحكامنا، ومن أين تأتي الأرقام، وأين تقف حدودنا — منشورة ليستطيع أي مراجع الدفاع عنها أو الطعن فيها.',
-          en: 'How we build our judgments, where the numbers come from, and where our limits stand — published so any reviewer can defend or challenge them.',
-        })}
-      </p>
-      <p className="mt-3 rounded-btn border-s-2 border-dga-green bg-dga-green/5 p-4 text-sm leading-relaxed text-dga-ink">
-        {t({
-          ar: 'منذ الإصدار السادس: السؤال المنظم للمنصة هو «كيف يتغير العمل الحكومي، وما القدرات التي يحتاجها الموظف والقيادي، وكيف نطورها؟» — وأدوات التوجيه المهني للأفراد والطلاب تبقى خدمة عامة ثانوية واضحة التبعية، لا قلب المنتج.',
-          en: 'Since v6, the platform’s organizing question is “How is government work changing, what capabilities do employees and leaders need, and how do we develop them?” — the career-guidance tools for individuals and students remain a clearly subordinate public-service track, not the product’s core.',
-        })}
-      </p>
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+      <header>
+        <p className="eyebrow">{t({ ar: 'المنهجية والمصادر', en: 'Method & sources' })}</p>
+        <h1 className="mt-2 text-h1 font-bold text-dga-green-deep">{t({ ar: 'المنهجية', en: 'Methodology' })}</h1>
+        <p className="mt-3 leading-relaxed text-dga-muted">
+          {t({
+            ar: 'كيف تُبنى أحكام الأداة، ومن أين تأتي أرقامها، وأين تقف حدودها؛ منشورة ليستطيع أي مراجع أن يدافع عنها أو يعترض عليها. كل رقم في هذه الصفحة يحمل شارة مصدره، افتحها لترى المصدر ونوعه والثقة فيه وتاريخ مراجعته.',
+            en: 'How the tool forms its judgments, where its figures come from and where its limits lie, published so any reviewer can defend or challenge them. Every figure on this page carries a source badge; open it to see the source, its type, the confidence in it and when it was last reviewed.',
+          })}
+        </p>
+      </header>
 
-      <div className="mt-10 space-y-5">
-        {sections.map((sec, i) => (
-          <motion.section
-            key={sec.title.en}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.45 }}
-            className="glass p-6"
-          >
-            <h2 className="flex items-center gap-3 text-lg font-bold text-dga-black">
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-pill bg-dga-green/10 font-mono text-sm font-bold text-dga-green-deep">
-                {i + 1}
-              </span>
-              {t(sec.title)}
-            </h2>
-            <p className="mt-3 text-sm leading-loose text-dga-ink">{t(sec.body)}</p>
-          </motion.section>
+      {/* key figures */}
+      <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {keyFigures.map((k) => (
+          <li key={k.id} className="glass flex flex-col gap-1 p-4">
+            <span className="text-lg text-dga-green-dark">
+              <Claim id={k.id} />
+            </span>
+            <span className="text-xs leading-relaxed text-dga-muted">{t(k.label)}</span>
+          </li>
         ))}
+      </ul>
+
+      {/* contents */}
+      <nav aria-label={t({ ar: 'محتويات الصفحة', en: 'On this page' })} className="mt-8 rounded-card border border-dga-line bg-white p-5">
+        <p className="text-xs font-semibold text-dga-muted">{t({ ar: 'محتويات الصفحة', en: 'On this page' })}</p>
+        <ol className="mt-3 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2">
+          {SECTIONS.map((s) => (
+            <li key={s.id}>
+              <a href={`#${s.id}`} onClick={(e) => jump(e, s.id)} className="text-dga-green-dark underline-offset-2 hover:underline">
+                {t(s.title)}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <div className="mt-8 space-y-5">
+        {/* 1 — what it is */}
+        <Block id="m-what">
+          <p>
+            {t({
+              ar: 'التقييم في هذه الأداة تقييم ذاتي يساعدك على استكشاف أولويات تطويرك في المجالات الثمانية. هو نقطة بداية لحوار تطويري، لا قياس لقدرتك.',
+              en: 'The assessment in this tool is a self-assessment that helps you explore your development priorities across the eight domains. It is a starting point for a development conversation, not a measurement of your ability.',
+            })}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-btn border border-dga-line bg-dga-bg p-4">
+              <h3 className="mb-2 font-bold text-dga-green-dark">{t({ ar: 'ما هو', en: 'What it is' })}</h3>
+              <Bullets
+                items={[
+                  t({
+                    ar: 'تقدير ذاتي لمهاراتك، تكمله مواقف حكم مهني وأسئلة تحقق معرفي تساعدك على مراجعة تقديرك.',
+                    en: 'A self-rating of your skills, complemented by professional-judgment scenarios and knowledge-check questions that help you review it.',
+                  }),
+                  <ClaimText
+                    key="plan"
+                    text={t({
+                      ar: 'أداة للتطوير الذاتي وللحوار بينك وبين مديرك حول خطة تطوير مدتها {{method-plan-length}}.',
+                      en: 'A tool for self-development and for a conversation with your manager about a development plan of {{method-plan-length}}.',
+                    })}
+                  />,
+                  t({ ar: 'نتائجه تبقى في متصفحك ولا تُرسل إلى أي جهة.', en: 'Its results stay in your browser and are sent to no one.' }),
+                ]}
+              />
+            </div>
+            <div className="rounded-btn border border-dga-line bg-dga-bg p-4">
+              <h3 className="mb-2 font-bold text-dga-amber-tx">{t({ ar: 'ما ليس هو', en: 'What it is not' })}</h3>
+              <Bullets
+                items={[
+                  t({
+                    ar: 'ليس قياسًا لقدرتك ولا امتحانًا، ولا يمنح شهادة أو مستوى معتمدًا.',
+                    en: 'Not a measurement of your ability or an exam, and it confers no certificate or certified level.',
+                  }),
+                  t({
+                    ar: 'لا يُستخدم في التوظيف أو الترقية أو المفاضلة أو التقييم الوظيفي أو أي قرار يمس الموظف.',
+                    en: 'Not for hiring, promotion, selection, performance appraisal or any decision about an employee.',
+                  }),
+                  t({ ar: 'لا يرتّب الأشخاص، ولا يعطي درجة كلية.', en: 'It ranks no one and gives no overall score.' }),
+                ]}
+              />
+            </div>
+          </div>
+        </Block>
+
+        {/* 2 — scale */}
+        <Block id="m-scale">
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'تقدّر كل مهارة على مقياس {{method-scale}}، ودرجة المجال متوسط تقديرات مهاراته. تتحول الدرجة إلى أحد {{method-levels-count}} عند العتبات {{method-level-thresholds}}.',
+                en: 'You rate each skill on a {{method-scale}} scale, and a domain score is the mean of its skill ratings. The score converts to one of {{method-levels-count}} at the thresholds {{method-level-thresholds}}.',
+              })}
+            />
+          </p>
+          <ScaleBar />
+          <Note>
+            {t({
+              ar: 'العتبات تحريرية معلنة لم تُشتق من بيانات، ولم يُتحقق من صلاحية المقياس إحصائيًا. المستوى يساعدك على قراءة تقديرك، ولا يصف أداءك الفعلي.',
+              en: 'The thresholds are declared editorial choices not derived from data, and the scale has not been statistically validated. A level helps you read your self-rating; it does not describe your actual performance.',
+            })}
+          </Note>
+        </Block>
+
+        {/* 3 — evidence layers */}
+        <Block id="m-layers">
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'تختار في بداية التقييم فئة دورك من {{method-role-categories}}:',
+                en: 'At the start you choose your role category from {{method-role-categories}}:',
+              })}
+            />
+          </p>
+          <ul className="flex flex-wrap gap-2" aria-label={t({ ar: 'فئات الدور', en: 'Role categories' })}>
+            {tracks.map((tr) => (
+              <li key={tr.id} className="chip text-dga-ink">
+                {t(tr.name)}
+              </li>
+            ))}
+          </ul>
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'يضم بنك المواقف {{method-scenarios-count}}، موقفًا لكل مجال في فئة دورك. لكل موقف أربعة خيارات تُمنح درجات جزئية {{method-scenario-scoring}} بحسب نضج التصرف، ويظهر مسوّغ الإجابة بعد اختيارها.',
+                en: 'The scenario bank holds {{method-scenarios-count}}, one per domain in your role category. Each has four options scored {{method-scenario-scoring}} by the maturity of the response, and the rationale appears after you answer.',
+              })}
+            />
+          </p>
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'يضم التحقق المعرفي {{method-knowledge-count}} عن المعرفة الأساسية في كل مجال. يُحفظ عدد ما أجبت عنه وعدد الصحيح منه، ولا يُحكم على اتساقه مع تقديرك الذاتي قبل {{method-knowledge-min-attempts}} في المجال.',
+                en: 'The knowledge check holds {{method-knowledge-count}} on foundational knowledge in each domain. It keeps how many you answered and how many were correct, and consistency with your self-rating is not judged before {{method-knowledge-min-attempts}} in the domain.',
+              })}
+            />
+          </p>
+          <Note>
+            {t({
+              ar: 'المواقف وأسئلة التحقق المعرفي تحريرية: كتبها مؤلف الأداة وراجعها تحريريًا، ولم تُختبر ميدانيًا مع جهات تجريبية، ولم يُتحقق من صلاحيتها إحصائيًا.',
+              en: 'The scenarios and knowledge-check questions are editorial: written and edited by the tool’s author, not field-tested with pilot entities and not statistically validated.',
+            })}
+          </Note>
+        </Block>
+
+        {/* 4 — priorities */}
+        <Block id="m-priorities">
+          <p>
+            {t({
+              ar: 'محرك أولويات واحد يقرأ أربعة مدخلات ويقترح أولويات التطوير. تقرأ منه صفحة النتائج والخطة والتقرير المطبوع، فلا تختلف الأولوية من صفحة إلى أخرى.',
+              en: 'One priority engine reads four inputs and suggests development priorities. The results page, the plan and the printed report all read from it, so the priority never differs from one page to another.',
+            })}
+          </p>
+          <PriorityDiagram />
+          <h3 className="pt-1 font-bold text-dga-black">{t({ ar: 'أسباب الأولوية', en: 'Reasons for a priority' })}</h3>
+          <Bullets
+            items={[
+              t({ ar: 'تقديرك الذاتي دون المستهدف الاسترشادي لفئة دورك.', en: 'Your self-rating is below the indicative target for your role category.' }),
+              t({ ar: 'فهمك للمواقف دون تقديرك الذاتي.', en: 'Your scenario responses are below your self-rating.' }),
+              t({ ar: 'تقديرك الذاتي وفهمك للمواقف كلاهما دون المستهدف.', en: 'Both your self-rating and your scenario responses are below the target.' }),
+              t({
+                ar: 'تقدير ذاتي مرتفع لا تؤيده المواقف ولا التحقق المعرفي، فيُقترح التحقق منه عمليًا.',
+                en: 'A high self-rating that neither the scenarios nor the knowledge check support, so checking it in practice is suggested.',
+              }),
+            ]}
+          />
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'إن اخترت دورًا محددًا من مكتبة الأدوار ({{method-roles-count}}) يُستخدم مستهدفه الاسترشادي بدل مستهدف الفئة.',
+                en: 'If you choose a specific role from the role library ({{method-roles-count}}), its indicative target replaces the category target.',
+              })}
+            />
+          </p>
+          <Note>
+            {t({
+              ar: 'لا درجة كلية ولا «جاهزية» عامة، ولا ترتيب للأشخاص. المستهدف استرشادي تحريري لفئة الدور، وليس معيارًا وظيفيًا. الأولوية المقترحة دعوة للتطوير، وليست قياسًا لنقص في قدرتك.',
+              en: 'No overall score, no general “readiness” and no ranking of people. The target is an indicative editorial one for the role category, not a job standard. A suggested priority is an invitation to develop, not a measurement of a shortfall in your ability.',
+            })}
+          </Note>
+        </Block>
+
+        {/* 5 — technologies */}
+        <Block id="m-tech">
+          <p>
+            <ClaimText
+              text={t({
+                ar: 'قائمة من {{method-tech-count}} مرتبطة بالمهارات التي تتطلبها كل تقنية. الغرض أن تعرف أي المهارات تستعد لها، لا أن تُقيَّم التقنيات نفسها.',
+                en: 'A list of {{method-tech-count}}, each linked to the skills it requires. The aim is to show which skills to prepare for, not to rate the technologies themselves.',
+              })}
+            />
+          </p>
+          <Bullets
+            items={[
+              <ClaimText
+                key="h"
+                text={t({
+                  ar: 'الأفق: {{method-tech-horizons}}. هو حكم تحريري عن موعد اتساع استخدام التقنية في العمل الحكومي.',
+                  en: 'Horizon: {{method-tech-horizons}}. It is an editorial judgment of when a technology’s use in government work broadens.',
+                })}
+              />,
+              <ClaimText
+                key="trl"
+                text={t({
+                  ar: 'مقياس الجاهزية التقنية {{method-tech-trl}} يصف النضج العالمي للتقنية لا نضج تبنيها في المملكة، ويظهر في التفاصيل فقط بشارة «تحريري».',
+                  en: 'The technology readiness scale {{method-tech-trl}} describes a technology’s global maturity, not its adoption in Saudi Arabia, and appears only in the details with an “editorial” badge.',
+                })}
+              />,
+              t({
+                ar: 'الحكم مراجعة مكتبية لكل تقنية مقابل إشارات منشورة مسماة، مع مسوّغ مكتوب لكل حكم.',
+                en: 'Each judgment is a desk review against named published signals, with a written rationale.',
+              }),
+              t({
+                ar: 'القائمة قراءة مستقلة، وليست رادارًا رسميًا لأي جهة.',
+                en: 'The list is an independent reading, not an official radar of any organization.',
+              }),
+            ]}
+          />
+        </Block>
+
+        {/* 6 — government data */}
+        <Block id="m-gov">
+          <p>
+            {t({
+              ar: 'تأتي أرقام الجهات من ملفي مصدر: سجل خدمات التمكين (التدريب والاستشارات)، ودليل الجهات والقطاعات. وهما سجلات داخلية لبرنامج قدراتك ومنصة الاستشارات والدراسات حتى نهاية الربع الثالث من 2026. الوحدتان مختلفتان: سجلات مشاركة تدريبية (لا أشخاص فريدون) وخدمات استشارية، فلا تُجمعان في رقم واحد.',
+              en: 'Entity figures come from two source workbooks: the enablement service records (training and consulting) and the entity and sector directory. Both are internal records of the government digital-skills program and the consulting and studies platform, up to the end of the third quarter of 2026. The two units differ, training participation records (not unique people) and consulting services, so they are never added into one figure.',
+            })}
+          </p>
+          <div className="overflow-x-auto rounded-btn border border-dga-line">
+            <table className="w-full min-w-[34rem] text-start text-[13px]">
+              <caption className="sr-only">{t({ ar: 'توفيق الأرقام الوطنية بين ثلاثة مصادر', en: 'Reconciling the national figures across three sources' })}</caption>
+              <thead className="bg-dga-bg text-xs text-dga-muted">
+                <tr>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'المصدر', en: 'Source' })}</th>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'سجلات المشاركة التدريبية', en: 'Training participation records' })}</th>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'الخدمات الاستشارية', en: 'Consulting services' })}</th>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'الحالة', en: 'Status' })}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-dga-line bg-dga-green/5 align-top">
+                  <th scope="row" className="p-3 text-start font-semibold">
+                    {t({ ar: 'مجاميع أوراق ملفي المصدر', en: 'Sheet totals of the two workbooks' })}
+                  </th>
+                  <td className="p-3"><Claim id="method-gov-training-sheet" variant="icon" /></td>
+                  <td className="p-3"><Claim id="method-gov-consulting-sheet" variant="icon" /></td>
+                  <td className="p-3 font-semibold text-dga-green-dark">{t({ ar: 'الرقم المنشور في الأداة', en: 'The figure the tool publishes' })}</td>
+                </tr>
+                <tr className="border-t border-dga-line align-top">
+                  <th scope="row" className="p-3 text-start font-semibold">
+                    {t({ ar: 'النص المنهجي المرافق للملفين', en: 'Prose accompanying the workbooks' })}
+                  </th>
+                  <td className="p-3"><Claim id="method-gov-training-prose" variant="icon" /></td>
+                  <td className="p-3"><Claim id="method-gov-consulting-prose" variant="icon" /></td>
+                  <td className="p-3 text-dga-muted">{t({ ar: 'لا يطابق الأوراق؛ للشفافية فقط', en: 'Does not match the sheets; for transparency only' })}</td>
+                </tr>
+                <tr className="border-t border-dga-line align-top">
+                  <th scope="row" className="p-3 text-start font-semibold">
+                    {t({ ar: 'السجل الحي لبرنامج قدراتك (تحقق أكتوبر 2026)', en: 'The program’s live register (checked October 2026)' })}
+                  </th>
+                  <td className="p-3"><Claim id="method-gov-training-register" variant="icon" /></td>
+                  <td className="p-3"><Claim id="method-gov-consulting-register" variant="icon" /></td>
+                  <td className="p-3 text-dga-muted">{t({ ar: 'يختلف بسبب تاريخ القطع والتصفية', en: 'Differs by cut-off date and filtering' })}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            {t({
+              ar: 'نعرض في الأداة مجاميع الأوراق لأنها متسقة مع المجاميع القطاعية، ونذكر الرقمين الآخرين بتاريخيهما. يحسم المالك الرقم المعتمد، وتُحدَّث الأداة عندئذ.',
+              en: 'The tool shows the sheet totals because they are consistent with the sector aggregates, and states the other two figures with their dates. The owner decides the confirmed figure, and the tool is updated then.',
+            })}
+          </p>
+          <Bullets
+            items={[
+              <ClaimText
+                key="n"
+                text={t({
+                  ar: 'البناء العام يعرض مجاميع فقط: أرقامًا وطنية ومجاميع قطاعية، ولا يظهر مجموع قطاع إلا إذا بلغ عدد جهاته ذات السجلات {{method-gov-sector-min}}.',
+                  en: 'The public build shows aggregates only, national figures and sector aggregates, and a sector total appears only when its entities with records reach {{method-gov-sector-min}}.',
+                })}
+              />,
+              t({
+                ar: 'لا سجلات لكل جهة، ولا شعارات رسمية، ولا ترتيب للجهات، ولا وصف لجهة بأنها لم تستفد، ولا احتياجات مستنتجة لجهة بعينها.',
+                en: 'No per-entity records, no official logos, no ranking of entities, no labelling of an entity as not served, and no inferred needs for a named entity.',
+              }),
+              t({
+                ar: 'الطبقة التفصيلية لكل جهة موجودة في نسخة عرض خاصة فقط، ولا تُنشر.',
+                en: 'The per-entity layer exists only in a private demonstration build and is not published.',
+              }),
+              t({
+                ar: '«جهة حكومية» تعني جهة حكومية فقط؛ وتُسمّى الأنواع الأخرى (شركات مملوكة، وجهات أهلية، وأندية) بنوعها.',
+                en: '“Government entity” means government entities only; other types (owned companies, non-profits, clubs) are named by their type.',
+              }),
+            ]}
+          />
+        </Block>
+
+        {/* 7 — category mapping */}
+        <Block id="m-mapping">
+          <p>
+            {t({
+              ar: 'تُستخدم فئات الاستشارات في سجل الخدمات لاقتراح «مجالات تطوير مرتبطة بسجل الاستشارات» على مستوى القطاع. هذا استنتاج تحريري: طلب الجهة لاستشارة لا يقيس احتياج موظفيها، والأوزان أدناه افتراضات معلنة لا قياس.',
+              en: 'The consulting categories in the service records are used to suggest “development domains linked to the consulting record” at sector level. This is an editorial inference: an entity requesting a consultation does not measure its staff’s needs, and the weights below are declared assumptions, not measurements.',
+            })}
+          </p>
+          <div className="overflow-x-auto rounded-btn border border-dga-line">
+            <table className="w-full min-w-[34rem] text-[13px]">
+              <caption className="sr-only">{t({ ar: 'جدول أوزان ربط فئات الاستشارات بالمجالات', en: 'Weight table mapping consulting categories to domains' })}</caption>
+              <thead className="bg-dga-bg text-xs text-dga-muted">
+                <tr>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'فئة الاستشارات', en: 'Consulting category' })}</th>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'المجالات المرتبطة بالترتيب', en: 'Linked domains, in order' })}</th>
+                  <th scope="col" className="p-3 text-start font-semibold">{t({ ar: 'الأوزان', en: 'Weights' })}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categoryWeightRows.map((row) => (
+                  <tr key={row.key} className="border-t border-dga-line align-top">
+                    <th scope="row" className="p-3 text-start font-semibold">{t(row.name)}</th>
+                    <td className="p-3">
+                      {row.weights.map((w, i) => {
+                        const d = domainById(w.domainId)
+                        return (
+                          <span key={w.domainId}>
+                            {i > 0 ? <span className="text-dga-muted"> · </span> : null}
+                            {d ? t(d.name) : w.domainId}
+                          </span>
+                        )
+                      })}
+                    </td>
+                    <td className="whitespace-nowrap p-3">
+                      <Claim id={row.claimId} variant="icon" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Bullets
+            items={[
+              t({
+                ar: 'يُعرض المؤشر على مستوى القطاع فقط، مع عدد السجلات والفترة، وبشارة «استنتاج تحريري».',
+                en: 'The indicator is shown at sector level only, with the record count and period, and an “editorial inference” badge.',
+              }),
+              t({
+                ar: 'لا تُعرض نسب مئوية لأعلى ثلاثة مجالات بعد إعادة توزيعها، لأن هذه المعالجة تضخّم الفروق.',
+                en: 'No percentages are shown for the top three domains after rescaling them, because that treatment exaggerates differences.',
+              }),
+              t({
+                ar: 'يظهر الأمن السيبراني في المؤشر أقل من حقيقته لأن خدمات الأمن السيبراني الوطنية ليست ضمن هذه الاستشارات.',
+                en: 'Cybersecurity appears lower than it really is, because national cybersecurity services are not part of these consultations.',
+              }),
+            ]}
+          />
+        </Block>
+
+        {/* 8 — privacy */}
+        <Block id="m-privacy">
+          <Bullets
+            items={[
+              t({
+                ar: 'لا يغادر شيء متصفحك: إجاباتك ونتائجك تُحفظ في جهازك فقط، ويمكنك حذفها متى شئت.',
+                en: 'Nothing leaves your browser: your answers and results are stored on your device only, and you can delete them at any time.',
+              }),
+              t({
+                ar: 'لا حسابات، ولا أدوات تحليل أو تتبع، ولا ملفات تعريف إعلانية.',
+                en: 'No accounts, no analytics or tracking tools, and no advertising cookies.',
+              }),
+              t({
+                ar: 'الخطوط مستضافة مع الموقع نفسه، فلا تُرسل الصفحة أي طلب إلى جهة خارجية عند التحميل.',
+                en: 'Fonts are hosted with the site itself, so the page sends no request to any third party on load.',
+              }),
+              t({
+                ar: 'إن اخترت نسخ رمز نتيجتك فهو يحمل درجات مقرّبة وفئة دورك فقط، بلا اسم ولا بيانات شخصية، ولا يُرسل إلى أي خادم.',
+                en: 'If you choose to copy your result code, it carries only rounded scores and your role category, with no name or personal data, and it is never sent to a server.',
+              }),
+              t({
+                ar: 'لا ربط بملف الموظف ولا بأي نظام للموارد البشرية.',
+                en: 'No link to an employee file or to any HR system.',
+              }),
+            ]}
+          />
+        </Block>
+
+        {/* 9 — independence */}
+        <Block id="m-independence">
+          <Note tone="green">
+            {t({
+              ar: 'رادار المهارات الرقمية مفهوم مستقل، وليس منتجًا رسميًا لأي جهة. أعدّه مؤلفه بصفة شخصية، ولا يمثل موقفًا رسميًا لأي جهة حكومية، ولا يستخدم شعارات رسمية. ذكر الأطر والتقارير والمؤشرات لا يعني أن جهاتها اعتمدت هذه الأداة.',
+              en: 'The Digital Skills Radar is an independent concept, not an official product of any organization. Its author prepared it in a personal capacity; it represents no official position of any government entity and uses no official logos. Citing frameworks, reports and indices does not mean their publishers endorse this tool.',
+            })}
+          </Note>
+        </Block>
+
+        {/* 10 — limits */}
+        <Block id="m-limits">
+          <Bullets
+            items={[
+              t({
+                ar: 'لم يُتحقق إحصائيًا بعد من صلاحية المقياس أو المواقف أو أسئلة التحقق المعرفي.',
+                en: 'The scale, scenarios and knowledge-check questions have not yet been statistically validated.',
+              }),
+              t({
+                ar: 'العتبات والأوزان والمستهدفات الاسترشادية تحريرية.',
+                en: 'Thresholds, weights and indicative targets are editorial.',
+              }),
+              t({
+                ar: 'بيانات الجهات تتوقف عند نهاية الربع الثالث من 2026، وسجلات التدريب سجلات مشاركة لا أشخاص.',
+                en: 'Entity data stops at the end of the third quarter of 2026, and training records are participation records, not people.',
+              }),
+              t({
+                ar: 'النص العربي هو المرجع، والترجمة الإنجليزية تحريرية.',
+                en: 'The Arabic text is the reference; the English translation is editorial.',
+              }),
+              t({
+                ar: 'بعض مصادر صفحة المعايير لم تُطابق بعد مع نصها الأصلي، وهي موسومة بثقة متوسطة أو منخفضة.',
+                en: 'Some sources on the standards page have not yet been matched to their original text, and are marked medium or low confidence.',
+              }),
+            ]}
+          />
+        </Block>
+
+        {/* 11 — cadence */}
+        <Block id="m-cadence">
+          <Bullets
+            items={[
+              t({ ar: 'مراجعة نصف سنوية لقائمة التقنيات وآفاقها.', en: 'A half-yearly review of the technology list and its horizons.' }),
+              t({ ar: 'مراجعة ربع سنوية للأرقام الوطنية المتحركة وبيانات الجهات.', en: 'A quarterly review of fast-moving national figures and entity data.' }),
+              t({
+                ar: 'مراجعة سنوية لمكتبة الأدوار ومستهدفاتها الاسترشادية وبنك المواقف.',
+                en: 'A yearly review of the role library, its indicative targets and the scenario bank.',
+              }),
+              <ClaimText
+                key="stale"
+                text={t({
+                  ar: 'يحمل كل ادعاء تاريخ آخر مراجعة له، ويُوسم في سجل الأدلة بأنه يحتاج مراجعة إذا مضى على مراجعته {{method-review-stale}}.',
+                  en: 'Every claim carries its last review date, and the evidence register flags it as needing review once {{method-review-stale}} have passed.',
+                })}
+              />,
+            ]}
+          />
+        </Block>
+
+        {/* 12 — release history */}
+        <Block id="m-changelog">
+          <ol className="space-y-4">
+            {CHANGELOG.map((c) => (
+              <li key={c.v} className="rounded-btn border border-dga-line bg-white p-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="chip-ok font-mono font-bold" dir="ltr">
+                    {c.v}
+                  </span>
+                  <time dateTime={c.date} className="text-xs text-dga-muted" dir="ltr">
+                    {c.date}
+                  </time>
+                </div>
+                <ul className="mt-3 space-y-1.5">
+                  {c.items.map((item, i) => (
+                    <li key={i} className="flex gap-2 leading-relaxed">
+                      <span className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-dga-green" aria-hidden />
+                      <span>{t(item)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+        </Block>
       </div>
 
-      {/* changelog */}
-      <section className="mt-12">
-        <h2 className="mb-5 text-2xl font-bold text-dga-green-dark">{t({ ar: 'سجل التغييرات', en: 'Changelog' })}</h2>
-        <div className="space-y-4">
-          {changelog.map((c) => (
-            <div key={c.v} className="glass p-5">
-              <div className="flex items-center gap-3">
-                <span className="chip-ok font-mono font-bold" dir="ltr">{c.v}</span>
-                <span className="text-xs text-dga-muted">{t(c.date)}</span>
-              </div>
-              <ul className="mt-3 space-y-2">
-                {c.items.map((item, i) => (
-                  <li key={i} className="flex gap-2 text-sm leading-relaxed text-dga-ink">
-                    <span className="text-dga-green">▸</span>
-                    {t(item)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      {/* next */}
+      <div className="mt-10 glass-strong flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+        <div>
+          <h2 className="text-lg font-bold text-dga-black">{t({ ar: 'كل رقم في جدول واحد', en: 'Every figure in one table' })}</h2>
+          <p className="mt-1 text-sm text-dga-muted">
+            {t({
+              ar: 'سجل الأدلة يعرض كل ادعاءات الأداة بمصادرها وأنواعها والثقة فيها وتواريخ مراجعتها.',
+              en: 'The evidence register lists every claim in the tool with its source, type, confidence and review date.',
+            })}
+          </p>
         </div>
-      </section>
+        <EvidenceLink className="btn-primary shrink-0 px-5 py-2.5 text-sm no-underline">
+          {t({ ar: 'افتح سجل الأدلة', en: 'Open the evidence register' })}
+          <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+        </EvidenceLink>
+      </div>
     </div>
   )
 }
