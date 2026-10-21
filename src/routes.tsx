@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 import type { RouteObject } from 'react-router-dom'
 import App from './App'
 import { AppProvider } from './store'
@@ -34,6 +35,12 @@ const HubRolesSkills = lazy(() => import('./views/hubs/RolesSkills'))
 const HubEntitiesSectors = lazy(() => import('./views/hubs/EntitiesSectors'))
 const HubMethod = lazy(() => import('./views/hubs/Method'))
 
+/** Redirects the DECISION §4 aliases to the implemented routes, keeping the language prefix. */
+function LangRedirect({ to }: { to: string }) {
+  const { lang } = useParams()
+  return <Navigate to={`/${lang === 'en' ? 'en' : 'ar'}/${to}`} replace />
+}
+
 const viewRoutes: RouteObject[] = [
   { index: true, element: <Home /> },
   { path: 'assess', element: <Wizard /> },
@@ -64,6 +71,9 @@ const viewRoutes: RouteObject[] = [
   { path: 'leaders/check', element: <LeaderCheck /> },
   { path: 'leaders/team', element: <TeamRadar /> },
   { path: 'work/shifts', element: <WorkShifts /> },
+  { path: 'work/skills-2030', element: <LangRedirect to="future-skills" /> },
+  { path: 'work/technologies', element: <LangRedirect to="tech-radar" /> },
+  { path: 'impact', element: <LangRedirect to="services" /> },
   { path: 'roles/:roleId', element: <RoleDetail /> },
   { path: '*', element: <NotFound /> },
 ]

@@ -14,9 +14,9 @@ export const pageTitles: Record<View, L> = {
   results: { ar: 'نتائج التقييم', en: 'Assessment Results' },
   pathways: { ar: 'خطة التطوير', en: 'Development Plan' },
   roles: { ar: 'الأدوار', en: 'Roles' },
-  skills: { ar: 'سجل المهارات', en: 'Skill Registry' },
-  'future-skills': { ar: 'مهارات المستقبل', en: 'Future Skills' },
-  'tech-radar': { ar: 'رادار التقنيات', en: 'Technology Radar' },
+  skills: { ar: 'قاموس المهارات', en: 'Skills dictionary' },
+  'future-skills': { ar: 'مهارات 2030', en: 'Skills for 2030' },
+  'tech-radar': { ar: 'تقنيات تغيّر العمل الحكومي', en: 'Technologies changing government work' },
   entities: { ar: 'الجهات', en: 'Entities' },
   sectors: { ar: 'القطاعات', en: 'Sectors' },
   directory: { ar: 'دليل الجهات', en: 'Entity Directory' },
@@ -44,16 +44,16 @@ export const pageTitles: Record<View, L> = {
 /** One or two sentences per view (70–160 characters) describing what the page offers. */
 export const pageDescriptions: Record<View, L> = {
   home: {
-    ar: 'رادار المهارات الرقمية: مفهوم مستقل يساعدك على قياس مهاراتك الرقمية مقابل متطلبات دورك الحكومي، وبناء خطة تطوير عملية.',
-    en: 'Digital Skills Radar: an independent concept for measuring your digital skills against your government role and building a practical development plan.',
+    ar: 'رادار المهارات الرقمية: مفهوم مستقل يساعد موظف الحكومة وقيادييه على استكشاف القدرات التي يتطلبها تغيّر العمل الحكومي، والخروج بخطوة تطوير محددة بأدلة معلنة المصدر، دون أن تغادر بياناتهم المتصفح.',
+    en: 'Digital Skills Radar: an independent concept that helps government employees and leaders explore the capabilities changing government work demands, and leave with a concrete development step backed by sourced evidence, without their data leaving the browser.',
   },
   wizard: {
-    ar: 'تقييم ذاتي قصير لمهاراتك الرقمية حسب مجالات العمل الحكومي، مع أسئلة معايرة وسيناريوهات عملية تكشف أين تقف مقارنة بدورك.',
-    en: 'A short self-assessment of your digital skills across government work domains, with calibration questions and practical scenarios tied to your role.',
+    ar: 'تقييم ذاتي قصير عبر ثمانية مجالات للعمل الحكومي، مع مواقف حكم مهني وأسئلة تحقق معرفي، ينتهي بثلاث أولويات تطوير مقترحة. للتطوير الذاتي فقط.',
+    en: 'A short self-assessment across eight government-work domains, with professional-judgment scenarios and knowledge-check questions, ending in three suggested development priorities. For self-development only.',
   },
   results: {
-    ar: 'نتائج تقييمك: مستواك في كل مجال مقارنة بالمستوى المستهدف لدورك، وأبرز الفجوات ونقاط القوة التي تستحق التركيز.',
-    en: 'Your assessment results: your level in each domain against the target for your role, with the gaps and strengths worth your attention.',
+    ar: 'نتيجتك: ثلاث أولويات تطوير مقترحة بأسبابها، ومستواك في كل مجال مقارنة بمستهدف استرشادي لفئة دورك، وطبقات الأدلة الثلاث جنباً إلى جنب.',
+    en: 'Your result: three suggested development priorities with their reasons, your level in each domain against an indicative target for your role category, and the three evidence layers side by side.',
   },
   pathways: {
     ar: 'خطة تطوير شخصية مبنية على نتائج تقييمك: أولويات واضحة، وخطوات تعلم عملية، ومصادر مقترحة لكل فجوة.',
@@ -72,16 +72,16 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Future skills: the digital skills gaining demand in government work, why they matter and how to start building them.',
   },
   'tech-radar': {
-    ar: 'رادار التقنيات: نظرة على التقنيات الناشئة ومدى نضجها وأثرها على العمل الحكومي، مع ما يلزم من مهارات لكل منها.',
-    en: 'Technology radar: a view of emerging technologies, their maturity and impact on government work, and the skills each one calls for.',
+    ar: 'تقنيات تغيّر العمل الحكومي: لكل تقنية أفق تبنّيها والمهارات التي تتطلبها من الموظف والقيادي، بتقديرات تحريرية معلنة.',
+    en: 'Technologies changing government work: for each technology its adoption horizon and the skills it demands from employees and leaders, with declared editorial estimates.',
   },
   entities: {
     ar: 'الجهات الحكومية ومهاراتها الرقمية: نظرة عامة على توزيع الاحتياج والمهارات عبر الجهات والقطاعات.',
     en: 'Government entities and their digital skills: an overview of how needs and skills are distributed across entities and sectors.',
   },
   sectors: {
-    ar: 'القطاعات الحكومية: مقارنة الاحتياج من المهارات الرقمية بين القطاعات، وأبرز الفجوات في كل قطاع.',
-    en: 'Government sectors: a comparison of digital skill needs across sectors and the main gaps within each one.',
+    ar: 'القطاعات الحكومية: مجالات التطوير المرتبطة بسجل الاستشارات في كل قطاع، بعدد السجلات وفترتها، وبشارة «استنتاج تحريري».',
+    en: 'Government sectors: the development domains associated with each sector’s consulting record, with record counts and period, marked as editorial inference.',
   },
   directory: {
     ar: 'دليل الجهات الحكومية: ابحث عن جهة واطلع على قطاعها وخدماتها واحتياجها من المهارات الرقمية.',
@@ -96,8 +96,8 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Standards: the frameworks and references the radar relies on to define skills and levels, and how they were adapted for government work.',
   },
   methodology: {
-    ar: 'المنهجية: كيف يقيس الرادار المهارات، وكيف تُحدد المستويات المستهدفة لكل دور، وما حدود هذا القياس.',
-    en: 'Methodology: how the radar measures skills, how target levels are set for each role, and the limits of that measurement.',
+    ar: 'المنهجية: كيف يُبنى التقييم الذاتي ومواقف الحكم وأسئلة التحقق، وكيف تُشتق الأولويات المقترحة والمستهدفات الاسترشادية، وما حدود كل ذلك.',
+    en: 'Methodology: how the self-assessment, judgment scenarios and knowledge checks are built, how suggested priorities and indicative targets are derived, and the limits of all of it.',
   },
   evidence: {
     ar: 'سجل الأدلة: مصدر كل رقم وادعاء يعرضه الرادار، مع حدود استخدامه، لتراجعه بنفسك قبل الاعتماد عليه.',
@@ -124,12 +124,12 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Enablement service record: the programmes and services that help government staff build digital skills, and who each one suits.',
   },
   sector: {
-    ar: 'موجز احتياج القطاع: المهارات الرقمية الأكثر طلباً في هذا القطاع، وأبرز الفجوات، والأدوار المرتبطة بها.',
-    en: 'Sector capability brief: the digital skills most needed in this sector, its main gaps and the roles connected to them.',
+    ar: 'موجز احتياج القطاع: مجالات التطوير المرتبطة بسجل الاستشارات في هذا القطاع، والأدوار المرتبطة بها، في صفحة قابلة للطباعة.',
+    en: 'Sector capability brief: the development domains associated with this sector’s consulting record and the roles connected to them, on a printable page.',
   },
   leaders: {
-    ar: 'للقادة والفرق: أدوات تساعد القائد على قراءة مهارات فريقه الرقمية، وتوجيه قرارات التطوير والتوظيف.',
-    en: 'For leaders and teams: tools that help a leader read the team’s digital skills and guide development and hiring decisions.',
+    ar: 'للقادة والفرق: الموجز القيادي، وفحص القرار القيادي، ورادار الفريق المحلي، ودليل التبني المؤسسي — أدوات تطوير لا تقييم أداء.',
+    en: 'For leaders and teams: the leader brief, the leader judgment check, the local team radar and the institutional adoption guide — development tools, not performance appraisal.',
   },
   'leader-brief': {
     ar: 'الموجز القيادي: ما يحتاج القائد الحكومي معرفته عن المهارات الرقمية لفريقه في دقائق، وبلغة غير تقنية.',
@@ -144,8 +144,8 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Team radar: combine your team members’ result codes to see skill distribution, coverage against targets and shared development priorities.',
   },
   adoption: {
-    ar: 'دليل التبني المؤسسي: كيف تستخدم الجهة الحكومية الرادار في تخطيط القدرات والتدريب والتوظيف، خطوة بخطوة.',
-    en: 'Institutional adoption guide: how a government entity can use the radar for capability planning, training and hiring, step by step.',
+    ar: 'دليل التبني المؤسسي: كيف تشغّل جهة حكومية دفعة تقييم طوعية في أسبوعين بخصوصية كاملة، وما الذي لا يُستخدم الرادار له.',
+    en: 'Institutional adoption guide: how a government entity runs a voluntary assessment cohort in two weeks with full privacy, and what the radar must never be used for.',
   },
   work: {
     ar: 'تحوّل العمل الحكومي: كيف تغيّر التقنيات الرقمية طبيعة المهام الحكومية، وما الذي يبقى بيد الإنسان.',

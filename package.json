@@ -11,7 +11,7 @@
     "prerender": "node scripts/prerender.mjs",
     "sitemap": "node scripts/sitemap.mjs",
     "size-budget": "node scripts/size-budget.mjs",
-    "test": "vitest run",
+    "test": "CONTENT_LINT_STRICT=1 vitest run",
     "preview": "vite preview",
     "prebuild": "node scripts/build-gov-data.mjs"
   },

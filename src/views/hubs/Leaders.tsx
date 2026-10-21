@@ -76,11 +76,11 @@ export default function LeadersHub() {
     },
     team: {
       text: {
-        ar: 'رادار الفريق قريباً. إلى ذلك الحين: اطلب من فريقك إكمال «تقييمي» طوعاً، وناقش أولوياته معه في حوارات التطوير.',
-        en: 'The team radar is coming soon. Meanwhile: invite your team to complete «My assessment» voluntarily, and discuss its priorities in development conversations.',
+        ar: 'افتح رادار الفريق: الصق رموز النتائج التي يشاركها أعضاء فريقك بإرادتهم (5 رموز على الأقل) لترى توزيع المجالات والتغطية ونقاط الفشل المفردة، دون صف لكل شخص.',
+        en: 'Open the team radar: paste the result codes your team members share by choice (at least 5) to see domain distributions, coverage and single points of failure, with no row per person.',
       },
-      view: 'wizard',
-      cta: { ar: 'افتح «تقييمي»', en: 'Open «My assessment»' },
+      view: 'leader-team',
+      cta: { ar: 'افتح رادار الفريق', en: 'Open the team radar' },
     },
     launch: {
       text: { ar: 'اقرأ دليل التبني المؤسسي: خطة أسبوعين، وقواعد الخصوصية، ورسالة دعوة تنسخها كما هي.', en: 'Read the adoption guide: a two-week plan, the privacy rules, and an invitation message you can copy as is.' },

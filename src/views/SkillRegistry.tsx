@@ -13,7 +13,7 @@ import type { L } from '../data/types'
 
 const ui = {
   eyebrow: { ar: 'الأدوار والمهارات', en: 'Roles and skills' },
-  title: { ar: 'سجل المهارات', en: 'Skill registry' },
+  title: { ar: 'قاموس المهارات', en: 'Skills dictionary' },
   intro: {
     ar: 'يضم السجل {{method-skills-count}} في {{method-domains-count}}، ولكل مهارة سجل مستقل: التعريف، وفئات الدور التي تحتاجها، ومهمة مثال، وأساس الدليل، والمتطلبات السابقة، وعبارة التقييم الذاتي المرتبطة بها.',
     en: 'The registry holds {{method-skills-count}} in {{method-domains-count}}, and each skill has its own record: definition, the role categories that need it, an example task, the evidence basis, prerequisites and the linked self-assessment statement.',

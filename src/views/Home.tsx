@@ -349,12 +349,8 @@ export default function Home() {
         en: 'See what your team needs from anonymous result codes members share by choice, with no row per person.',
       },
       output: { ar: 'ملخص احتياج الفريق', en: 'A team needs summary' },
-      view: 'leaders',
+      view: 'leader-team',
       sheet: 'team',
-      soon: {
-        ar: 'رادار الفريق لم يُبنَ بعد. ابدأ الآن بالموجز القيادي وفحص القرار القيادي.',
-        en: 'The team radar is not built yet. Start now with the leader brief and the leader judgment check.',
-      },
     },
     {
       id: 'hr',
