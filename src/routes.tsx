@@ -12,7 +12,8 @@ const SkillRegistry = lazy(() => import('./views/SkillRegistry'))
 const FutureSkills = lazy(() => import('./views/FutureSkills'))
 const TechRadar = lazy(() => import('./views/TechRadar'))
 const Entities = lazy(() => import('./views/Entities'))
-const Impact = lazy(() => import('./views/Impact'))
+const Services = lazy(() => import('./views/Services'))
+const SectorBrief = lazy(() => import('./views/SectorBrief'))
 const GovSectors = lazy(() => import('./views/GovSectors'))
 const Directory = lazy(() => import('./views/Directory'))
 const EntityDetail = lazy(() => import('./views/EntityDetail'))
@@ -50,8 +51,8 @@ const viewRoutes: RouteObject[] = [
   { path: 'capabilities', element: <HubRolesSkills /> },
   { path: 'method', element: <HubMethod /> },
   { path: 'about', element: <About /> },
-  { path: 'services', element: <Impact /> },
-  { path: 'impact', element: <Impact /> },
+  { path: 'services', element: <Services /> },
+  { path: 'sectors/:sectorId', element: <SectorBrief /> },
   { path: 'sectors', element: <GovSectors /> },
   { path: 'directory', element: <Directory /> },
   { path: 'directory/:entityId', element: <EntityDetail /> },

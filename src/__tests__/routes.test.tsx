@@ -1,14 +1,29 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { afterEach, describe, expect, it } from 'vitest'
-import { govEntities } from '../data/govEntities'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+// @ts-ignore: the app has no @types/node; these imports are test-side only
+import { existsSync, readFileSync } from 'node:fs'
+import { configureGovData } from '../data/gov'
 import { technologies } from '../data/technologies'
 import { pathFor, routeFromPath, viewFromPath } from '../lib/routes'
 import { routes } from '../routes'
 import type { View } from '../store'
 
-const entity = govEntities.find((item) => item.nameEn)!
+// @ts-ignore: see above
+const ROOT = `${process.cwd()}/`
+const entityIndex = JSON.parse(readFileSync(`${ROOT}public/data/entities-index.json`, 'utf8')) as { id: string; nameAr: string; nameEn: string | null }[]
+const entity = entityIndex.find((item) => item.nameEn)!
+
+/** Serve public/data/* from disk through the gov loaders (same approach as gov.test.ts). */
+async function fsFetch(url: string): Promise<Response> {
+  const m = /\/data\/([a-z0-9/._-]+)$/i.exec(url)
+  const file = m ? `${ROOT}public/data/${m[1]}` : null
+  if (!file || !existsSync(file)) return { ok: false, status: 404, json: async () => null } as unknown as Response
+  const text = readFileSync(file, 'utf8')
+  return { ok: true, status: 200, json: async () => JSON.parse(text) } as unknown as Response
+}
+beforeAll(() => configureGovData({ fetcher: fsFetch as unknown as typeof fetch, base: '/' }))
 const technology = technologies[1]
 const routers: ReturnType<typeof createMemoryRouter>[] = []
 
@@ -104,7 +119,7 @@ describe('real application routes', () => {
 const expectedRoutes: Record<Exclude<View, 'not-found'>, string> = {
   home: '', wizard: '/assess', results: '/assess/results', pathways: '/assess/plan',
   roles: '/roles', skills: '/skills', 'future-skills': '/future-skills',
-  'tech-radar': '/tech-radar', entities: '/entities', impact: '/impact',
+  'tech-radar': '/tech-radar', entities: '/entities',
   'roles-hub': '/capabilities', 'method-hub': '/method',
   sectors: '/sectors', directory: '/directory', entity: `/directory/${entity.id}`,
   standards: '/standards', methodology: '/methodology',

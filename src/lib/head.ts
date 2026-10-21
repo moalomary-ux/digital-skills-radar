@@ -18,7 +18,6 @@ export const pageTitles: Record<View, L> = {
   'future-skills': { ar: 'مهارات المستقبل', en: 'Future Skills' },
   'tech-radar': { ar: 'رادار التقنيات', en: 'Technology Radar' },
   entities: { ar: 'الجهات', en: 'Entities' },
-  impact: { ar: 'الأثر', en: 'Impact' },
   sectors: { ar: 'القطاعات', en: 'Sectors' },
   directory: { ar: 'دليل الجهات', en: 'Entity Directory' },
   entity: { ar: 'تفاصيل الجهة', en: 'Entity Details' },
@@ -79,10 +78,6 @@ export const pageDescriptions: Record<View, L> = {
   entities: {
     ar: 'الجهات الحكومية ومهاراتها الرقمية: نظرة عامة على توزيع الاحتياج والمهارات عبر الجهات والقطاعات.',
     en: 'Government entities and their digital skills: an overview of how needs and skills are distributed across entities and sectors.',
-  },
-  impact: {
-    ar: 'الأثر: كيف تنعكس المهارات الرقمية على جودة الخدمات الحكومية وسرعة الإنجاز وقرارات العمل اليومية.',
-    en: 'Impact: how digital skills translate into better government services, faster delivery and sounder everyday work decisions.',
   },
   sectors: {
     ar: 'القطاعات الحكومية: مقارنة الاحتياج من المهارات الرقمية بين القطاعات، وأبرز الفجوات في كل قطاع.',

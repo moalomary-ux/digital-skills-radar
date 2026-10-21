@@ -17,7 +17,6 @@ export type View =
   | 'standards'
   | 'methodology'
   | 'skills'
-  | 'impact'
   | 'sectors'
   | 'directory'
   | 'entity'

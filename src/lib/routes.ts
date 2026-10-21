@@ -4,7 +4,7 @@ import type { View } from '../store'
 const slugs: Record<View, string> = {
   home: '', wizard: 'assess', results: 'assess/results', pathways: 'assess/plan',
   roles: 'roles', skills: 'skills', 'future-skills': 'future-skills',
-  'tech-radar': 'tech-radar', entities: 'entities', impact: 'impact',
+  'tech-radar': 'tech-radar', entities: 'entities',
   sectors: 'sectors', directory: 'directory', entity: 'directory/:entityId',
   standards: 'standards', methodology: 'methodology',
   evidence: 'evidence', about: 'about', report: 'assess/report', services: 'services',

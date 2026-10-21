@@ -42,6 +42,7 @@ import {
   fixTopConsulting,
   label,
   loadSectorEntities,
+  NON_GOVERNMENT_SECTOR_IDS,
   loadSectors,
   otherServicesAr,
   periods,
@@ -63,7 +64,10 @@ const sectorsText = readText('public/data/sectors.json')
 const index = JSON.parse(indexText) as EntityIndexRow[]
 const sectorsFile = JSON.parse(sectorsText) as SectorsFile
 const sectorRows = sectorsFile.sectors
-const listedSectors = sectorRows.filter((s) => !s.pooled)
+// The sectors page lists government sectors only (the same rule as src/views/GovSectors.tsx); the
+// state-owned-companies sector keeps its brief but is not a card on the page.
+const govCountOf = (sectorId: string) => index.filter((r) => r.sectorId === sectorId && (DEFAULT_DIRECTORY_TYPES as readonly string[]).includes(r.type)).length
+const listedSectors = sectorRows.filter((s) => !s.pooled && !NON_GOVERNMENT_SECTOR_IDS.includes(s.id) && sectorById(s.id) && govCountOf(s.id) > 0)
 const pooledRow = sectorRows.find((s) => s.pooled)!
 const shownSector = listedSectors.find((s) => s.showAggregates)!
 const hiddenSector = listedSectors.find((s) => !s.showAggregates)!
@@ -257,8 +261,10 @@ describe('2. the n ≥ 10 rule', () => {
         }
       }
     }
-    expect(listedSectors.length).toBe(leadInt(claimById('gov-sectors-public')))
-    expect(listedSectors.filter((s) => s.showAggregates).length).toBe(leadInt(claimById('gov-sectors-with-aggregates')))
+    expect(sectorRows.filter((s) => !s.pooled).length).toBe(leadInt(claimById('gov-sectors-public')))
+    expect(listedSectors.length).toBe(29)
+    // published aggregates count every non-pooled sector with n ≥ 10 (the state-owned-companies brief included), not only the page's cards
+    expect(sectorRows.filter((s) => !s.pooled && s.showAggregates).length).toBe(leadInt(claimById('gov-sectors-with-aggregates')))
     expect(listedSectors.some((s) => s.id === 'private-sector')).toBe(false)
   })
 
@@ -655,7 +661,6 @@ describe('9. gov claims', () => {
     }
     expect(refs.length).toBeGreaterThanOrEqual(10)
     expect(refs.filter((r) => !claimById(r.split(':')[1]))).toEqual([])
-    expect(readText('src/views/Impact.tsx')).toMatch(/from '\.\/Services'/)
   })
 })
 

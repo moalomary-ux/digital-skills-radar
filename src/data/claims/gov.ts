@@ -196,7 +196,7 @@ export const govClaims: Claim[] = [
   },
   {
     id: 'gov-sectors-public',
-    text: { ar: 'يعرض البناء العام 30 قطاعًا بعد إبعاد قطاع «القطاع الخاص».', en: 'The public build lists 30 sectors after setting aside the «private sector» sector.' },
+    text: { ar: 'يحوي ملف القطاعات العام 30 قطاعًا بعد إبعاد «القطاع الخاص»؛ تعرض صفحة القطاعات منها 29 قطاعًا حكوميًا، ويبقى موجز قطاع «الشركات المملوكة للدولة» متاحًا من دليل الجهات.', en: 'The public sectors file holds 30 sectors after setting aside the «private sector»; the sectors page lists 29 of them as government sectors, and the «state-owned companies» brief stays reachable from the directory.' },
     value: { ar: '30', en: '30' },
     unit: { ar: 'قطاع', en: 'sectors' },
     kind: 'editorial',

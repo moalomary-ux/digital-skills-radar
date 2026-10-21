@@ -12,7 +12,8 @@
     "sitemap": "node scripts/sitemap.mjs",
     "size-budget": "node scripts/size-budget.mjs",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prebuild": "node scripts/build-gov-data.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",
