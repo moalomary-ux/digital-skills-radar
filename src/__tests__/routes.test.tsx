@@ -38,7 +38,7 @@ describe('real application routes', () => {
 
   it('renders the first wizard heading on direct load', async () => {
     renderRoute('/ar/assess')
-    expect(await screen.findByRole('heading', { level: 1, name: 'ما هو دورك؟' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'ما طبيعة دورك؟' })).toBeInTheDocument()
   })
 
   it('loads a real entity directly in English', async () => {
@@ -61,8 +61,8 @@ describe('real application routes', () => {
   })
 
   it.each([
-    ['ar', 'en', 'rtl', 'ما هو دورك؟', 'رادار المهارات الرقمية — تقييم المهارات'],
-    ['en', 'ar', 'ltr', 'What is your role?', 'Digital Skills Radar — Skills Assessment'],
+    ['ar', 'en', 'rtl', 'ما طبيعة دورك؟', 'رادار المهارات الرقمية — تقييم المهارات'],
+    ['en', 'ar', 'ltr', 'What is the nature of your role?', 'Digital Skills Radar — Skills Assessment'],
   ])('uses URL language %s over stored language %s', async (lang, stored, dir, heading, title) => {
     localStorage.setItem('dsr-lang', JSON.stringify(stored))
     renderRoute(`/${lang}/assess`)

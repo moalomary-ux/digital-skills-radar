@@ -28,12 +28,14 @@ const LeaderBrief = lazy(() => import('./views/leaders/LeaderBrief'))
 const LeaderCheck = lazy(() => import('./views/leaders/LeaderCheck'))
 const WorkShifts = lazy(() => import('./views/work/WorkShifts'))
 const RoleDetail = lazy(() => import('./views/RoleDetail'))
+const Report = lazy(() => import('./views/Report'))
 
 const viewRoutes: RouteObject[] = [
   { index: true, element: <Home /> },
   { path: 'assess', element: <Wizard /> },
   { path: 'assess/results', element: <Results /> },
   { path: 'assess/plan', element: <Pathways /> },
+  { path: 'assess/report', element: <Report /> },
   { path: 'roles', element: <Roles /> },
   { path: 'skills', element: <SkillRegistry /> },
   { path: 'future-skills', element: <FutureSkills /> },
