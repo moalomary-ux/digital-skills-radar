@@ -37,6 +37,8 @@ export default {
         kpi: ['40px', { lineHeight: '1', fontWeight: '500' }],
         'body-lg': ['16px', { lineHeight: '1.9' }],
         tag: ['12px', { lineHeight: '1.4' }],
+        // compact header scale: six hub labels + language + button fit one line from 1024 px
+        nav: ['14px', { lineHeight: '1.35' }],
       },
       borderRadius: {
         btn: '4px',

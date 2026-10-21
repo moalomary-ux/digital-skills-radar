@@ -1,102 +1,98 @@
+import { Link } from 'react-router-dom'
 import { useApp } from '../store'
-import { RadarMark } from './Header'
+import { pathFor } from '../lib/routes'
+import { RadarMark } from './Brand'
+import LangLink from './shell/LangLink'
+import { DATA_UPDATED_ON, formatDay, hubs, INDEPENDENCE, SITE_NAME } from './shell/site'
 
+/** Four columns: the hubs · about, privacy, evidence · language · last data update — then the independence line. */
 export default function Footer() {
-  const { t, go } = useApp()
-
-  const columns: {
-    title: { ar: string; en: string }
-    links: ({ label: { ar: string; en: string }; view: Parameters<typeof go>[0] } | { label: { ar: string; en: string }; href: string })[]
-  }[] = [
-    {
-      title: { ar: 'المنصة', en: 'Platform' },
-      links: [
-        { label: { ar: 'تقييم المهارات', en: 'Skills assessment' }, view: 'wizard' },
-        { label: { ar: 'النتائج والرادار', en: 'Results & radar' }, view: 'results' },
-        { label: { ar: 'مسارات التطوير', en: 'Development pathways' }, view: 'pathways' },
-        { label: { ar: 'المعايير والتقارير', en: 'Standards & reports' }, view: 'standards' },
-        { label: { ar: 'سجل المهارات', en: 'Skill registry' }, view: 'skills' },
-        { label: { ar: 'المنهجية وسجل التغييرات', en: 'Methodology & changelog' }, view: 'methodology' },
-      ],
-    },
-    {
-      title: { ar: 'التوجيه المهني', en: 'Career guidance' },
-      links: [
-        { label: { ar: 'اكتشف التخصصات', en: 'Explore careers' }, view: 'careers' },
-        { label: { ar: 'اختبار التوجيه', en: 'Guidance quiz' }, view: 'decide' },
-        { label: { ar: 'مهارات المستقبل', en: 'Future skills' }, view: 'future-skills' },
-        { label: { ar: 'ما يزدهر وما يندثر', en: 'Growing vs declining' }, view: 'lists' },
-        { label: { ar: 'للجهات الحكومية', en: 'For government entities' }, view: 'entities' },
-        { label: { ar: 'أثر تمكين الجهات', en: 'Enablement impact' }, view: 'impact' },
-        { label: { ar: 'القطاعات الحكومية', en: 'Government sectors' }, view: 'sectors' },
-        { label: { ar: 'دليل الجهات', en: 'Entity directory' }, view: 'directory' },
-        { label: { ar: 'رادار التقنيات', en: 'Tech radar' }, view: 'tech-radar' },
-      ],
-    },
-    {
-      title: { ar: 'مصادر التعلم', en: 'Learning resources' },
-      links: [
-        { label: { ar: 'أكاديمية طويق', en: 'Tuwaiq Academy' }, href: 'https://tuwaiq.edu.sa' },
-        { label: { ar: 'الأكاديمية السعودية الرقمية', en: 'Saudi Digital Academy' }, href: 'https://sda.edu.sa' },
-        { label: { ar: 'كورسيرا', en: 'Coursera' }, href: 'https://www.coursera.org' },
-        { label: { ar: 'إطار SFIA', en: 'SFIA Framework' }, href: 'https://sfia-online.org' },
-      ],
-    },
-  ]
+  const { t, lang } = useApp()
+  const linkCls = 'text-sm text-white/85 no-underline hover:text-white hover:underline'
+  const headCls = 'border-b border-white/20 pb-2 text-sm font-semibold text-white'
 
   return (
-    <footer className="no-print mt-20 bg-dga-green-ink text-white">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_2fr]">
+    <footer className="site-footer no-print mt-20 bg-dga-green-ink text-white">
+      <div className="saudi-band opacity-70" aria-hidden="true" />
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+        <div className="flex items-center gap-3">
+          <RadarMark className="h-10 w-10 brightness-0 invert" />
+          <p className="text-lg font-bold">{t(SITE_NAME)}</p>
+        </div>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85">
+          {t({
+            ar: 'أداة مفتوحة لدعم قرارات تطوير القوى العاملة الحكومية: كيف يتغير العمل، وما القدرات المطلوبة، وكيف نطورها.',
+            en: 'An open tool for government workforce development decisions: how work is changing, which capabilities it needs, and how to build them.',
+          })}
+        </p>
+
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <nav aria-label={t({ ar: 'أقسام الرادار', en: 'Radar sections' })}>
+            <h2 className={headCls}>{t({ ar: 'الأقسام', en: 'Sections' })}</h2>
+            <ul className="mt-3 space-y-2">
+              {hubs.map((hub) => (
+                <li key={hub.id}>
+                  <Link to={pathFor(hub.view, lang)} className={linkCls}>
+                    {t(hub.title)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <div>
-            <div className="flex items-center gap-3">
-              <RadarMark className="h-11 w-11 brightness-0 invert" />
-              <span className="text-lg font-bold">{t({ ar: 'رادار المهارات الرقمية', en: 'Digital Skills Radar' })}</span>
-            </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85">
+            <h2 className={headCls}>{t({ ar: 'عن المفهوم', en: 'About' })}</h2>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link to={pathFor('about', lang)} className={linkCls}>
+                  {t({ ar: 'عن المفهوم ومن أعدّه', en: 'About the concept and its author' })}
+                </Link>
+              </li>
+              <li>
+                <Link to={`${pathFor('about', lang)}#privacy`} className={linkCls}>
+                  {t({ ar: 'الخصوصية', en: 'Privacy' })}
+                </Link>
+              </li>
+              <li>
+                <Link to={pathFor('evidence', lang)} className={linkCls}>
+                  {t({ ar: 'سجل الأدلة', en: 'Evidence register' })}
+                </Link>
+              </li>
+              <li>
+                <Link to={pathFor('methodology', lang)} className={linkCls}>
+                  {t({ ar: 'المنهجية', en: 'Methodology' })}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 className={headCls}>{t({ ar: 'اللغة', en: 'Language' })}</h2>
+            <p className="mt-3 text-sm text-white/85">
+              {t({ ar: 'تعرض الآن: العربية', en: 'Now showing: English' })}
+            </p>
+            <LangLink className="mt-2 inline-flex rounded-btn border border-white/40 px-3 py-1.5 text-sm text-white no-underline hover:border-white hover:no-underline" />
+          </div>
+
+          <div>
+            <h2 className={headCls}>{t({ ar: 'آخر تحديث للبيانات', en: 'Last data update' })}</h2>
+            <p className="mt-3 text-sm text-white/85">
+              <time dateTime={DATA_UPDATED_ON}>{formatDay(DATA_UPDATED_ON, lang)}</time>
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-white/70">
               {t({
-                ar: 'منصة إرشاد مهني ومهاري مبنية على أدلة عالمية.',
-                en: 'A career and skills guidance platform built on global evidence.',
+                ar: 'كل رقم معروض مسجل بمصدره وتاريخ مراجعته في سجل الأدلة.',
+                en: 'Every figure shown is registered with its source and review date in the evidence register.',
               })}
             </p>
           </div>
-          <div className="grid gap-8 sm:grid-cols-3">
-            {columns.map((col) => (
-              <div key={col.title.en}>
-                <h3 className="border-b border-white/20 pb-2 text-base font-semibold">{t(col.title)}</h3>
-                <ul className="mt-3 space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={link.label.en}>
-                      {'href' in link ? (
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-white/80 no-underline hover:text-white hover:underline"
-                        >
-                          {t(link.label)}
-                        </a>
-                      ) : (
-                        <button onClick={() => go(link.view)} className="text-sm text-white/80 hover:text-white hover:underline">
-                          {t(link.label)}
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/20 pt-6 text-center text-xs text-white/70 sm:flex-row sm:text-start">
+        <div className="mt-10 flex flex-col gap-2 border-t border-white/20 pt-6 text-xs leading-relaxed text-white/80 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-semibold text-white">{t(INDEPENDENCE)}</p>
           <p>
-            {t({
-              ar: 'نموذج مفاهيمي مستلهم من الأطر العالمية (WEF, ILO, OECD, SFIA, DigComp) — غير تابع لأي جهة رسمية.',
-              en: 'A concept prototype inspired by global frameworks (WEF, ILO, OECD, SFIA, DigComp) — not affiliated with any official entity.',
-            })}
+            {t({ ar: 'لا يغادر أي شيء متصفحك: لا حسابات ولا تحليلات ولا ملفات تتبع.', en: 'Nothing leaves your browser: no accounts, no analytics, no tracking.' })}
           </p>
-          <p>{t({ ar: 'كل بياناتك تُحفظ محليًا في متصفحك فقط', en: 'All your data is stored locally in your browser only' })}</p>
         </div>
       </div>
     </footer>
