@@ -1,245 +1,218 @@
-import { motion } from 'framer-motion'
 import { useApp } from '../store'
-import type { L } from '../data/types'
 import { levels } from '../data/levels'
-import { frameworkCards, reportCards } from '../data/standards'
+import { crosswalk, frameworkCards, indexCards, reportCards } from '../data/standards'
+import type { SourceCard } from '../data/standards'
+import Claim, { ClaimText, EvidenceLink } from '../components/Claim'
 import Icon from '../components/Icon'
 
-
-// v6-B: global indices that justify and anchor the tool (from the external review's table)
-const globalIndices: { id: string; name: L; publisher: L; connects: L; url: string }[] = [
-  {
-    id: 'gtmi',
-    name: { ar: 'مؤشر نضج GovTech (GTMI)', en: 'GovTech Maturity Index (GTMI)' },
-    publisher: { ar: 'البنك الدولي', en: 'World Bank' },
-    connects: { ar: 'السند المباشر الأقوى: يتناول برامج المهارات الحكومية ويربط انتشار التدريب بمكاسب إنتاجية قابلة للقياس.', en: 'The strongest direct anchor: covers government skills programs and links training penetration to measurable productivity gains.' },
-    url: 'https://thedocs.worldbank.org/en/doc/18230a0f33e201615caa954f2d354891-0350052025/original/2025GTMI-Online-Survey-Guidance-Note-eng.pdf',
-  },
-  {
-    id: 'dgi',
-    name: { ar: 'مؤشر الحكومة الرقمية (DGI)', en: 'OECD Digital Government Index (DGI)' },
-    publisher: { ar: 'منظمة التعاون والتنمية', en: 'OECD' },
-    connects: { ar: 'يربط القدرات بحكومة قائمة على البيانات ومتمحورة حول المستخدم ومتكاملة واستباقية — وهي مجالات رادارنا الثمانية بعينها.', en: 'Ties capabilities to a data-driven, user-centred, integrated and proactive government — precisely our radar’s eight domains.' },
-    url: 'https://www.oecd.org/en/publications/digital-government-outlook_0496b2bc-en/full-report/digital-governments-at-a-turning-point_0491aad4.html',
-  },
-  {
-    id: 'ourdata',
-    name: { ar: 'مؤشر البيانات الحكومية المفتوحة (OURdata)', en: 'OECD OURdata Index' },
-    publisher: { ar: 'منظمة التعاون والتنمية', en: 'OECD' },
-    connects: { ar: 'يتضمن برامج الثقافة البيانية داخل الحكومة ودعم إعادة استخدام البيانات — أساس مجال «الذكاء والبيانات».', en: 'Covers in-government data-literacy programs and data-reuse support — the basis of our AI & Data domain.' },
-    url: 'https://www.oecd.org/en/publications/digital-government-outlook_0496b2bc-en.html',
-  },
-  {
-    id: 'egdi',
-    name: { ar: 'مؤشر الحكومة الإلكترونية ومؤشر الخدمات والمشاركة (EGDI/OSI)', en: 'UN EGDI / OSI / e-Participation' },
-    publisher: { ar: 'الأمم المتحدة', en: 'United Nations' },
-    connects: { ar: 'تدعم الصلة بجودة الخدمة والإتاحة والمشاركة؛ لا تقيس مهارة الموظف مباشرة — وهي حدود نعلنها.', en: 'Supports the link to service quality, accessibility and participation; it does not measure employee skill directly — a limit we declare.' },
-    url: 'https://desapublications.un.org/sites/default/files/publications/2024-10/Technical%20Appendix%20%28Web%20version%29%2030102024.pdf',
-  },
-  {
-    id: 'gci',
-    name: { ar: 'المؤشر العالمي للأمن السيبراني (GCI)', en: 'ITU Global Cybersecurity Index (GCI)' },
-    publisher: { ar: 'الاتحاد الدولي للاتصالات', en: 'ITU' },
-    connects: { ar: 'يتضمن تنمية القدرات والتوعية والتدريب الأمني — سند مجال «الأمن السيبراني والثقة الرقمية».', en: 'Includes capacity development, awareness and security training — the anchor for our Cybersecurity & Digital Trust domain.' },
-    url: 'https://www.itu.int/en/mediacentre/Pages/PR-2024-09-10-Global-Cybersecurity-Index.aspx',
-  },
-  {
-    id: 'imd',
-    name: { ar: 'ترتيب التنافسية الرقمية العالمي', en: 'IMD World Digital Competitiveness Ranking' },
-    publisher: { ar: 'IMD', en: 'IMD' },
-    connects: { ar: 'يوفر السياق الأوسع لأهمية المعرفة والتدريب والاستعداد المستقبلي في التنافسية الوطنية.', en: 'Provides the broader context for why knowledge, training and future-readiness drive national competitiveness.' },
-    url: 'https://www.imd.org/centers/wcc/world-competitiveness-center/rankings/world-digital-competitiveness-ranking/methodology',
-  },
-]
+function SourceCardView({ card }: { card: SourceCard }) {
+  const { t } = useApp()
+  return (
+    <article className="glass flex flex-col p-6">
+      <h3 className="text-lg font-bold leading-snug text-dga-black">{t(card.name)}</h3>
+      <p className="mt-1 text-xs font-semibold text-dga-muted">{t(card.publisher)}</p>
+      {card.claimIds.length > 0 && (
+        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-dga-ink">
+          {card.claimIds.map((id) => (
+            <li key={id}>
+              <Claim id={id} />
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="mt-4 text-sm leading-relaxed text-dga-ink">{t(card.description)}</p>
+      {card.limits && (
+        <p className="mt-3 border-s-2 border-dga-amber ps-3 text-xs leading-relaxed text-dga-muted">
+          <span className="font-semibold text-dga-amber-tx">{t({ ar: 'حدود الاستناد: ', en: 'Limits: ' })}</span>
+          {t(card.limits)}
+        </p>
+      )}
+      {card.url && (
+        <a
+          href={card.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-dga-green-dark underline-offset-2 hover:underline"
+        >
+          {card.homeLink ? t({ ar: 'الموقع الرئيس للجهة', en: 'Publisher’s home page' }) : t({ ar: 'افتح المرجع', en: 'Open the source' })}
+          <span aria-hidden>↗</span>
+          <span className="sr-only">{t({ ar: '(يفتح في نافذة جديدة)', en: '(opens in a new tab)' })}</span>
+        </a>
+      )}
+    </article>
+  )
+}
 
 export default function Standards() {
   const { t, go, lang } = useApp()
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      {/* intro + level mapping */}
-      <div className="mb-12 max-w-3xl">
-        <p className="eyebrow">{t({ ar: 'الأساس المنهجي', en: 'Methodological basis' })}</p>
-        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
-          {t({ ar: 'المعايير والتقارير التي يقف عليها الرادار', en: 'The standards & reports behind the radar' })}
-        </h1>
+      <header className="mb-10 max-w-3xl">
+        <p className="eyebrow">{t({ ar: 'المنهجية والمصادر', en: 'Method & sources' })}</p>
+        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{t({ ar: 'المعايير والأطر المرجعية', en: 'Standards and reference frameworks' })}</h1>
         <p className="mt-4 leading-relaxed text-dga-ink">
           {t({
-            ar: 'رادار المهارات الرقمية ليس اختراعًا من فراغ: مستوياته الأربعة ومجالاته الثمانية وعباراته الأربعون كلها ترجمة عملية لأطر وتقارير عالمية ووطنية موثقة.',
-            en: 'The Digital Skills Radar is not invented from thin air: its four levels, eight domains and forty statements are a practical translation of documented global and national frameworks and reports.',
+            ar: 'يستند الرادار إلى أطر وتقارير دولية ووطنية منشورة. تبين هذه الصفحة ما نأخذه من كل مرجع، وحدود الأخذ منه. كل رقم فيها يحمل شارة مصدره؛ افتحها لترى المصدر ونوعه والثقة فيه وتاريخ مراجعته.',
+            en: 'The radar draws on published international and national frameworks and reports. This page shows what we take from each source and the limits of doing so. Every figure carries a source badge; open it to see the source, its type, the confidence in it and when it was last reviewed.',
           })}
         </p>
-      </div>
+      </header>
 
-      {/* level mapping table */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55 }}
-        className="glass mb-14 overflow-hidden"
-      >
+      {/* level crosswalk */}
+      <section aria-labelledby="xwalk-title" className="glass mb-14 overflow-hidden">
         <div className="border-b border-dga-line bg-dga-bg p-6">
-          <h2 className="text-xl font-bold">{t({ ar: 'كيف تقابل مستوياتنا الأطر العالمية؟', en: 'How do our levels map to global frameworks?' })}</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm">
-            <thead>
-              <tr className="border-b border-dga-line text-start text-xs text-dga-muted">
-                <th className="p-4 text-start font-semibold">{t({ ar: 'مستوى الرادار', en: 'Radar level' })}</th>
-                <th className="p-4 text-start font-semibold">SFIA (7)</th>
-                <th className="p-4 text-start font-semibold">DigComp 2.2 (8)</th>
-                <th className="p-4 text-start font-semibold">DigComp 3.0 (4)</th>
-                <th className="p-4 text-start font-semibold">{t({ ar: 'إطار قطر (4)', en: 'Qatar DSF (4)' })}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {levels.map((l, i) => (
-                <tr key={l.value} className="border-b border-dga-line last:border-0">
-                  <td className="p-4">
-                    <span className="font-bold text-dga-green">{t(l.name)}</span>
-                    <span className="block text-xs text-dga-muted">{t(l.description)}</span>
-                  </td>
-                  <td className="p-4 font-mono text-dga-ink">{['1–2', '3', '4–5', '6–7'][i]}</td>
-                  <td className="p-4 font-mono text-dga-ink">{['1–2', '3–4', '5–6', '7–8'][i]}</td>
-                  <td className="p-4 font-mono text-dga-ink">{['1', '2', '3', '4'][i]}</td>
-                  <td className="p-4 font-mono text-dga-ink">{['1', '2', '3', '4'][i]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {/* scoring scheme note (expert-review P0-9) */}
-        <div className="border-t border-dga-line bg-dga-bg p-6 text-xs leading-relaxed text-dga-muted">
-          <p className="font-bold text-dga-ink">{t({ ar: 'منهجية الاحتساب الموثقة', en: 'Documented scoring scheme' })}</p>
-          <p className="mt-1.5">
+          <h2 id="xwalk-title" className="text-xl font-bold">
+            {t({ ar: 'كيف تقابل مستوياتنا الأطر الدولية؟', en: 'How do our levels relate to international frameworks?' })}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-dga-muted">
             {t({
-              ar: 'عتبات موحدة للمستوى والمرحلة معًا: أقل من 1.25 = وعي/تأسيسي، 1.25–2.24 = تطبيق/نامٍ، 2.25–3.24 = ممارس/متمكّن، 3.25 فأكثر = خبير/رائد. درجة المجال = متوسط عباراته الخمس. هذه عتبات تحريرية مُعلنة (لا معايرة تجريبية بعد)، والنتيجة أداة تأمل ذاتي لا قياسًا معتمدًا، ولا يجوز استخدامها في قرارات توظيف أو مفاضلة.',
-              en: 'One shared threshold set for both level and stage: below 1.25 = Awareness/Foundation, 1.25–2.24 = Working/Developing, 2.25–3.24 = Practitioner/Proficient, 3.25+ = Expert/Leading. A domain score is the mean of its five statements. These are documented editorial thresholds (not yet empirically calibrated), and the result is a self-reflection aid, not a validated measurement — it must not be used for hiring or selection decisions.',
+              ar: 'مواءمة تحريرية استرشادية لا تطابق مباشر: الأطر تصف أشياء مختلفة، والمقابلة تساعد على القراءة ولا تمنح مستوى معتمدًا.',
+              en: 'An indicative editorial crosswalk, not a direct mapping: the frameworks describe different things, and the correspondence helps reading without conferring any certified level.',
             })}
           </p>
         </div>
-      </motion.section>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[36rem] text-sm">
+            <caption className="sr-only">{t({ ar: 'مقابلة مستويات الرادار بإطاري SFIA 9 وDigComp', en: 'Radar levels against SFIA 9 and DigComp' })}</caption>
+            <thead>
+              <tr className="border-b border-dga-line text-xs text-dga-muted">
+                <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'مستوى الرادار', en: 'Radar level' })}</th>
+                <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'مستويات المسؤولية في SFIA 9', en: 'SFIA 9 responsibility levels' })}</th>
+                <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'نطاق DigComp ومستوياته', en: 'DigComp band and levels' })}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {crosswalk.map((row) => {
+                const level = levels.find((l) => l.value === row.level)
+                return (
+                  <tr key={row.level} className="border-b border-dga-line align-top last:border-0">
+                    <th scope="row" className="p-4 text-start font-normal">
+                      <span className="block font-bold text-dga-green-dark">{level ? t(level.name) : null}</span>
+                      {level && <span className="mt-0.5 block text-xs leading-relaxed text-dga-muted">{t(level.description)}</span>}
+                    </th>
+                    <td className="p-4 text-dga-ink">
+                      <Claim id={row.sfiaClaim} variant="icon" />
+                    </td>
+                    <td className="p-4 text-dga-ink">
+                      <span className="me-2 font-semibold">{t(row.digcompBand)}</span>
+                      <Claim id={row.digcompClaim} variant="icon" />
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="border-t border-dga-line bg-dga-bg p-6 text-sm leading-loose text-dga-ink">
+          <ClaimText
+            text={t({
+              ar: 'يصف SFIA 9 المسؤولية في العمل على {{standards-sfia9-levels}}، ويحدد DigComp 2.2 لكل كفاءة {{standards-digcomp22-levels}} تتجمع في {{standards-digcomp-bands}}. أما مستويات الرادار فتقدير ذاتي لأغراض التطوير، وعتباتها تحريرية مشروحة في صفحة المنهجية.',
+              en: 'SFIA 9 describes responsibility at work on {{standards-sfia9-levels}}, and DigComp 2.2 defines {{standards-digcomp22-levels}} per competence, grouped into {{standards-digcomp-bands}}. The radar’s levels are a self-assessment for development, and their thresholds are editorial, as explained on the methodology page.',
+            })}
+          />
+          <button type="button" onClick={() => go('methodology')} className="btn-ghost ms-0 mt-3 block px-4 py-2 text-sm sm:ms-3 sm:mt-0 sm:inline-flex">
+            {t({ ar: 'المنهجية', en: 'Methodology' })}
+            <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+          </button>
+        </div>
+      </section>
 
       {/* frameworks */}
-      <h2 className="mb-6 text-2xl font-bold">
-        {t({ ar: 'الأطر المرجعية', en: 'Reference frameworks' })}
-        <span className="ms-3 text-sm font-normal text-dga-muted">{frameworkCards.length}</span>
-      </h2>
-      <div className="mb-14 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {frameworkCards.map((c, i) => (
-          <motion.a
-            key={c.id}
-            href={c.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-            className="glass group flex flex-col p-6 no-underline transition-all duration-300 hover:border-dga-green/50"
-          >
-            <div className="mb-3 flex items-start justify-between gap-3">
-              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-green">{t(c.name)}</h3>
-              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-green" aria-hidden>
-                ↗
-              </span>
-            </div>
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {c.facts.map((f, fi) => (
-                <span key={fi} className="chip text-[10.5px] text-dga-ink">
-                  {t(f)}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm leading-relaxed text-dga-muted">{t(c.description)}</p>
-          </motion.a>
-        ))}
-      </div>
+      <section aria-labelledby="frameworks-title" className="mb-14">
+        <h2 id="frameworks-title" className="mb-2 text-2xl font-bold">{t({ ar: 'الأطر المرجعية للمهارات', en: 'Skills reference frameworks' })}</h2>
+        <p className="mb-6 max-w-3xl text-sm leading-relaxed text-dga-muted">
+          {t({
+            ar: 'أطر تصف المهارات ومستوياتها، نسترشد بها في بناء المجالات والمهارات والمستويات.',
+            en: 'Frameworks that describe skills and their levels, which guide how we built the domains, skills and levels.',
+          })}
+        </p>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {frameworkCards.map((c) => (
+            <SourceCardView key={c.id} card={c} />
+          ))}
+        </div>
+      </section>
 
       {/* reports */}
-      <h2 className="mb-6 text-2xl font-bold">
-        {t({ ar: 'التقارير والأدلة', en: 'Reports & evidence' })}
-        <span className="ms-3 text-sm font-normal text-dga-muted">{reportCards.length}</span>
-      </h2>
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {reportCards.map((c, i) => (
-          <motion.a
-            key={c.id}
-            href={c.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-            className="glass group flex flex-col p-6 no-underline transition-all duration-300 hover:border-dga-amber/50"
-          >
-            <div className="mb-2 flex items-start justify-between gap-3">
-              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-amber-tx">{t(c.name)}</h3>
-              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-amber-tx" aria-hidden>
-                ↗
-              </span>
-            </div>
-            <p className="mb-3 text-xs font-semibold text-dga-muted">{t(c.publisher)}</p>
-            <p className="border-s-2 border-dga-amber ps-3 text-sm leading-relaxed text-dga-ink">{t(c.highlight)}</p>
-          </motion.a>
-        ))}
-      </div>
-
-      {/* global indices (v6-B) */}
-      <h2 className="mb-2 mt-14 text-2xl font-bold">
-        {t({ ar: 'المؤشرات العالمية المرتبطة', en: 'Linked global indices' })}
-        <span className="ms-3 text-sm font-normal text-dga-muted">{globalIndices.length}</span>
-      </h2>
-      <p className="mb-6 max-w-3xl text-sm text-dga-muted">
-        {t({
-          ar: 'هذه المؤشرات تدعم مبرر بناء الأداة وترتبط بمجالاتها — وتثبت نجاحها يتطلب قياس أثرها محليًا.',
-          en: 'These indices justify building the tool and connect to its domains — while proving its success requires measuring its local impact.',
-        })}
-      </p>
-      <div className="mb-14 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {globalIndices.map((g, i) => (
-          <motion.a
-            key={g.id}
-            href={g.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-            className="glass group flex flex-col p-6 no-underline transition-all duration-300 hover:border-dga-green"
-          >
-            <div className="mb-2 flex items-start justify-between gap-3">
-              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-green-dark">{t(g.name)}</h3>
-              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-green" aria-hidden>↗</span>
-            </div>
-            <p className="mb-3 text-xs font-semibold text-dga-muted">{t(g.publisher)}</p>
-            <p className="border-s-2 border-dga-green/50 ps-3 text-sm leading-relaxed text-dga-ink">{t(g.connects)}</p>
-          </motion.a>
-        ))}
-      </div>
-
-      {/* skill registry link */}
-      <div className="mb-14 glass flex flex-wrap items-center justify-between gap-4 p-6">
-        <div>
-          <h2 className="text-lg font-bold text-dga-black">{t({ ar: 'كل مهارة سجل مستقل', en: 'Every skill is its own record' })}</h2>
-          <p className="mt-1 text-sm text-dga-muted">
-            {t({ ar: 'أربعون سجلًا موثقًا بنسخة وتاريخ مراجعة — مربوطة بعبارات التقييم وخطط التطوير.', en: 'Forty documented, versioned, review-dated records — linked to assessment items and development plans.' })}
-          </p>
+      <section aria-labelledby="reports-title" className="mb-14">
+        <h2 id="reports-title" className="mb-2 text-2xl font-bold">{t({ ar: 'التقارير والإشارات', en: 'Reports and signals' })}</h2>
+        <p className="mb-6 max-w-3xl text-sm leading-relaxed text-dga-muted">
+          {t({
+            ar: 'تقارير نقرأ منها اتجاه الطلب على المهارات. نوع كل مصدر ظاهر على شارته: التقرير الدولي غير الاستطلاع، وكلاهما غير بيانات المنصات التجارية.',
+            en: 'Reports from which we read the direction of skills demand. Each source’s type shows on its badge: an international report is not a survey, and neither is commercial platform data.',
+          })}
+        </p>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {reportCards.map((c) => (
+            <SourceCardView key={c.id} card={c} />
+          ))}
         </div>
-        <button onClick={() => go('skills')} className="btn-primary px-5 py-2.5 text-sm">
-          {t({ ar: 'افتح سجل المهارات', en: 'Open the skill registry' })}
-          <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
-        </button>
-      </div>
+      </section>
+
+      {/* indices */}
+      <section aria-labelledby="indices-title" className="mb-14">
+        <h2 id="indices-title" className="mb-2 text-2xl font-bold">{t({ ar: 'المؤشرات الدولية المرتبطة', en: 'Related international indices' })}</h2>
+        <p className="mb-6 max-w-3xl text-sm leading-relaxed text-dga-muted">
+          {t({
+            ar: 'مؤشرات تقيس الحكومة الرقمية على مستوى الدول. ترتبط بمجالات الرادار، لكنها لا تقيس مهارة الموظف، ولا تثبت أثر هذه الأداة.',
+            en: 'Indices that measure digital government at country level. They relate to the radar’s domains, but they do not measure employee skill and do not prove this tool’s effect.',
+          })}
+        </p>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {indexCards.map((c) => (
+            <SourceCardView key={c.id} card={c} />
+          ))}
+        </div>
+      </section>
+
+      {/* skill registry + evidence register */}
+      <section className="mb-14 grid gap-5 md:grid-cols-2">
+        <div className="glass flex flex-col justify-between gap-4 p-6">
+          <div>
+            <h2 className="text-lg font-bold text-dga-black">{t({ ar: 'لكل مهارة سجل مستقل', en: 'Every skill has its own record' })}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-dga-muted">
+              <ClaimText
+                text={t({
+                  ar: 'سجل المهارات يصف {{method-skills-count}} بتعريف ومهمة مثال وأساس دليل وتاريخ مراجعة، مرتبطة بعبارات التقييم الذاتي وخطط التطوير.',
+                  en: 'The skill registry describes {{method-skills-count}} with a definition, an example task, an evidence basis and a review date, linked to the self-assessment statements and development plans.',
+                })}
+              />
+            </p>
+          </div>
+          <button type="button" onClick={() => go('skills')} className="btn-primary self-start px-5 py-2.5 text-sm">
+            {t({ ar: 'افتح سجل المهارات', en: 'Open the skill registry' })}
+            <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+          </button>
+        </div>
+        <div className="glass flex flex-col justify-between gap-4 p-6">
+          <div>
+            <h2 className="text-lg font-bold text-dga-black">{t({ ar: 'سجل الأدلة', en: 'Evidence register' })}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-dga-muted">
+              {t({
+                ar: 'كل رقم في الأداة في جدول واحد: مصدره ونوعه والثقة فيه وتاريخ آخر مراجعة له.',
+                en: 'Every figure in the tool in one table: its source, type, confidence and last review date.',
+              })}
+            </p>
+          </div>
+          <EvidenceLink className="btn-ghost self-start px-5 py-2.5 text-sm no-underline">
+            {t({ ar: 'افتح سجل الأدلة', en: 'Open the evidence register' })}
+            <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+          </EvidenceLink>
+        </div>
+      </section>
 
       {/* CTA */}
-      <div className="mt-14 glass-strong p-8 text-center">
+      <div className="glass-strong p-8 text-center">
         <Icon name="radar" className="mx-auto h-8 w-8 text-dga-green" />
-        <h2 className="mt-3 text-xl font-bold">{t({ ar: 'جاهز لترى موقعك على الخريطة؟', en: 'Ready to see where you stand?' })}</h2>
-        <button onClick={() => go('wizard')} className="btn-primary mt-5">
+        <h2 className="mt-3 text-xl font-bold">{t({ ar: 'ابدأ تقييمك الذاتي', en: 'Start your self-assessment' })}</h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-dga-muted">
+          {t({
+            ar: 'يساعدك على استكشاف أولويات تطويرك في المجالات الثمانية، للتطوير فقط.',
+            en: 'It helps you explore your development priorities across the eight domains, for development only.',
+          })}
+        </p>
+        <button type="button" onClick={() => go('wizard')} className="btn-primary mt-5">
           {t({ ar: 'ابدأ التقييم', en: 'Start the assessment' })}
         </button>
       </div>
