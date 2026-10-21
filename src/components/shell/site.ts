@@ -58,7 +58,7 @@ export const hubs: Hub[] = [
     items: [
       { view: 'leader-brief', label: { ar: 'الموجز القيادي', en: 'Leader brief' } },
       { view: 'leader-check', label: { ar: 'فحص القرار القيادي', en: 'Leader judgment check' } },
-      { view: 'leader-team', label: { ar: 'رادار الفريق', en: 'Team radar' }, soon: true },
+      { view: 'leader-team', label: { ar: 'رادار الفريق', en: 'Team radar' } },
       { view: 'adoption', label: { ar: 'دليل التبني المؤسسي', en: 'Institutional adoption guide' } },
     ],
   },

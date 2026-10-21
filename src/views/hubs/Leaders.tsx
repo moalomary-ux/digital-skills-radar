@@ -49,7 +49,6 @@ export default function LeadersHub() {
         ar: 'يجمع رموز نتائج مجهولة يشاركها أعضاء الفريق بإرادتهم، ولا يعرض شيئاً تحت 5 رموز، ولا صفاً لكل شخص.',
         en: 'Combines anonymous result codes team members share by choice, shows nothing below 5 codes, and never a row per person.',
       },
-      soon: true,
     },
     {
       id: 'launch',

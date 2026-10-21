@@ -132,8 +132,7 @@ describe('drawer', () => {
     // every hub is listed, with its sub-pages; the unbuilt team radar is not a link
     for (const hub of hubs) expect(within(dialog).getByRole('link', { name: hub.title.ar })).toHaveAttribute('href', pathFor(hub.view, 'ar'))
     expect(within(dialog).getByRole('link', { name: 'الموجز القيادي' })).toHaveAttribute('href', '/ar/leaders/brief')
-    expect(within(dialog).queryByRole('link', { name: /رادار الفريق/ })).toBeNull()
-    expect(within(dialog).getByText('رادار الفريق')).toBeInTheDocument()
+    expect(within(dialog).getByRole('link', { name: /رادار الفريق/ })).toHaveAttribute('href', '/ar/leaders/team')
 
     // focus trap: Shift+Tab from the first element wraps to the last, Tab wraps back
     await user.keyboard('{Shift>}{Tab}{/Shift}')
@@ -308,8 +307,8 @@ describe('about and hubs', () => {
     renderView(LeadersHub, '/ar/leaders')
     await user.click(screen.getByRole('radio', { name: 'أريد إطلاق التقييم في جهتي' }))
     expect(screen.getByRole('link', { name: /افتح الدليل/ })).toHaveAttribute('href', '/ar/leaders/adoption')
-    // the team radar card is not a dead link
-    expect(screen.queryByRole('link', { name: 'رادار الفريق' })).toBeNull()
+    // the team radar card is a real link now
+    expect(screen.getByRole('link', { name: /رادار الفريق/ })).toHaveAttribute('href', '/ar/leaders/team')
   })
 
   it('the method hub cycles through real examples of a source type', async () => {

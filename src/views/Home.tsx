@@ -405,9 +405,9 @@ export default function Home() {
 
   const wef = ['leaders-wef-2025-skills-change', 'leaders-wef-2025-ai-transform', 'leaders-wef-2025-skill-gaps']
   const wefLabels: Record<string, L> = {
-    'leaders-wef-2025-skills-change': { ar: 'من المهارات الأساسية للعاملين يتوقع أصحاب العمل أن تتغير بحلول 2030', en: 'of workers’ core skills are expected by employers to change by 2030' },
+    'leaders-wef-2025-skills-change': { ar: 'من المهارات الحالية للعاملين يتوقع أصحاب العمل أن تتحول أو تتقادم بحلول 2030', en: 'of workers’ existing skill sets are expected by employers to be transformed or become outdated by 2030' },
     'leaders-wef-2025-ai-transform': { ar: 'من أصحاب العمل يتوقعون أن يحوّل الذكاء الاصطناعي أعمالهم بحلول 2030', en: 'of employers expect AI to transform their business by 2030' },
-    'leaders-wef-2025-skill-gaps': { ar: 'من أصحاب العمل يرون فجوات المهارات العائق الأول أمام التحول', en: 'of employers see skill gaps as the main barrier to transformation' },
+    'leaders-wef-2025-skill-gaps': { ar: 'من أصحاب العمل يعدّون فجوات المهارات عائقاً رئيساً أمام التحول', en: 'of employers name skill gaps a major barrier to transformation' },
   }
 
   return (

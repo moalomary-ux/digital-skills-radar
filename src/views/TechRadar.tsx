@@ -192,8 +192,9 @@ export default function TechRadar() {
         <div>
           {mode === 'chart' ? (
             <div className="no-print glass-strong mb-6 overflow-x-auto p-3 sm:p-5">
-              <div className="min-w-[540px]">
+              <div>
                 <TechRadarChart
+                  onClear={() => setSelectedId(null)}
                   technologies={chartTechs}
                   lang={lang}
                   selectedId={selectedId}

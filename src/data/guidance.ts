@@ -14,7 +14,7 @@ import type { L } from './types'
 export const headlineStats: { value: string; label: L; claimId: string }[] = [
   { value: '170', label: { ar: 'مليون وظيفة جديدة متوقعة عالميًا بحلول 2030', en: 'million new jobs expected globally by 2030' }, claimId: 'future-wef-2025-jobs-created' },
   { value: '92', label: { ar: 'مليون وظيفة متوقع استبدالها في الفترة نفسها', en: 'million jobs expected to be displaced in the same period' }, claimId: 'future-wef-2025-jobs-displaced' },
-  { value: '39%', label: { ar: 'من المهارات الأساسية متوقع أن تتغير بحلول 2030', en: 'of core skills are expected to change by 2030' }, claimId: 'standards-wef-core-skills' },
+  { value: '39%', label: { ar: 'من المهارات الحالية للعاملين متوقع أن تتحول أو تتقادم بحلول 2030', en: 'of workers’ existing skill sets are expected to be transformed or become outdated by 2030' }, claimId: 'standards-wef-core-skills' },
   { value: '+78', label: { ar: 'مليون وظيفة صافية متوقعة، فالتوقعات تستحدث أكثر مما تستبدل', en: 'million net new jobs expected, as projections create more than they displace' }, claimId: 'future-wef-2025-net-jobs' },
 ]
 

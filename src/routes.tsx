@@ -25,6 +25,7 @@ const LeaderCheck = lazy(() => import('./views/leaders/LeaderCheck'))
 const WorkShifts = lazy(() => import('./views/work/WorkShifts'))
 const RoleDetail = lazy(() => import('./views/RoleDetail'))
 const Report = lazy(() => import('./views/Report'))
+const TeamRadar = lazy(() => import('./views/leaders/TeamRadar'))
 const About = lazy(() => import('./views/About'))
 const HubLeaders = lazy(() => import('./views/hubs/Leaders'))
 const HubWork = lazy(() => import('./views/hubs/Work'))
@@ -60,6 +61,7 @@ const viewRoutes: RouteObject[] = [
   { path: 'evidence', element: <Evidence /> },
   { path: 'leaders/brief', element: <LeaderBrief /> },
   { path: 'leaders/check', element: <LeaderCheck /> },
+  { path: 'leaders/team', element: <TeamRadar /> },
   { path: 'work/shifts', element: <WorkShifts /> },
   { path: 'roles/:roleId', element: <RoleDetail /> },
   { path: '*', element: <NotFound /> },
