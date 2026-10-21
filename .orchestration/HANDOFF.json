@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "PHASE-3: main has P1+P5a+P6+P2+P5b+P3 merged (219 tests, initial chunk 79 kB gzip). Running: P4 govdata (omary/Codex, wt-p4), P7 SEO/prerender/CI (omary/Codex, wt-p7), P8 team radar (Opus, wt-p8), P9 charts/a11y (Opus, wt-p9), claims web-verification (Opus, report to reviews/claims-verification-20261022.md).",
+  "state": "PHASE-4 release hardening: all packets merged on main (P1..P9 + claims verification); acceptance review ACCEPT_WITH_FIXES (reviews/acceptance-review-20261022.md); leader fixes committed (a6fd9a1); fix packs A (assessment/content) and B (gov pages + publish guard) running as uncommitted edits in repo",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -27,6 +27,12 @@
       "date": "2026-10-22",
       "text": "Public build = aggregates only (VITE_DATA_MODE=aggregate); per-entity records, logos and rankings only in the private build; DGA's own logo removed; citizen lane (careers/quiz/lists/map) removed from v9 and kept under tag v8-handover; 5-hub IA per docs/plan/DECISION-20261021.md",
       "status": "applied in plan"
+    },
+    {
+      "id": "D4",
+      "date": "2026-10-22",
+      "text": "Deploy = GitHub Pages workflow build (actions/deploy-pages) switched via API at deploy time; custom domain omary.me via Pages API + Hostinger DNS (@ A -> 185.199.108.153/109/110/111, www CNAME -> moalomary-ux.github.io); deema A and mail records untouched",
+      "status": "planned"
     }
   ],
   "outputs": {
@@ -35,7 +41,7 @@
     "plan": "repo/docs/plan/PLAN-20261021.md",
     "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "merge P4/P7/P8/P9 -> apply claims corrections -> visual QA (visual-qa agent + my own pass) -> independent reviewer -> deploy to GitHub Pages + DNS omary.me -> live verification -> report + memory",
+  "next_step": "wait fix packs -> commit -> full build + guard + tests -> final visual pass -> switch Pages to workflow + set cname -> push main -> DNS update -> verify live https://omary.me -> report + memory",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
   "leader": "fable",
   "worktrees": {
