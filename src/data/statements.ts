@@ -113,8 +113,8 @@ export const statements: Statement[] = [
   {
     id: 'cld-5', domainId: 'cloud', skillIndex: 4,
     text: {
-      ar: 'أستطيع وضع متطلبات استمرارية الأعمال لخدمة رقمية حرجة.',
-      en: 'I can define business-continuity requirements for a critical digital service.',
+      ar: 'أستطيع وضع متطلبات الاستمرارية وإدارة مخاطر المورد لخدمة رقمية حرجة.',
+      en: 'I can define continuity and vendor-risk requirements for a critical digital service.',
     },
   },
   // ── 4. User-Centred Service Design ───────────────────────────
@@ -194,14 +194,14 @@ export const statements: Statement[] = [
     id: 'agl-1', domainId: 'agile', skillIndex: 0,
     text: {
       ar: 'أستطيع العمل ضمن فريق يتبع دورات تطوير قصيرة بأدوار واجتماعات دورية واضحة.',
-      en: 'I can work in a team that runs short delivery cycles with clear roles and ceremonies.',
+      en: 'I can work in a team that runs short delivery cycles with clear roles and regular meetings.',
     },
   },
   {
     id: 'agl-2', domainId: 'agile', skillIndex: 1,
     text: {
-      ar: 'أستطيع قيادة منتج رقمي عبر مراحل الاكتشاف والتجربة والإطلاق.',
-      en: 'I can lead a digital product through the discovery, beta and launch stages.',
+      ar: 'أستطيع تحديد المرحلة التي بلغها منتج رقمي (اكتشاف، تجربة، إطلاق) وما يلزم لانتقاله إلى المرحلة التالية.',
+      en: 'I can identify which stage a digital product has reached (discovery, beta, launch) and what it needs to move to the next one.',
     },
   },
   {
@@ -229,8 +229,8 @@ export const statements: Statement[] = [
   {
     id: 'emg-1', domainId: 'emerging', skillIndex: 0,
     text: {
-      ar: 'أستطيع تقييم جدوى أتمتة إجراء عمل محدد قبل تبنّيها.',
-      en: 'I can assess the case for automating a specific work procedure before adopting it.',
+      ar: 'أستطيع تقييم ما إذا كان إجراء عمل محدد يناسب الأتمتة أو وكلاء الذكاء الاصطناعي قبل تبنّيها.',
+      en: 'I can assess whether a specific work procedure suits automation or AI agents before adopting them.',
     },
   },
   {

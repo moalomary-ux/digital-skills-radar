@@ -4,7 +4,7 @@ export const domains: Domain[] = [
   {
     id: 'ai-data',
     name: { ar: 'الذكاء الاصطناعي والبيانات', en: 'AI & Data' },
-    shortName: { ar: 'الذكاء والبيانات', en: 'AI & Data' },
+    shortName: { ar: 'الذكاء الاصطناعي والبيانات', en: 'AI & Data' },
     description: {
       ar: 'قراءة البيانات وتحليلها وحوكمتها، واستخدام الذكاء الاصطناعي التوليدي بمسؤولية في العمل الحكومي.',
       en: 'Reading, analyzing and governing data, and using generative AI responsibly in government work.',
@@ -71,7 +71,7 @@ export const domains: Domain[] = [
   },
   {
     id: 'policy',
-    name: { ar: 'السياسات والحوكمة الرقمية', en: 'Digital Policy, Strategy & Governance' },
+    name: { ar: 'السياسات والاستراتيجية والحوكمة الرقمية', en: 'Digital Policy, Strategy & Governance' },
     shortName: { ar: 'السياسات والحوكمة', en: 'Policy & Governance' },
     description: {
       ar: 'استراتيجية التحول الرقمي والوعي بالتشريعات والحكومة المفتوحة والشمول الرقمي والشراء التقني.',
@@ -88,8 +88,8 @@ export const domains: Domain[] = [
   },
   {
     id: 'agile',
-    name: { ar: 'إدارة المنتجات الرقمية الرشيقة', en: 'Agile Product & Delivery' },
-    shortName: { ar: 'المنتجات الرشيقة', en: 'Agile Delivery' },
+    name: { ar: 'المنتجات الرقمية والتسليم الرشيق', en: 'Agile Product & Delivery' },
+    shortName: { ar: 'التسليم الرشيق', en: 'Agile Delivery' },
     description: {
       ar: 'طرق العمل الرشيقة ودورة حياة المنتج وقصص المستخدم وإدارة أصحاب المصلحة وقياس الأثر.',
       en: 'Agile ways of working, product lifecycle, user stories, stakeholder management and benefits measurement.',
@@ -108,12 +108,12 @@ export const domains: Domain[] = [
     name: { ar: 'التقنيات الناشئة', en: 'Emerging Technologies' },
     shortName: { ar: 'التقنيات الناشئة', en: 'Emerging Tech' },
     description: {
-      ar: 'الأتمتة والوكلاء الأذكياء وإنترنت الأشياء وسلسلة الكتل والتوأم الرقمي واستكشاف التقنيات بمنهجية.',
+      ar: 'الأتمتة ووكلاء الذكاء الاصطناعي وإنترنت الأشياء وسلسلة الكتل والتوأم الرقمي واستكشاف التقنيات بمنهجية.',
       en: 'Agentic AI & automation, IoT & smart cities, blockchain, geospatial & digital twins, and technology scouting.',
     },
     icon: 'spark',
     skills: [
-      { ar: 'الذكاء الاصطناعي الوكيل والأتمتة', en: 'Agentic AI & automation' },
+      { ar: 'وكلاء الذكاء الاصطناعي والأتمتة', en: 'Agentic AI & automation' },
       { ar: 'إنترنت الأشياء والمدن الذكية', en: 'IoT & smart cities' },
       { ar: 'سلسلة الكتل والاعتمادات الرقمية', en: 'Blockchain & digital credentials' },
       { ar: 'البيانات المكانية والتوأم الرقمي', en: 'Geospatial & digital twins' },

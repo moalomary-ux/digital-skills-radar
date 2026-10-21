@@ -9,8 +9,8 @@ export const roles: Role[] = [
     id: 'generalist',
     name: { ar: 'موظف حكومي عام', en: 'Generalist Government Employee' },
     description: {
-      ar: 'تستخدم الأدوات الرقمية وتتعامل مع الخدمات الحكومية في عملك اليومي. الهدف: مستوى «تطبيق» في كل المجالات، و«ممارس» في القيادة وتصميم الخدمات.',
-      en: 'You use digital tools and interact with government services in daily work. Target: “Working” across all domains, “Practitioner” in leadership and service design.',
+      ar: 'تستخدم الأدوات الرقمية وتتعامل مع الخدمات الحكومية في عملك اليومي. الهدف: مستوى «تطبيق» في كل المجالات، و«إتقان» في القيادة وتصميم الخدمات.',
+      en: 'You use digital tools and interact with government services in daily work. Target: the application level across all domains, and proficiency in leadership and service design.',
     },
     targets: {
       'ai-data': 2,
@@ -27,8 +27,8 @@ export const roles: Role[] = [
     id: 'specialist',
     name: { ar: 'أخصائي رقمي', en: 'Digital Specialist' },
     description: {
-      ar: 'تعمل في مجال رقمي متخصص (بيانات، أمن، بنية تحتية، تطوير منتجات). الهدف: مستوى «ممارس» في عائلة مجالك التقنية، و«تطبيق» في بقية المجالات.',
-      en: 'You work in a specialist digital field (data, security, infrastructure, product delivery). Target: “Practitioner” in your technical domain family, “Working” elsewhere.',
+      ar: 'تعمل في مجال رقمي متخصص (بيانات، أمن، بنية تحتية، تطوير منتجات). الهدف: مستوى «إتقان» في مجالك التقني، و«تطبيق» في بقية المجالات.',
+      en: 'You work in a specialist digital field (data, security, infrastructure, product delivery). Target: proficiency in your technical domain, and the application level elsewhere.',
     },
     targets: {
       'ai-data': 3,
@@ -45,8 +45,8 @@ export const roles: Role[] = [
     id: 'leader',
     name: { ar: 'قائد رقمي', en: 'Digital Leader' },
     description: {
-      ar: 'تقود التحول الرقمي والفرق والقرارات الاستراتيجية. الهدف: مستوى «خبير» في السياسات والقيادة، و«ممارس» في معظم المجالات الأخرى.',
-      en: 'You lead digital transformation, teams and strategic decisions. Target: “Expert” in policy and leadership, “Practitioner” across most other domains.',
+      ar: 'تقود التحول الرقمي والفرق والقرارات الاستراتيجية. الهدف: مستوى «ريادة» في السياسات والقيادة، و«إتقان» في معظم المجالات الأخرى.',
+      en: 'You lead digital transformation, teams and strategic decisions. Target: the leadership level in policy and in digital leadership, and proficiency in most other domains.',
     },
     targets: {
       'ai-data': 3,

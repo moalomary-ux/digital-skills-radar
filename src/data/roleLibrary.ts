@@ -1,9 +1,9 @@
 import type { L } from './types'
 import { roles } from './roles'
-import { careerById, careerTargetsFor } from './careers'
 
 /**
- * Role Library — 20 digital-government roles.
+ * Role Library — the digital-government reference roles. Never write the count in copy:
+ * derive it from `libraryRoles.length` (registered as claim `method-roles-count`).
  * Converted from research/role-library.md; domain keys normalized to app ids:
  *   ai_data→ai-data · cyber_trust→cyber · cloud_infra→cloud · service_design→service-design
  *   policy_gov→policy · agile_delivery→agile · emerging_tech→emerging · leadership_collab→leadership
@@ -20,7 +20,16 @@ export interface LibraryRole {
   targets: Record<string, number>
   responsibilities: L[]
   sfia: string[]
+  /**
+   * Set when the SFIA 9 mapping is approximate: a code whose fit or presence in SFIA 9 could
+   * not be confirmed against the official list during the desk audit (2026-10-22, no network).
+   * Codes are never invented; the official list is the reference.
+   */
+  sfiaNote?: L
 }
+
+/** The note shown next to approximate SFIA mappings. */
+export const SFIA_APPROX: L = { ar: 'تقريبي', en: 'approximate' }
 
 export const familyNames: Record<RoleFamily, L> = {
   Leadership: { ar: 'القيادة', en: 'Leadership' },
@@ -113,6 +122,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'تقييم مصادر بيانات إنترنت الأشياء والمدن الذكية من حيث الجودة وقابلية التشغيل البيني والقيمة.', en: 'Evaluate IoT and smart-city data sources for quality, interoperability and value.' },
     ],
     sfia: ['DAAN', 'DTAN', 'VISL', 'BINT'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'cybersecurity_analyst',
@@ -192,7 +202,8 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'أتمتة العمليات: الاستجابة للحوادث والتوسع والتعافي وتقليل العمل اليدوي المتكرر.', en: 'Automate operations: incident response, scaling, recovery and toil reduction.' },
       { ar: 'قيادة مراجعات ما بعد الحوادث دون لوم ودفع تحسينات الموثوقية.', en: 'Lead blameless post-incident reviews and drive reliability improvements.' },
     ],
-    sfia: ['ITOP', 'AVMT', 'SLEN', 'PBMG'],
+    sfia: ['ITOP', 'AVMT', 'CPMG', 'PBMG'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'service_designer',
@@ -209,6 +220,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'بناء نماذج أولية للخدمات المستقبلية واختبارها وفق معايير الخدمة قبل التطوير.', en: 'Prototype and test future-state services against service standards before build.' },
     ],
     sfia: ['HCEV', 'UNAN', 'CEXP', 'BPRE'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'ux_researcher',
@@ -257,6 +269,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'تقديم المشورة للقيادة وفرق التسليم حول الالتزامات المتعلقة بالذكاء الاصطناعي المسؤول والتواصل العام.', en: 'Advise leadership and delivery teams on responsible-AI obligations and public communication.' },
     ],
     sfia: ['AIDE', 'GOVN', 'PEDP', 'RSCH'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'digital_policy_advisor',
@@ -289,6 +302,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'تقديم المشورة لفرق الخدمة حول التصميم الشامل والقنوات المساندة والامتثال.', en: 'Advise service teams on inclusive design, assisted channels and compliance.' },
     ],
     sfia: ['ACIN', 'CEXP', 'OFCL'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'product_manager',
@@ -316,11 +330,12 @@ export const libraryRoles: LibraryRole[] = [
     },
     targets: { 'ai-data': 1, cyber: 1, cloud: 2, 'service-design': 2, policy: 2, agile: 4, emerging: 1, leadership: 3 },
     responsibilities: [
-      { ar: 'تيسير الطقوس الرشيقة وإيقاعات التسليم والتحسين المستمر.', en: 'Facilitate agile ceremonies, delivery rhythms and continuous improvement.' },
+      { ar: 'تيسير اجتماعات العمل الرشيق وإيقاعات التسليم والتحسين المستمر.', en: 'Facilitate agile ceremonies, delivery rhythms and continuous improvement.' },
       { ar: 'إزالة العوائق وإدارة التبعيات وحماية الفريق من المشتتات.', en: 'Remove blockers, manage dependencies and shield the team from disruption.' },
       { ar: 'متابعة صحة التسليم — التدفق والجودة والمخاطر — والرفع بالتقارير بشفافية إلى الحوكمة.', en: 'Track delivery health — flow, quality, risks — and report honestly to governance.' },
     ],
-    sfia: ['DEMG', 'PRMG', 'OFCL', 'PBMG'],
+    sfia: ['PRMG', 'RLMT', 'OFCL', 'PBMG'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'business_analyst',
@@ -353,6 +368,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'تحديد مقاييس النجاح وضوابط سلوك الذكاء الاصطناعي في الخدمات الحية.', en: 'Define success metrics and guardrails for AI behaviour in live services.' },
     ],
     sfia: ['PROD', 'MLNG', 'AIDE', 'REQM'],
+    sfiaNote: SFIA_APPROX,
   },
   {
     id: 'software_engineer',
@@ -424,20 +440,16 @@ export const libraryRoleById = (id: string): LibraryRole | undefined =>
   libraryRoles.find((r) => r.id === id)
 
 export const LIB_PREFIX = 'lib:'
-export const CAREER_PREFIX = 'career:'
 
 /**
  * Resolve a stored role id (generic profile id or `lib:<library id>`)
- * to per-domain target levels, using the app's domain keys.
+ * to per-domain target levels, using the app's domain keys. Ids from the retired
+ * citizen lane fall back to the first generic profile.
  */
 export function resolveTargets(roleId: string | null | undefined): Record<string, number> {
   if (roleId && roleId.startsWith(LIB_PREFIX)) {
     const lib = libraryRoleById(roleId.slice(LIB_PREFIX.length))
     if (lib) return lib.targets
-  }
-  if (roleId && roleId.startsWith(CAREER_PREFIX)) {
-    const career = careerById(roleId.slice(CAREER_PREFIX.length))
-    if (career) return careerTargetsFor(career)
   }
   const generic = roles.find((r) => r.id === roleId) ?? roles[0]
   return generic.targets
@@ -448,10 +460,6 @@ export function resolveRoleName(roleId: string | null | undefined): L {
   if (roleId && roleId.startsWith(LIB_PREFIX)) {
     const lib = libraryRoleById(roleId.slice(LIB_PREFIX.length))
     if (lib) return lib.name
-  }
-  if (roleId && roleId.startsWith(CAREER_PREFIX)) {
-    const career = careerById(roleId.slice(CAREER_PREFIX.length))
-    if (career) return { ar: `جاهزية لمهنة: ${career.name.ar}`, en: `Readiness for: ${career.name.en}` }
   }
   const generic = roles.find((r) => r.id === roleId)
   return generic ? generic.name : roles[0].name
