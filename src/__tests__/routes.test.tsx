@@ -108,11 +108,14 @@ const expectedRoutes: Record<Exclude<View, 'not-found'>, string> = {
   lists: '/careers/trends', decide: '/guidance', entities: '/entities', impact: '/impact',
   sectors: '/sectors', directory: '/directory', entity: `/directory/${entity.id}`,
   standards: '/standards', methodology: '/methodology',
+  evidence: '/evidence', about: '/about', report: '/assess/report', services: '/services',
+  sector: '/sectors/health', leaders: '/leaders', 'leader-brief': '/leaders/brief', 'leader-check': '/leaders/check',
+  'leader-team': '/leaders/team', adoption: '/leaders/adoption', work: '/work', 'work-shifts': '/work/shifts', role: '/roles/cdo',
 }
 
 describe.each(['ar', 'en'] as const)('route helpers in %s', (lang) => {
   it.each(Object.entries(expectedRoutes))('round-trips %s with its specified URL', (view, suffix) => {
-    const path = pathFor(view as View, lang, { entityId: entity.id })
+    const path = pathFor(view as View, lang, { entityId: entity.id, roleId: 'cdo', sectorId: 'health' })
     expect(path).toBe(`/${lang}${suffix}`)
     expect(viewFromPath(path)).toBe(view)
   })

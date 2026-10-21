@@ -23,6 +23,11 @@ const EntityDetail = lazy(() => import('./views/EntityDetail'))
 const Standards = lazy(() => import('./views/Standards'))
 const Methodology = lazy(() => import('./views/Methodology'))
 const NotFound = lazy(() => import('./views/NotFound'))
+const Evidence = lazy(() => import('./views/Evidence'))
+const LeaderBrief = lazy(() => import('./views/leaders/LeaderBrief'))
+const LeaderCheck = lazy(() => import('./views/leaders/LeaderCheck'))
+const WorkShifts = lazy(() => import('./views/work/WorkShifts'))
+const RoleDetail = lazy(() => import('./views/RoleDetail'))
 
 const viewRoutes: RouteObject[] = [
   { index: true, element: <Home /> },
@@ -46,6 +51,11 @@ const viewRoutes: RouteObject[] = [
   { path: 'methodology', element: <Methodology /> },
   { path: 'tech-radar/:techId', element: <TechRadar /> },
   { path: 'careers/:careerId', element: <Careers /> },
+  { path: 'evidence', element: <Evidence /> },
+  { path: 'leaders/brief', element: <LeaderBrief /> },
+  { path: 'leaders/check', element: <LeaderCheck /> },
+  { path: 'work/shifts', element: <WorkShifts /> },
+  { path: 'roles/:roleId', element: <RoleDetail /> },
   { path: '*', element: <NotFound /> },
 ]
 
