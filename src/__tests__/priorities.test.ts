@@ -144,6 +144,43 @@ describe('priority engine — rules', () => {
     expect(summaryLine(p, 'en')).toContain(`“${p[1].domainName.en}”`)
   })
 
+  it('D6: «self_below_target» text follows the scenario shown beside it (self 1, scenarios 3/3)', () => {
+    const r = rec({ scores: all(1), scenario: all(3) }) // judgment 3/3 → 4 on 0–4, above every target 2
+    const p = priorities(r, target2, domains)
+    expect(p[0]).toMatchObject({ reason: 'self_below_target', scenarioScore: 3, targetBasis: 'category' })
+    for (const x of p) {
+      // the old sentence claimed the judgment was silent although the card shows «3 / 3»
+      expect(x.text.ar).not.toContain('لم يؤكد موقف الحكم')
+      expect(x.text.en).not.toContain('no scenario')
+      expect(x.text.ar).toContain('بلغت المستهدف أو تجاوزته')
+      expect(x.text.en).toContain('reached or passed the target')
+      expect(x.text.ar).toContain('لفئة دورك')
+    }
+    // no scenario answer in the domain → the text says so
+    const silent = priorities(rec({ scores: all(1), scenario: undefined }), target2, domains)[0]
+    expect(silent.reason).toBe('self_below_target')
+    expect(silent.text.ar).toContain('لا توجد إجابة موقف حكم في هذا المجال')
+    expect(silent.text.en).toContain('no scenario answer in this domain')
+  })
+
+  it('D6: a precise role names «المستهدف الاسترشادي لدورك», never «لفئة دورك»', () => {
+    const roleRec = rec({ roleId: 'lib:data_scientist', scores: all(0), scenario: undefined })
+    const p = priorities(roleRec, targetsForRecord(roleRec), domains)
+    expect(p[0]).toMatchObject({ reason: 'self_below_target', targetBasis: 'role' })
+    expect(p[0].text.ar).toContain('المستهدف الاسترشادي لدورك')
+    expect(p[0].text.en).toContain('the indicative target for your role;')
+    for (const lang of ['ar', 'en'] as const) expect(summaryLine(p, lang)).not.toMatch(/فئة دورك|role category/)
+    expect(summaryLine(p, 'ar')).toContain('لدورك')
+    // maintain headline follows the same rule
+    const atTarget = rec({ roleId: 'lib:data_scientist', scores: all(4), scenario: all(3) })
+    const kept = priorities(atTarget, targetsForRecord(atTarget), domains)
+    expect(kept[0].reason).toBe('maintain')
+    expect(summaryLine(kept, 'ar')).toContain('المستهدف الاسترشادي لدورك أو فوقه')
+    expect(summaryLine(kept, 'en')).toContain('the indicative target for your role in every domain')
+    // a category record keeps the category wording
+    expect(summaryLine(priorities(rec({ scores: all(4), scenario: all(3) }), target2, domains), 'ar')).toContain('لفئة دورك')
+  })
+
   it('the plan starts from the conservative evidence level (judgment outranks self-report)', () => {
     const r = rec({ scores: { ...all(2), cyber: 3.5 }, scenario: { ...all(2), cyber: 0 } })
     const first = priorities(r, target2, domains)[0]

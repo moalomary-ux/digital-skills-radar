@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { routes } from '../routes'
 import { AppProvider } from '../store'
 import type { ResultRecord } from '../store'
@@ -10,6 +10,9 @@ import { tracks } from '../data/tracks'
 import { categoryTargets } from '../data/levels'
 import { priorities, targetsForRecord } from '../lib/priorities'
 import { decodeResult } from '../lib/resultCode'
+import { LS_PLAN } from '../views/Pathways'
+import { PLAN_PROGRESS_KEY as RESULTS_PLAN_KEY } from '../views/Results'
+import { PLAN_PROGRESS_KEY as ABOUT_PLAN_KEY, SESSION_KEYS } from '../views/About'
 
 const routers: ReturnType<typeof createMemoryRouter>[] = []
 afterEach(() => {
@@ -167,5 +170,42 @@ describe.each(['ar', 'en'] as const)('assessment journey (%s)', (lang) => {
     const roleRadio = screen.getByRole('radio', { name: lang === 'ar' ? /عالم البيانات|علم البيانات/ : /Data Scientist/ })
     expect(roleRadio).toBeChecked()
     expect(screen.getByRole('button', { name: new RegExp(T.start) })).toBeDisabled()
+  })
+})
+
+describe('privacy: the plan progress leaves with the results (D10)', () => {
+  const scores = Object.fromEntries(domains.map((d) => [d.id, 1]))
+  const seed = () => {
+    localStorage.setItem('dsr-history', JSON.stringify([{ v: 2, id: 'r-1', date: '2026-10-22T08:00:00.000Z', roleId: 'cat:applied', trackId: 'applied', answers: {}, scores, overall: 1 }]))
+    localStorage.setItem(LS_PLAN, JSON.stringify({ 'r-1': { 'ai-data': [1, 2] } }))
+  }
+
+  it('one key: the plan page, Results and About clear the same storage entry', () => {
+    expect(LS_PLAN).toBe('dsr-plan-progress')
+    expect(RESULTS_PLAN_KEY).toBe(LS_PLAN)
+    expect(ABOUT_PLAN_KEY).toBe(LS_PLAN)
+  })
+
+  it('«مسح نتائجي» in Results removes the plan progress too', async () => {
+    seed()
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true)
+    renderApp('/ar/assess/results')
+    fireEvent.click(await screen.findByRole('button', { name: 'مسح نتائجي من هذا المتصفح' }))
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('تقدّم خطتك'))
+    confirm.mockRestore()
+    await waitFor(() => expect(JSON.parse(localStorage.getItem('dsr-history') ?? '[]')).toEqual([]))
+    expect(localStorage.getItem(LS_PLAN)).toBeNull()
+  })
+
+  it('«امسح بياناتك» in About lists and removes the plan progress and the tab-only leader data', async () => {
+    seed()
+    for (const k of SESSION_KEYS) sessionStorage.setItem(k, 'x')
+    renderApp('/ar/about')
+    expect(await screen.findByText(/وتقدّم خطتك \(الأسابيع التي أنجزتها\)/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'امسح المسودة وسجل النتائج وتقدّم الخطة' }))
+    fireEvent.click(screen.getByRole('button', { name: 'نعم، امسح' }))
+    expect(await screen.findByText('مُسحت المسودة وسجل النتائج وتقدّم الخطة من هذا المتصفح.')).toBeInTheDocument()
+    expect(localStorage.getItem(LS_PLAN)).toBeNull()
+    for (const k of SESSION_KEYS) expect(sessionStorage.getItem(k)).toBeNull()
   })
 })

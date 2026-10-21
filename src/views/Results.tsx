@@ -84,6 +84,21 @@ export function roleLine(rec: ResultRecord): { category: L | null; role: L | nul
   return { category, role: lib ? lib.name : category ? null : resolveRoleName(rec.roleId) }
 }
 
+/**
+ * The plan page keeps its ticked weeks under this key (`LS_PLAN` in Pathways.tsx). It is repeated here,
+ * not imported, so this page does not pull the plan page's code into its own chunk.
+ */
+export const PLAN_PROGRESS_KEY = 'dsr-plan-progress'
+
+/** Remove the plan's ticked weeks from this browser (they belong to the results being deleted). */
+export function clearPlanProgress(): void {
+  try {
+    localStorage.removeItem(PLAN_PROGRESS_KEY)
+  } catch {
+    /* storage unavailable: nothing was stored */
+  }
+}
+
 /* ------------------------------------------------------------------ page */
 
 type LayerKey = 'self' | 'judgment' | 'knowledge' | 'target'
@@ -452,14 +467,16 @@ export default function Results() {
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <label htmlFor="result-code" className="sr-only">{t({ ar: 'رمز النتيجة', en: 'Result code' })}</label>
+          {/* the whole code stays visible, on screen and in print: width from its own length, never clipped */}
           <input
             id="result-code"
             ref={codeInputRef}
             readOnly
             dir="ltr"
             value={formatCode(code)}
+            size={formatCode(code).length + 1}
             onFocus={(e) => e.currentTarget.select()}
-            className="w-full max-w-xs rounded-btn border border-dga-line bg-dga-bg px-3 py-2 font-mono text-sm tracking-wider text-dga-black sm:w-auto"
+            className="w-full max-w-xs rounded-btn border border-dga-line bg-dga-bg px-3 py-2 font-mono text-sm tracking-wide text-dga-black sm:w-auto sm:min-w-[30ch] sm:max-w-none print:w-auto print:min-w-[30ch] print:max-w-none"
             data-testid="result-code"
           />
           <button type="button" onClick={copyCode} className="btn-ghost no-print px-4 py-2 text-sm">
@@ -476,7 +493,10 @@ export default function Results() {
         <button
           type="button"
           onClick={() => {
-            if (window.confirm(t({ ar: 'حذف كل النتائج المحفوظة في هذا المتصفح؟', en: 'Delete all results saved in this browser?' }))) clearHistory()
+            if (window.confirm(t({ ar: 'حذف كل النتائج المحفوظة وتقدّم خطتك من هذا المتصفح؟', en: 'Delete all saved results and your plan progress from this browser?' }))) {
+              clearHistory()
+              clearPlanProgress()
+            }
           }}
           className="text-xs text-rose-700 underline-offset-4 hover:underline"
         >

@@ -4,7 +4,7 @@ import { useApp } from '../store'
 import { pathFor } from '../lib/routes'
 import { isFullMode } from '../lib/flags'
 import Claim from '../components/Claim'
-import EntityLogo from '../components/EntityLogo'
+import EntityLogo, { EnglishNameFallback } from '../components/EntityLogo'
 import { DEFAULT_DIRECTORY_TYPES, ENTITY_TYPES, entityTypeById, label, loadEntitiesIndex, regionById, regions, sectorById, sectors, useGovData } from '../data/gov'
 import type { EntityIndexRow, EntityType } from '../data/gov'
 import type { L } from '../data/types'
@@ -27,6 +27,10 @@ const ui = {
     en: 'Active entities of the cleaned directory by name, type, sector and region. Government and quasi-government entities are selected by default; the other types can be shown from the filter.',
   },
   countNote: { ar: 'جهة في الدليل العام', en: 'entities in the public directory' },
+  namesNote: {
+    ar: 'تظهر أسماء الجهات كما وردت في ملف المصدر، والاسم الإنجليزي تحتها حين يتوفر.',
+    en: 'Entity names are proper nouns shown in Arabic as recorded in the source workbook, with the English name underneath where the source has one.',
+  },
   search: { ar: 'ابحث بالاسم', en: 'Search by name' },
   searchHint: { ar: 'الاسم العربي أو الإنجليزي', en: 'Arabic or English name' },
   types: { ar: 'نوع الجهة', en: 'Entity type' },
@@ -127,6 +131,7 @@ export default function Directory() {
         <p className="mt-3 text-sm text-dga-ink">
           <Claim id="gov-directory-public" /> {t(ui.countNote)}
         </p>
+        <p className="mt-1 text-xs text-dga-muted">{t(ui.namesNote)}</p>
       </div>
 
       {/* filters */}
@@ -280,7 +285,7 @@ function EntityCard({ entity: e, full }: { entity: EntityIndexRow; full: boolean
     <Link
       to={pathFor('entity', lang, { entityId: e.id })}
       className="glass flex h-full flex-col p-4 transition-shadow hover:shadow-card-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green"
-      aria-label={`${e.nameAr}: ${t(ui.open)}`}
+      aria-label={`${lang === 'en' && e.nameEn ? e.nameEn : e.nameAr}: ${t(ui.open)}`}
     >
       <div className="flex items-center gap-3">
         {full ? <EntityLogo entity={e} className="h-12 w-12" /> : null}
@@ -289,10 +294,11 @@ function EntityCard({ entity: e, full }: { entity: EntityIndexRow; full: boolean
             {e.nameAr}
           </h2>
           {e.nameEn ? (
-            <p className="truncate text-[10.5px] text-dga-muted" dir="ltr" title={e.nameEn}>
+            <p className="truncate text-[10.5px] text-dga-muted" lang="en" dir="ltr" title={e.nameEn}>
               {e.nameEn}
             </p>
           ) : null}
+          <EnglishNameFallback lang={lang} nameEn={e.nameEn} />
         </div>
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5 text-[10px]">

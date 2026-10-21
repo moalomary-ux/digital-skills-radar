@@ -10,13 +10,13 @@ import { AUTHOR, DATA_UPDATED_ON, formatDay, INDEPENDENCE, SOON } from '../compo
 const built: { label: L; view: View }[] = [
   { label: { ar: '«تقييمي»: تقييم ذاتي في 8 مجالات، ومواقف حكم مهني، وأولويات تطوير مقترحة، وخطة للأيام الـ90 المقبلة', en: '«My assessment»: a self-assessment across 8 domains, judgment scenarios, suggested development priorities and a 90-day plan' }, view: 'wizard' },
   { label: { ar: 'الموجز القيادي وفحص القرار القيادي', en: 'The leader brief and the leader judgment check' }, view: 'leader-brief' },
+  { label: { ar: 'رادار الفريق: تجميع رموز نتائج مجهولة، لا يعرض شيئاً تحت 5 رموز ولا صفاً لكل شخص', en: 'The team radar: combines anonymous result codes, shows nothing below 5 codes and never a row per person' }, view: 'leader-team' },
   { label: { ar: 'خريطة تحوّل المهام في الوظائف الحكومية', en: 'The task-shift map for government jobs' }, view: 'work-shifts' },
   { label: { ar: 'مكتبة الأدوار وأوراقها القابلة للطباعة', en: 'The role library and its printable sheets' }, view: 'roles' },
   { label: { ar: 'سجل الأدلة: كل رقم بمصدره ودرجة الثقة به', en: 'The evidence register: every figure with its source and confidence' }, view: 'evidence' },
 ]
 
 const notBuilt: { label: L; note: L }[] = [
-  { label: { ar: 'رادار الفريق', en: 'Team radar' }, note: { ar: 'تجميع رموز نتائج مجهولة؛ لا يعرض شيئاً تحت 5 رموز ولا صفاً لكل شخص.', en: 'Combines anonymous result codes; shows nothing below 5 codes and never a row per person.' } },
   { label: { ar: 'وضع الورشة', en: 'Workshop mode' }, note: { ar: 'لتيسير مواقف الحكم المهني في جلسة جماعية.', en: 'For facilitating judgment scenarios in a group session.' } },
   { label: { ar: 'مخطِّط قدرات الوحدة', en: 'Unit capability planner' }, note: { ar: 'من مزيج الأدوار في الوحدة إلى ملف القدرات المطلوب.', en: 'From a unit’s mix of roles to the capability profile it needs.' } },
   { label: { ar: 'التعلم المشترك', en: 'Learning together' }, note: { ar: 'حلقات تعلم ودفعات مشتركة للمساقات: أفكار من النسخة السابقة لم تُنفَّذ.', en: 'Learning circles and shared course cohorts: ideas from the previous version, not implemented.' } },
@@ -30,6 +30,35 @@ const neverDo: L[] = [
   { ar: 'لا ربط بملف الموظف ولا بالتقييم الوظيفي أو الترقية', en: 'No link to employee files, performance appraisal or promotion' },
   { ar: 'لا شعارات رسمية لأي جهة', en: 'No official logos of any entity' },
 ]
+
+/**
+ * Browser keys this page clears. The plan's ticked weeks use `LS_PLAN` from Pathways.tsx and the two
+ * leader tools keep their state in sessionStorage; the keys are repeated here, not imported, so this
+ * page does not pull those pages' code into its chunk.
+ */
+export const PLAN_PROGRESS_KEY = 'dsr-plan-progress'
+export const SESSION_KEYS = ['dsr-leader-check-v1', 'dsr-team-a', 'dsr-team-b'] as const
+
+function hasPlanProgress(): boolean {
+  try {
+    return localStorage.getItem(PLAN_PROGRESS_KEY) !== null
+  } catch {
+    return false
+  }
+}
+
+function clearBrowserExtras(): void {
+  try {
+    localStorage.removeItem(PLAN_PROGRESS_KEY)
+  } catch {
+    /* storage unavailable: nothing was stored */
+  }
+  try {
+    for (const k of SESSION_KEYS) sessionStorage.removeItem(k)
+  } catch {
+    /* storage unavailable: nothing was stored */
+  }
+}
 
 const credits: L[] = [
   { ar: 'إطار SFIA 9 للمهارات الرقمية', en: 'SFIA 9 skills framework' },
@@ -45,11 +74,12 @@ export default function About() {
   const { t, lang, history, answers, clearHistory, resetDraft } = useApp()
   const [confirming, setConfirming] = useState(false)
   const [cleared, setCleared] = useState(false)
-  const stored = (history?.length ?? 0) > 0 || Object.keys(answers ?? {}).length > 0
+  const stored = (history?.length ?? 0) > 0 || Object.keys(answers ?? {}).length > 0 || hasPlanProgress()
 
   const clearAll = () => {
     clearHistory()
     resetDraft()
+    clearBrowserExtras()
     setConfirming(false)
     setCleared(true)
   }
@@ -102,7 +132,8 @@ export default function About() {
           {[
             { ar: 'لا يغادر أي شيء متصفحك: لا خادم يستقبل إجاباتك، ولا حسابات.', en: 'Nothing leaves your browser: no server receives your answers, and there are no accounts.' },
             { ar: 'لا تحليلات ولا ملفات تتبع ولا طلبات إلى أطراف خارجية عند التحميل؛ الخطوط مستضافة محلياً.', en: 'No analytics, no tracking and no third-party requests at load; fonts are hosted locally.' },
-            { ar: 'ما يُحفظ في متصفحك فقط: مسودة تقييمك، وسجل نتائجك، ولغتك المختارة.', en: 'What is stored, in your browser only: your assessment draft, your result history and your chosen language.' },
+            { ar: 'ما يُحفظ في متصفحك فقط: مسودة تقييمك، وسجل نتائجك، وتقدّم خطتك (الأسابيع التي أنجزتها)، ولغتك المختارة.', en: 'What is stored, in your browser only: your assessment draft, your result history, your plan progress (the weeks you ticked) and your chosen language.' },
+            { ar: 'فحص القرار القيادي ورادار الفريق يحفظان ما تُدخله في هذه النافذة فقط، ويُمحى عند إغلاقها.', en: 'The leader judgment check and the team radar keep what you enter in this tab only; it is erased when you close the tab.' },
             { ar: 'رمز النتيجة لا يُرسل إلى أحد؛ تشاركه أنت إن أردت، ولا يحمل اسمك.', en: 'Your result code is sent to no one; you share it if you choose, and it carries no name.' },
           ].map((x) => (
             <li key={x.en} className="flex gap-2.5">
@@ -115,12 +146,12 @@ export default function About() {
           <p className="text-sm font-semibold text-dga-black">{t({ ar: 'امسح بياناتك من هذا المتصفح', en: 'Clear your data from this browser' })}</p>
           <div className="mt-2 flex flex-wrap items-center gap-3" aria-live="polite">
             {cleared ? (
-              <p className="text-sm text-dga-tag-ok-text">{t({ ar: 'مُسحت المسودة وسجل النتائج من هذا المتصفح.', en: 'The draft and result history were cleared from this browser.' })}</p>
+              <p className="text-sm text-dga-tag-ok-text">{t({ ar: 'مُسحت المسودة وسجل النتائج وتقدّم الخطة من هذا المتصفح.', en: 'The draft, result history and plan progress were cleared from this browser.' })}</p>
             ) : !stored ? (
-              <p className="text-sm text-dga-muted">{t({ ar: 'لا توجد مسودة ولا نتائج محفوظة في هذا المتصفح.', en: 'There is no draft and no saved result in this browser.' })}</p>
+              <p className="text-sm text-dga-muted">{t({ ar: 'لا توجد مسودة ولا نتائج ولا تقدّم خطة محفوظ في هذا المتصفح.', en: 'There is no draft, saved result or plan progress in this browser.' })}</p>
             ) : confirming ? (
               <>
-                <p className="text-sm text-dga-ink">{t({ ar: 'سيُحذف سجل نتائجك ومسودتك نهائياً من هذا المتصفح. متأكد؟', en: 'Your result history and draft will be removed from this browser for good. Are you sure?' })}</p>
+                <p className="text-sm text-dga-ink">{t({ ar: 'سيُحذف سجل نتائجك ومسودتك وتقدّم خطتك نهائياً من هذا المتصفح. متأكد؟', en: 'Your result history, draft and plan progress will be removed from this browser for good. Are you sure?' })}</p>
                 <button type="button" onClick={clearAll} className="btn-primary px-4 py-2 text-sm">
                   {t({ ar: 'نعم، امسح', en: 'Yes, clear' })}
                 </button>
@@ -130,7 +161,7 @@ export default function About() {
               </>
             ) : (
               <button type="button" onClick={() => setConfirming(true)} className="btn-ghost px-4 py-2 text-sm">
-                {t({ ar: 'امسح المسودة وسجل النتائج', en: 'Clear the draft and result history' })}
+                {t({ ar: 'امسح المسودة وسجل النتائج وتقدّم الخطة', en: 'Clear the draft, result history and plan progress' })}
               </button>
             )}
           </div>

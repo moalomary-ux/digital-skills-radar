@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "postbuild": "cp dist/index.html dist/404.html && npm run build:ssr && node scripts/prerender.mjs && node scripts/sitemap.mjs",
+    "postbuild": "cp dist/index.html dist/404.html && npm run build:ssr && node scripts/prerender.mjs && node scripts/sitemap.mjs && node scripts/publish-guard.mjs --stamp",
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "prerender": "node scripts/prerender.mjs",
     "sitemap": "node scripts/sitemap.mjs",
     "size-budget": "node scripts/size-budget.mjs",
+    "guard": "node scripts/publish-guard.mjs",
     "test": "CONTENT_LINT_STRICT=1 vitest run",
     "preview": "vite preview",
     "prebuild": "node scripts/build-gov-data.mjs"

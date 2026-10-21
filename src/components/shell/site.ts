@@ -92,7 +92,7 @@ export const hubs: Hub[] = [
     title: { ar: 'الجهات والقطاعات', en: 'Entities & sectors' },
     views: ['entities', 'sectors', 'sector', 'services', 'directory', 'entity'],
     items: [
-      { view: 'sectors', label: { ar: 'احتياج القطاعات', en: 'Sector needs' } },
+      { view: 'sectors', label: { ar: 'القطاعات الحكومية', en: 'Government sectors' } },
       { view: 'services', label: { ar: 'سجل خدمات التمكين', en: 'Enablement service record' } },
       { view: 'directory', label: { ar: 'دليل الجهات', en: 'Entity directory' } },
     ],

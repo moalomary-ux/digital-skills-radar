@@ -76,6 +76,23 @@ describe('header', () => {
     expect(within(header).getByRole('link', { name: 'أكمل تقييمك' })).toHaveAttribute('href', '/ar/assess')
   })
 
+  it('after a completed assessment the header button reads «نتيجتي» and leads to the results (D12c)', async () => {
+    const scores = { 'ai-data': 2, cyber: 2, cloud: 2, 'service-design': 2, policy: 2, agile: 2, emerging: 2, leadership: 2 }
+    localStorage.setItem('dsr-history', JSON.stringify([{ v: 2, id: 'r-1', date: '2026-10-22T08:00:00.000Z', roleId: 'cat:applied', trackId: 'applied', answers: {}, scores, overall: 2 }]))
+    renderApp('/ar')
+    await screen.findByRole('heading', { level: 1 })
+    const header = document.querySelector('header.site-header') as HTMLElement
+    expect(within(header).queryByRole('link', { name: 'أكمل تقييمك' })).toBeNull()
+    expect(within(header).getByRole('link', { name: 'نتيجتي' })).toHaveAttribute('href', '/ar/assess/results')
+  })
+
+  it('with no draft and no result the header button reads «ابدأ التقييم»', async () => {
+    renderApp('/en')
+    await screen.findByRole('heading', { level: 1 })
+    const header = document.querySelector('header.site-header') as HTMLElement
+    expect(within(header).getByRole('link', { name: 'Start the assessment' })).toHaveAttribute('href', '/en/assess')
+  })
+
   // Measured in headless Chrome (P3 note): at 1024 px the six English labels take 630 px of a 683 px slot
   // (scrollbar included), Arabic 527 px of 727 px; at 1280/1440 both fit with the wordmark shown. These
   // budgets keep any later relabelling inside what was measured.
@@ -194,15 +211,15 @@ describe('home', () => {
     const expected: [string, string][] = [
       ['أنا موظف', '/ar/assess'],
       ['أنا قيادي', '/ar/leaders/brief'],
-      ['أقود فريقاً', '/ar/leaders'],
+      ['أقود فريقاً', '/ar/leaders/team'],
       ['الموارد البشرية والتعلم', '/ar/leaders/adoption'],
     ]
     for (const [name, href] of expected) {
       const heading = screen.getByRole('heading', { level: 3, name })
       expect(within(heading).getByRole('link')).toHaveAttribute('href', href)
     }
-    // the unbuilt team radar is announced honestly on that one card only
-    expect(screen.getAllByText('قريباً')).toHaveLength(1)
+    // the team radar is live (review D5): no persona card is marked «قريباً» any more
+    expect(screen.queryAllByText('قريباً')).toHaveLength(0)
     // no roadmap or student sections on the home page
     expect(screen.queryByText(/خارطة طريق/)).toBeNull()
     expect(screen.queryByText(/للأفراد والطلاب/)).toBeNull()

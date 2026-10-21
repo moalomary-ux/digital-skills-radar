@@ -39,6 +39,10 @@ import { LIB_PREFIX, resolveTargets } from '../data/roleLibrary'
  *   ties:       larger gap first, then the fixed domain order.
  * At most 3 priorities. When no domain has a development reason, the 3 domains closest to their
  * target are returned as «maintain» (keep the level, share knowledge).
+ *
+ * Reason text follows the evidence shown beside it: «self_below_target» says whether a scenario
+ * answer exists and where it sits against the target, and the target is named «لدورك» / “for your
+ * role” when the record holds a precise library role, «لفئة دورك» / “for your role category” otherwise.
  */
 
 export type Reason = 'both_below_target' | 'self_below_target' | 'judgment_below_self' | 'inflated' | 'maintain'
@@ -76,6 +80,15 @@ export interface DomainEvidence {
   planScore: number
 }
 
+/** where the indicative target comes from: a precise library role, or the role category */
+export type TargetBasis = 'role' | 'category'
+
+/** The record shape the engine reads; `roleId` (optional) only names the target's basis in the text. */
+export type PriorityInput = Pick<ResultRecord, 'scores' | 'scenario' | 'knowledge' | 'calibration' | 'v'> & { roleId?: string }
+
+export const targetBasisFor = (roleId: string | null | undefined): TargetBasis =>
+  typeof roleId === 'string' && roleId.startsWith(LIB_PREFIX) ? 'role' : 'category'
+
 export interface Priority {
   domainId: string
   domainName: L
@@ -91,6 +104,8 @@ export interface Priority {
   agreement: Agreement | null
   knowledge?: KnowledgeView
   planScore: number
+  /** the target behind this priority: a precise role or the role category (wording only) */
+  targetBasis: TargetBasis
 }
 
 export const reasonLabel: Record<Reason, L> = {
@@ -107,11 +122,26 @@ export const agreementLabel: Record<Agreement, L> = {
   check_higher: { ar: 'التحقق أعلى من تقديرك', en: 'Check above your self-rating' },
 }
 
-const reasonShort: Record<Exclude<Reason, 'maintain'>, L> = {
-  both_below_target: { ar: 'تقديرك الذاتي وإجابتك في موقف الحكم كلاهما دون المستهدف', en: 'both your self-rating and your scenario response are below the target' },
-  self_below_target: { ar: 'تقديرك الذاتي دون المستهدف الاسترشادي لفئة دورك', en: 'your self-rating is below the indicative target for your role category' },
-  judgment_below_self: { ar: 'إجابتك في موقف الحكم أدنى من تقديرك الذاتي', en: 'your scenario response is lower than your self-rating' },
-  inflated: { ar: 'تقديرك الذاتي أعلى مما أظهره موقف الحكم والتحقق المعرفي', en: 'your self-rating is higher than both the scenario and the knowledge check showed' },
+/** «لدورك» for a precise role, «لفئة دورك» for a role category. */
+const targetOwner: Record<TargetBasis, L> = {
+  role: { ar: 'لدورك', en: 'for your role' },
+  category: { ar: 'لفئة دورك', en: 'for your role category' },
+}
+
+function reasonShort(reason: Exclude<Reason, 'maintain'>, basis: TargetBasis): L {
+  switch (reason) {
+    case 'both_below_target':
+      return { ar: 'تقديرك الذاتي وإجابتك في موقف الحكم كلاهما دون المستهدف', en: 'both your self-rating and your scenario response are below the target' }
+    case 'self_below_target':
+      return {
+        ar: `تقديرك الذاتي دون المستهدف الاسترشادي ${targetOwner[basis].ar}`,
+        en: `your self-rating is below the indicative target ${targetOwner[basis].en}`,
+      }
+    case 'judgment_below_self':
+      return { ar: 'إجابتك في موقف الحكم أدنى من تقديرك الذاتي', en: 'your scenario response is lower than your self-rating' }
+    case 'inflated':
+      return { ar: 'تقديرك الذاتي أعلى مما أظهره موقف الحكم والتحقق المعرفي', en: 'your self-rating is higher than both the scenario and the knowledge check showed' }
+  }
 }
 
 const CATEGORY_IDS: readonly TrackId[] = ['awareness', 'applied', 'specialist', 'team_lead', 'executive']
@@ -161,7 +191,7 @@ const round2 = (x: number) => Math.round(x * 100) / 100
 
 /** Evidence, reason and rank score for every domain, in domain order. */
 export function assessDomains(
-  record: Pick<ResultRecord, 'scores' | 'scenario' | 'knowledge' | 'calibration' | 'v'>,
+  record: PriorityInput,
   targets: Record<string, number>,
   domains: Pick<Domain, 'id' | 'name'>[]
 ): DomainEvidence[] {
@@ -216,27 +246,46 @@ export function assessDomains(
   })
 }
 
-function reasonText(reason: Reason, name: L): L {
+/** Where the scenario answer sits for this domain: none, at/above the target, or below it. */
+type JudgmentState = 'absent' | 'at_or_above_target' | 'below_target'
+
+const judgmentState = (e: Pick<DomainEvidence, 'judgment4' | 'target'>): JudgmentState =>
+  e.judgment4 === undefined ? 'absent' : e.judgment4 >= e.target ? 'at_or_above_target' : 'below_target'
+
+/** The second half of the «self_below_target» sentence — it must agree with the scenario shown beside it. */
+const selfBelowTail: Record<JudgmentState, L> = {
+  absent: { ar: 'ولا توجد إجابة موقف حكم في هذا المجال تؤكد ذلك أو تنفيه.', en: 'and there is no scenario answer in this domain to confirm or rule this out.' },
+  at_or_above_target: {
+    ar: 'لكن إجابتك في موقف الحكم بلغت المستهدف أو تجاوزته، فقد تكون أقرب إليه مما يوحي به تقديرك.',
+    en: 'but your scenario response reached or passed the target, so you may be closer to it than your self-rating suggests.',
+  },
+  below_target: { ar: 'وجاءت إجابتك في موقف الحكم دون المستهدف كذلك.', en: 'and your scenario response is below the target too.' },
+}
+
+function reasonText(e: Pick<DomainEvidence, 'reason' | 'domainName' | 'judgment4' | 'target'>, basis: TargetBasis): L {
+  const { reason, domainName: name } = e
   if (reason === 'maintain') {
     return {
       ar: `أنت عند المستهدف الاسترشادي أو فوقه في «${name.ar}»؛ حافظ على مستواك بمشاركة معرفتك مع غيرك.`,
       en: `You are at or above the indicative target in “${name.en}”; keep your level by sharing what you know.`,
     }
   }
-  const r = reasonShort[reason]
-  const tail: Record<Exclude<Reason, 'maintain'>, L> = {
-    both_below_target: { ar: 'فهي أولوية تطوير مقترحة يؤيدها دليلان.', en: 'so two layers of evidence point to this development priority.' },
-    self_below_target: { ar: 'ولم يؤكد موقف الحكم ذلك أو ينفه بعد.', en: 'and no scenario has confirmed or ruled this out yet.' },
-    judgment_below_self: { ar: 'جرّب المهارة في مهمة حقيقية لتتأكد من مستواك.', en: 'try the skill on a real task to check your level.' },
-    inflated: { ar: 'يُقترح التحقق منه عمليًا قبل البناء عليه.', en: 'checking it in practice is suggested before building on it.' },
-  }
+  const r = reasonShort(reason, basis)
+  const tail: L =
+    reason === 'self_below_target'
+      ? selfBelowTail[judgmentState(e)]
+      : {
+          both_below_target: { ar: 'فهي أولوية تطوير مقترحة يؤيدها دليلان.', en: 'so two layers of evidence point to this development priority.' },
+          judgment_below_self: { ar: 'جرّب المهارة في مهمة حقيقية لتتأكد من مستواك.', en: 'try the skill on a real task to check your level.' },
+          inflated: { ar: 'يُقترح التحقق منه عمليًا قبل البناء عليه.', en: 'checking it in practice is suggested before building on it.' },
+        }[reason]
   return {
-    ar: `في «${name.ar}»: ${r.ar}، ${tail[reason].ar}`,
-    en: `In “${name.en}”: ${r.en}; ${tail[reason].en}`,
+    ar: `في «${name.ar}»: ${r.ar}، ${tail.ar}`,
+    en: `In “${name.en}”: ${r.en}; ${tail.en}`,
   }
 }
 
-function toPriority(e: DomainEvidence, rank: number): Priority {
+function toPriority(e: DomainEvidence, rank: number, basis: TargetBasis): Priority {
   return {
     domainId: e.domainId,
     domainName: e.domainName,
@@ -246,10 +295,11 @@ function toPriority(e: DomainEvidence, rank: number): Priority {
     ...(e.scenarioScore !== undefined ? { scenarioScore: e.scenarioScore } : {}),
     target: e.target,
     gap: e.gap,
-    text: reasonText(e.reason, e.domainName),
+    text: reasonText(e, basis),
     agreement: e.agreement,
     ...(e.knowledge ? { knowledge: e.knowledge } : {}),
     planScore: e.planScore,
+    targetBasis: basis,
   }
 }
 
@@ -258,15 +308,16 @@ const byRank = (order: Map<string, number>) => (a: DomainEvidence, b: DomainEvid
 
 /** Up to 3 ranked development priorities (or «maintain» when there is nothing to develop). */
 export function priorities(
-  record: Pick<ResultRecord, 'scores' | 'scenario' | 'knowledge' | 'calibration' | 'v'>,
+  record: PriorityInput,
   targets: Record<string, number>,
   domains: Pick<Domain, 'id' | 'name'>[]
 ): Priority[] {
   const evidence = assessDomains(record, targets, domains)
+  const basis = targetBasisFor(record.roleId)
   const order = new Map(domains.map((d, i) => [d.id, i]))
   const develop = evidence.filter((e) => e.reason !== 'maintain').sort(byRank(order))
   const pool = develop.length ? develop : evidence.slice().sort(byRank(order))
-  return pool.slice(0, MAX_PRIORITIES).map((e, i) => toPriority(e, i + 1))
+  return pool.slice(0, MAX_PRIORITIES).map((e, i) => toPriority(e, i + 1, basis))
 }
 
 /** One headline sentence written from the reason codes (no overall score, no stage). */
@@ -276,12 +327,13 @@ export function summaryLine(list: Priority[], lang: Lang): string {
     return lang === 'ar' ? 'أكمل التقييم لتظهر أولويات تطويرك المقترحة.' : 'Complete the assessment to see your suggested development priorities.'
   }
   const [first, ...rest] = list
+  const owner = targetOwner[first.targetBasis ?? 'category']
   if (first.reason === 'maintain') {
     return lang === 'ar'
-      ? 'أنت عند المستهدف الاسترشادي لفئة دورك أو فوقه في كل المجالات؛ خطتك للحفاظ على مستواك ومشاركة معرفتك.'
-      : 'You are at or above the indicative target for your role category in every domain; your plan is to keep your level and share what you know.'
+      ? `أنت عند المستهدف الاسترشادي ${owner.ar} أو فوقه في كل المجالات؛ خطتك للحفاظ على مستواك ومشاركة معرفتك.`
+      : `You are at or above the indicative target ${owner.en} in every domain; your plan is to keep your level and share what you know.`
   }
-  const why = reasonShort[first.reason]
+  const why = reasonShort(first.reason, first.targetBasis ?? 'category')
   const others = rest.map((p) => q(p.domainName))
   if (lang === 'ar') {
     const tail = others.length ? ` تليها ${others.join(' و')}.` : ''

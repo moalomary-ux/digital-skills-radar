@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 /**
- * Size budget for the initial JS of the Digital Skills Radar (packet P7). No dependencies.
+ * Size budget for the initial load of the Digital Skills Radar (packet P7, review D12). No dependencies.
  *
- *   node scripts/size-budget.mjs            # measure dist/, exit 1 if the largest initial chunk > 180 kB gzip
+ *   node scripts/size-budget.mjs            # measure dist/; exit 1 if a budget below is exceeded
  *   node scripts/size-budget.mjs other-dir  # measure another build directory (diagnostics)
  *
- * "Initial JS" means every file referenced by dist/index.html through
- *   <script type="module" src="...">   and   <link rel="modulepreload" href="...">
+ * Two budgets, both on dist/index.html:
+ *   1. largest initial JS chunk          <= 180 kB gzip  (SIZE_BUDGET_KB overrides, diagnostics only)
+ *   2. total initial transfer             <= 220 kB gzip  (SIZE_BUDGET_TOTAL_KB overrides, diagnostics only)
+ *      = every <script type="module" src>, every <link rel="modulepreload" href> and every
+ *        <link rel="stylesheet" href> referenced by dist/index.html, each gzipped and summed.
+ * "Initial JS" means every file referenced through <script type="module"> and <link rel="modulepreload">.
  * Each file is gzipped with zlib (level 9) and reported as raw kB / gzip kB.
  *
  * Exit codes: 0 within budget, 1 over budget, 2 dist/index.html missing (or no JS referenced).
- * SIZE_BUDGET_KB overrides the threshold for diagnostics only; the committed default (180) is the owner's.
+ * The committed defaults (180 and 220) are the owner's.
  */
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
@@ -19,12 +23,15 @@ import { gzipSync } from 'node:zlib'
 
 const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const DEFAULT_BUDGET_KB = 180
+const DEFAULT_TOTAL_BUDGET_KB = 220
 
 const distDir = resolve(PROJECT_ROOT, process.argv[2] ?? 'dist')
 const indexPath = join(distDir, 'index.html')
 
-const budgetKb = parseBudget(process.env.SIZE_BUDGET_KB)
+const budgetKb = parseBudget(process.env.SIZE_BUDGET_KB, DEFAULT_BUDGET_KB, 'SIZE_BUDGET_KB')
 const budgetBytes = budgetKb * 1024
+const totalBudgetKb = parseBudget(process.env.SIZE_BUDGET_TOTAL_KB, DEFAULT_TOTAL_BUDGET_KB, 'SIZE_BUDGET_TOTAL_KB')
+const totalBudgetBytes = totalBudgetKb * 1024
 
 if (!existsSync(indexPath)) {
   console.error(`size-budget: ${relative(PROJECT_ROOT, indexPath)} not found. Run \`npm run build\` first.`)
@@ -41,48 +48,65 @@ if (refs.length === 0) {
   process.exit(2)
 }
 
-const rows = []
+const styles = collectStylesheets(html)
+
 const missing = []
-for (const ref of refs) {
+const measure = (ref, kind) => {
   const filePath = resolveAsset(distDir, ref)
   if (!existsSync(filePath)) {
     missing.push(ref)
-    continue
+    return null
   }
   const raw = readFileSync(filePath)
-  const gzip = gzipSync(raw, { level: 9 }).length
-  rows.push({ file: ref, raw: raw.length, gzip })
+  return { file: ref, kind, raw: raw.length, gzip: gzipSync(raw, { level: 9 }).length }
 }
+const rows = refs.map((ref) => measure(ref, 'js')).filter(Boolean)
+const cssRows = styles.map((ref) => measure(ref, 'css')).filter(Boolean)
 
 if (missing.length > 0) {
-  console.error(`size-budget: referenced JS not found under ${relative(PROJECT_ROOT, distDir)}: ${missing.join(', ')}`)
+  console.error(`size-budget: referenced JS/CSS not found under ${relative(PROJECT_ROOT, distDir)}: ${missing.join(', ')}`)
   process.exit(2)
 }
 
 rows.sort((a, b) => b.gzip - a.gzip)
-printTable(rows)
+cssRows.sort((a, b) => b.gzip - a.gzip)
+printTable([...rows, ...cssRows])
 
 const largest = rows[0]
 const summary = `largest initial chunk: ${largest.file} = ${kb(largest.gzip)} kB gzip (budget ${budgetKb} kB${
   budgetKb !== DEFAULT_BUDGET_KB ? ', overridden via SIZE_BUDGET_KB' : ''
 })`
 
-if (largest.gzip > budgetBytes) {
-  console.error(`\nsize-budget: FAIL - ${summary}. Over by ${kb(largest.gzip - budgetBytes)} kB.`)
+const all = [...rows, ...cssRows]
+const totalGzip = all.reduce((n, r) => n + r.gzip, 0)
+const totalRaw = all.reduce((n, r) => n + r.raw, 0)
+const jsGzip = rows.reduce((n, r) => n + r.gzip, 0)
+const cssGzip = cssRows.reduce((n, r) => n + r.gzip, 0)
+const totalSummary = `total initial transfer of index.html: ${kb(totalGzip)} kB gzip (${kb(totalRaw)} kB raw; JS ${rows.length} file(s) ${kb(jsGzip)} kB + CSS ${cssRows.length} file(s) ${kb(cssGzip)} kB) (budget ${totalBudgetKb} kB${
+  totalBudgetKb !== DEFAULT_TOTAL_BUDGET_KB ? ', overridden via SIZE_BUDGET_TOTAL_KB' : ''
+})`
+
+console.log('')
+const failures = []
+if (largest.gzip > budgetBytes) failures.push(`${summary}. Over by ${kb(largest.gzip - budgetBytes)} kB.`)
+else console.log(`size-budget: OK - ${summary}.`)
+if (totalGzip > totalBudgetBytes) failures.push(`${totalSummary}. Over by ${kb(totalGzip - totalBudgetBytes)} kB.`)
+else console.log(`size-budget: OK - ${totalSummary}.`)
+
+if (failures.length > 0) {
+  for (const f of failures) console.error(`size-budget: FAIL - ${f}`)
   process.exit(1)
 }
-
-console.log(`\nsize-budget: OK - ${summary}.`)
 process.exit(0)
 
 /* ------------------------------------------------------------------ helpers */
 
-function parseBudget(value) {
-  if (value === undefined || value === '') return DEFAULT_BUDGET_KB
+function parseBudget(value, fallback, name) {
+  if (value === undefined || value === '') return fallback
   const n = Number(value)
   if (!Number.isFinite(n) || n <= 0) {
-    console.error(`size-budget: SIZE_BUDGET_KB must be a positive number, got "${value}". Using ${DEFAULT_BUDGET_KB}.`)
-    return DEFAULT_BUDGET_KB
+    console.error(`size-budget: ${name} must be a positive number, got "${value}". Using ${fallback}.`)
+    return fallback
   }
   return n
 }
@@ -106,6 +130,20 @@ function collectInitialScripts(source) {
     }
   }
   return [...new Set(found)].filter((u) => /\.m?js(\?.*)?$/i.test(u))
+}
+
+/** CSS URLs referenced by index.html through <link rel="stylesheet">, in document order, de-duplicated. */
+function collectStylesheets(source) {
+  const found = []
+  const tagRe = /<link\b([^>]*)>/gi
+  let m
+  while ((m = tagRe.exec(source)) !== null) {
+    const attrs = m[1]
+    if (!/\brel\s*=\s*["']?stylesheet["']?/i.test(attrs)) continue
+    const href = attr(attrs, 'href')
+    if (href && !/^(?:https?:)?\/\//i.test(href)) found.push(href)
+  }
+  return [...new Set(found)]
 }
 
 function attr(attrs, name) {
@@ -133,4 +171,7 @@ function printTable(list) {
   console.log(line('file', 'raw kB', 'gzip kB'))
   console.log(line('-'.repeat(fileWidth), '-'.repeat(9), '-'.repeat(9)))
   for (const r of list) console.log(line(r.file, kb(r.raw), kb(r.gzip)))
+  const sum = (key) => list.reduce((n, r) => n + r[key], 0)
+  console.log(line('-'.repeat(fileWidth), '-'.repeat(9), '-'.repeat(9)))
+  console.log(line('total (initial transfer)', kb(sum('raw')), kb(sum('gzip'))))
 }

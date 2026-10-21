@@ -7,8 +7,17 @@ import Drawer from './shell/Drawer'
 import LangLink from './shell/LangLink'
 import { hubForView, hubs } from './shell/site'
 import { useAssessCta } from './shell/hooks'
+import type { L } from '../data/types'
 
 export { RadarMark } from './Brand'
+
+/**
+ * The header button's words follow the state behind `useAssessCta`:
+ *   a draft in progress (answers exist; saving a result clears them) → «أكمل تقييمك» → the assessment
+ *   a saved result and no newer draft                                  → «نتيجتي»     → the results
+ *   nothing yet                                                        → «ابدأ التقييم» → the assessment
+ */
+const MY_RESULTS: L = { ar: 'نتيجتي', en: 'My results' }
 
 /**
  * Site header: brand, the six hubs as real links (≥ 1024 px), language link, and the persistent assessment
@@ -21,6 +30,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuBtn = useRef<HTMLButtonElement>(null)
   const cta = useAssessCta()
+  const ctaLabel = cta.view === 'results' ? MY_RESULTS : cta.label
   const activeHub = hubForView(view)
   const drawerId = 'site-drawer'
 
@@ -62,7 +72,7 @@ export default function Header() {
             to={cta.to}
             className="btn-primary hidden whitespace-nowrap px-3 py-2 text-[13px] no-underline hover:no-underline lg:inline-flex xl:px-3.5 xl:text-nav"
           >
-            {t(cta.label)}
+            {t(ctaLabel)}
           </Link>
           <button
             ref={menuBtn}

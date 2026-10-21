@@ -5,7 +5,8 @@
  * EntityDetail) in the public (aggregate) build, plus the full-mode switch of EntityLogo.
  *
  * Groups: 1 totals · 2 the n ≥ 10 rule · 3 public index · 4 no logos · 5 banned content · 6 English pages ·
- * 7 Arabic plural · 8 loader cache · 9 claims · 10 build-script idempotency.
+ * 6b English taxonomy on every directory page, year labels, the hub promises · 7 Arabic plural · 8 loader cache ·
+ * 9 claims · 10 build-script idempotency.
  */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createElement } from 'react'
@@ -25,10 +26,11 @@ import SectorBrief from '../views/SectorBrief'
 import Directory from '../views/Directory'
 import EntityDetail from '../views/EntityDetail'
 import EntityLogo from '../components/EntityLogo'
+import EntitiesSectorsHub from '../views/hubs/EntitiesSectors'
 import { claimById } from '../data/claims'
 import type { Claim } from '../data/claims'
 import { govClaims } from '../data/claims/gov'
-import { govServiceKpis, yearlyTraining } from '../data/govServices'
+import { PARTIAL_YEAR, govServiceKpis, yearlyTraining } from '../data/govServices'
 import { govEntities } from '../data/govEntities'
 import { govSectors } from '../data/govSectors'
 import { entityYearlyTraining } from '../data/govEntityDetails'
@@ -38,6 +40,7 @@ import {
   SECTOR_MIN_ENTITIES,
   clearGovDataCache,
   configureGovData,
+  englishNameFallback,
   entityTypeById,
   fixTopConsulting,
   label,
@@ -559,6 +562,111 @@ describe('6. English pages carry no Arabic outside lang="ar"', () => {
     expect(container.querySelector('h1')?.textContent).toBe('Enablement service record')
     expect(container.textContent).toContain('Both source workbooks up to the end of Q3 2026')
     expect(container.querySelectorAll('[lang="ar"]').length).toBeGreaterThan(0)
+  })
+})
+
+/* ============================================ 6b. English taxonomy everywhere, year labels, hub */
+
+/** Arabic runs left after removing every element marked lang="ar" (same rule as group 6). */
+const arabicRunsOutsideAr = (container: HTMLElement) =>
+  textOutsideArabic(container).match(new RegExp(`${ARABIC.source}[${cp(0x0600)}-${cp(0x06ff)}\\s«»،؛]*`, 'g')) ?? []
+
+describe('6b. English pages: taxonomy labels in English on every state, proper names marked lang="ar"', () => {
+  it('directory (en), every type selected, every page: no Arabic outside lang="ar"; Arabic-only names carry the English note', async () => {
+    const { container } = PAGES.directory('en')
+    await settled(container)
+    const toggles = [...container.querySelectorAll<HTMLButtonElement>('button[aria-pressed]')]
+    for (const b of toggles) {
+      if (b.getAttribute('aria-pressed') !== 'true') {
+        act(() => {
+          fireEvent.click(b)
+        })
+      }
+    }
+    await waitFor(() => expect(container.querySelector('[role="status"]')?.textContent).toContain(`${fmt(index.length)} of ${fmt(index.length)}`))
+    const seen = new Set<string>()
+    for (let guard = 0; guard < 30; guard++) {
+      expect(arabicRunsOutsideAr(container), `directory page ${guard + 1}`).toEqual([])
+      for (const card of container.querySelectorAll('ul li a')) {
+        const id = card.getAttribute('href')?.split('/').pop() ?? ''
+        seen.add(id)
+        const row = index.find((r) => r.id === id)!
+        const text = card.textContent ?? ''
+        if (row.nameEn) {
+          expect(text, `${id}: English name`).toContain(row.nameEn)
+          expect(card.getAttribute('aria-label'), `${id}: aria-label`).toContain(row.nameEn)
+        } else {
+          expect(text, `${id}: English fallback note`).toContain(englishNameFallback.short)
+        }
+        expect(card.querySelector('h2')?.getAttribute('lang'), `${id}: name marked lang="ar"`).toBe('ar')
+      }
+      const next = [...container.querySelectorAll<HTMLButtonElement>('nav button')].find((b) => (b.textContent ?? '').includes('Next page'))
+      if (!next || next.disabled) break
+      act(() => {
+        fireEvent.click(next)
+      })
+    }
+    expect(seen.size).toBe(index.length)
+  })
+
+  it('directory (en): every sector and region option is English', async () => {
+    const { container } = PAGES.directory('en')
+    await settled(container)
+    const options = [...container.querySelectorAll('select option')].map((o) => o.textContent ?? '')
+    expect(options.length).toBeGreaterThan(20)
+    expect(options.filter((o) => ARABIC.test(o))).toEqual([])
+  })
+
+  it('sectors (en) with a category focus: the focus panel and every card are English', async () => {
+    const { container } = renderAt(createElement(GovSectors), 'en', '/en/sectors?category=digital-strategy')
+    await settled(container)
+    expect(container.querySelector('#sectors-focus')?.textContent).toContain('Digital strategies')
+    expect(container.querySelectorAll('#sectors-focus ~ ul li, section[aria-labelledby="sectors-focus"] li').length).toBeGreaterThan(0)
+    expect(arabicRunsOutsideAr(container)).toEqual([])
+  })
+
+  it('services (en): categories, pillars and regions are English; no Arabic outside lang="ar"', async () => {
+    const { container } = PAGES.services('en')
+    await settled(container)
+    expect(arabicRunsOutsideAr(container)).toEqual([])
+    const lists = [...container.querySelectorAll('ul[aria-label]')]
+    expect(lists.length).toBe(3)
+    for (const ul of lists) expect(ul.querySelectorAll('[lang="ar"]').length, ul.getAttribute('aria-label') ?? '').toBe(0)
+  })
+
+  it.each(['ar', 'en'] as const)('services (%s): the partial year and its marker form one left-to-right isolate', async (lang) => {
+    const { container } = PAGES.services(lang)
+    await settled(container)
+    const isolates = [...container.querySelectorAll('bdi[dir="ltr"]')].filter((b) => (b.textContent ?? '').startsWith(String(PARTIAL_YEAR)))
+    const marked = isolates.filter((b) => b.textContent === `${PARTIAL_YEAR}*`)
+    // the legend line and the chart axis
+    expect(marked.length).toBe(2)
+    for (const b of marked) {
+      const marker = b.lastElementChild
+      expect(marker?.textContent).toBe('*')
+      expect(marker?.getAttribute('aria-hidden')).toBe('true')
+      expect(b.firstChild?.textContent).toBe(String(PARTIAL_YEAR))
+    }
+    // no bare «*» or «2026*» outside an isolate
+    const loose = [...container.querySelectorAll('span')].filter((el) => /^\d{4}\*$/.test(el.textContent ?? '') && !el.closest('bdi') && !el.querySelector('bdi'))
+    expect(loose).toEqual([])
+  })
+})
+
+describe('6b. the section hub promises what the aggregate pages show', () => {
+  it.each(['ar', 'en'] as const)('hub (%s): states the n ≥ 10 rule from the data constant, never promises logos, rankings or per-entity records', (lang) => {
+    const { container } = renderAt(createElement(EntitiesSectorsHub), lang, `/${lang}/entities`)
+    const text = container.textContent ?? ''
+    expect(text).toContain(`${SECTOR_MIN_ENTITIES}`)
+    if (lang === 'ar') {
+      for (const s of ['شعارات رسمية', 'سجلات خدمة لجهة مسماة', 'ترتيب للجهات', 'مجموع مركّب', 'جهات القطاع الخاص', 'القطاعات الحكومية', 'استنتاج تحريري']) expect(text, s).toContain(s)
+      expect(text).not.toContain('مجاميع فقط')
+    } else {
+      expect(arabicRunsOutsideAr(container)).toEqual([])
+      for (const s of ['Official logos', 'Entity rankings', 'Private-sector entities', 'Government sectors', 'editorial inference']) expect(text, s).toContain(s)
+    }
+    // the public build never shows the private-demo notice
+    expect(text).not.toMatch(/عرض خاص|Private demo/)
   })
 })
 

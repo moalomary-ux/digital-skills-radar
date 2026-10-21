@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useApp } from '../../store'
 import { domainById } from '../../data/domains'
 import { shifts, SHIFTS_REVIEWED_ON } from '../../data/leaders/shifts'
-import { audienceNames, briefMeta, briefQuestions, BRIEF_REVIEWED_ON, ownedDecisions } from '../../data/leaders/brief'
+import { audienceNames, briefMeta, briefQuestions, BRIEF_REVIEWED_ON, checkFocus, checkMeta, ownedDecisions } from '../../data/leaders/brief'
 import type { BriefAudience } from '../../data/leaders/brief'
 import { claimById } from '../../data/claims'
 import Claim from '../../components/Claim'
@@ -53,23 +53,52 @@ function DomainChip({ id }: { id: string }) {
   return <span className="chip-info whitespace-nowrap">{t(domainById(id).shortName)}</span>
 }
 
+/** Arabic counted noun: 1, 2, 3–10 (plural) and 11+ (singular accusative). */
+function arCount(n: number, f: { one: string; two: string; few: string; many: string }): string {
+  if (n === 1) return f.one
+  if (n === 2) return f.two
+  const r = n % 100
+  return `${n} ${r >= 3 && r <= 10 ? f.few : f.many}`
+}
+
+const enCount = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+/** Counts come from the data the page shows, never typed by hand (review D11). */
+const counts = {
+  shifts: shifts.length,
+  decisions: ownedDecisions.length,
+  questions: briefQuestions.length,
+  // one decision focus per executive scenario (the leaders test keeps the two lists equal)
+  situations: Object.keys(checkFocus).length,
+}
+
 const label = {
   printBrief: { ar: 'اطبع الموجز', en: 'Print the brief' },
   takeCheck: { ar: 'ابدأ فحص القرار القيادي', en: 'Take the leader judgment check' },
-  shiftsTitle: { ar: '5 تحولات في العمل الحكومي 2026–2030', en: '5 shifts in government work, 2026–2030' },
+  shiftsTitle: {
+    ar: `${arCount(counts.shifts, { one: 'تحول واحد', two: 'تحولان', few: 'تحولات', many: 'تحولاً' })} في العمل الحكومي 2026–2030`,
+    en: `${enCount(counts.shifts, 'shift', 'shifts')} in government work, 2026–2030`,
+  },
   whatChanges: { ar: 'ما الذي يتغير', en: 'What changes' },
   requires: { ar: 'المهارة المطلوبة', en: 'The skill it asks for' },
   decision: { ar: 'القرار المطلوب منك هذا العام', en: 'The decision you need to make this year' },
   signal: { ar: 'إشارة من مصدر منشور', en: 'A signal from a published source' },
   unchanged: { ar: 'ما الذي لا يتغير', en: 'What does not change' },
-  decisionsTitle: { ar: '3 قرارات تملكها هذا العام', en: '3 decisions you own this year' },
+  decisionsTitle: {
+    ar: `${arCount(counts.decisions, { one: 'قرار واحد', two: 'قراران', few: 'قرارات', many: 'قراراً' })} تملكها هذا العام`,
+    en: `${enCount(counts.decisions, 'decision', 'decisions')} you own this year`,
+  },
   answers: { ar: 'يجيب عن التحول', en: 'Answers shift' },
-  questionsTitle: { ar: '10 أسئلة تطرحها على مدير التقنية ومدير الموارد البشرية', en: '10 questions to ask your CIO and your HR director' },
+  questionsTitle: {
+    ar: `${arCount(counts.questions, { one: 'سؤال واحد', two: 'سؤالان', few: 'أسئلة', many: 'سؤالاً' })} تطرحها على مدير التقنية ومدير الموارد البشرية`,
+    en: `${enCount(counts.questions, 'question', 'questions')} to ask your CIO and your HR director`,
+  },
   listenFor: { ar: 'إجابة تطمئنك:', en: 'A reassuring answer:' },
   nextTitle: { ar: 'خطوتك التالية', en: 'Your next step' },
+  // no duration: none has been timed with real users, so the card names only what the check contains
   checkCard: {
-    ar: '8 مواقف قيادية في نحو 6 دقائق، والمخرج 3 قرارات تستحق وقتك. بلا درجة ولا مقارنة.',
-    en: '8 leadership situations in about 6 minutes, ending with 3 decisions worth your time. No score, no comparison.',
+    ar: `${arCount(counts.situations, { one: 'موقف قيادي واحد قصير', two: 'موقفان قياديان قصيران', few: 'مواقف قيادية قصيرة', many: 'موقفاً قيادياً قصيراً' })}، والمخرج «${checkMeta.outputTitle.ar}». بلا درجة ولا مقارنة.`,
+    en: `${enCount(counts.situations, 'short leadership situation', 'short leadership situations')}, ending with “${checkMeta.outputTitle.en}”. No score, no comparison.`,
   },
   mapTitle: { ar: 'خريطة تحوّل العمل الحكومي', en: 'The government work-shift map' },
   mapCard: {

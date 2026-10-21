@@ -13,8 +13,14 @@ export function useAssessCta(): { label: L; view: View; to: string; resuming: bo
   const hasHistory = (history ?? []).length > 0
   const resuming = hasDraft || hasHistory
   const view: View = hasDraft || !hasHistory ? 'wizard' : 'results'
+  // a draft in progress → resume; a saved result and no draft → my result; nothing → start
+  const label: L = hasDraft
+    ? { ar: 'أكمل تقييمك', en: 'Resume assessment' }
+    : hasHistory
+      ? { ar: 'نتيجتي', en: 'My result' }
+      : { ar: 'ابدأ التقييم', en: 'Start the assessment' }
   return {
-    label: resuming ? { ar: 'أكمل تقييمك', en: 'Resume assessment' } : { ar: 'ابدأ التقييم', en: 'Start the assessment' },
+    label,
     view,
     to: pathFor(view, lang),
     resuming,

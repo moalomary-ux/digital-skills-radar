@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useApp } from '../store'
 import { pathFor } from '../lib/routes'
+import { bdi } from '../lib/format'
 import { isFullMode } from '../lib/flags'
-import EntityLogo from '../components/EntityLogo'
+import EntityLogo, { EnglishNameFallback } from '../components/EntityLogo'
 import Icon from '../components/Icon'
 import { yearlyTraining } from '../data/govServices'
 import { categoryByKey, entityTypeById, findEntity, findEntityDetail, fixTopConsulting, kindById, label, regionById, scopeById, sectorById, useGovData } from '../data/gov'
@@ -170,8 +171,8 @@ function PrivateRecord({ entity }: { entity: EntityIndexRow }) {
                   <tbody>
                     {detail.yearlyTraining.map((v, i) => (
                       <tr key={TRAINING_YEARS[i] ?? i} className="border-t border-dga-line">
-                        <th scope="row" className="py-1 text-start font-medium text-dga-ink" dir="ltr">
-                          {TRAINING_YEARS[i] ?? i}
+                        <th scope="row" className="py-1 text-start font-medium text-dga-ink">
+                          {bdi(TRAINING_YEARS[i] ?? i)}
                         </th>
                         <td className="py-1 text-end tabular-nums" dir="ltr">
                           {fmt(v)}
@@ -231,10 +232,11 @@ function Profile({ entity, detail }: { entity: EntityIndexRow; detail: EntityDet
               {entity.nameAr}
             </h1>
             {entity.nameEn ? (
-              <p className="mt-1 text-sm text-dga-muted" dir="ltr">
+              <p className="mt-1 text-sm text-dga-muted" lang="en" dir="ltr">
                 {entity.nameEn}
               </p>
             ) : null}
+            <EnglishNameFallback lang={lang} nameEn={entity.nameEn} long className="mt-1 block text-xs text-dga-muted" />
             <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
               <div>
                 <dt className="text-xs font-semibold text-dga-muted">{t(ui.type)}</dt>

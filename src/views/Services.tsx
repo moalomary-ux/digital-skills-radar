@@ -4,6 +4,8 @@ import { pathFor } from '../lib/routes'
 import { isFullMode } from '../lib/flags'
 import Claim, { formatClaimDate } from '../components/Claim'
 import Icon from '../components/Icon'
+import { EnglishNameFallback } from '../components/EntityLogo'
+import { bdi } from '../lib/format'
 import { claimById } from '../data/claims'
 import { consultingCategories, strategicPillars, yearlyTraining, regionStats, PARTIAL_YEAR } from '../data/govServices'
 import { categoryByKey, cutoff, fixTopConsulting, label, loadSectorEntities, loadSectors, periods, pillarFromAr, regionById, regionIdFromAr, sectorById, useGovData } from '../data/gov'
@@ -97,6 +99,8 @@ const LEDE_EN_TAIL = ' delivered to entities in training and consulting, as reco
 interface BarRow {
   key: string
   label: string
+  /** set to 'ar' when the label is the raw workbook string (no bilingual term found) */
+  labelLang?: 'ar'
   value: number
   to?: string
   toLabel?: string
@@ -109,7 +113,7 @@ function BarList({ rows, unit, ariaLabel }: { rows: BarRow[]; unit: string; aria
     <ul className="mt-4 space-y-2.5" aria-label={ariaLabel}>
       {rows.map((r) => (
         <li key={r.key} className="grid grid-cols-[minmax(0,11rem),1fr,auto] items-center gap-3 text-sm sm:grid-cols-[minmax(0,16rem),1fr,auto]">
-          <span className="truncate text-dga-ink" title={r.label}>
+          <span className="truncate text-dga-ink" title={r.label} lang={r.labelLang} dir={r.labelLang ? 'rtl' : undefined}>
             {r.to ? (
               <Link to={r.to} className="font-medium text-dga-green-dark underline-offset-2 hover:underline" aria-label={r.toLabel ? `${r.label}: ${r.toLabel}` : undefined}>
                 {r.label}
@@ -128,6 +132,23 @@ function BarList({ rows, unit, ariaLabel }: { rows: BarRow[]; unit: string; aria
         </li>
       ))}
     </ul>
+  )
+}
+
+/**
+ * A year on the chart axis or in its legend. The year and the partial-year marker sit in one left-to-right
+ * isolate, so Arabic text never moves the marker to the far side («*2026»); the marker is its own element.
+ */
+function YearLabel({ year, partial = false }: { year: number; partial?: boolean }) {
+  return bdi(
+    <>
+      {year}
+      {partial ? (
+        <span className="ms-px" aria-hidden="true">
+          *
+        </span>
+      ) : null}
+    </>
   )
 }
 
@@ -209,10 +230,11 @@ function PrivateUsageTable() {
                       <span lang="ar" dir="rtl">{r.nameAr}</span>
                     </Link>
                     {r.nameEn ? (
-                      <span className="block text-[11px] text-dga-muted" dir="ltr">
+                      <span className="block text-[11px] text-dga-muted" lang="en" dir="ltr">
                         {r.nameEn}
                       </span>
                     ) : null}
+                    <EnglishNameFallback lang={lang} nameEn={r.nameEn} />
                   </td>
                   <td className="py-2 pe-3 text-dga-ink">{label(sectorById(r.sectorId), lang, r.sectorId)}</td>
                   <td className="py-2 pe-3 text-end tabular-nums" dir="ltr">{fmt(r.trainingRecords)}</td>
@@ -240,15 +262,20 @@ export default function Services() {
     return {
       key: c.category,
       label: term ? label(term, lang) : c.category,
+      labelLang: term ? undefined : 'ar',
       value: c.recordCount,
       to: term ? pathFor('sectors', lang, { category: term.id }) : undefined,
       toLabel: t(ui.openSectors),
     }
   })
-  const pillarRows: BarRow[] = strategicPillars.map((p) => ({ key: p.pillar, label: label(pillarFromAr(p.pillar), lang, p.pillar), value: p.recordCount }))
+  const pillarRows: BarRow[] = strategicPillars.map((p) => {
+    const term = pillarFromAr(p.pillar)
+    return { key: p.pillar, label: label(term, lang, p.pillar), labelLang: term ? undefined : 'ar', value: p.recordCount }
+  })
   const regionRows: BarRow[] = regionStats.map((r) => {
     const id = regionIdFromAr(r.region)
-    return { key: r.region, label: label(id ? regionById(id) : undefined, lang, r.region), value: r.entities }
+    const term = id ? regionById(id) : undefined
+    return { key: r.region, label: label(term, lang, r.region), labelLang: term ? undefined : 'ar', value: r.entities }
   })
   const maxYear = Math.max(1, ...yearlyTraining.map((y) => y.records))
 
@@ -348,7 +375,7 @@ export default function Services() {
           {t(ui.byYear)}
         </h2>
         <p className="mt-1 text-xs text-dga-muted">
-          <span dir="ltr">{PARTIAL_YEAR}</span>: {t(ui.byYearNote)}
+          <YearLabel year={PARTIAL_YEAR} partial />: {t(ui.byYearNote)}
         </p>
         <div className="mt-5 flex h-48 items-end gap-3 sm:gap-5" aria-hidden="true">
           {yearlyTraining.map((y) => {
@@ -359,9 +386,8 @@ export default function Services() {
                   {fmt(y.records)}
                 </span>
                 <span className={`w-full max-w-[3.5rem] rounded-t-md ${partial ? 'bg-dga-amber' : 'bg-dga-green'}`} style={{ height: `${Math.max((y.records / maxYear) * 80, 2)}%` }} />
-                <span className="text-xs text-dga-muted" dir="ltr">
-                  {y.year}
-                  {partial ? '*' : ''}
+                <span className="text-xs text-dga-muted">
+                  <YearLabel year={y.year} partial={partial} />
                 </span>
               </div>
             )
@@ -379,7 +405,7 @@ export default function Services() {
             {yearlyTraining.map((y) => (
               <tr key={y.year} className="border-t border-dga-line">
                 <th scope="row" className="py-1.5 text-start font-medium text-dga-ink">
-                  <span dir="ltr">{y.year}</span>
+                  {bdi(y.year)}
                   {y.year === PARTIAL_YEAR ? <span className="ms-2 text-[11px] text-dga-amber-tx">({t(ui.partial)})</span> : null}
                 </th>
                 <td className="py-1.5 text-end tabular-nums" dir="ltr">{fmt(y.records)}</td>

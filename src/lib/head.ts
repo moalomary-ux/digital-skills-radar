@@ -27,7 +27,7 @@ export const pageTitles: Record<View, L> = {
   about: { ar: 'عن المفهوم', en: 'About the concept' },
   report: { ar: 'ورقة حوار التطوير', en: 'Development conversation sheet' },
   services: { ar: 'سجل خدمات التمكين', en: 'Enablement service record' },
-  sector: { ar: 'موجز احتياج القطاع', en: 'Sector capability brief' },
+  sector: { ar: 'موجز القطاع', en: 'Sector brief' },
   leaders: { ar: 'للقادة والفرق', en: 'Leaders & teams' },
   'leader-brief': { ar: 'الموجز القيادي', en: 'Leader brief' },
   'leader-check': { ar: 'فحص القرار القيادي', en: 'Leader judgment check' },
@@ -124,8 +124,8 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Enablement service record: the programmes and services that help government staff build digital skills, and who each one suits.',
   },
   sector: {
-    ar: 'موجز احتياج القطاع: مجالات التطوير المرتبطة بسجل الاستشارات في هذا القطاع، والأدوار المرتبطة بها، في صفحة قابلة للطباعة.',
-    en: 'Sector capability brief: the development domains associated with this sector’s consulting record and the roles connected to them, on a printable page.',
+    ar: 'موجز القطاع: مجالات التطوير المرتبطة بسجل الاستشارات في هذا القطاع، والأدوار المرتبطة بها، في صفحة قابلة للطباعة.',
+    en: 'Sector brief: the development domains associated with this sector’s consulting record and the roles connected to them, on a printable page.',
   },
   leaders: {
     ar: 'للقادة والفرق: الموجز القيادي، وفحص القرار القيادي، ورادار الفريق المحلي، ودليل التبني المؤسسي — أدوات تطوير لا تقييم أداء.',

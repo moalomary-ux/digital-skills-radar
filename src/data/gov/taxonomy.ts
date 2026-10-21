@@ -218,6 +218,18 @@ export const cutoff = {
   en: 'Both source workbooks up to the end of Q3 2026',
 } as const
 
+/* ---------------------------------------------------- entity proper names */
+
+/**
+ * Entity names are proper nouns: the Arabic name is always shown (wrapped `lang="ar"`), and the English
+ * name, when the source has one, under it. In the English UI an entity without an English name carries
+ * this note, so the reader knows the Arabic script is the name itself and not an untranslated label.
+ */
+export const englishNameFallback = {
+  short: 'Arabic name only',
+  long: 'The source workbook has no English name for this entity, so its Arabic name is shown.',
+} as const
+
 /** Pick the label of a term in the current language; falls back to the id so nothing renders empty. */
 export function label(term: Term | undefined, lang: 'ar' | 'en', fallback = ''): string {
   if (!term) return fallback

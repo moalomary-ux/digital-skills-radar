@@ -5,6 +5,7 @@ import { pathFor } from '../lib/routes'
 import { isFullMode } from '../lib/flags'
 import Claim from '../components/Claim'
 import Icon from '../components/Icon'
+import { EnglishNameFallback } from '../components/EntityLogo'
 import { domainById } from '../data/domains'
 import { domainsFromCategoryCounts } from '../data/sectorSkills'
 import { DEFAULT_DIRECTORY_TYPES, categoryByKey, cutoff, fixTopConsulting, label, loadEntitiesIndex, loadSectorEntities, loadSectors, periods, sectorById, useGovData } from '../data/gov'
@@ -37,7 +38,7 @@ const PRINT_CSS = `
 `
 
 const ui = {
-  eyebrow: { ar: 'موجز احتياج القطاع', en: 'Sector capability brief' },
+  eyebrow: { ar: 'موجز القطاع', en: 'Sector brief' },
   notFound: { ar: 'لا قطاع بهذا المعرّف.', en: 'No sector has this identifier.' },
   backToSectors: { ar: 'عودة إلى القطاعات الحكومية', en: 'Back to the government sectors' },
   loading: { ar: 'جارٍ تحميل موجز القطاع…', en: 'Loading the sector brief…' },
@@ -132,10 +133,11 @@ function PrivateEntities({ sectorId }: { sectorId: string }) {
                       <span lang="ar" dir="rtl">{e.nameAr}</span>
                     </Link>
                     {e.nameEn ? (
-                      <span className="block text-[11px] text-dga-muted" dir="ltr">
+                      <span className="block text-[11px] text-dga-muted" lang="en" dir="ltr">
                         {e.nameEn}
                       </span>
                     ) : null}
+                    <EnglishNameFallback lang={lang} nameEn={e.nameEn} />
                   </td>
                   <td className="py-2 pe-3 text-end tabular-nums" dir="ltr">{fmt(e.services.trainingRecords)}</td>
                   <td className="py-2 pe-3 text-end tabular-nums" dir="ltr">{fmt(e.services.trainingPrograms)}</td>

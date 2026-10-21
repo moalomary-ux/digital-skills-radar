@@ -493,7 +493,7 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       { w: 6, text: { ar: 'مراجعة الأقران — اطلب من زميل متمكّن نقد مخرَجك؛ وسجّل الملاحظات ونفّذها.', en: 'Peer review — ask an experienced colleague to critique your deliverable; log and act on the feedback.' } },
       { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع مديرك — ثم أجب عن أسئلة التحقق المعرفي للمجال، وأعد دراسة أي وحدة أخطأت في أسئلتها.', en: 'Mid-plan review with your manager — then answer the domain knowledge-check questions and revisit any module whose questions you missed.' } },
       { w: 8, text: { ar: 'إعادة التعليم — قدّم جلسة مشاركة معرفة لثلاثين دقيقة لفريقك حول أسلوب أصبحت تستخدمه باستقلالية.', en: 'Teach-back — run a 30-minute knowledge-sharing session for your team on one technique you now use independently.' } },
-      { w: 9, text: { ar: 'سجّل في {{resource_2}} (أو احجز موعد شهادتها)؛ وقد جزءاً صغيراً من العمل ضمن مبادرة أكبر.', en: 'Enrol in {{resource_2}} (or book its certification); lead a small workstream or sub-task within a larger initiative.' } },
+      { w: 9, text: { ar: 'سجّل في {{resource_2}} (أو احجز موعد شهادتها)؛ وتولَّ قيادة جزء صغير من العمل ضمن مبادرة أكبر.', en: 'Enrol in {{resource_2}} (or book its certification); lead a small workstream or sub-task within a larger initiative.' } },
       { w: 10, text: { ar: 'تعاون بين الفرق — اعمل مع زميل من تخصص آخر لحل مشكلة مشتركة واحدة.', en: 'Cross-team collaboration — pair with a colleague from another discipline and resolve one shared problem.' } },
       { w: 11, text: { ar: 'القياس — اجمع أدلة قبل/بعد (مقاييس، ملاحظات مستخدمين، جودة) لمخرجات الأسبوعين 5 و9.', en: 'Measure — collect before/after evidence (metrics, user feedback, quality) for your W5 and W9 deliverables.' } },
       { w: 12, text: { ar: 'تجميع الملف — جمّع المخرجات والملاحظات والمقاييس في ملف أدلة لمستوى «إتقان».', en: 'Portfolio assembly — compile artefacts, feedback and metrics into a Proficiency-level evidence portfolio.' } },
@@ -510,8 +510,8 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       { w: 1, text: { ar: 'حدد هدف «الريادة» — صف معنى قيادة أفضل الممارسات في جهتك؛ واحصل على راعٍ أقدم.', en: 'Define the Leadership target — describe what leading best practice means for your organisation; secure a senior sponsor.' } },
       { w: 2, text: { ar: 'حدد مبادرة على مستوى الجهة في {{domain_ar}} ستقودها خلال هذا الربع.', en: 'Identify an organisation-level initiative in {{domain_en}} you will lead over the quarter.' } },
       { w: 3, text: { ar: 'كتلة بحث — قارن ثلاثة نماذج خارجية (أطر، دراسات حالة، معايير) ولخّص الممارسات القابلة للنقل.', en: 'Research block — benchmark 3 external exemplars (frameworks, case studies, standards) and summarise transferable practice.' } },
-      { w: 4, text: { ar: 'اصغ مساهمة في معايير الجهة أو دليلها الإرشادي لمجال {{domain_ar}}.', en: "Draft a contribution to the organisation's standards or playbook for {{domain_en}}." } },
-      { w: 5, text: { ar: 'قد جلسة للفريق — يسّر ورشة عمل أو اجتماع مراجعة معماري/تصميمي يطبق معيارك المقترح.', en: 'Lead a team session — facilitate a workshop or design/review authority meeting applying your draft standard.' } },
+      { w: 4, text: { ar: 'صُغ مساهمة في معايير الجهة أو دليلها الإرشادي لمجال {{domain_ar}}.', en: "Draft a contribution to the organisation's standards or playbook for {{domain_en}}." } },
+      { w: 5, text: { ar: 'أدِر جلسة للفريق — يسّر ورشة عمل أو اجتماع مراجعة معماري/تصميمي يطبق معيارك المقترح.', en: 'Lead a team session — facilitate a workshop or design/review authority meeting applying your draft standard.' } },
       { w: 6, text: { ar: 'سجّل في {{resource_1}} أو حدد موعد تقييمها — استهدف برنامجاً أو شهادة بمستوى متقدم.', en: 'Enrol in {{resource_1}} or schedule its assessment — target an advanced-level programme or credential.' } },
       { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع راعيك ومديرك — ثم أصدر النسخة الأولى من مذكرتك الإرشادية أو معيارك، وادعُ إلى تعليقات منظمة.', en: 'Mid-plan review with your sponsor and manager — then release v1 of your guidance note or standard and invite structured comment.' } },
       { w: 8, text: { ar: 'درّب ممارسَين — جلسات تدريب كل أسبوعين؛ ووثّق تقدمهما كدليل على قدرتك التعليمية.', en: 'Coach two practitioners — run fortnightly coaching; document their progress as evidence of teaching.' } },
@@ -568,7 +568,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     options: [
       { key: 'a', text: { ar: 'تجميع العملاء في مجموعات دون فئات محددة مسبقاً', en: 'Clustering customers into groups with no predefined labels' } },
       { key: 'b', text: { ar: 'تصنيف رسائل البريد الإلكتروني إلى مزعجة أو غير مزعجة', en: 'Classification of emails as spam or not spam' } },
-      { key: 'c', text: { ar: 'الانحدار للتنبؤ بالطلب على الخدمة في الشهر القادم', en: "Regression to predict next month's service demand" } },
+      { key: 'c', text: { ar: 'الانحدار للتنبؤ بالطلب على خدمة حكومية في الشهر القادم', en: "Regression to predict next month's demand for a government service" } },
       { key: 'd', text: { ar: 'تصنيف المشاعر في ملاحظات المواطنين', en: 'Sentiment classification of citizen feedback' } },
     ],
     answer: 'a',
@@ -579,7 +579,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'ai_data_q2', domainId: 'ai-data', format: 'true_false',
-    q: { ar: 'النموذج الذي يحقق دقة عالية جداً على بيانات التدريب مضمون أن يؤدي جيداً على بيانات جديدة لم يرها من قبل.', en: 'A model that achieves very high accuracy on its training data is guaranteed to perform well on new, unseen data.' },
+    q: { ar: 'إذا حقق النموذج دقة عالية جداً على بيانات التدريب، فهذا دليل كافٍ على أنه سيؤدي جيداً على بيانات جديدة لم يرها.', en: 'If a model reaches very high accuracy on its training data, that is enough evidence it will perform well on new, unseen data.' },
     options: [
       { key: 'a', text: { ar: 'خطأ', en: 'False' } },
       { key: 'b', text: { ar: 'صحيح', en: 'True' } },
@@ -594,10 +594,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'ai_data_q3', domainId: 'ai-data', format: 'mcq',
     q: { ar: 'ماذا يعني "تسرب البيانات" في مشروع تعلم الآلة؟', en: 'What does "data leakage" mean in a machine-learning project?' },
     options: [
-      { key: 'a', text: { ar: 'نشر مجموعة بيانات عن طريق الخطأ على منصة البيانات المفتوحة', en: 'Accidentally publishing a dataset on an open-data portal' } },
-      { key: 'b', text: { ar: 'فقدان بيانات التدريب بسبب فشل النسخ الاحتياطي', en: 'Losing training data because of a failed backup' } },
-      { key: 'c', text: { ar: 'تأثير معلومات من خارج مجموعة التدريب (مثل بيانات الاختبار أو المتغير الهدف نفسه) في تدريب النموذج، ما يضخّم الأداء المقاس', en: 'Information from outside the training set (e.g., test data or the target itself) influencing model training, inflating measured performance' } },
-      { key: 'd', text: { ar: 'مشاركة بيانات مجهولة الهوية بين فريقين حكوميين', en: 'Sharing anonymised data between two government teams' } },
+      { key: 'a', text: { ar: 'نشر مجموعة بيانات التدريب عن طريق الخطأ على منصة البيانات المفتوحة', en: 'Accidentally publishing the training dataset on the open-data portal' } },
+      { key: 'b', text: { ar: 'فقدان جزء من بيانات التدريب بسبب فشل النسخ الاحتياطي الليلي', en: 'Losing part of the training data because a nightly backup failed' } },
+      { key: 'c', text: { ar: 'وصول معلومات لن تتوفر وقت التنبؤ (كبيانات الاختبار) إلى تدريب النموذج، فتتضخم نتائجه', en: "Information the model won't have at prediction time (e.g., test data) reaching its training, inflating its scores" } },
+      { key: 'd', text: { ar: 'مشاركة بيانات مجهولة الهوية بين فريقين حكوميين دون اتفاقية مشاركة', en: 'Sharing anonymised data between two government teams without a sharing agreement' } },
     ],
     answer: 'c',
     explanation: {
@@ -608,9 +608,9 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   // ── cyber_trust ──
   {
     id: 'cyber_trust_q1', domainId: 'cyber', format: 'mcq',
-    q: { ar: 'ماذا يرمز "الثلاثي CIA" في أمن المعلومات؟', en: 'What does the "CIA triad" of information security stand for?' },
+    q: { ar: 'إلامَ يرمز "الثلاثي CIA" في أمن المعلومات؟', en: 'What does the "CIA triad" of information security stand for?' },
     options: [
-      { key: 'a', text: { ar: 'التحكم، النزاهة، المصادقة', en: 'Control, Integrity, Authentication' } },
+      { key: 'a', text: { ar: 'السرية، قابلية التشغيل البيني، المصادقة', en: 'Confidentiality, Interoperability, Authentication' } },
       { key: 'b', text: { ar: 'الامتثال، الهوية، الوصول', en: 'Compliance, Identity, Access' } },
       { key: 'c', text: { ar: 'التشفير، العزل، التدقيق', en: 'Cryptography, Isolation, Auditing' } },
       { key: 'd', text: { ar: 'السرية، النزاهة، التوافر', en: 'Confidentiality, Integrity, Availability' } },
@@ -625,9 +625,9 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'cyber_trust_q2', domainId: 'cyber', format: 'mcq',
     q: { ar: 'أي مما يلي أوضح مثال على هجوم الهندسة الاجتماعية؟', en: 'Which of the following is the clearest example of a social-engineering attack?' },
     options: [
-      { key: 'a', text: { ar: 'استغلال ثغرة غير معالجة في خادم ويب', en: 'Exploiting an unpatched web-server vulnerability' } },
+      { key: 'a', text: { ar: 'استغلال ثغرة معروفة غير معالجة في خادم الويب العام للجهة', en: "Exploiting a known but unpatched vulnerability in the entity's public web server" } },
       { key: 'b', text: { ar: 'رسالة تصيّد إلكترونية تخدع موظفاً ليكشف كلمة مروره', en: 'A phishing email that tricks an employee into revealing their password' } },
-      { key: 'c', text: { ar: 'هجوم حرمان من الخدمة موزّع يغرق بوابة إلكترونية', en: 'A distributed denial-of-service attack flooding a portal' } },
+      { key: 'c', text: { ar: 'هجوم حرمان من الخدمة موزّع يغرق بوابة حكومية بسيل من الطلبات', en: 'A distributed denial-of-service attack that floods a government portal with requests' } },
       { key: 'd', text: { ar: 'اعتراض حركة بيانات شبكة لاسلكية غير مشفرة', en: 'Intercepting unencrypted Wi-Fi traffic' } },
     ],
     answer: 'b',
@@ -654,7 +654,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'cloud_infra_q1', domainId: 'cloud', format: 'mcq',
     q: { ar: 'أي مما يلي ليس من نماذج الخدمة السحابية القياسية الثلاثة؟', en: 'Which of the following is NOT one of the three standard cloud service models?' },
     options: [
-      { key: 'a', text: { ar: 'الأجهزة كأجهزة مُدارة (داخل المقر)', en: 'Hardware as a Managed Appliance (on-premises)' } },
+      { key: 'a', text: { ar: 'العتاد كجهاز مُدار (داخل المقر)', en: 'Hardware as a Managed Appliance (on-premises)' } },
       { key: 'b', text: { ar: 'البنية التحتية كخدمة (IaaS)', en: 'Infrastructure as a Service (IaaS)' } },
       { key: 'c', text: { ar: 'المنصة كخدمة (PaaS)', en: 'Platform as a Service (PaaS)' } },
       { key: 'd', text: { ar: 'البرمجيات كخدمة (SaaS)', en: 'Software as a Service (SaaS)' } },
@@ -676,7 +676,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     ],
     answer: 'c',
     explanation: {
-      ar: 'في نموذج IaaS يؤمّن المزود الطبقة المادية والطبقة الافتراضية؛ بينما يدير العميل نظام التشغيل الضيف والوسائط والبيانات والوصول.',
+      ar: 'في نموذج IaaS يؤمّن المزود الطبقة المادية والطبقة الافتراضية؛ بينما يدير العميل نظام التشغيل الضيف والبرمجيات الوسيطة والبيانات والوصول.',
       en: 'In IaaS, the provider secures the physical layer and hypervisor; the customer manages the guest OS, middleware, data and access.',
     },
   },
@@ -700,8 +700,8 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     options: [
       { key: 'a', text: { ar: 'مخطط هيكلي تنظيمي', en: 'An organisational chart' } },
       { key: 'b', text: { ar: 'مخطط جانت لخطة المشروع', en: 'A Gantt chart of the project plan' } },
-      { key: 'c', text: { ar: 'مخطط كيانات وعلاقات لقاعدة البيانات', en: 'An entity-relationship diagram of the database' } },
-      { key: 'd', text: { ar: 'مخطط خدمة يربط إجراءات المستخدم بعمليات الواجهة الأمامية والكواليس', en: 'A service blueprint mapping user actions to frontstage and backstage processes' } },
+      { key: 'c', text: { ar: 'مخطط الكيانات والعلاقات لقاعدة بيانات النظام الخلفي للخدمة', en: 'An entity-relationship diagram of the database behind the service' } },
+      { key: 'd', text: { ar: 'مخطط خدمة يربط خطوات المستخدم بالعمل الداخلي', en: 'A service blueprint linking user steps to backstage work' } },
     ],
     answer: 'd',
     explanation: {
@@ -711,10 +711,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'service_design_q2', domainId: 'service-design', format: 'true_false',
-    q: { ar: 'بحث المستخدم مطلوب فقط في بداية المشروع، قبل بدء أعمال التصميم.', en: 'User research is only needed at the start of a project, before design work begins.' },
+    q: { ar: 'يستمر بحث المستخدم عبر مراحل الخدمة كلها، من الاكتشاف إلى ما بعد إطلاقها.', en: 'User research continues through every phase of a service, from discovery to after it goes live.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
     answer: 'b',
     explanation: {
@@ -745,7 +745,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
       { key: 'a', text: { ar: 'منقّب البيانات', en: 'Data miner' } },
       { key: 'b', text: { ar: 'مالك البيانات', en: 'Data owner' } },
       { key: 'c', text: { ar: 'أمين البيانات', en: 'Data steward' } },
-      { key: 'd', text: { ar: 'وصي البيانات', en: 'Data custodian' } },
+      { key: 'd', text: { ar: 'الوصي على البيانات', en: 'Data custodian' } },
     ],
     answer: 'a',
     explanation: {
@@ -772,7 +772,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     options: [
       { key: 'a', text: { ar: 'هيئة الاتصالات والفضاء والتقنية', en: 'The Communications, Space and Technology Commission (CST)' } },
       { key: 'b', text: { ar: 'وزارة التجارة', en: 'The Ministry of Commerce' } },
-      { key: 'c', text: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)', en: 'The Saudi Data and Artificial Intelligence Authority (SDAIA)' } },
+      { key: 'c', text: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)', en: 'The Saudi Data & AI Authority (SDAIA)' } },
       { key: 'd', text: { ar: 'الهيئة الوطنية للأمن السيبراني', en: 'The National Cybersecurity Authority (NCA)' } },
     ],
     answer: 'c',
@@ -789,7 +789,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
       { key: 'a', text: { ar: 'تخطيط السبرنت (Sprint Planning)', en: 'Sprint Planning' } },
       { key: 'b', text: { ar: 'الاجتماع اليومي (Daily Scrum)', en: 'Daily Scrum' } },
       { key: 'c', text: { ar: 'مراجعة السبرنت (Sprint Review)', en: 'Sprint Review' } },
-      { key: 'd', text: { ar: 'مجلس التوجيه الفصلي', en: 'Quarterly Steering Board' } },
+      { key: 'd', text: { ar: 'مجلس التوجيه', en: 'Steering Board' } },
     ],
     answer: 'd',
     explanation: {
@@ -799,10 +799,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'agile_delivery_q2', domainId: 'agile', format: 'true_false',
-    q: { ar: 'في التسليم الرشيق، يُثبَّت نطاق مفصّل ويُتفق عليه مسبقاً ولا يجوز تغييره أثناء المشروع.', en: 'In agile delivery, a detailed scope is fixed and agreed upfront and must not change during the project.' },
+    q: { ar: 'في التسليم الرشيق، يمكن إعادة ترتيب أولويات النطاق أثناء المشروع بناءً على الأدلة وملاحظات المستخدمين.', en: 'In agile delivery, scope can be reprioritised during the project based on evidence and user feedback.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
     answer: 'b',
     explanation: {
@@ -815,9 +815,9 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ما الغرض الأساسي من المنتج الأولي الأدنى (MVP)؟', en: 'What is the primary purpose of a Minimum Viable Product (MVP)?' },
     options: [
       { key: 'a', text: { ar: 'إطلاق منتج مكتمل المزايا بأسرع وقت ممكن', en: 'To launch a feature-complete product as quickly as possible' } },
-      { key: 'b', text: { ar: 'اختبار الفرضيات الأساسية والتعلم من المستخدمين الحقيقيين بأقل جهد', en: 'To test key assumptions and learn from real users with the least effort' } },
+      { key: 'b', text: { ar: 'اختبار الفرضيات الأساسية مع مستخدمين حقيقيين بأقل جهد', en: 'To test key assumptions with real users at the least effort' } },
       { key: 'c', text: { ar: 'استبدال بحث المستخدم بالتحليلات', en: 'To replace user research with analytics' } },
-      { key: 'd', text: { ar: 'عرض المعمارية التقنية على المدققين', en: 'To demonstrate technical architecture to auditors' } },
+      { key: 'd', text: { ar: 'عرض المعمارية التقنية على المدققين قبل اعتماد الميزانية', en: 'To demonstrate the technical architecture to auditors before budget approval' } },
     ],
     answer: 'b',
     explanation: {
@@ -830,35 +830,35 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'emerging_tech_q1', domainId: 'emerging', format: 'mcq',
     q: { ar: 'أي مما يلي ليس من مجالات التقنيات الناشئة للحكومة؟', en: 'Which of the following is NOT an emerging technology domain for government?' },
     options: [
-      { key: 'a', text: { ar: 'شبكات الاتصال الهاتفي (Dial-up)', en: 'Dial-up networking' } },
+      { key: 'a', text: { ar: 'الاتصال الهاتفي (Dial-up)', en: 'Dial-up access' } },
       { key: 'b', text: { ar: 'الحوسبة الكمومية', en: 'Quantum computing' } },
       { key: 'c', text: { ar: 'الحوسبة الطرفية', en: 'Edge computing' } },
       { key: 'd', text: { ar: 'الحوسبة المكانية والواقع الممتد', en: 'Spatial computing and extended reality' } },
     ],
     answer: 'a',
     explanation: {
-      ar: 'الاتصال الهاتفي تقنية وصول قديمة؛ أما الحوسبة الكمومية والطرفية والمكانية فهي مجالات ناشئة نشطة يتتبعها رادار التقنيات الحكومي.',
-      en: 'Dial-up is a legacy access technology; quantum, edge and spatial computing are active emerging-technology domains tracked on government tech radars.',
+      ar: 'الاتصال الهاتفي تقنية وصول قديمة؛ أما الحوسبة الكمومية والطرفية والمكانية فهي مجالات ناشئة نشطة تتابعها الحكومات.',
+      en: 'Dial-up is a legacy access technology; quantum, edge and spatial computing are active emerging-technology domains that governments track.',
     },
   },
   {
     id: 'emerging_tech_q2', domainId: 'emerging', format: 'mcq',
     q: { ar: 'ما الخاصية التي تجعل السجل في سلسلة الكتل (Blockchain) كاشفاً للتلاعب عملياً؟', en: 'What property makes a blockchain record effectively tamper-evident?' },
     options: [
-      { key: 'a', text: { ar: 'كل سجل مخزّن على خادم مركزي واحد', en: 'Each record is stored on a single central server' } },
+      { key: 'a', text: { ar: 'كل سجل محفوظ على خادم مركزي واحد تديره جهة موثوقة', en: 'Every record is kept on a single central server run by a trusted authority' } },
       { key: 'b', text: { ar: 'تُحذف السجلات بعد 24 ساعة', en: 'Records are deleted after 24 hours' } },
-      { key: 'c', text: { ar: 'كل كتلة مرتبطة تشفيرياً بالكتلة السابقة، فأي تعديل في السجل يكسر السلسلة', en: 'Each block is cryptographically linked to the previous block, so altering history breaks the chain' } },
-      { key: 'd', text: { ar: 'يمكن للمسؤولين فقط قراءة السجل', en: 'Only administrators can read the ledger' } },
+      { key: 'c', text: { ar: 'كل كتلة مرتبطة تشفيرياً بالكتلة التي تسبقها', en: 'Each block is cryptographically linked to the one before it' } },
+      { key: 'd', text: { ar: 'لا يستطيع قراءة السجل إلا عدد محدود من مسؤولي النظام', en: 'Only a small group of system administrators can read the ledger' } },
     ],
     answer: 'c',
     explanation: {
-      ar: 'يربط التجزئة التشفيرية كل كتلة بسابقتها؛ وأي تغيير في كتلة سابقة يبطل جميع التجزئات اللاحقة ويكتشف فوراً.',
+      ar: 'تربط التجزئة التشفيرية كل كتلة بسابقتها؛ وأي تغيير في كتلة سابقة يبطل جميع التجزئات اللاحقة ويُكتشف فوراً.',
       en: 'Cryptographic hashing links each block to its predecessor; changing any past block invalidates all subsequent hashes and is immediately detectable.',
     },
   },
   {
     id: 'emerging_tech_q3', domainId: 'emerging', format: 'true_false',
-    q: { ar: 'ستحل الحواسيب الكمومية محل الحواسيب التقليدية في جميع مهام الحوسبة.', en: 'Quantum computers will replace classical computers for all computing tasks.' },
+    q: { ar: 'يُتوقع أن تحل الحواسيب الكمومية محل الحواسيب التقليدية في الأعمال اليومية كقواعد البيانات والمواقع الإلكترونية.', en: 'Quantum computers are expected to replace classical computers for everyday work such as databases and websites.' },
     options: [
       { key: 'a', text: { ar: 'خطأ', en: 'False' } },
       { key: 'b', text: { ar: 'صحيح', en: 'True' } },
@@ -874,10 +874,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'leadership_collab_q1', domainId: 'leadership', format: 'mcq',
     q: { ar: 'ماذا تعني "السلامة النفسية" في فريق رقمي عالي الأداء؟', en: 'What does "psychological safety" mean in a high-performing digital team?' },
     options: [
-      { key: 'a', text: { ar: 'ضمان بألا يتعرض أحد للنقد إطلاقاً', en: 'A guarantee that no one will ever be criticised' } },
+      { key: 'a', text: { ar: 'ضمان بألا يتعرض أي عضو في الفريق للنقد على عمله إطلاقاً', en: 'A guarantee that no one in the team will ever be criticised for their work' } },
       { key: 'b', text: { ar: 'سياسة تقنية معلومات تحمي أجهزة الموظفين', en: 'An IT policy that protects employee devices' } },
       { key: 'c', text: { ar: 'برنامج صحة وعافية تديره الموارد البشرية', en: 'A wellness programme run by HR' } },
-      { key: 'd', text: { ar: 'قناعة مشتركة بأن المخاطرة بين الأشخاص آمنة — كالاعتراف بالأخطاء وطرح الأسئلة وتحدي الأفكار', en: 'A shared belief that it is safe to take interpersonal risks — admitting mistakes, asking questions, challenging ideas' } },
+      { key: 'd', text: { ar: 'قناعة مشتركة بأن الاعتراف بالخطأ وطرح الأسئلة وتحدي الأفكار أمر آمن', en: 'A shared belief that it is safe to admit mistakes, ask questions and challenge ideas' } },
     ],
     answer: 'd',
     explanation: {
@@ -887,10 +887,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'leadership_collab_q2', domainId: 'leadership', format: 'true_false',
-    q: { ar: 'يدور التحول الرقمي أساساً حول شراء تقنية جديدة.', en: 'Digital transformation is primarily about buying new technology.' },
+    q: { ar: 'في التحول الرقمي، تغيير العمليات والثقافة أهم من شراء التقنية الجديدة.', en: 'In digital transformation, changing processes and culture matters more than buying new technology.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
     answer: 'b',
     explanation: {
@@ -902,10 +902,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'leadership_collab_q3', domainId: 'leadership', format: 'mcq',
     q: { ar: 'أي نهج قيادي هو الأكثر فاعلية عموماً للتغيير الرقمي المعقد في الحكومة؟', en: 'Which leadership approach is generally most effective for complex digital change in government?' },
     options: [
-      { key: 'a', text: { ar: 'الأمر والسيطرة من شخصية قيادية واحدة', en: 'Command-and-control direction from a single senior figure' } },
-      { key: 'b', text: { ar: 'القيادة التكيفية الموزعة التي تمكّن الفرق متعددة التخصصات وتتحسّن بناءً على الأدلة', en: 'Adaptive, distributed leadership that empowers multidisciplinary teams and iterates on evidence' } },
+      { key: 'a', text: { ar: 'الأمر والسيطرة من شخصية قيادية واحدة تعتمد كل قرار بنفسها', en: 'Command-and-control direction from one senior figure who approves every decision' } },
+      { key: 'b', text: { ar: 'قيادة تكيفية موزعة تمكّن الفرق وتتعلم من الأدلة', en: 'Adaptive, shared leadership that empowers teams to learn from evidence' } },
       { key: 'c', text: { ar: 'تفويض جميع القرارات الرقمية للموردين', en: 'Delegating all digital decisions to vendors' } },
-      { key: 'd', text: { ar: 'انتظار خطة مثالية متعددة السنوات قبل البدء', en: 'Waiting for a perfect multi-year plan before starting' } },
+      { key: 'd', text: { ar: 'انتظار خطة مثالية متعددة السنوات قبل البدء بأي تنفيذ', en: 'Waiting for a complete, perfect multi-year plan before starting any delivery' } },
     ],
     answer: 'b',
     explanation: {
@@ -917,10 +917,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'ai_data_q4', domainId: 'ai-data', format: 'mcq',
     q: { ar: 'ما الغرض الرئيسي من تقسيم البيانات إلى مجموعة تدريب ومجموعة اختبار؟', en: 'What is the main purpose of splitting data into training and test sets?' },
     options: [
-      { key: 'a', text: { ar: 'تقييم أداء النموذج على بيانات لم يرها أثناء التدريب', en: 'Evaluating model performance on data it did not see during training' } },
-      { key: 'b', text: { ar: 'تسريع تدريب النموذج', en: 'Speeding up model training' } },
-      { key: 'c', text: { ar: 'تقليل حجم ملفات البيانات', en: 'Reducing data file sizes' } },
-      { key: 'd', text: { ar: 'حماية البيانات من التسرب الأمني', en: 'Protecting data from security leaks' } },
+      { key: 'a', text: { ar: 'فحص أداء النموذج على بيانات لم يرها', en: 'Checking how the model performs on data it has not seen' } },
+      { key: 'b', text: { ar: 'تسريع تدريب النموذج باستخدام أمثلة أقل في كل دورة', en: 'Speeding up model training by using fewer examples per run' } },
+      { key: 'c', text: { ar: 'تقليل حجم ملفات البيانات لتسريع حفظها ونقلها', en: 'Reducing the size of data files so they are faster to store' } },
+      { key: 'd', text: { ar: 'حماية السجلات الحساسة من التسرب الأمني أثناء التدريب', en: 'Protecting sensitive records from security leaks during training' } },
     ],
     answer: 'a',
     explanation: {
@@ -930,10 +930,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'ai_data_q5', domainId: 'ai-data', format: 'true_false',
-    q: { ar: 'الذكاء الاصطناعي التوليدي يضمن صحة الحقائق في مخرجاته.', en: 'Generative AI guarantees the factual accuracy of its outputs.' },
+    q: { ar: 'قد ينتج الذكاء الاصطناعي التوليدي معلومات خاطئة بصياغة تبدو واثقة ومقنعة.', en: 'Generative AI can produce wrong information phrased in a confident, convincing way.' },
     options: [
-      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
-      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
     ],
     answer: 'a',
     explanation: {
@@ -946,7 +946,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ما الذي تصفه المصادقة متعددة العوامل (MFA) بدقة؟', en: 'What does multi-factor authentication (MFA) precisely describe?' },
     options: [
       { key: 'a', text: { ar: 'استخدام كلمتي مرور قويتين معًا', en: 'Using two strong passwords together' } },
-      { key: 'b', text: { ar: 'تسجيل الدخول من جهازين مختلفين', en: 'Logging in from two different devices' } },
+      { key: 'b', text: { ar: 'تسجيل الدخول من جهازين مسجّلين مختلفين في الوقت نفسه', en: 'Logging in from two different registered devices at the same time' } },
       { key: 'c', text: { ar: 'إثبات الهوية بدليلين من فئتين مختلفتين (معرفة/ملكية/سمة حيوية)', en: 'Proving identity with two factors from different categories (knowledge / possession / biometric)' } },
       { key: 'd', text: { ar: 'تغيير كلمة المرور مرتين في السنة', en: 'Changing your password twice a year' } },
     ],
@@ -958,10 +958,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'cyber_trust_q5', domainId: 'cyber', format: 'true_false',
-    q: { ar: 'وجود القفل (HTTPS) في المتصفح يعني أن محتوى الموقع موثوق دائمًا.', en: 'The padlock (HTTPS) in a browser means a site’s content is always trustworthy.' },
+    q: { ar: 'يمكن لموقع تصيّد احتيالي أن يُظهر رمز القفل (HTTPS) في المتصفح.', en: 'A phishing site can show the padlock (HTTPS) in the browser.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
     answer: 'b',
     explanation: {
@@ -974,9 +974,9 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'في نموذج SaaS، ما الذي يديره مزود الخدمة مقارنة بـIaaS؟', en: 'In the SaaS model, what does the provider manage compared with IaaS?' },
     options: [
       { key: 'a', text: { ar: 'العتاد فقط', en: 'Hardware only' } },
-      { key: 'b', text: { ar: 'العتاد والشبكة فقط', en: 'Hardware and network only' } },
-      { key: 'c', text: { ar: 'لا شيء — العميل يدير كل شيء', en: 'Nothing — the customer manages everything' } },
-      { key: 'd', text: { ar: 'كل الطبقات تقريبًا بما فيها التطبيق وبياناته التشغيلية', en: 'Almost all layers, including the application itself' } },
+      { key: 'b', text: { ar: 'العتاد والشبكة فقط، ويدير العميل كل ما فوقهما', en: 'Hardware and network only, with the customer running the rest' } },
+      { key: 'c', text: { ar: 'لا شيء — العميل يدير كل الطبقات بنفسه كما في مركز بياناته', en: 'Nothing — the customer manages every layer, as in its own data centre' } },
+      { key: 'd', text: { ar: 'كل الطبقات تقريبًا، بما فيها التطبيق نفسه', en: 'Almost every layer, including the application' } },
     ],
     answer: 'd',
     explanation: {
@@ -986,7 +986,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'cloud_infra_q5', domainId: 'cloud', format: 'true_false',
-    q: { ar: 'استخدام السحابة يعني بالضرورة أن بياناتك تُخزَّن خارج بلدك.', en: 'Using the cloud necessarily means your data is stored outside your country.' },
+    q: { ar: 'نقل خدمة إلى السحابة يعني أن بياناتها ستُخزَّن خارج المملكة.', en: 'Moving a service to the cloud means its data will be stored outside the Kingdom.' },
     options: [
       { key: 'a', text: { ar: 'خطأ', en: 'False' } },
       { key: 'b', text: { ar: 'صحيح', en: 'True' } },
@@ -1001,10 +1001,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'service_design_q4', domainId: 'service-design', format: 'mcq',
     q: { ar: 'ما الغرض الأساسي من النموذج الأولي منخفض الدقة في تصميم الخدمات؟', en: 'What is the main purpose of a low-fidelity prototype in service design?' },
     options: [
-      { key: 'a', text: { ar: 'إبهار أصحاب المصلحة بتصميم نهائي', en: 'Impressing stakeholders with a final design' } },
-      { key: 'b', text: { ar: 'اختبار الفكرة مع المستخدمين بأقل كلفة قبل البناء', en: 'Testing the idea with users at the lowest cost before building' } },
-      { key: 'c', text: { ar: 'توثيق المتطلبات التقنية للمطورين', en: 'Documenting technical requirements for developers' } },
-      { key: 'd', text: { ar: 'استبدال بحث المستخدمين كليًا', en: 'Replacing user research entirely' } },
+      { key: 'a', text: { ar: 'إبهار أصحاب المصلحة بتصميم نهائي مصقول قبل اعتماد المشروع', en: 'Impressing stakeholders with a polished final design' } },
+      { key: 'b', text: { ar: 'اختبار الفكرة مع المستخدمين بكلفة قليلة قبل البناء', en: 'Testing the idea cheaply with users before building' } },
+      { key: 'c', text: { ar: 'توثيق المتطلبات التقنية المفصّلة لفريق التطوير قبل البدء', en: 'Documenting detailed technical requirements for the development team' } },
+      { key: 'd', text: { ar: 'الاستغناء كليًا عن بحث المستخدمين والاكتفاء بافتراضات الفريق', en: "Replacing user research with the team's own assumptions" } },
     ],
     answer: 'b',
     explanation: {
@@ -1029,8 +1029,8 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'policy_gov_q4', domainId: 'policy', format: 'mcq',
     q: { ar: 'ما مبدأ «مرة واحدة فقط» (Once-Only) في الحكومة الرقمية؟', en: 'What is the “once-only” principle in digital government?' },
     options: [
-      { key: 'a', text: { ar: 'لا تطلب الجهة من المواطن بيانات تملكها جهة حكومية أخرى أصلًا', en: 'An agency never asks citizens for data another government body already holds' } },
-      { key: 'b', text: { ar: 'يقدّم المواطن وثائقه مرة واحدة فقط في حياته', en: 'Citizens submit their documents only once in their lifetime' } },
+      { key: 'a', text: { ar: 'لا تطلب الجهة من المواطن بيانات لدى جهة حكومية أخرى', en: 'Agencies do not ask citizens for data another agency already holds' } },
+      { key: 'b', text: { ar: 'يقدّم المواطن كل وثيقة رسمية مرة واحدة فقط طوال حياته', en: 'Citizens submit each official document only once in their whole lifetime' } },
       { key: 'c', text: { ar: 'كل خدمة تُستخدم مرة واحدة فقط', en: 'Each service is used only once' } },
       { key: 'd', text: { ar: 'نشر البيانات مرة واحدة في السنة', en: 'Publishing data once a year' } },
     ],
@@ -1057,14 +1057,14 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'agile_delivery_q4', domainId: 'agile', format: 'mcq',
     q: { ar: 'ما الغرض الأساسي من اجتماع الاسترجاع (Retrospective)؟', en: 'What is the main purpose of a retrospective?' },
     options: [
-      { key: 'a', text: { ar: 'عرض المنتج على أصحاب المصلحة', en: 'Demoing the product to stakeholders' } },
-      { key: 'b', text: { ar: 'تخطيط عمل الدورة القادمة بالتفصيل', en: 'Planning the next sprint in detail' } },
+      { key: 'a', text: { ar: 'عرض الجزء المنجز من المنتج على أصحاب المصلحة', en: 'Demoing the finished increment to stakeholders for feedback' } },
+      { key: 'b', text: { ar: 'تخطيط عمل السبرنت القادم بالتفصيل', en: 'Planning the next sprint in detail' } },
       { key: 'c', text: { ar: 'تأمل طريقة عمل الفريق وتحسينها', en: 'Reflecting on how the team works and improving it' } },
-      { key: 'd', text: { ar: 'تقييم أداء الأفراد للمدير', en: 'Evaluating individual performance for the manager' } },
+      { key: 'd', text: { ar: 'تقييم أداء كل فرد في الفريق لصالح المدير', en: "Evaluating each member's individual performance for the manager" } },
     ],
     answer: 'c',
     explanation: {
-      ar: 'الاسترجاع يحسّن طريقة العمل نفسها؛ والعرض للمراجع (Review) والتخطيط للتخطيط (Planning) — فعاليات مختلفة.',
+      ar: 'الاسترجاع يحسّن طريقة العمل نفسها؛ أما عرض المنتج فمكانه مراجعة السبرنت (Review)، والتخطيط مكانه تخطيط السبرنت (Planning) — فعاليات مختلفة.',
       en: 'The retrospective improves the way of working itself; demos belong to the review and planning to planning — different events.',
     },
   },
@@ -1087,7 +1087,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     options: [
       { key: 'a', text: { ar: 'نسخة احتياطية من قاعدة البيانات', en: 'A backup copy of a database' } },
       { key: 'b', text: { ar: 'حساب مزيف على الشبكات الاجتماعية', en: 'A fake social-media account' } },
-      { key: 'c', text: { ar: 'جهازان متطابقان يعملان بالتناوب', en: 'Two identical devices running in alternation' } },
+      { key: 'c', text: { ar: 'جهازان ماديان متطابقان يعملان بالتناوب كنسخة احتياطية', en: 'Two identical physical devices that run in turn as backups' } },
       { key: 'd', text: { ar: 'نموذج رقمي حي لأصل أو نظام مادي يتغذى ببياناته الفعلية', en: 'A live digital model of a physical asset or system fed by its real data' } },
     ],
     answer: 'd',
@@ -1113,10 +1113,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'leadership_collab_q4', domainId: 'leadership', format: 'mcq',
     q: { ar: 'ما الخطوة الأولى الأصح في إدارة تغيير لمبادرة رقمية؟', en: 'What is the right first step in managing change for a digital initiative?' },
     options: [
-      { key: 'a', text: { ar: 'شراء الأداة الجديدة فورًا', en: 'Buying the new tool immediately' } },
-      { key: 'b', text: { ar: 'فهم من يتأثر بالتغيير وما الذي يتغير لهم', en: 'Understanding who is affected and what changes for them' } },
-      { key: 'c', text: { ar: 'إرسال تعميم إلزامي لجميع الموظفين', en: 'Sending a mandatory circular to all staff' } },
-      { key: 'd', text: { ar: 'انتظار اكتمال التطوير التقني', en: 'Waiting for technical development to finish' } },
+      { key: 'a', text: { ar: 'شراء الأداة الجديدة فورًا ليبدأ التغيير', en: 'Buying the new tool immediately so the change can start' } },
+      { key: 'b', text: { ar: 'فهم من يتأثر وما الذي يتغير لهم', en: 'Mapping who is affected and what changes for them' } },
+      { key: 'c', text: { ar: 'إرسال تعميم إلزامي يعلن التغيير لجميع الموظفين', en: 'Sending a mandatory circular announcing the change to all staff' } },
+      { key: 'd', text: { ar: 'انتظار اكتمال التطوير التقني قبل إبلاغ أي أحد', en: 'Waiting for technical development to finish before telling anyone' } },
     ],
     answer: 'b',
     explanation: {

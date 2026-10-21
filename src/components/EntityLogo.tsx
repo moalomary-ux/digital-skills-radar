@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { isFullMode } from '../lib/flags'
+import { englishNameFallback } from '../data/gov/taxonomy'
 
 /**
  * Entity mark. In the public (aggregate) build this is always a neutral monogram: no official logos ship
@@ -32,7 +33,7 @@ export function Monogram({ entity, className = 'h-12 w-12' }: { entity: LogoEnti
   const ch = entity.nameAr.trim().charAt(0) || '؟'
   const color = MONO_COLORS[hash(entity.id) % MONO_COLORS.length]
   return (
-    <span className={`grid shrink-0 select-none place-items-center rounded-full text-lg font-bold text-white ${className}`} style={{ backgroundColor: color }} aria-hidden="true">
+    <span className={`grid shrink-0 select-none place-items-center rounded-full text-lg font-bold text-white ${className}`} style={{ backgroundColor: color }} aria-hidden="true" lang="ar">
       {ch}
     </span>
   )
@@ -54,4 +55,13 @@ export default function EntityLogo({ entity, className = 'h-12 w-12' }: { entity
       className={`shrink-0 rounded-full border border-dga-line bg-white object-contain p-1 ${className}`}
     />
   )
+}
+
+/**
+ * English UI only: the note shown with an entity whose source record has no English name, so the Arabic
+ * script reads as the proper name itself (the name element carries `lang="ar"`). Renders nothing otherwise.
+ */
+export function EnglishNameFallback({ lang, nameEn, long = false, className = 'block text-[10.5px] italic text-dga-muted' }: { lang: 'ar' | 'en'; nameEn: string | null; long?: boolean; className?: string }) {
+  if (lang !== 'en' || nameEn) return null
+  return <span className={className}>{long ? englishNameFallback.long : englishNameFallback.short}</span>
 }

@@ -3,6 +3,8 @@ import { useApp } from '../../store'
 import type { View } from '../../store'
 import type { L } from '../../data/types'
 import { pathFor } from '../../lib/routes'
+import { isFullMode } from '../../lib/flags'
+import { SECTOR_MIN_ENTITIES } from '../../data/gov/types'
 import Claim from '../../components/Claim'
 import { HubCard, HubHeader, HubSection } from '../../components/shell/Hub'
 import { useArrow, useTabs } from '../../components/shell/hooks'
@@ -16,33 +18,56 @@ interface Page {
   never: L[]
 }
 
+/** The publication rule for sector aggregates (claim `method-gov-sector-min`). */
+const N = SECTOR_MIN_ENTITIES
+
+/**
+ * What each page of the section shows and deliberately never shows, worded to match the public
+ * (VITE_DATA_MODE=aggregate) build exactly: national figures, sector aggregates for n ≥ 10 only, and a
+ * directory of entity names; no per-entity records, no logos, no rankings.
+ */
 const pages: Page[] = [
   {
     view: 'sectors',
     icon: 'compass',
-    title: { ar: 'احتياج القطاعات', en: 'Sector needs' },
-    answers: { ar: 'ما مجالات التطوير المرتبطة بقطاعي؟', en: 'Which development domains relate to my sector?' },
+    title: { ar: 'القطاعات الحكومية', en: 'Government sectors' },
+    answers: { ar: 'كم جهة في قطاعي، وما الذي طلبه من تدريب واستشارات؟', en: 'How many entities are in my sector, and what training and consulting has it requested?' },
     shows: [
-      { ar: 'مجالات تطوير مرتبطة بسجل الاستشارات لكل قطاع، بشارة «استنتاج تحريري»', en: 'Development domains linked to each sector’s consulting record, marked «editorial inference»' },
-      { ar: 'عدد السجلات وفترتها بجانب كل استنتاج', en: 'The number of records and their period next to each inference' },
-      { ar: 'مجاميع قطاعية فقط حين يكفي عدد الجهات لحماية الخصوصية', en: 'Sector aggregates only when there are enough entities to protect privacy' },
+      { ar: 'عدد الجهات الحكومية وشبه الحكومية في كل قطاع', en: 'The number of government and quasi-government entities in each sector' },
+      {
+        ar: `مجاميع التدريب والاستشارات للقطاع فقط حين يبلغ عدد جهاته ذات السجلات ${N} أو أكثر`,
+        en: `Training and consulting totals for a sector only when it has ${N} or more entities with records`,
+      },
+      {
+        ar: 'موجز قابل للطباعة لكل قطاع: عدد السجلات وفترتها، ومجالات تطوير مرتبطة بسجل الاستشارات بشارة «استنتاج تحريري»',
+        en: 'A printable brief per sector: record counts and their period, and development domains linked to the consulting record, marked «editorial inference»',
+      },
     ],
     never: [
-      { ar: 'ترتيب للجهات أو «أعلى الجهات»', en: 'Rankings of entities or «top entities»' },
-      { ar: '«احتياجات» منسوبة إلى جهة بعينها', en: '«Needs» attributed to a single entity' },
+      { ar: 'ترتيب للجهات أو قائمة «أعلى الجهات»', en: 'Entity rankings or a «top entities» list' },
+      {
+        ar: `مجاميع التدريب والاستشارات لقطاع يقل عدد جهاته ذات السجلات عن ${N}؛ تبقى ضمن المجاميع الوطنية فقط`,
+        en: `Training and consulting totals for a sector with fewer than ${N} entities with records; they stay within the national totals only`,
+      },
+      { ar: 'نسب مئوية، أو «احتياجات» منسوبة إلى جهة بعينها', en: 'Percentages, or «needs» attributed to a single entity' },
     ],
   },
   {
     view: 'services',
     icon: 'cycle',
     title: { ar: 'سجل خدمات التمكين', en: 'Enablement service record' },
-    answers: { ar: 'ما خدمات التدريب والاستشارات التي قُدّمت، ومتى؟', en: 'Which training and consulting services were delivered, and when?' },
+    answers: { ar: 'ما التدريب والاستشارات التي قُدّمت للجهات، ومتى؟', en: 'What training and consulting was delivered to entities, and when?' },
     shows: [
-      { ar: 'سجلات المشاركة التدريبية والخدمات الاستشارية، كلٌّ بوحدته', en: 'Training participation records and consulting services, each in its own unit' },
-      { ar: 'السلاسل السنوية وتاريخ آخر تحديث للبيانات', en: 'Yearly series and the date of the last data update' },
+      {
+        ar: 'الأرقام الوطنية: سجلات المشاركة التدريبية والخدمات الاستشارية والجهات المستفيدة، كلٌّ بوحدته',
+        en: 'National figures: training participation records, consulting services and entities served, each in its own unit',
+      },
+      { ar: 'السلسلة السنوية للتدريب، والاستشارات حسب الفئة والركيزة، والانتشار حسب المنطقة', en: 'The yearly training series, consulting by category and pillar, and coverage by region' },
+      { ar: 'تاريخ القطع، والتوفيق مع السجل الحي للبرنامج', en: 'The cut-off date and the reconciliation with the program’s live register' },
     ],
     never: [
       { ar: 'مجموع مركّب يخلط وحدات مختلفة', en: 'A combined total that mixes different units' },
+      { ar: 'أرقام أو ترتيب لجهة بعينها', en: 'Figures or rankings for a single entity' },
       { ar: 'ادعاء «أثر» لم يُقس', en: 'An «impact» claim that was never measured' },
     ],
   },
@@ -50,15 +75,19 @@ const pages: Page[] = [
     view: 'directory',
     icon: 'flag',
     title: { ar: 'دليل الجهات', en: 'Entity directory' },
-    answers: { ar: 'أين أجد جهة حكومية، وما قطاعها ونوعها؟', en: 'Where do I find a government entity, and what is its sector and type?' },
+    answers: { ar: 'أين أجد جهة حكومية، وما نوعها وقطاعها ومنطقتها؟', en: 'Where do I find a government entity, and what is its type, sector and region?' },
     shows: [
-      { ar: 'أسماء الجهات الحكومية وقطاعاتها وأنواعها', en: 'Government entity names, sectors and types' },
-      { ar: 'بحث وتصفية بالقطاع والنوع', en: 'Search and filter by sector and type' },
+      {
+        ar: 'الجهات القائمة بالاسم والنوع والقطاع والمنطقة؛ الجهات الحكومية وشبه الحكومية مختارة افتراضيًا',
+        en: 'Active entities by name, type, sector and region; government and quasi-government entities are selected by default',
+      },
+      { ar: 'بحث بالاسم العربي أو الإنجليزي، وتصفية بالنوع والقطاع والمنطقة', en: 'Search by Arabic or English name, and filters by type, sector and region' },
+      { ar: 'صفحة لكل جهة تربطها بموجز قطاعها', en: 'A page per entity that links to its sector brief' },
     ],
     never: [
       { ar: 'شعارات رسمية', en: 'Official logos' },
-      { ar: 'سجلات خدمة تفصيلية لجهة مسماة', en: 'Detailed service records for a named entity' },
-      { ar: 'قوائم «لم تستفد»', en: '«Not served» lists' },
+      { ar: 'سجلات خدمة لجهة مسماة، أو وصفها بأنها استفادت أو لم تستفد', en: 'Service records for a named entity, or labels saying whether it was served' },
+      { ar: 'جهات القطاع الخاص', en: 'Private-sector entities' },
     ],
   },
 ]
@@ -72,13 +101,18 @@ export default function EntitiesSectorsHub() {
   return (
     <div>
       <HubHeader
-        eyebrow={{ ar: 'مجاميع فقط، بلا ترتيب', en: 'Aggregates only, no rankings' }}
+        eyebrow={{ ar: 'مجاميع ودليل، بلا ترتيب', en: 'Aggregates and a directory, no rankings' }}
         title={{ ar: 'الجهات والقطاعات', en: 'Entities & sectors' }}
         intro={{
-          ar: 'صورة مجمّعة لاحتياج القطاعات الحكومية وسجل خدمات التمكين. البناء العام يعرض المجاميع فقط: لا ترتيب للجهات، ولا سجلات تفصيلية لجهة بعينها، ولا شعارات رسمية.',
-          en: 'An aggregate picture of government sector needs and the enablement service record. The public build shows aggregates only: no entity rankings, no detailed records for a single entity, and no official logos.',
+          ar: `سجل خدمات التمكين بأرقامه الوطنية، والقطاعات الحكومية بمجاميعها، ودليل لأسماء الجهات. البناء العام لا يعرض سجلات خدمة لجهة بعينها، ولا ترتيبًا للجهات، ولا شعارات رسمية، ولا ينشر مجاميع قطاع إلا إذا بلغ عدد جهاته ذات السجلات ${N} أو أكثر.`,
+          en: `The enablement service record with its national figures, the government sectors with their aggregates, and a directory of entity names. The public build shows no service records for a single entity, no entity rankings and no official logos, and publishes a sector’s totals only when it has ${N} or more entities with records.`,
         }}
       >
+        {isFullMode() ? (
+          <p className="chip mt-4 border-dga-amber/60 bg-amber-50 text-dga-amber-tx">
+            {t({ ar: 'عرض خاص: هذا البناء الكامل يعرض سجلات الجهات ولا يُنشر', en: 'Private demo: this full build shows entity records and is never published' })}
+          </p>
+        ) : null}
         <p className="mt-4 flex flex-wrap items-center gap-2 text-sm text-dga-muted">
           {t({ ar: 'قاعدة الخصوصية للمجاميع القطاعية:', en: 'Privacy rule for sector aggregates:' })}
           <Claim id="method-gov-sector-min" />
