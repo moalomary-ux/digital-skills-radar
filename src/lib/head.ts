@@ -76,22 +76,6 @@ export const pageDescriptions: Record<View, L> = {
     ar: 'رادار التقنيات: نظرة على التقنيات الناشئة ومدى نضجها وأثرها على العمل الحكومي، مع ما يلزم من مهارات لكل منها.',
     en: 'Technology radar: a view of emerging technologies, their maturity and impact on government work, and the skills each one calls for.',
   },
-  explore: {
-    ar: 'خريطة المهارات: استعراض تفاعلي لمجالات المهارات الرقمية وترابطها، لتفهم الصورة الكاملة قبل اختيار ما تطوره.',
-    en: 'Skills map: an interactive view of digital skill domains and how they connect, to see the whole picture before choosing what to develop.',
-  },
-  careers: {
-    ar: 'المسارات المهنية الرقمية في العمل الحكومي: ما يتطلبه كل مسار من مهارات، وكيف تنتقل بينها خطوة بخطوة.',
-    en: 'Digital career paths in government: the skills each path requires and how to move between them step by step.',
-  },
-  lists: {
-    ar: 'الاتجاهات المهنية: قراءة في الأدوار والمهارات الرقمية الصاعدة في القطاع الحكومي وما يتغير في طبيعة العمل.',
-    en: 'Career trends: a reading of the rising digital roles and skills in the public sector and what is changing in the nature of work.',
-  },
-  decide: {
-    ar: 'التوجيه المهني: أسئلة قصيرة تساعدك على اختيار المسار الرقمي الأنسب لاهتماماتك وخبرتك وظروف عملك.',
-    en: 'Career guidance: short questions that help you choose the digital path that best fits your interests, experience and work context.',
-  },
   entities: {
     ar: 'الجهات الحكومية ومهاراتها الرقمية: نظرة عامة على توزيع الاحتياج والمهارات عبر الجهات والقطاعات.',
     en: 'Government entities and their digital skills: an overview of how needs and skills are distributed across entities and sectors.',
@@ -123,6 +107,14 @@ export const pageDescriptions: Record<View, L> = {
   evidence: {
     ar: 'سجل الأدلة: مصدر كل رقم وادعاء يعرضه الرادار، مع حدود استخدامه، لتراجعه بنفسك قبل الاعتماد عليه.',
     en: 'Evidence register: the source behind every figure and claim the radar shows, with its limits, so you can check it before relying on it.',
+  },
+  'roles-hub': {
+    ar: 'الأدوار والمهارات: المجالات الثمانية ومستوياتها الأربعة، ومكتبة الأدوار الحكومية، وقاموس المهارات في مكان واحد.',
+    en: 'Roles and skills: the eight domains and four levels, the government role library and the skills dictionary in one place.',
+  },
+  'method-hub': {
+    ar: 'المنهجية والمصادر: كيف نبني أحكامنا، وسجل الأدلة لكل رقم، والمعايير التي نستند إليها، وما لا ندّعيه.',
+    en: 'Method and sources: how the judgments are built, the evidence register behind every figure, the standards relied on, and what is not claimed.',
   },
   about: {
     ar: 'عن المفهوم: ما هو رادار المهارات الرقمية، ولمن صُمم، وما الذي يقدمه وما لا يدعيه.',

@@ -26,7 +26,7 @@ const LANGS: Lang[] = ['ar', 'en']
  * (which is expanded per library role and checked separately).
  */
 const PUBLIC_STATIC_VIEWS: View[] = [
-  'home', 'careers', 'decide', 'lists', 'future-skills', 'explore', 'entities', 'tech-radar',
+  'home', 'future-skills', 'entities', 'tech-radar', 'roles-hub', 'method-hub',
   'roles', 'standards', 'methodology', 'skills', 'impact', 'sectors', 'directory', 'evidence',
   'about', 'services', 'leaders', 'leader-brief', 'adoption', 'work', 'work-shifts',
 ]
@@ -139,7 +139,7 @@ describe('head helpers', () => {
     expect(headFor('methodology', 'en').canonical).toBe('https://omary.me/en/methodology/')
     expect(headFor('home', 'ar').canonical).toBe('https://omary.me/ar/')
     expect(canonicalPath('home', 'en')).toBe('/en/')
-    expect(canonicalPath('explore', 'ar', { domain: 'data' })).toBe('/ar/map/')
+    expect(canonicalPath('sectors', 'ar', { category: 'x' })).toBe('/ar/sectors/')
     expect(canonicalPath('role', 'en', { roleId: 'data_scientist' })).toBe('/en/roles/data_scientist/')
   })
 
