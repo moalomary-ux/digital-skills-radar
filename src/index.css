@@ -9,6 +9,10 @@
   body {
     @apply bg-dga-bg font-sans text-dga-ink antialiased;
   }
+  /* page-level guard: nothing may push the layout sideways at 390 px */
+  #root {
+    overflow-x: clip;
+  }
   ::selection {
     background: rgba(27, 131, 84, 0.22);
   }
@@ -115,6 +119,91 @@ a {
   }
 }
 
+/* ── Shell (P3) ─────────────────────────────────────────────────────────── */
+
+/* Skip link: off-screen until focused, then pinned to the reading-start corner */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 0.75rem;
+  top: 0.5rem;
+  z-index: 60;
+  transform: translateY(-160%);
+  border-radius: 4px;
+  background: #074d31;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease-out;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: none;
+  outline: 2px solid #dba102;
+  outline-offset: 2px;
+  text-decoration: none;
+}
+
+/* Header hub links: active hub underlined (not by colour alone) */
+.nav-link {
+  position: relative;
+}
+.nav-link.is-active::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0.375rem;
+  bottom: 0.15rem;
+  height: 2px;
+  border-radius: 2px;
+  background: #1b8354;
+}
+
+/* Page entrance: transform + a partial fade only, so content is never invisible */
+@keyframes pageIn {
+  from { opacity: 0.6; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.page-fade {
+  animation: pageIn 0.25s ease-out both;
+}
+
+/* Drawer: slides in from the inline end (right in LTR, left in RTL) */
+@keyframes drawerInLtr {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes drawerInRtl {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.drawer-panel {
+  animation: drawerInLtr 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+[dir='rtl'] .drawer-panel {
+  animation-name: drawerInRtl;
+}
+.drawer-backdrop {
+  animation: backdropIn 0.2s ease-out both;
+}
+
+/* Sticky mobile CTA respects the iPhone home indicator */
+.sticky-cta {
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade,
+  .drawer-panel,
+  .drawer-backdrop {
+    animation: none !important;
+  }
+}
+
 /* Print: clean report output */
 @media print {
   body {
@@ -122,6 +211,33 @@ a {
   }
   .no-print {
     display: none !important;
+  }
+  /* site chrome never prints; page content always does */
+  .site-header,
+  .site-footer,
+  .site-drawer,
+  .sticky-cta,
+  .skip-link {
+    display: none !important;
+  }
+  #root > div {
+    padding-bottom: 0 !important;
+  }
+  .page-fade {
+    animation: none !important;
+  }
+  /* motion leftovers (e.g. an entrance that never ran) must not hide content on paper */
+  main [style*='opacity: 0'],
+  main [style*='opacity:0'] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* interactive explorers print every panel, not only the selected one */
+  .print-reveal[hidden] {
+    display: block !important;
+  }
+  a[href] {
+    text-decoration: none !important;
   }
   .glass,
   .glass-strong {
