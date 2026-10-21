@@ -1,0 +1,1278 @@
+{
+  "generatedOn": "2026-10-21",
+  "mode": "aggregate",
+  "national": {
+    "training": 7915,
+    "consulting": 2873,
+    "entitiesServed": 421
+  },
+  "minEntitiesForAggregates": 10,
+  "periods": {
+    "training": {
+      "ar": "2021 إلى 2026",
+      "en": "2021 to 2026"
+    },
+    "consulting": {
+      "ar": "2023 إلى نهاية الربع الثالث 2026",
+      "en": "2023 to the end of Q3 2026"
+    }
+  },
+  "cutoff": {
+    "ar": "ملفا المصدر حتى نهاية الربع الثالث 2026",
+    "en": "Both source workbooks up to the end of Q3 2026"
+  },
+  "sectors": [
+    {
+      "id": "royal-court",
+      "nameAr": "الديوان الملكي ومجلس الوزراء",
+      "nameEn": "Royal Court and Council of Ministers",
+      "entityCount": 23,
+      "entitiesWithRecords": 17,
+      "showAggregates": true,
+      "training": 222,
+      "consulting": 78,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 50,
+        "1. الاستراتيجيات الرقمية": 14,
+        "4. التميز المؤسسي واستمرارية الأعمال": 6,
+        "6. البيانات والتكامل": 7,
+        "7. مؤشرات الأداء الرقمي": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 36,
+          "raw": 36.4
+        },
+        {
+          "domainId": "cyber",
+          "records": 15,
+          "raw": 15
+        },
+        {
+          "domainId": "policy",
+          "records": 10,
+          "raw": 9.8
+        },
+        {
+          "domainId": "leadership",
+          "records": 7,
+          "raw": 6.6
+        },
+        {
+          "domainId": "ai-data",
+          "records": 6,
+          "raw": 6.2
+        },
+        {
+          "domainId": "agile",
+          "records": 4,
+          "raw": 4
+        }
+      ]
+    },
+    {
+      "id": "regions",
+      "nameAr": "الإمارات والمناطق",
+      "nameEn": "Regional emirates",
+      "entityCount": 14,
+      "entitiesWithRecords": 13,
+      "showAggregates": true,
+      "training": 85,
+      "consulting": 77,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 30,
+        "1. الاستراتيجيات الرقمية": 23,
+        "6. البيانات والتكامل": 14,
+        "5. الاستثمار والخدمات الرقمية": 3,
+        "4. التميز المؤسسي واستمرارية الأعمال": 6,
+        "3. الابتكار والتقنيات الناشئة": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 24,
+          "raw": 23.8
+        },
+        {
+          "domainId": "policy",
+          "records": 17,
+          "raw": 17.3
+        },
+        {
+          "domainId": "ai-data",
+          "records": 11,
+          "raw": 11.4
+        },
+        {
+          "domainId": "leadership",
+          "records": 9,
+          "raw": 9.3
+        },
+        {
+          "domainId": "cyber",
+          "records": 9,
+          "raw": 9
+        },
+        {
+          "domainId": "agile",
+          "records": 4,
+          "raw": 3.6
+        },
+        {
+          "domainId": "service-design",
+          "records": 2,
+          "raw": 1.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 1,
+          "raw": 0.8
+        }
+      ]
+    },
+    {
+      "id": "municipal-housing",
+      "nameAr": "البلديات والإسكان",
+      "nameEn": "Municipalities and housing",
+      "entityCount": 24,
+      "entitiesWithRecords": 24,
+      "showAggregates": true,
+      "training": 473,
+      "consulting": 160,
+      "categories": {
+        "7. مؤشرات الأداء الرقمي": 18,
+        "2. تخطيط وتمكين البنية التقنية": 67,
+        "3. الابتكار والتقنيات الناشئة": 9,
+        "4. التميز المؤسسي واستمرارية الأعمال": 17,
+        "5. الاستثمار والخدمات الرقمية": 9,
+        "8. التميز والتنافسية": 4,
+        "6. البيانات والتكامل": 13,
+        "1. الاستراتيجيات الرقمية": 23
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 50,
+          "raw": 49.5
+        },
+        {
+          "domainId": "ai-data",
+          "records": 23,
+          "raw": 23
+        },
+        {
+          "domainId": "policy",
+          "records": 21,
+          "raw": 21.3
+        },
+        {
+          "domainId": "cyber",
+          "records": 20,
+          "raw": 20.1
+        },
+        {
+          "domainId": "agile",
+          "records": 17,
+          "raw": 17.4
+        },
+        {
+          "domainId": "leadership",
+          "records": 16,
+          "raw": 16.1
+        },
+        {
+          "domainId": "emerging",
+          "records": 7,
+          "raw": 7.2
+        },
+        {
+          "domainId": "service-design",
+          "records": 5,
+          "raw": 5.4
+        }
+      ]
+    },
+    {
+      "id": "interior-security",
+      "nameAr": "الداخلية والأمن",
+      "nameEn": "Interior and security",
+      "entityCount": 27,
+      "entitiesWithRecords": 21,
+      "showAggregates": true,
+      "training": 465,
+      "consulting": 89,
+      "categories": {
+        "7. مؤشرات الأداء الرقمي": 5,
+        "2. تخطيط وتمكين البنية التقنية": 37,
+        "5. الاستثمار والخدمات الرقمية": 5,
+        "1. الاستراتيجيات الرقمية": 11,
+        "4. التميز المؤسسي واستمرارية الأعمال": 12,
+        "3. الابتكار والتقنيات الناشئة": 10,
+        "6. البيانات والتكامل": 9
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 28,
+          "raw": 27.7
+        },
+        {
+          "domainId": "ai-data",
+          "records": 12,
+          "raw": 12.2
+        },
+        {
+          "domainId": "cyber",
+          "records": 11,
+          "raw": 11.1
+        },
+        {
+          "domainId": "policy",
+          "records": 10,
+          "raw": 9.7
+        },
+        {
+          "domainId": "agile",
+          "records": 9,
+          "raw": 9.2
+        },
+        {
+          "domainId": "leadership",
+          "records": 8,
+          "raw": 8.1
+        },
+        {
+          "domainId": "emerging",
+          "records": 8,
+          "raw": 8
+        },
+        {
+          "domainId": "service-design",
+          "records": 3,
+          "raw": 3
+        }
+      ]
+    },
+    {
+      "id": "defense",
+      "nameAr": "الدفاع والحرس الوطني",
+      "nameEn": "Defense and National Guard",
+      "entityCount": 12,
+      "entitiesWithRecords": 12,
+      "showAggregates": true,
+      "training": 217,
+      "consulting": 60,
+      "categories": {
+        "1. الاستراتيجيات الرقمية": 19,
+        "8. التميز والتنافسية": 4,
+        "4. التميز المؤسسي واستمرارية الأعمال": 5,
+        "2. تخطيط وتمكين البنية التقنية": 25,
+        "6. البيانات والتكامل": 3,
+        "3. الابتكار والتقنيات الناشئة": 3,
+        "5. الاستثمار والخدمات الرقمية": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 18,
+          "raw": 18.1
+        },
+        {
+          "domainId": "policy",
+          "records": 15,
+          "raw": 15.3
+        },
+        {
+          "domainId": "leadership",
+          "records": 10,
+          "raw": 10.1
+        },
+        {
+          "domainId": "cyber",
+          "records": 8,
+          "raw": 7.5
+        },
+        {
+          "domainId": "ai-data",
+          "records": 3,
+          "raw": 3
+        },
+        {
+          "domainId": "agile",
+          "records": 3,
+          "raw": 3
+        },
+        {
+          "domainId": "emerging",
+          "records": 2,
+          "raw": 2.4
+        },
+        {
+          "domainId": "service-design",
+          "records": 1,
+          "raw": 0.6
+        }
+      ]
+    },
+    {
+      "id": "justice",
+      "nameAr": "العدل والقضاء",
+      "nameEn": "Justice and judiciary",
+      "entityCount": 9,
+      "entitiesWithRecords": 7,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "foreign-affairs",
+      "nameAr": "الخارجية والدبلوماسية",
+      "nameEn": "Foreign affairs and diplomacy",
+      "entityCount": 4,
+      "entitiesWithRecords": 2,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "finance",
+      "nameAr": "المالية والاستثمار الحكومي",
+      "nameEn": "Finance and government investment",
+      "entityCount": 13,
+      "entitiesWithRecords": 11,
+      "showAggregates": true,
+      "training": 307,
+      "consulting": 116,
+      "categories": {
+        "7. مؤشرات الأداء الرقمي": 11,
+        "2. تخطيط وتمكين البنية التقنية": 69,
+        "6. البيانات والتكامل": 7,
+        "3. الابتكار والتقنيات الناشئة": 4,
+        "4. التميز المؤسسي واستمرارية الأعمال": 9,
+        "1. الاستراتيجيات الرقمية": 14,
+        "5. الاستثمار والخدمات الرقمية": 1,
+        "8. التميز والتنافسية": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 50,
+          "raw": 49.7
+        },
+        {
+          "domainId": "cyber",
+          "records": 21,
+          "raw": 20.7
+        },
+        {
+          "domainId": "ai-data",
+          "records": 13,
+          "raw": 13
+        },
+        {
+          "domainId": "policy",
+          "records": 11,
+          "raw": 10.6
+        },
+        {
+          "domainId": "agile",
+          "records": 10,
+          "raw": 9.8
+        },
+        {
+          "domainId": "leadership",
+          "records": 8,
+          "raw": 8.4
+        },
+        {
+          "domainId": "emerging",
+          "records": 3,
+          "raw": 3.2
+        },
+        {
+          "domainId": "service-design",
+          "records": 1,
+          "raw": 0.6
+        }
+      ]
+    },
+    {
+      "id": "economy-planning",
+      "nameAr": "الاقتصاد والتخطيط والإحصاء",
+      "nameEn": "Economy, planning and statistics",
+      "entityCount": 7,
+      "entitiesWithRecords": 5,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "commerce-industry",
+      "nameAr": "التجارة والصناعة والاستثمار",
+      "nameEn": "Commerce, industry and investment",
+      "entityCount": 29,
+      "entitiesWithRecords": 26,
+      "showAggregates": true,
+      "training": 508,
+      "consulting": 180,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 93,
+        "4. التميز المؤسسي واستمرارية الأعمال": 20,
+        "1. الاستراتيجيات الرقمية": 22,
+        "7. مؤشرات الأداء الرقمي": 16,
+        "6. البيانات والتكامل": 18,
+        "5. الاستثمار والخدمات الرقمية": 5,
+        "8. التميز والتنافسية": 2,
+        "3. الابتكار والتقنيات الناشئة": 4
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 69,
+          "raw": 68.7
+        },
+        {
+          "domainId": "cyber",
+          "records": 28,
+          "raw": 27.9
+        },
+        {
+          "domainId": "ai-data",
+          "records": 25,
+          "raw": 24.8
+        },
+        {
+          "domainId": "agile",
+          "records": 18,
+          "raw": 18.4
+        },
+        {
+          "domainId": "policy",
+          "records": 18,
+          "raw": 18.2
+        },
+        {
+          "domainId": "leadership",
+          "records": 16,
+          "raw": 15.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 3,
+          "raw": 3.2
+        },
+        {
+          "domainId": "service-design",
+          "records": 3,
+          "raw": 3
+        }
+      ]
+    },
+    {
+      "id": "energy-utilities",
+      "nameAr": "الطاقة والتعدين والمرافق",
+      "nameEn": "Energy, mining and utilities",
+      "entityCount": 12,
+      "entitiesWithRecords": 10,
+      "showAggregates": true,
+      "training": 258,
+      "consulting": 92,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 53,
+        "6. البيانات والتكامل": 7,
+        "4. التميز المؤسسي واستمرارية الأعمال": 11,
+        "7. مؤشرات الأداء الرقمي": 6,
+        "3. الابتكار والتقنيات الناشئة": 1,
+        "8. التميز والتنافسية": 2,
+        "5. الاستثمار والخدمات الرقمية": 2,
+        "1. الاستراتيجيات الرقمية": 10
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 38,
+          "raw": 38.5
+        },
+        {
+          "domainId": "cyber",
+          "records": 16,
+          "raw": 15.9
+        },
+        {
+          "domainId": "ai-data",
+          "records": 9,
+          "raw": 9.4
+        },
+        {
+          "domainId": "agile",
+          "records": 9,
+          "raw": 9
+        },
+        {
+          "domainId": "leadership",
+          "records": 9,
+          "raw": 8.6
+        },
+        {
+          "domainId": "policy",
+          "records": 9,
+          "raw": 8.6
+        },
+        {
+          "domainId": "service-design",
+          "records": 1,
+          "raw": 1.2
+        },
+        {
+          "domainId": "emerging",
+          "records": 1,
+          "raw": 0.8
+        }
+      ]
+    },
+    {
+      "id": "ict-space",
+      "nameAr": "الاتصالات وتقنية المعلومات والفضاء",
+      "nameEn": "Communications, IT and space",
+      "entityCount": 14,
+      "entitiesWithRecords": 23,
+      "showAggregates": true,
+      "training": 328,
+      "consulting": 185,
+      "categories": {
+        "8. التميز والتنافسية": 12,
+        "2. تخطيط وتمكين البنية التقنية": 70,
+        "6. البيانات والتكامل": 38,
+        "5. الاستثمار والخدمات الرقمية": 17,
+        "7. مؤشرات الأداء الرقمي": 9,
+        "4. التميز المؤسسي واستمرارية الأعمال": 13,
+        "3. الابتكار والتقنيات الناشئة": 13,
+        "1. الاستراتيجيات الرقمية": 13
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 57,
+          "raw": 56.6
+        },
+        {
+          "domainId": "ai-data",
+          "records": 38,
+          "raw": 38.4
+        },
+        {
+          "domainId": "cyber",
+          "records": 21,
+          "raw": 21
+        },
+        {
+          "domainId": "policy",
+          "records": 21,
+          "raw": 20.7
+        },
+        {
+          "domainId": "leadership",
+          "records": 16,
+          "raw": 16.3
+        },
+        {
+          "domainId": "agile",
+          "records": 11,
+          "raw": 11.4
+        },
+        {
+          "domainId": "emerging",
+          "records": 10,
+          "raw": 10.4
+        },
+        {
+          "domainId": "service-design",
+          "records": 10,
+          "raw": 10.2
+        }
+      ]
+    },
+    {
+      "id": "transport-logistics",
+      "nameAr": "النقل والخدمات اللوجستية",
+      "nameEn": "Transport and logistics",
+      "entityCount": 12,
+      "entitiesWithRecords": 13,
+      "showAggregates": true,
+      "training": 285,
+      "consulting": 108,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 66,
+        "1. الاستراتيجيات الرقمية": 10,
+        "4. التميز المؤسسي واستمرارية الأعمال": 8,
+        "6. البيانات والتكامل": 15,
+        "7. مؤشرات الأداء الرقمي": 7,
+        "8. التميز والتنافسية": 1,
+        "5. الاستثمار والخدمات الرقمية": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 49,
+          "raw": 49.2
+        },
+        {
+          "domainId": "cyber",
+          "records": 20,
+          "raw": 19.8
+        },
+        {
+          "domainId": "ai-data",
+          "records": 16,
+          "raw": 16.2
+        },
+        {
+          "domainId": "policy",
+          "records": 8,
+          "raw": 7.8
+        },
+        {
+          "domainId": "agile",
+          "records": 8,
+          "raw": 7.6
+        },
+        {
+          "domainId": "leadership",
+          "records": 7,
+          "raw": 6.8
+        },
+        {
+          "domainId": "service-design",
+          "records": 1,
+          "raw": 0.6
+        }
+      ]
+    },
+    {
+      "id": "water-environment",
+      "nameAr": "المياه والبيئة والزراعة",
+      "nameEn": "Water, environment and agriculture",
+      "entityCount": 19,
+      "entitiesWithRecords": 17,
+      "showAggregates": true,
+      "training": 442,
+      "consulting": 145,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 83,
+        "1. الاستراتيجيات الرقمية": 17,
+        "7. مؤشرات الأداء الرقمي": 5,
+        "6. البيانات والتكامل": 12,
+        "4. التميز المؤسسي واستمرارية الأعمال": 8,
+        "3. الابتكار والتقنيات الناشئة": 12,
+        "8. التميز والتنافسية": 5,
+        "5. الاستثمار والخدمات الرقمية": 3
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 60,
+          "raw": 60.5
+        },
+        {
+          "domainId": "cyber",
+          "records": 25,
+          "raw": 24.9
+        },
+        {
+          "domainId": "policy",
+          "records": 15,
+          "raw": 15.1
+        },
+        {
+          "domainId": "ai-data",
+          "records": 15,
+          "raw": 15
+        },
+        {
+          "domainId": "leadership",
+          "records": 11,
+          "raw": 11.3
+        },
+        {
+          "domainId": "emerging",
+          "records": 10,
+          "raw": 9.6
+        },
+        {
+          "domainId": "agile",
+          "records": 7,
+          "raw": 6.8
+        },
+        {
+          "domainId": "service-design",
+          "records": 2,
+          "raw": 1.8
+        }
+      ]
+    },
+    {
+      "id": "health",
+      "nameAr": "الصحة",
+      "nameEn": "Health",
+      "entityCount": 44,
+      "entitiesWithRecords": 39,
+      "showAggregates": true,
+      "training": 940,
+      "consulting": 267,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 172,
+        "7. مؤشرات الأداء الرقمي": 10,
+        "6. البيانات والتكامل": 19,
+        "4. التميز المؤسسي واستمرارية الأعمال": 22,
+        "8. التميز والتنافسية": 13,
+        "5. الاستثمار والخدمات الرقمية": 8,
+        "3. الابتكار والتقنيات الناشئة": 4,
+        "1. الاستراتيجيات الرقمية": 19
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 124,
+          "raw": 124.2
+        },
+        {
+          "domainId": "cyber",
+          "records": 52,
+          "raw": 51.6
+        },
+        {
+          "domainId": "leadership",
+          "records": 22,
+          "raw": 22.3
+        },
+        {
+          "domainId": "ai-data",
+          "records": 22,
+          "raw": 22
+        },
+        {
+          "domainId": "policy",
+          "records": 22,
+          "raw": 21.7
+        },
+        {
+          "domainId": "agile",
+          "records": 17,
+          "raw": 17.2
+        },
+        {
+          "domainId": "service-design",
+          "records": 5,
+          "raw": 4.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 3,
+          "raw": 3.2
+        }
+      ]
+    },
+    {
+      "id": "education-training",
+      "nameAr": "التعليم العام والتدريب",
+      "nameEn": "General education and training",
+      "entityCount": 10,
+      "entitiesWithRecords": 9,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "higher-education",
+      "nameAr": "التعليم العالي والجامعات",
+      "nameEn": "Higher education and universities",
+      "entityCount": 31,
+      "entitiesWithRecords": 31,
+      "showAggregates": true,
+      "training": 803,
+      "consulting": 250,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 164,
+        "4. التميز المؤسسي واستمرارية الأعمال": 29,
+        "6. البيانات والتكامل": 16,
+        "1. الاستراتيجيات الرقمية": 28,
+        "3. الابتكار والتقنيات الناشئة": 7,
+        "5. الاستثمار والخدمات الرقمية": 1,
+        "8. التميز والتنافسية": 4,
+        "7. مؤشرات الأداء الرقمي": 1
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 118,
+          "raw": 118
+        },
+        {
+          "domainId": "cyber",
+          "records": 49,
+          "raw": 49.2
+        },
+        {
+          "domainId": "leadership",
+          "records": 22,
+          "raw": 22.4
+        },
+        {
+          "domainId": "policy",
+          "records": 22,
+          "raw": 21.6
+        },
+        {
+          "domainId": "agile",
+          "records": 18,
+          "raw": 17.8
+        },
+        {
+          "domainId": "ai-data",
+          "records": 15,
+          "raw": 14.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 6,
+          "raw": 5.6
+        },
+        {
+          "domainId": "service-design",
+          "records": 1,
+          "raw": 0.6
+        }
+      ]
+    },
+    {
+      "id": "islamic-affairs-hajj",
+      "nameAr": "الشؤون الإسلامية والحج والعمرة",
+      "nameEn": "Islamic affairs, Hajj and Umrah",
+      "entityCount": 11,
+      "entitiesWithRecords": 10,
+      "showAggregates": true,
+      "training": 177,
+      "consulting": 58,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 29,
+        "8. التميز والتنافسية": 5,
+        "4. التميز المؤسسي واستمرارية الأعمال": 4,
+        "6. البيانات والتكامل": 7,
+        "7. مؤشرات الأداء الرقمي": 1,
+        "5. الاستثمار والخدمات الرقمية": 3,
+        "3. الابتكار والتقنيات الناشئة": 3,
+        "1. الاستراتيجيات الرقمية": 6
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 22,
+          "raw": 21.7
+        },
+        {
+          "domainId": "cyber",
+          "records": 9,
+          "raw": 8.7
+        },
+        {
+          "domainId": "policy",
+          "records": 7,
+          "raw": 7.4
+        },
+        {
+          "domainId": "ai-data",
+          "records": 7,
+          "raw": 6.8
+        },
+        {
+          "domainId": "leadership",
+          "records": 6,
+          "raw": 6.4
+        },
+        {
+          "domainId": "agile",
+          "records": 3,
+          "raw": 2.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 2,
+          "raw": 2.4
+        },
+        {
+          "domainId": "service-design",
+          "records": 2,
+          "raw": 1.8
+        }
+      ]
+    },
+    {
+      "id": "labor-social",
+      "nameAr": "العمل والتنمية الاجتماعية",
+      "nameEn": "Labor and social development",
+      "entityCount": 16,
+      "entitiesWithRecords": 10,
+      "showAggregates": true,
+      "training": 277,
+      "consulting": 173,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 88,
+        "8. التميز والتنافسية": 14,
+        "4. التميز المؤسسي واستمرارية الأعمال": 18,
+        "7. مؤشرات الأداء الرقمي": 18,
+        "6. البيانات والتكامل": 11,
+        "1. الاستراتيجيات الرقمية": 12,
+        "5. الاستثمار والخدمات الرقمية": 8,
+        "3. الابتكار والتقنيات الناشئة": 4
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 64,
+          "raw": 63.8
+        },
+        {
+          "domainId": "cyber",
+          "records": 26,
+          "raw": 26.4
+        },
+        {
+          "domainId": "ai-data",
+          "records": 20,
+          "raw": 20.4
+        },
+        {
+          "domainId": "leadership",
+          "records": 19,
+          "raw": 19.2
+        },
+        {
+          "domainId": "agile",
+          "records": 18,
+          "raw": 18
+        },
+        {
+          "domainId": "policy",
+          "records": 17,
+          "raw": 17.2
+        },
+        {
+          "domainId": "service-design",
+          "records": 5,
+          "raw": 4.8
+        },
+        {
+          "domainId": "emerging",
+          "records": 3,
+          "raw": 3.2
+        }
+      ]
+    },
+    {
+      "id": "culture-heritage",
+      "nameAr": "الثقافة والتراث",
+      "nameEn": "Culture and heritage",
+      "entityCount": 26,
+      "entitiesWithRecords": 13,
+      "showAggregates": true,
+      "training": 94,
+      "consulting": 66,
+      "categories": {
+        "2. تخطيط وتمكين البنية التقنية": 39,
+        "1. الاستراتيجيات الرقمية": 14,
+        "4. التميز المؤسسي واستمرارية الأعمال": 2,
+        "6. البيانات والتكامل": 2,
+        "5. الاستثمار والخدمات الرقمية": 4,
+        "7. مؤشرات الأداء الرقمي": 2,
+        "3. الابتكار والتقنيات الناشئة": 1,
+        "8. التميز والتنافسية": 2
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 28,
+          "raw": 27.7
+        },
+        {
+          "domainId": "policy",
+          "records": 12,
+          "raw": 12.2
+        },
+        {
+          "domainId": "cyber",
+          "records": 12,
+          "raw": 11.7
+        },
+        {
+          "domainId": "leadership",
+          "records": 6,
+          "raw": 6.2
+        },
+        {
+          "domainId": "ai-data",
+          "records": 3,
+          "raw": 3
+        },
+        {
+          "domainId": "service-design",
+          "records": 2,
+          "raw": 2.4
+        },
+        {
+          "domainId": "agile",
+          "records": 2,
+          "raw": 2
+        },
+        {
+          "domainId": "emerging",
+          "records": 1,
+          "raw": 0.8
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "nameAr": "الإعلام",
+      "nameEn": "Media",
+      "entityCount": 6,
+      "entitiesWithRecords": 8,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "tourism-entertainment",
+      "nameAr": "السياحة والترفيه والفعاليات",
+      "nameEn": "Tourism, entertainment and events",
+      "entityCount": 16,
+      "entitiesWithRecords": 7,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "sports",
+      "nameAr": "الرياضة",
+      "nameEn": "Sports",
+      "entityCount": 65,
+      "entitiesWithRecords": 7,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "oversight-anticorruption",
+      "nameAr": "الرقابة ومكافحة الفساد",
+      "nameEn": "Oversight and anti-corruption",
+      "entityCount": 5,
+      "entitiesWithRecords": 4,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "shared-services",
+      "nameAr": "الخدمات الحكومية المشتركة",
+      "nameEn": "Shared government services",
+      "entityCount": 4,
+      "entitiesWithRecords": 4,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "development-authorities",
+      "nameAr": "هيئات التطوير والمشاريع الكبرى",
+      "nameEn": "Development authorities and major projects",
+      "entityCount": 33,
+      "entitiesWithRecords": 24,
+      "showAggregates": true,
+      "training": 266,
+      "consulting": 167,
+      "categories": {
+        "1. الاستراتيجيات الرقمية": 44,
+        "2. تخطيط وتمكين البنية التقنية": 87,
+        "6. البيانات والتكامل": 10,
+        "5. الاستثمار والخدمات الرقمية": 9,
+        "8. التميز والتنافسية": 1,
+        "4. التميز المؤسسي واستمرارية الأعمال": 7,
+        "7. مؤشرات الأداء الرقمي": 2,
+        "3. الابتكار والتقنيات الناشئة": 7
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 63,
+          "raw": 62.9
+        },
+        {
+          "domainId": "policy",
+          "records": 35,
+          "raw": 34.8
+        },
+        {
+          "domainId": "cyber",
+          "records": 26,
+          "raw": 26.1
+        },
+        {
+          "domainId": "leadership",
+          "records": 17,
+          "raw": 16.6
+        },
+        {
+          "domainId": "ai-data",
+          "records": 11,
+          "raw": 10.6
+        },
+        {
+          "domainId": "emerging",
+          "records": 6,
+          "raw": 5.6
+        },
+        {
+          "domainId": "service-design",
+          "records": 5,
+          "raw": 5.4
+        },
+        {
+          "domainId": "agile",
+          "records": 5,
+          "raw": 5
+        }
+      ]
+    },
+    {
+      "id": "vision-programs",
+      "nameAr": "البرامج الوطنية ورؤية 2030",
+      "nameEn": "National programs and Vision 2030",
+      "entityCount": 9,
+      "entitiesWithRecords": 3,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "banking-finance",
+      "nameAr": "البنوك والخدمات المالية",
+      "nameEn": "Banking and financial services",
+      "entityCount": 7,
+      "entitiesWithRecords": 5,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "state-owned-companies",
+      "nameAr": "الشركات المملوكة للدولة والصناديق السيادية",
+      "nameEn": "State-owned companies and sovereign funds",
+      "entityCount": 79,
+      "entitiesWithRecords": 13,
+      "showAggregates": true,
+      "training": 28,
+      "consulting": 29,
+      "categories": {
+        "6. البيانات والتكامل": 3,
+        "4. التميز المؤسسي واستمرارية الأعمال": 3,
+        "2. تخطيط وتمكين البنية التقنية": 19,
+        "3. الابتكار والتقنيات الناشئة": 1,
+        "7. مؤشرات الأداء الرقمي": 3
+      },
+      "domains": [
+        {
+          "domainId": "cloud",
+          "records": 14,
+          "raw": 13.9
+        },
+        {
+          "domainId": "cyber",
+          "records": 6,
+          "raw": 5.7
+        },
+        {
+          "domainId": "ai-data",
+          "records": 4,
+          "raw": 4.4
+        },
+        {
+          "domainId": "agile",
+          "records": 3,
+          "raw": 3
+        },
+        {
+          "domainId": "leadership",
+          "records": 1,
+          "raw": 1.2
+        },
+        {
+          "domainId": "emerging",
+          "records": 1,
+          "raw": 0.8
+        }
+      ]
+    },
+    {
+      "id": "international-other",
+      "nameAr": "منظمات دولية وجهات أخرى",
+      "nameEn": "International organizations and others",
+      "entityCount": 6,
+      "entitiesWithRecords": 6,
+      "showAggregates": false,
+      "training": null,
+      "consulting": null,
+      "categories": null,
+      "domains": null
+    },
+    {
+      "id": "other-pooled",
+      "nameAr": "قطاعات أخرى (مجاميع مجمّعة)",
+      "nameEn": "Other sectors (pooled totals)",
+      "entityCount": 0,
+      "entitiesWithRecords": 94,
+      "showAggregates": true,
+      "training": 1740,
+      "consulting": 573,
+      "categories": null,
+      "domains": null,
+      "pooled": true,
+      "pooledSectorIds": [
+        "justice",
+        "foreign-affairs",
+        "economy-planning",
+        "education-training",
+        "media",
+        "tourism-entertainment",
+        "sports",
+        "oversight-anticorruption",
+        "shared-services",
+        "vision-programs",
+        "banking-finance",
+        "private-sector",
+        "international-other"
+      ]
+    }
+  ]
+}

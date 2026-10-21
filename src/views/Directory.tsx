@@ -1,49 +1,103 @@
-import { useEffect, useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useId, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useApp } from '../store'
-import { govEntities } from '../data/govEntities'
+import { pathFor } from '../lib/routes'
+import { isFullMode } from '../lib/flags'
+import Claim from '../components/Claim'
 import EntityLogo from '../components/EntityLogo'
-import Icon from '../components/Icon'
+import { DEFAULT_DIRECTORY_TYPES, ENTITY_TYPES, entityTypeById, label, loadEntitiesIndex, regionById, regions, sectorById, sectors, useGovData } from '../data/gov'
+import type { EntityIndexRow, EntityType } from '../data/gov'
+import type { L } from '../data/types'
+
+/**
+ * Entity directory (packet P4): the public index only (id, names, sector, type, region). Government
+ * and quasi-government types are selected by default; the type filter is a group of toggle buttons;
+ * every card is a real link. No logos, no service records and no «served / not served» labels in the
+ * public build; the monogram appears in the full build only.
+ */
 
 const fmt = (n: number) => n.toLocaleString('en-US')
 const PAGE_SIZE = 48
 
-/** Unique values of a string field, ordered by frequency desc then alpha. */
-function optionsOf(field: 'sector' | 'type' | 'scope' | 'region'): string[] {
-  const counts = new Map<string, number>()
-  for (const e of govEntities) counts.set(e[field], (counts.get(e[field]) ?? 0) + 1)
-  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ar')).map(([v]) => v)
-}
-
-const SECTORS = optionsOf('sector')
-const TYPES = optionsOf('type')
-const SCOPES = optionsOf('scope')
-const REGIONS = optionsOf('region')
+const ui = {
+  eyebrow: { ar: 'الجهات والقطاعات', en: 'Entities and sectors' },
+  title: { ar: 'دليل الجهات', en: 'Entity directory' },
+  lede: {
+    ar: 'الجهات القائمة في الدليل المنقّى بالاسم والنوع والقطاع والمنطقة. الجهات الحكومية وشبه الحكومية مختارة افتراضيًا، ويمكن إظهار الأنواع الأخرى من المرشّح.',
+    en: 'Active entities of the cleaned directory by name, type, sector and region. Government and quasi-government entities are selected by default; the other types can be shown from the filter.',
+  },
+  countNote: { ar: 'جهة في الدليل العام', en: 'entities in the public directory' },
+  search: { ar: 'ابحث بالاسم', en: 'Search by name' },
+  searchHint: { ar: 'الاسم العربي أو الإنجليزي', en: 'Arabic or English name' },
+  types: { ar: 'نوع الجهة', en: 'Entity type' },
+  sector: { ar: 'القطاع', en: 'Sector' },
+  allSectors: { ar: 'كل القطاعات', en: 'All sectors' },
+  region: { ar: 'المنطقة', en: 'Region' },
+  allRegions: { ar: 'كل المناطق', en: 'All regions' },
+  results: { ar: 'جهة', en: 'entities' },
+  of: { ar: 'من', en: 'of' },
+  none: { ar: 'لا جهات تطابق البحث أو المرشّحات.', en: 'No entities match the search or filters.' },
+  noTypes: { ar: 'اختر نوعًا واحدًا على الأقل لعرض الجهات.', en: 'Select at least one type to show entities.' },
+  prev: { ar: 'الصفحة السابقة', en: 'Previous page' },
+  next: { ar: 'الصفحة التالية', en: 'Next page' },
+  page: { ar: 'صفحة', en: 'Page' },
+  pageOf: { ar: 'من', en: 'of' },
+  loading: { ar: 'جارٍ تحميل الدليل…', en: 'Loading the directory…' },
+  loadError: { ar: 'تعذّر تحميل الدليل. أعد تحميل الصفحة.', en: 'The directory could not be loaded. Reload the page.' },
+  open: { ar: 'افتح صفحة الجهة', en: 'Open the entity page' },
+} satisfies Record<string, L>
 
 export default function Directory() {
-  const { t, openEntity } = useApp()
+  const { t, lang } = useApp()
+  const { data: index, error, loading } = useGovData(loadEntitiesIndex)
+  const [searchParams] = useSearchParams()
+  const full = isFullMode()
+
   const [query, setQuery] = useState('')
-  const [fSector, setFSector] = useState('')
-  const [fType, setFType] = useState('')
-  const [fScope, setFScope] = useState('')
+  const [types, setTypes] = useState<Set<EntityType>>(() => new Set(DEFAULT_DIRECTORY_TYPES))
+  const [fSector, setFSector] = useState(() => {
+    const raw = searchParams.get('sector') ?? ''
+    return sectorById(raw) ? raw : ''
+  })
   const [fRegion, setFRegion] = useState('')
-  const [fLogo, setFLogo] = useState(false)
-  const [fServed, setFServed] = useState(false)
   const [page, setPage] = useState(0)
+
+  const searchId = useId()
+  const sectorId = useId()
+  const regionId = useId()
+  const typesId = useId()
+  const statusId = useId()
+
+  const rows = useMemo(() => index ?? [], [index])
+
+  const typesPresent = useMemo(() => {
+    const present = new Set(rows.map((e) => e.type))
+    return ENTITY_TYPES.filter((ty) => present.has(ty))
+  }, [rows])
+  const typeCounts = useMemo(() => {
+    const counts = new Map<EntityType, number>()
+    for (const e of rows) counts.set(e.type, (counts.get(e.type) ?? 0) + 1)
+    return counts
+  }, [rows])
+  const sectorsPresent = useMemo(() => {
+    const present = new Set(rows.map((e) => e.sectorId))
+    return sectors.filter((s) => present.has(s.id))
+  }, [rows])
+  const regionsPresent = useMemo(() => {
+    const present = new Set(rows.map((e) => e.region))
+    return regions.filter((r) => present.has(r.id))
+  }, [rows])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return govEntities.filter(
+    return rows.filter(
       (e) =>
-        (!fSector || e.sector === fSector) &&
-        (!fType || e.type === fType) &&
-        (!fScope || e.scope === fScope) &&
+        types.has(e.type) &&
+        (!fSector || e.sectorId === fSector) &&
         (!fRegion || e.region === fRegion) &&
-        (!fLogo || !!e.logo) &&
-        (!fServed || !!e.services) &&
         (q.length === 0 || e.nameAr.toLowerCase().includes(q) || (e.nameEn ?? '').toLowerCase().includes(q))
     )
-  }, [query, fSector, fType, fScope, fRegion, fLogo, fServed])
+  }, [rows, query, types, fSector, fRegion])
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const safePage = Math.min(page, pageCount - 1)
@@ -51,180 +105,201 @@ export default function Directory() {
 
   useEffect(() => {
     setPage(0)
-  }, [query, fSector, fType, fScope, fRegion, fLogo, fServed])
+  }, [query, types, fSector, fRegion])
+
+  const toggleType = (ty: EntityType) =>
+    setTypes((prev) => {
+      const next = new Set(prev)
+      if (next.has(ty)) next.delete(ty)
+      else next.add(ty)
+      return next
+    })
 
   const selectCls = 'rounded-btn border border-dga-line bg-white px-2.5 py-2 text-xs outline-none focus:border-dga-green'
-  const toggleCls = (on: boolean) => `chip ${on ? 'border-dga-green bg-dga-green font-semibold !text-white' : ''}`
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       {/* header */}
       <div className="mb-8 max-w-3xl">
-        <p className="eyebrow">{t({ ar: '682 جهة حكومية وشبه حكومية', en: '682 government & quasi-government entities' })}</p>
-        <h1 className="mt-2 text-h1 font-bold text-dga-green-deep">{t({ ar: 'دليل الجهات', en: 'Entity Directory' })}</h1>
-        <p className="mt-3 leading-relaxed text-dga-muted">
-          {t({
-            ar: 'الدليل الكامل للجهات مع شعاراتها وتصنيفها (القطاع، النوع، النطاق، المنطقة) وسجل استفادتها من خدمات التدريب والاستشارات.',
-            en: 'The complete entity directory with logos, classification (sector, type, scope, region), and each entity’s training & consulting benefit record.',
-          })}
+        <p className="eyebrow">{t(ui.eyebrow)}</p>
+        <h1 className="mt-2 text-h1 font-bold text-dga-green-deep">{t(ui.title)}</h1>
+        <p className="mt-3 leading-relaxed text-dga-muted">{t(ui.lede)}</p>
+        <p className="mt-3 text-sm text-dga-ink">
+          <Claim id="gov-directory-public" /> {t(ui.countNote)}
         </p>
       </div>
 
       {/* filters */}
-      <div className="no-print mb-6 space-y-3">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t({ ar: 'ابحث بالاسم العربي أو الإنجليزي…', en: 'Search by Arabic or English name…' })}
-          className="w-full max-w-md rounded-btn border border-dga-line bg-white px-3 py-2 text-sm outline-none focus:border-dga-green"
-        />
-        <div className="flex flex-wrap items-center gap-2">
-          <select value={fSector} onChange={(e) => setFSector(e.target.value)} className={selectCls} aria-label="sector">
-            <option value="">{t({ ar: 'كل القطاعات', en: 'All sectors' })}</option>
-            {SECTORS.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <select value={fType} onChange={(e) => setFType(e.target.value)} className={selectCls} aria-label="type">
-            <option value="">{t({ ar: 'كل الأنواع', en: 'All types' })}</option>
-            {TYPES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <select value={fScope} onChange={(e) => setFScope(e.target.value)} className={selectCls} aria-label="scope">
-            <option value="">{t({ ar: 'كل النطاقات', en: 'All scopes' })}</option>
-            {SCOPES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <select value={fRegion} onChange={(e) => setFRegion(e.target.value)} className={selectCls} aria-label="region">
-            <option value="">{t({ ar: 'كل المناطق', en: 'All regions' })}</option>
-            {REGIONS.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          <button onClick={() => setFLogo((v) => !v)} className={toggleCls(fLogo)}>
-            {t({ ar: 'لها شعار', en: 'Has logo' })}
-          </button>
-          <button onClick={() => setFServed((v) => !v)} className={toggleCls(fServed)}>
-            {t({ ar: 'مستفيدة فقط', en: 'Served only' })}
-          </button>
+      <div className="no-print mb-6 space-y-4">
+        <div>
+          <label htmlFor={searchId} className="block text-xs font-semibold text-dga-black">
+            {t(ui.search)}
+          </label>
+          <input
+            id={searchId}
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t(ui.searchHint)}
+            className="mt-1 w-full max-w-md rounded-btn border border-dga-line bg-white px-3 py-2 text-sm outline-none focus:border-dga-green"
+          />
         </div>
-        <p className="text-xs text-dga-muted">
-          {t({ ar: `${fmt(filtered.length)} من ${fmt(govEntities.length)} جهة`, en: `${fmt(filtered.length)} of ${fmt(govEntities.length)} entities` })}
+
+        <div role="group" aria-labelledby={typesId}>
+          <p id={typesId} className="text-xs font-semibold text-dga-black">
+            {t(ui.types)}
+          </p>
+          <div className="mt-1 flex flex-wrap gap-2">
+            {typesPresent.map((ty) => {
+              const on = types.has(ty)
+              return (
+                <button
+                  key={ty}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggleType(ty)}
+                  className={`chip cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green ${on ? 'border-dga-green bg-dga-green font-semibold !text-white' : ''}`}
+                >
+                  {label(entityTypeById(ty), lang, ty)}
+                  <span className="tabular-nums opacity-80" dir="ltr">
+                    {fmt(typeCounts.get(ty) ?? 0)}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <label htmlFor={sectorId} className="block text-xs font-semibold text-dga-black">
+              {t(ui.sector)}
+            </label>
+            <select id={sectorId} value={fSector} onChange={(e) => setFSector(e.target.value)} className={`mt-1 ${selectCls}`}>
+              <option value="">{t(ui.allSectors)}</option>
+              {sectorsPresent.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {label(s, lang)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor={regionId} className="block text-xs font-semibold text-dga-black">
+              {t(ui.region)}
+            </label>
+            <select id={regionId} value={fRegion} onChange={(e) => setFRegion(e.target.value)} className={`mt-1 ${selectCls}`}>
+              <option value="">{t(ui.allRegions)}</option>
+              {regionsPresent.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {label(r, lang)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <p id={statusId} className="text-xs text-dga-muted" role="status" aria-live="polite">
+          <span className="tabular-nums" dir="ltr">
+            {fmt(filtered.length)}
+          </span>{' '}
+          {t(ui.of)}{' '}
+          <span className="tabular-nums" dir="ltr">
+            {fmt(rows.length)}
+          </span>{' '}
+          {t(ui.results)}
         </p>
       </div>
 
+      {loading ? (
+        <p className="glass p-10 text-center text-sm text-dga-muted" role="status">
+          {t(ui.loading)}
+        </p>
+      ) : null}
+      {error ? (
+        <p className="glass p-10 text-center text-sm text-dga-amber-tx" role="alert">
+          {t(ui.loadError)}
+        </p>
+      ) : null}
+
       {/* cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {pageItems.map((e, i) => (
-          <motion.article
-            key={e.id}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-20px' }}
-            transition={{ duration: 0.3, delay: (i % 4) * 0.04 }}
-            onClick={() => openEntity(e.id)}
-            onKeyDown={(ev) => ev.key === 'Enter' && openEntity(e.id)}
-            role="button"
-            tabIndex={0}
-            className="glass flex cursor-pointer flex-col p-4 transition-shadow hover:shadow-card-lg"
-          >
-            <div className="flex items-center gap-3">
-              <EntityLogo entity={e} className="h-12 w-12" />
-              <div className="min-w-0">
-                <h2 className="truncate text-sm font-bold text-dga-black" title={e.nameAr}>{e.nameAr}</h2>
-                {e.nameEn && <p className="truncate text-[10.5px] text-dga-muted" dir="ltr" title={e.nameEn}>{e.nameEn}</p>}
-              </div>
-            </div>
+      {!loading && !error ? (
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {pageItems.map((e) => (
+            <li key={e.id}>
+              <EntityCard entity={e} full={full} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
-            <div className="mt-3 flex flex-wrap gap-1.5 text-[10px]">
-              <span className="chip">{e.sector}</span>
-              <span className="chip">{e.type}</span>
-              <span className="chip">{e.scope}</span>
-            </div>
-
-            <p className="mt-2 flex items-center gap-1.5 text-[11px] text-dga-muted">
-              <Icon name="compass" className="h-3.5 w-3.5" />
-              {e.region}
-              {e.hq ? ` — ${e.hq}` : ''}
-            </p>
-
-            {e.services ? (
-              <div className="mt-3 rounded-btn bg-dga-bg p-2.5 text-[11px] leading-relaxed">
-                <p>
-                  <span className="chip-info !px-1.5 !py-0 text-[10px]">{t({ ar: 'مستفيدة', en: 'served' })}</span>{' '}
-                  {e.services.lastYear && (
-                    <span className="text-dga-muted">
-                      {t({ ar: `آخر خدمة ${e.services.lastYear}`, en: `last service ${e.services.lastYear}` })}
-                    </span>
-                  )}
-                </p>
-                <p className="mt-1.5 text-dga-ink">
-                  {t({ ar: 'تدريب:', en: 'Training:' })}{' '}
-                  <span className="font-mono font-bold text-dga-green-dark" dir="ltr">{fmt(e.services.trainingBeneficiaries)}</span>
-                  {' · '}
-                  {t({ ar: 'استشارات:', en: 'Consulting:' })}{' '}
-                  <span className="font-mono font-bold text-dga-green-dark" dir="ltr">{fmt(e.services.consultingServices)}</span>
-                </p>
-                {e.services.topConsulting && (
-                  <p className="mt-1 text-dga-muted">
-                    <span className="font-semibold text-dga-ink">{t({ ar: 'أبرز الخدمات: ', en: 'Top services: ' })}</span>
-                    {e.services.topConsulting}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <p className="mt-3 rounded-btn bg-dga-bg p-2.5 text-[11px] text-dga-muted">
-                {t({ ar: 'لم تستفد من الخدمات بعد', en: 'No services utilized yet' })}
-              </p>
-            )}
-
-            {e.website && (
-              <a
-                href={e.website.startsWith('http') ? e.website : `https://${e.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(ev) => ev.stopPropagation()}
-                className="mt-auto inline-flex items-center gap-1 pt-3 text-[11px] font-semibold text-dga-green-dark hover:underline"
-                dir="ltr"
-              >
-                <Icon name="cloud" className="h-3.5 w-3.5" />
-                {e.website.replace(/^https?:\/\//, '')}
-              </a>
-            )}
-          </motion.article>
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="glass p-10 text-center text-dga-muted">
-          {t({ ar: 'لا جهات تطابق البحث أو الفلاتر.', en: 'No entities match the search or filters.' })}
-        </div>
-      )}
+      {!loading && !error && filtered.length === 0 ? (
+        <div className="glass p-10 text-center text-dga-muted">{types.size === 0 ? t(ui.noTypes) : t(ui.none)}</div>
+      ) : null}
 
       {/* pagination */}
-      {pageCount > 1 && (
-        <div className="no-print mt-8 flex items-center justify-center gap-2">
+      {pageCount > 1 ? (
+        <nav className="no-print mt-8 flex items-center justify-center gap-3" aria-label={t(ui.page)}>
           <button
+            type="button"
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={safePage === 0}
+            aria-label={t(ui.prev)}
             className="btn-ghost px-3 py-1.5 text-xs disabled:opacity-40"
           >
-            {t({ ar: 'السابق', en: 'Prev' })}
+            <span aria-hidden="true">{lang === 'ar' ? '→' : '←'}</span> {t(ui.prev)}
           </button>
-          <span className="text-xs text-dga-muted" dir="ltr">
-            {safePage + 1} / {pageCount}
+          <span className="text-xs text-dga-muted">
+            {t(ui.page)}{' '}
+            <span className="tabular-nums" dir="ltr">
+              {safePage + 1}
+            </span>{' '}
+            {t(ui.pageOf)}{' '}
+            <span className="tabular-nums" dir="ltr">
+              {pageCount}
+            </span>
           </span>
           <button
+            type="button"
             onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
             disabled={safePage >= pageCount - 1}
+            aria-label={t(ui.next)}
             className="btn-ghost px-3 py-1.5 text-xs disabled:opacity-40"
           >
-            {t({ ar: 'التالي', en: 'Next' })}
+            {t(ui.next)} <span aria-hidden="true">{lang === 'ar' ? '←' : '→'}</span>
           </button>
-        </div>
-      )}
+        </nav>
+      ) : null}
     </div>
+  )
+}
+
+function EntityCard({ entity: e, full }: { entity: EntityIndexRow; full: boolean }) {
+  const { t, lang } = useApp()
+  return (
+    <Link
+      to={pathFor('entity', lang, { entityId: e.id })}
+      className="glass flex h-full flex-col p-4 transition-shadow hover:shadow-card-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green"
+      aria-label={`${e.nameAr}: ${t(ui.open)}`}
+    >
+      <div className="flex items-center gap-3">
+        {full ? <EntityLogo entity={e} className="h-12 w-12" /> : null}
+        <div className="min-w-0">
+          <h2 className="truncate text-sm font-bold text-dga-black" title={e.nameAr} lang="ar" dir="rtl">
+            {e.nameAr}
+          </h2>
+          {e.nameEn ? (
+            <p className="truncate text-[10.5px] text-dga-muted" dir="ltr" title={e.nameEn}>
+              {e.nameEn}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1.5 text-[10px]">
+        <span className="chip-info">{label(entityTypeById(e.type), lang, e.type)}</span>
+        <span className="chip">{label(sectorById(e.sectorId), lang, e.sectorId)}</span>
+      </div>
+      <p className="mt-2 text-[11px] text-dga-muted">{label(regionById(e.region), lang, e.region)}</p>
+    </Link>
   )
 }
