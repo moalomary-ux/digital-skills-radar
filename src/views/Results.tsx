@@ -22,7 +22,7 @@ import {
 import type { Agreement, DomainEvidence, Priority, Reason } from '../lib/priorities'
 import { encodeResult, formatCode } from '../lib/resultCode'
 import { downloadText, formatLongDate } from '../lib/ics'
-import RadarChart from '../components/RadarChart'
+import RadarChart, { RadarLayerSwatch } from '../components/RadarChart'
 import Disclaimer from '../components/Disclaimer'
 import Icon from '../components/Icon'
 
@@ -84,35 +84,6 @@ export function roleLine(rec: ResultRecord): { category: L | null; role: L | nul
   return { category, role: lib ? lib.name : category ? null : resolveRoleName(rec.roleId) }
 }
 
-/* -------------------------------------------------------------- radar layer CSS */
-
-// RadarChart (not owned by this view) has no layer props for self/target; its polygons are
-// hidden by attribute selectors. Wave 3 should add `show*` props (see packet note).
-const layerCss = `
-.rl-hide-self svg polygon[fill="url(#gradCurrent)"], .rl-hide-self svg circle[fill="#0E9F6E"] { display: none; }
-.rl-hide-target svg polygon[fill="url(#gradTarget)"], .rl-hide-target svg circle[fill="#DBA102"] { display: none; }
-`
-
-// Geometry mirrored from RadarChart (viewBox 620, centre 310/316, radius 196).
-const RC = { size: 620, cx: 310, cy: 316, R: 196 }
-
-function KnowledgeMarkers({ evidence, lang }: { evidence: DomainEvidence[]; lang: 'ar' | 'en' }) {
-  const dirSign = lang === 'ar' ? -1 : 1
-  return (
-    <svg viewBox={`0 0 ${RC.size} ${RC.size}`} className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
-      {evidence.map((e, i) => {
-        const k = e.knowledge
-        if (!k || k.attempted === null || k.attempted < MIN_KNOWLEDGE_ATTEMPTS) return null
-        const angle = ((-90 + dirSign * i * (360 / evidence.length)) * Math.PI) / 180
-        const r = (k.correct / k.attempted) * RC.R
-        const x = RC.cx + r * Math.cos(angle)
-        const y = RC.cy + r * Math.sin(angle)
-        return <rect key={e.domainId} x={x - 6} y={y - 6} width="12" height="12" transform={`rotate(45 ${x} ${y})`} fill="#212539" stroke="#fff" strokeWidth="2" />
-      })}
-    </svg>
-  )
-}
-
 /* ------------------------------------------------------------------ page */
 
 type LayerKey = 'self' | 'judgment' | 'knowledge' | 'target'
@@ -165,6 +136,10 @@ export default function Results() {
   const shownValues = prevScores ? selfValues.map((v, i) => prevScores[i] + (v - prevScores[i]) * compare) : selfValues
   const judgmentValues = evidence.some((e) => e.judgment4 !== undefined) ? evidence.map((e) => e.judgment4 ?? 0) : undefined
   const hasJudgmentGaps = evidence.some((e) => e.judgment4 === undefined)
+  // knowledge check on the radar's 0–4 scale; only judged once enough questions were attempted
+  const knowledgeValues = evidence.map((e) =>
+    e.knowledge && e.knowledge.attempted !== null && e.knowledge.attempted >= MIN_KNOWLEDGE_ATTEMPTS ? (e.knowledge.correct / e.knowledge.attempted) * 4 : null,
+  )
   const selectedEv = evidence.find((e) => e.domainId === selected) ?? null
   const forward = lang === 'ar' ? '←' : '→'
 
@@ -222,16 +197,14 @@ export default function Results() {
   }
 
   const layerButtons: { key: LayerKey; label: L; swatch: ReactNode; available: boolean }[] = [
-    { key: 'self', label: { ar: 'تقديري الذاتي', en: 'My self-rating' }, swatch: <span className="h-2.5 w-2.5 rounded-full bg-dga-green" />, available: true },
-    { key: 'judgment', label: { ar: 'مواقف الحكم', en: 'Judgment scenarios' }, swatch: <span className="h-0 w-4 border-t-2 border-dashed border-[#1849A9]" />, available: !!judgmentValues },
-    { key: 'knowledge', label: { ar: 'التحقق المعرفي', en: 'Knowledge check' }, swatch: <span className="h-2.5 w-2.5 rotate-45 bg-dga-ink" />, available: evidence.some((e) => e.knowledge && e.knowledge.attempted !== null && e.knowledge.attempted >= MIN_KNOWLEDGE_ATTEMPTS) },
-    { key: 'target', label: { ar: 'المستهدف', en: 'Target' }, swatch: <span className="h-2.5 w-2.5 rounded-full bg-dga-amber" />, available: true },
+    { key: 'self', label: { ar: 'تقديري الذاتي', en: 'My self-rating' }, swatch: <RadarLayerSwatch layer="self" />, available: true },
+    { key: 'judgment', label: { ar: 'مواقف الحكم', en: 'Judgment scenarios' }, swatch: <RadarLayerSwatch layer="scenario" />, available: !!judgmentValues },
+    { key: 'knowledge', label: { ar: 'التحقق المعرفي', en: 'Knowledge check' }, swatch: <RadarLayerSwatch layer="knowledge" />, available: knowledgeValues.some((v) => v !== null) },
+    { key: 'target', label: { ar: 'المستهدف', en: 'Target' }, swatch: <RadarLayerSwatch layer="target" />, available: true },
   ]
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <style>{layerCss}</style>
-
       {/* header */}
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -302,29 +275,30 @@ export default function Results() {
                   layers[b.key] && b.available ? 'border-dga-green bg-dga-green/10 font-semibold text-dga-green-dark' : 'border-dga-line bg-white text-dga-muted'
                 }`}
               >
-                <span className="inline-flex w-4 justify-center" aria-hidden>{b.swatch}</span>
+                <span className="inline-flex w-6 justify-center" aria-hidden>{b.swatch}</span>
                 {t(b.label)}
               </button>
             ))}
           </div>
 
-          <div className={`mx-auto mt-2 max-w-[560px] px-6 [&_svg]:overflow-visible ${layers.self ? '' : 'rl-hide-self'} ${layers.target ? '' : 'rl-hide-target'}`}>
-            <div className="relative">
+          <div className="mx-auto mt-2 max-w-[560px] px-2 sm:px-4">
             <RadarChart
               labels={domains.map((d) => d.shortName)}
+              ids={domains.map((d) => d.id)}
               values={shownValues}
               targets={evidence.map((e) => e.target)}
               previous={prevScores}
-              judgment={layers.judgment ? judgmentValues : undefined}
+              judgment={judgmentValues}
+              knowledge={knowledgeValues}
+              layers={{ self: layers.self, target: layers.target, scenario: layers.judgment, knowledge: layers.knowledge }}
               lang={lang}
               interactive
-              onAxisClick={(i) => selectDomain(domains[i].id, true)}
+              selectedAxis={selected}
+              onAxisSelect={(id) => selectDomain(id, true)}
               onHoverLabel={(i) => {
                 if (i !== null) setSelected(domains[i].id)
               }}
             />
-            {layers.knowledge && <KnowledgeMarkers evidence={evidence} lang={lang} />}
-            </div>
           </div>
           {hasJudgmentGaps && judgmentValues && layers.judgment && (
             <p className="text-[11px] text-dga-muted">{t({ ar: 'المجالات بلا موقف حكم تظهر عند المركز في طبقة المواقف.', en: 'Domains without a scenario sit at the centre of the scenario layer.' })}</p>
