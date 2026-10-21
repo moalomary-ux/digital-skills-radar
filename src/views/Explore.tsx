@@ -22,6 +22,9 @@ export default function Explore() {
       setSpotlight({ kind: 'domain', id: pendingDomainId })
       setPanelDomain(pendingDomainId)
       clearPendingDomain()
+    } else {
+      setSpotlight(null)
+      setPanelDomain(null)
     }
   }, [pendingDomainId, clearPendingDomain])
 

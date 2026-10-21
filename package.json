@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "postbuild": "cp dist/index.html dist/404.html",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {

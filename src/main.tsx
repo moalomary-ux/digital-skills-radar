@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import { AppProvider } from './store'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { routes } from './routes'
 import './index.css'
+
+const router = createBrowserRouter(routes, { basename: import.meta.env.BASE_URL })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 )

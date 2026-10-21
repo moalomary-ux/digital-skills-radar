@@ -1,6 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { L, Lang } from './data/types'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { pathFor, routeFromPath } from './lib/routes'
+import { usePageTitle } from './lib/head'
 
 export type View =
   | 'home'
@@ -22,6 +25,7 @@ export type View =
   | 'sectors'
   | 'directory'
   | 'entity'
+  | 'not-found'
 
 export interface ResultRecord {
   id: string
@@ -97,8 +101,19 @@ function load<T>(key: string, fallback: T): T {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => load<Lang>(LS_LANG, 'ar'))
-  const [view, setView] = useState<View>('home')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const route = routeFromPath(location.pathname)
+  const [storedLang, setStoredLang] = useState<Lang>(() => load<unknown>(LS_LANG, 'ar') === 'en' ? 'en' : 'ar')
+  const lang = route.lang ?? storedLang
+  const view = route.view
+  usePageTitle(view, lang)
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      navigate({ pathname: pathFor('home', lang), search: location.search, hash: location.hash }, { replace: true })
+    }
+  }, [location.pathname, location.search, location.hash, lang, navigate])
   const [history, setHistory] = useState<ResultRecord[]>(() => load<ResultRecord[]>(LS_HISTORY, []))
   const draft = useMemo(
     () =>
@@ -113,16 +128,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [calibrationAnswers, setCalibrationAnswers] = useState<Record<string, string>>(draft.calibration ?? {})
   const [trackId, setTrackIdState] = useState<string | null>(draft.trackId ?? null)
   const [scenarioAnswers, setScenarioAnswers] = useState<Record<string, number>>(draft.scenarios ?? {})
-  const [pendingTechId, setPendingTechId] = useState<string | null>(null)
-  const [pendingCareerId, setPendingCareerId] = useState<string | null>(null)
-  const [pendingDomainId, setPendingDomainId] = useState<string | null>(null)
-  const [pendingEntityId, setPendingEntityId] = useState<string | null>(null)
-  const [pendingSectorCategory, setPendingSectorCategory] = useState<string | null>(null)
+  const pendingTechId = route.techId
+  const pendingCareerId = route.careerId
+  const pendingEntityId = route.entityId
+  const search = new URLSearchParams(location.search)
+  const pendingDomainId = view === 'explore' ? search.get('domain') : null
+  const pendingSectorCategory = view === 'sectors' ? search.get('category') : null
 
   useEffect(() => {
     document.documentElement.lang = lang
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
     localStorage.setItem(LS_LANG, JSON.stringify(lang))
+    setStoredLang(lang)
   }, [lang])
 
   useEffect(() => {
@@ -134,11 +151,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [history])
 
   const t = useCallback((l: L) => (lang === 'ar' ? l.ar : l.en), [lang])
-  const toggleLang = useCallback(() => setLang((p) => (p === 'ar' ? 'en' : 'ar')), [])
+  const toggleLang = useCallback(() => {
+    const next = lang === 'ar' ? 'en' : 'ar'
+    const pathname = /^\/(ar|en)(?=\/|$)/.test(location.pathname)
+      ? location.pathname.replace(/^\/(ar|en)(?=\/|$)/, `/${next}`)
+      : `/${next}${location.pathname === '/' ? '' : location.pathname}`
+    navigate({ pathname, search: location.search, hash: location.hash })
+  }, [lang, location.pathname, location.search, location.hash, navigate])
   const go = useCallback((v: View) => {
-    setView(v)
+    navigate(pathFor(v, lang))
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-  }, [])
+  }, [lang, navigate])
   const setRoleId = useCallback((id: string) => setRoleIdState(id), [])
   const setAnswer = useCallback(
     (statementId: string, value: number) => setAnswers((p) => ({ ...p, [statementId]: value })),
@@ -162,39 +185,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
   const saveResult = useCallback((rec: ResultRecord) => setHistory((p) => [...p, rec]), [])
   const clearHistory = useCallback(() => setHistory([]), [])
-  const openTech = useCallback(
-    (techId: string) => {
-      setPendingTechId(techId)
-      setView('tech-radar')
-      window.scrollTo({ top: 0 })
-    },
-    []
-  )
-  const clearPendingTech = useCallback(() => setPendingTechId(null), [])
-  const openCareer = useCallback((careerId: string) => {
-    setPendingCareerId(careerId)
-    setView('careers')
+  const open = useCallback((v: View, params: Record<string, string>) => {
+    navigate(pathFor(v, lang, params))
     window.scrollTo({ top: 0 })
-  }, [])
-  const clearPendingCareer = useCallback(() => setPendingCareerId(null), [])
-  const openDomainAt = useCallback((domainId: string) => {
-    setPendingDomainId(domainId)
-    setView('explore')
-    window.scrollTo({ top: 0 })
-  }, [])
-  const clearPendingDomain = useCallback(() => setPendingDomainId(null), [])
-  const openEntity = useCallback((entityId: string) => {
-    setPendingEntityId(entityId)
-    setView('entity')
-    window.scrollTo({ top: 0 })
-  }, [])
-  const clearPendingEntity = useCallback(() => setPendingEntityId(null), [])
-  const openSectorsByCategory = useCallback((category: string) => {
-    setPendingSectorCategory(category)
-    setView('sectors')
-    window.scrollTo({ top: 0 })
-  }, [])
-  const clearPendingSectorCategory = useCallback(() => setPendingSectorCategory(null), [])
+  }, [lang, navigate])
+  const openTech = useCallback((techId: string) => open('tech-radar', { techId }), [open])
+  const openCareer = useCallback((careerId: string) => open('careers', { careerId }), [open])
+  const openDomainAt = useCallback((domain: string) => open('explore', { domain }), [open])
+  const openEntity = useCallback((entityId: string) => open('entity', { entityId }), [open])
+  const openSectorsByCategory = useCallback((category: string) => open('sectors', { category }), [open])
+  // Effect consumers must retain IDs in the URL for reloads and language changes.
+  const clearPendingTech = useCallback(() => {}, [])
+  const clearPendingCareer = useCallback(() => {}, [])
+  const clearPendingDomain = useCallback(() => {}, [])
+  const clearPendingEntity = useCallback(() => {}, [])
+  // Sectors exposes an explicit reset button, rather than consuming its value in an effect.
+  const clearPendingSectorCategory = useCallback(() => {
+    const params = new URLSearchParams(location.search)
+    params.delete('category')
+    navigate({ pathname: location.pathname, search: params.toString(), hash: location.hash })
+  }, [location.pathname, location.search, location.hash, navigate])
 
   const value: AppState = {
     lang,
