@@ -11,10 +11,6 @@ const Roles = lazy(() => import('./views/Roles'))
 const SkillRegistry = lazy(() => import('./views/SkillRegistry'))
 const FutureSkills = lazy(() => import('./views/FutureSkills'))
 const TechRadar = lazy(() => import('./views/TechRadar'))
-const Explore = lazy(() => import('./views/Explore'))
-const Lists = lazy(() => import('./views/Lists'))
-const Careers = lazy(() => import('./views/Careers'))
-const Decide = lazy(() => import('./views/Decide'))
 const Entities = lazy(() => import('./views/Entities'))
 const Impact = lazy(() => import('./views/Impact'))
 const GovSectors = lazy(() => import('./views/GovSectors'))
@@ -40,10 +36,6 @@ const viewRoutes: RouteObject[] = [
   { path: 'skills', element: <SkillRegistry /> },
   { path: 'future-skills', element: <FutureSkills /> },
   { path: 'tech-radar', element: <TechRadar /> },
-  { path: 'map', element: <Explore /> },
-  { path: 'careers/trends', element: <Lists /> },
-  { path: 'careers', element: <Careers /> },
-  { path: 'guidance', element: <Decide /> },
   { path: 'entities', element: <Entities /> },
   { path: 'impact', element: <Impact /> },
   { path: 'sectors', element: <GovSectors /> },
@@ -52,7 +44,6 @@ const viewRoutes: RouteObject[] = [
   { path: 'standards', element: <Standards /> },
   { path: 'methodology', element: <Methodology /> },
   { path: 'tech-radar/:techId', element: <TechRadar /> },
-  { path: 'careers/:careerId', element: <Careers /> },
   { path: 'evidence', element: <Evidence /> },
   { path: 'leaders/brief', element: <LeaderBrief /> },
   { path: 'leaders/check', element: <LeaderCheck /> },

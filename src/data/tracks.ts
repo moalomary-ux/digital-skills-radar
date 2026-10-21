@@ -1,7 +1,10 @@
 import type { L } from './types'
 
 /**
- * v6-B9: audience tracks — the review's five entry tracks as a first-class
+ * Role categories («فئة الدور», glossary §5): عام · تطبيقي · تخصصي · قيادة فرق · تنفيذي.
+ * Ids are kept from v6 (`awareness`… `executive`) because results and codes store them;
+ * only the labels follow the v9 glossary («مسار» and «توعوي» are no longer used).
+ * v6-B9: the review's five entry categories as a first-class
  * concept. A track declares what the user should be able to PROVE, not how
  * much they know. Proficiency level stays an independent axis: an executive
  * may need awareness of a technology but advanced judgment in investing in it.
@@ -27,7 +30,7 @@ export interface Track {
 export const tracks: Track[] = [
   {
     id: 'awareness',
-    name: { ar: 'توعوي', en: 'Awareness' },
+    name: { ar: 'عام', en: 'General' },
     audience: { ar: 'كل موظف — بلا استثناء', en: 'Every employee — no exceptions' },
     proves: { ar: 'يفهم التغيّر والفرصة والمخاطر وحدود الاستخدام.', en: 'Understands the change, the opportunity, the risks and the limits of use.' },
     examples: {
@@ -38,7 +41,7 @@ export const tracks: Track[] = [
   },
   {
     id: 'applied',
-    name: { ar: 'أساسي تطبيقي', en: 'Applied foundation' },
+    name: { ar: 'تطبيقي', en: 'Applied' },
     audience: { ar: 'موظف ينجز مهامًا تشغيلية يومية', en: 'An employee performing daily operational tasks' },
     proves: { ar: 'ينجز مهمة صحيحة وآمنة بكفاءة.', en: 'Completes a task correctly, safely and efficiently.' },
     examples: {
@@ -60,7 +63,7 @@ export const tracks: Track[] = [
   },
   {
     id: 'team_lead',
-    name: { ar: 'قيادة الفرق والتحول', en: 'Team & transformation leadership' },
+    name: { ar: 'قيادة فرق', en: 'Team leadership' },
     audience: { ar: 'مدير فريق أو برنامج تحول', en: 'A team lead or transformation-program manager' },
     proves: { ar: 'يقود التبني والجودة والتغيير ويتابع المنافع.', en: 'Leads adoption, quality and change, and tracks benefits.' },
     examples: {
@@ -71,7 +74,7 @@ export const tracks: Track[] = [
   },
   {
     id: 'executive',
-    name: { ar: 'تنفيذي واستراتيجي', en: 'Executive & strategic' },
+    name: { ar: 'تنفيذي', en: 'Executive' },
     audience: { ar: 'قيادي يقرر الاستثمار والأولويات', en: 'An executive deciding investment and priorities' },
     proves: { ar: 'يرتب الاستثمار والأولويات والمخاطر والمساءلة والتكامل.', en: 'Orders investment, priorities, risk, accountability and integration.' },
     examples: {
