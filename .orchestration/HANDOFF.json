@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "PHASE-1 multi-model review running",
+  "state": "PHASE-2 build: P1 (router) done by Codex Astra via omary.py, under independent review; P5a (evidence) and P6 (leaders content) running on Claude Opus in worktrees wt-p5a/wt-p6; P2/P3/P4/P5b/P7 start after P1 merges",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -21,12 +21,26 @@
       "date": "2026-10-21",
       "text": "Hosting: GitHub Pages with custom domain omary.me (apex) — DNS A records -> GitHub Pages IPs, www CNAME -> moalomary-ux.github.io; VPS1 self-hosting kept as documented alternative (would require changing DEEMA's gateway)",
       "status": "proposed, apply at deploy time"
+    },
+    {
+      "id": "D3",
+      "date": "2026-10-22",
+      "text": "Public build = aggregates only (VITE_DATA_MODE=aggregate); per-entity records, logos and rankings only in the private build; DGA's own logo removed; citizen lane (careers/quiz/lists/map) removed from v9 and kept under tag v8-handover; 5-hub IA per docs/plan/DECISION-20261021.md",
+      "status": "applied in plan"
     }
   ],
   "outputs": {
-    "reviews_dir": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/reviews"
+    "reviews_dir": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/reviews",
+    "decision": "repo/docs/plan/DECISION-20261021.md",
+    "plan": "repo/docs/plan/PLAN-20261021.md",
+    "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "Synthesize reviews -> DECISION.md + PLAN.md (work packets) -> build via omary.py / builders -> independent review + visual QA -> deploy + DNS -> report",
+  "next_step": "merge P1 after review -> leader integration (routes for new views, SSR guards, OG image) -> launch P2 P3 P4 P5b P7 -> merge -> wave 3 (team radar, a11y/tests, visual QA) -> deploy GitHub Pages + DNS omary.me -> report",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
-  "leader": "fable"
+  "leader": "fable",
+  "worktrees": {
+    "wt-p1": "wave1/p1-router (omary task T-20261021T204441)",
+    "wt-p5a": "wave2/p5a-evidence (Claude Opus)",
+    "wt-p6": "wave2/p6-leaders (Claude Opus)"
+  }
 }
