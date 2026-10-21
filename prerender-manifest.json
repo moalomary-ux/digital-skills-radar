@@ -1,0 +1,1853 @@
+{
+  "generatedBy": "scripts/prerender.mjs",
+  "pages": [
+    {
+      "path": "/ar",
+      "file": "ar/index.html",
+      "canonical": "https://omary.me/ar/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/about",
+      "file": "ar/about/index.html",
+      "canonical": "https://omary.me/ar/about/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/about/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/about/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/about/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/capabilities",
+      "file": "ar/capabilities/index.html",
+      "canonical": "https://omary.me/ar/capabilities/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/capabilities/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/capabilities/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/capabilities/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/directory",
+      "file": "ar/directory/index.html",
+      "canonical": "https://omary.me/ar/directory/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/directory/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/directory/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/directory/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/entities",
+      "file": "ar/entities/index.html",
+      "canonical": "https://omary.me/ar/entities/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/entities/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/entities/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/entities/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/evidence",
+      "file": "ar/evidence/index.html",
+      "canonical": "https://omary.me/ar/evidence/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/evidence/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/evidence/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/evidence/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/future-skills",
+      "file": "ar/future-skills/index.html",
+      "canonical": "https://omary.me/ar/future-skills/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/future-skills/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/future-skills/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/future-skills/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/leaders",
+      "file": "ar/leaders/index.html",
+      "canonical": "https://omary.me/ar/leaders/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/leaders/adoption",
+      "file": "ar/leaders/adoption/index.html",
+      "canonical": "https://omary.me/ar/leaders/adoption/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/adoption/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/adoption/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/adoption/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/leaders/brief",
+      "file": "ar/leaders/brief/index.html",
+      "canonical": "https://omary.me/ar/leaders/brief/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/brief/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/brief/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/brief/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/method",
+      "file": "ar/method/index.html",
+      "canonical": "https://omary.me/ar/method/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/method/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/method/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/method/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/methodology",
+      "file": "ar/methodology/index.html",
+      "canonical": "https://omary.me/ar/methodology/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/methodology/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/methodology/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/methodology/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles",
+      "file": "ar/roles/index.html",
+      "canonical": "https://omary.me/ar/roles/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/ai_ethics_officer",
+      "file": "ar/roles/ai_ethics_officer/index.html",
+      "canonical": "https://omary.me/ar/roles/ai_ethics_officer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ai_ethics_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ai_ethics_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ai_ethics_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/ai_product_owner",
+      "file": "ar/roles/ai_product_owner/index.html",
+      "canonical": "https://omary.me/ar/roles/ai_product_owner/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ai_product_owner/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ai_product_owner/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ai_product_owner/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/business_analyst",
+      "file": "ar/roles/business_analyst/index.html",
+      "canonical": "https://omary.me/ar/roles/business_analyst/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/business_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/business_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/business_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/chief_digital_officer",
+      "file": "ar/roles/chief_digital_officer/index.html",
+      "canonical": "https://omary.me/ar/roles/chief_digital_officer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/chief_digital_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/chief_digital_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/chief_digital_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/cloud_architect",
+      "file": "ar/roles/cloud_architect/index.html",
+      "canonical": "https://omary.me/ar/roles/cloud_architect/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/cloud_architect/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/cloud_architect/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/cloud_architect/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/content_designer",
+      "file": "ar/roles/content_designer/index.html",
+      "canonical": "https://omary.me/ar/roles/content_designer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/content_designer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/content_designer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/content_designer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/cybersecurity_analyst",
+      "file": "ar/roles/cybersecurity_analyst/index.html",
+      "canonical": "https://omary.me/ar/roles/cybersecurity_analyst/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/cybersecurity_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/cybersecurity_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/cybersecurity_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/data_engineer",
+      "file": "ar/roles/data_engineer/index.html",
+      "canonical": "https://omary.me/ar/roles/data_engineer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/data_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/data_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/data_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/data_scientist",
+      "file": "ar/roles/data_scientist/index.html",
+      "canonical": "https://omary.me/ar/roles/data_scientist/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/data_scientist/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/data_scientist/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/data_scientist/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/delivery_manager",
+      "file": "ar/roles/delivery_manager/index.html",
+      "canonical": "https://omary.me/ar/roles/delivery_manager/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/delivery_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/delivery_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/delivery_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/digital_identity_specialist",
+      "file": "ar/roles/digital_identity_specialist/index.html",
+      "canonical": "https://omary.me/ar/roles/digital_identity_specialist/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_identity_specialist/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_identity_specialist/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_identity_specialist/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/digital_inclusion_officer",
+      "file": "ar/roles/digital_inclusion_officer/index.html",
+      "canonical": "https://omary.me/ar/roles/digital_inclusion_officer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_inclusion_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_inclusion_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_inclusion_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/digital_policy_advisor",
+      "file": "ar/roles/digital_policy_advisor/index.html",
+      "canonical": "https://omary.me/ar/roles/digital_policy_advisor/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_policy_advisor/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_policy_advisor/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_policy_advisor/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/digital_transformation_lead",
+      "file": "ar/roles/digital_transformation_lead/index.html",
+      "canonical": "https://omary.me/ar/roles/digital_transformation_lead/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_transformation_lead/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_transformation_lead/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_transformation_lead/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/emerging_tech_scout",
+      "file": "ar/roles/emerging_tech_scout/index.html",
+      "canonical": "https://omary.me/ar/roles/emerging_tech_scout/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/emerging_tech_scout/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/emerging_tech_scout/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/emerging_tech_scout/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/gis_smart_city_analyst",
+      "file": "ar/roles/gis_smart_city_analyst/index.html",
+      "canonical": "https://omary.me/ar/roles/gis_smart_city_analyst/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/gis_smart_city_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/gis_smart_city_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/gis_smart_city_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/open_data_manager",
+      "file": "ar/roles/open_data_manager/index.html",
+      "canonical": "https://omary.me/ar/roles/open_data_manager/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/open_data_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/open_data_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/open_data_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/performance_analyst",
+      "file": "ar/roles/performance_analyst/index.html",
+      "canonical": "https://omary.me/ar/roles/performance_analyst/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/performance_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/performance_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/performance_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/product_manager",
+      "file": "ar/roles/product_manager/index.html",
+      "canonical": "https://omary.me/ar/roles/product_manager/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/product_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/product_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/product_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/security_architect",
+      "file": "ar/roles/security_architect/index.html",
+      "canonical": "https://omary.me/ar/roles/security_architect/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/security_architect/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/security_architect/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/security_architect/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/service_designer",
+      "file": "ar/roles/service_designer/index.html",
+      "canonical": "https://omary.me/ar/roles/service_designer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/service_designer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/service_designer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/service_designer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/site_reliability_engineer",
+      "file": "ar/roles/site_reliability_engineer/index.html",
+      "canonical": "https://omary.me/ar/roles/site_reliability_engineer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/site_reliability_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/site_reliability_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/site_reliability_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/software_engineer",
+      "file": "ar/roles/software_engineer/index.html",
+      "canonical": "https://omary.me/ar/roles/software_engineer/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/software_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/software_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/software_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/roles/ux_researcher",
+      "file": "ar/roles/ux_researcher/index.html",
+      "canonical": "https://omary.me/ar/roles/ux_researcher/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ux_researcher/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ux_researcher/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ux_researcher/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/sectors",
+      "file": "ar/sectors/index.html",
+      "canonical": "https://omary.me/ar/sectors/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/sectors/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/sectors/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/sectors/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/services",
+      "file": "ar/services/index.html",
+      "canonical": "https://omary.me/ar/services/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/services/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/services/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/services/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/skills",
+      "file": "ar/skills/index.html",
+      "canonical": "https://omary.me/ar/skills/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/skills/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/skills/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/skills/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/standards",
+      "file": "ar/standards/index.html",
+      "canonical": "https://omary.me/ar/standards/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/standards/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/standards/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/standards/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/tech-radar",
+      "file": "ar/tech-radar/index.html",
+      "canonical": "https://omary.me/ar/tech-radar/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/tech-radar/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/tech-radar/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/tech-radar/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/work",
+      "file": "ar/work/index.html",
+      "canonical": "https://omary.me/ar/work/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/work/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/work/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/work/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/ar/work/shifts",
+      "file": "ar/work/shifts/index.html",
+      "canonical": "https://omary.me/ar/work/shifts/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/work/shifts/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/work/shifts/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/work/shifts/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en",
+      "file": "en/index.html",
+      "canonical": "https://omary.me/en/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/about",
+      "file": "en/about/index.html",
+      "canonical": "https://omary.me/en/about/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/about/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/about/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/about/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/capabilities",
+      "file": "en/capabilities/index.html",
+      "canonical": "https://omary.me/en/capabilities/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/capabilities/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/capabilities/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/capabilities/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/directory",
+      "file": "en/directory/index.html",
+      "canonical": "https://omary.me/en/directory/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/directory/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/directory/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/directory/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/entities",
+      "file": "en/entities/index.html",
+      "canonical": "https://omary.me/en/entities/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/entities/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/entities/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/entities/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/evidence",
+      "file": "en/evidence/index.html",
+      "canonical": "https://omary.me/en/evidence/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/evidence/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/evidence/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/evidence/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/future-skills",
+      "file": "en/future-skills/index.html",
+      "canonical": "https://omary.me/en/future-skills/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/future-skills/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/future-skills/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/future-skills/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/leaders",
+      "file": "en/leaders/index.html",
+      "canonical": "https://omary.me/en/leaders/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/leaders/adoption",
+      "file": "en/leaders/adoption/index.html",
+      "canonical": "https://omary.me/en/leaders/adoption/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/adoption/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/adoption/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/adoption/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/leaders/brief",
+      "file": "en/leaders/brief/index.html",
+      "canonical": "https://omary.me/en/leaders/brief/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/leaders/brief/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/leaders/brief/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/leaders/brief/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/method",
+      "file": "en/method/index.html",
+      "canonical": "https://omary.me/en/method/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/method/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/method/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/method/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/methodology",
+      "file": "en/methodology/index.html",
+      "canonical": "https://omary.me/en/methodology/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/methodology/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/methodology/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/methodology/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles",
+      "file": "en/roles/index.html",
+      "canonical": "https://omary.me/en/roles/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/ai_ethics_officer",
+      "file": "en/roles/ai_ethics_officer/index.html",
+      "canonical": "https://omary.me/en/roles/ai_ethics_officer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ai_ethics_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ai_ethics_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ai_ethics_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/ai_product_owner",
+      "file": "en/roles/ai_product_owner/index.html",
+      "canonical": "https://omary.me/en/roles/ai_product_owner/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ai_product_owner/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ai_product_owner/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ai_product_owner/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/business_analyst",
+      "file": "en/roles/business_analyst/index.html",
+      "canonical": "https://omary.me/en/roles/business_analyst/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/business_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/business_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/business_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/chief_digital_officer",
+      "file": "en/roles/chief_digital_officer/index.html",
+      "canonical": "https://omary.me/en/roles/chief_digital_officer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/chief_digital_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/chief_digital_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/chief_digital_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/cloud_architect",
+      "file": "en/roles/cloud_architect/index.html",
+      "canonical": "https://omary.me/en/roles/cloud_architect/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/cloud_architect/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/cloud_architect/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/cloud_architect/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/content_designer",
+      "file": "en/roles/content_designer/index.html",
+      "canonical": "https://omary.me/en/roles/content_designer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/content_designer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/content_designer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/content_designer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/cybersecurity_analyst",
+      "file": "en/roles/cybersecurity_analyst/index.html",
+      "canonical": "https://omary.me/en/roles/cybersecurity_analyst/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/cybersecurity_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/cybersecurity_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/cybersecurity_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/data_engineer",
+      "file": "en/roles/data_engineer/index.html",
+      "canonical": "https://omary.me/en/roles/data_engineer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/data_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/data_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/data_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/data_scientist",
+      "file": "en/roles/data_scientist/index.html",
+      "canonical": "https://omary.me/en/roles/data_scientist/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/data_scientist/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/data_scientist/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/data_scientist/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/delivery_manager",
+      "file": "en/roles/delivery_manager/index.html",
+      "canonical": "https://omary.me/en/roles/delivery_manager/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/delivery_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/delivery_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/delivery_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/digital_identity_specialist",
+      "file": "en/roles/digital_identity_specialist/index.html",
+      "canonical": "https://omary.me/en/roles/digital_identity_specialist/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_identity_specialist/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_identity_specialist/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_identity_specialist/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/digital_inclusion_officer",
+      "file": "en/roles/digital_inclusion_officer/index.html",
+      "canonical": "https://omary.me/en/roles/digital_inclusion_officer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_inclusion_officer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_inclusion_officer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_inclusion_officer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/digital_policy_advisor",
+      "file": "en/roles/digital_policy_advisor/index.html",
+      "canonical": "https://omary.me/en/roles/digital_policy_advisor/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_policy_advisor/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_policy_advisor/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_policy_advisor/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/digital_transformation_lead",
+      "file": "en/roles/digital_transformation_lead/index.html",
+      "canonical": "https://omary.me/en/roles/digital_transformation_lead/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/digital_transformation_lead/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/digital_transformation_lead/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/digital_transformation_lead/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/emerging_tech_scout",
+      "file": "en/roles/emerging_tech_scout/index.html",
+      "canonical": "https://omary.me/en/roles/emerging_tech_scout/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/emerging_tech_scout/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/emerging_tech_scout/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/emerging_tech_scout/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/gis_smart_city_analyst",
+      "file": "en/roles/gis_smart_city_analyst/index.html",
+      "canonical": "https://omary.me/en/roles/gis_smart_city_analyst/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/gis_smart_city_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/gis_smart_city_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/gis_smart_city_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/open_data_manager",
+      "file": "en/roles/open_data_manager/index.html",
+      "canonical": "https://omary.me/en/roles/open_data_manager/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/open_data_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/open_data_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/open_data_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/performance_analyst",
+      "file": "en/roles/performance_analyst/index.html",
+      "canonical": "https://omary.me/en/roles/performance_analyst/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/performance_analyst/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/performance_analyst/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/performance_analyst/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/product_manager",
+      "file": "en/roles/product_manager/index.html",
+      "canonical": "https://omary.me/en/roles/product_manager/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/product_manager/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/product_manager/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/product_manager/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/security_architect",
+      "file": "en/roles/security_architect/index.html",
+      "canonical": "https://omary.me/en/roles/security_architect/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/security_architect/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/security_architect/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/security_architect/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/service_designer",
+      "file": "en/roles/service_designer/index.html",
+      "canonical": "https://omary.me/en/roles/service_designer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/service_designer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/service_designer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/service_designer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/site_reliability_engineer",
+      "file": "en/roles/site_reliability_engineer/index.html",
+      "canonical": "https://omary.me/en/roles/site_reliability_engineer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/site_reliability_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/site_reliability_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/site_reliability_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/software_engineer",
+      "file": "en/roles/software_engineer/index.html",
+      "canonical": "https://omary.me/en/roles/software_engineer/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/software_engineer/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/software_engineer/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/software_engineer/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/roles/ux_researcher",
+      "file": "en/roles/ux_researcher/index.html",
+      "canonical": "https://omary.me/en/roles/ux_researcher/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/roles/ux_researcher/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/roles/ux_researcher/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/roles/ux_researcher/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/sectors",
+      "file": "en/sectors/index.html",
+      "canonical": "https://omary.me/en/sectors/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/sectors/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/sectors/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/sectors/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/services",
+      "file": "en/services/index.html",
+      "canonical": "https://omary.me/en/services/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/services/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/services/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/services/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/skills",
+      "file": "en/skills/index.html",
+      "canonical": "https://omary.me/en/skills/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/skills/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/skills/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/skills/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/standards",
+      "file": "en/standards/index.html",
+      "canonical": "https://omary.me/en/standards/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/standards/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/standards/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/standards/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/tech-radar",
+      "file": "en/tech-radar/index.html",
+      "canonical": "https://omary.me/en/tech-radar/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/tech-radar/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/tech-radar/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/tech-radar/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/work",
+      "file": "en/work/index.html",
+      "canonical": "https://omary.me/en/work/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/work/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/work/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/work/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/work/shifts",
+      "file": "en/work/shifts/index.html",
+      "canonical": "https://omary.me/en/work/shifts/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://omary.me/ar/work/shifts/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://omary.me/en/work/shifts/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://omary.me/ar/work/shifts/"
+        }
+      ],
+      "status": "rendered"
+    }
+  ]
+}
