@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "PHASE-4 release hardening: all packets merged on main (P1..P9 + claims verification); acceptance review ACCEPT_WITH_FIXES (reviews/acceptance-review-20261022.md); leader fixes committed (a6fd9a1); fix packs A (assessment/content) and B (gov pages + publish guard) running as uncommitted edits in repo",
+  "state": "RELEASED 2026-10-21T23:30Z: main 9589862 pushed; gh-pages d0b12d0 (aggregate build) live at https://omary.me via GitHub Pages custom domain; DNS switched; HTTPS certificate pending GitHub issuance; workflow deploy parked on branch ci/deploy-workflow (needs gh workflow scope)",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -41,7 +41,7 @@
     "plan": "repo/docs/plan/PLAN-20261021.md",
     "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "wait fix packs -> commit -> full build + guard + tests -> final visual pass -> switch Pages to workflow + set cname -> push main -> DNS update -> verify live https://omary.me -> report + memory",
+  "next_step": "verify HTTPS then enable https_enforced; owner decisions: data layer public/private, national totals, citizen lane; future: workshop mode, unit planner, gov pages prerender with data, PWA, screen-reader audit",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
   "leader": "fable",
   "worktrees": {
@@ -61,5 +61,6 @@
     "omary.py crashed in prepare_dirs when a scope path is an extension-less file (public/CNAME) — P1 was imported manually after the independent review; report to the owner for omary-evolve",
     "guidance.ts still carries dead communityFeatures (remove in final cleanup)",
     "claims written offline need the verification report applied"
-  ]
+  ],
+  "report": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/REPORT-20261022.md"
 }
