@@ -1,7 +1,10 @@
-// AUTO-GENERATED from inbox/services.xlsx — do not hand-edit
-// DGA service-delivery KPIs, consulting taxonomy, yearly training series, region stats
-// NOTE: المنهجية prose mentions 7,935 training / 2,918 consulting records;
-// the workbook الملخص and all sheet totals (verified by recomputation) are 7,915 / 2,873.
+// National figures of the enablement service record (packet P4), from services.xlsx (الملخص and the sheet
+// totals, recomputed): KPIs, consulting categories, strategic pillars, yearly training series, region stats.
+// The methodology prose of the workbook says 7,935 / 2,918; the sheets sum to 7,915 / 2,873 and the program's
+// live register showed 7,891 / 2,918 on 2026-10-18 (claims method-gov-*). This file is small and may be
+// imported synchronously (Home, Services); it carries no per-entity data and no ranking.
+
+import type { L } from './types'
 
 export interface GovServiceKpis {
   servedEntities: number
@@ -12,7 +15,9 @@ export interface GovServiceKpis {
   consultingEntities: number
   bothTracksEntities: number
   trainingPrograms: number
+  /** @deprecated P4-SHIM(p2): composite of two units (forbidden in the UI); removed with the old Impact view */
   totalBenefit: number
+  /** Arabic period strings as written in the workbook; bilingual versions in `govServicePeriods` */
   trainingPeriod: string
   consultingPeriod: string
 }
@@ -41,6 +46,7 @@ export interface RegionStat {
   consultingServices: number
 }
 
+/** @deprecated P4-SHIM(p2): rankings are forbidden; type kept only until the old Impact view is replaced */
 export interface TopEntity {
   rank: number
   name: string
@@ -113,170 +119,28 @@ export const regionStats: RegionStat[] = [
   { region: 'غير محدد', entities: 47, trainingBeneficiaries: 0, consultingServices: 81 },
 ]
 
-export const topEntitiesByBenefit: TopEntity[] = [
-  {
-    rank: 1,
-    name: 'المؤسسة العامة للتدريب التقني والمهني',
-    sector: 'التعليم العام والتدريب',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 437,
-    trainingPrograms: 68,
-    consultingServices: 7,
-    totalBenefit: 444,
-    entityId: 'ent-0282',
-  },
-  {
-    rank: 2,
-    name: 'وزارة الصحة',
-    sector: 'الصحة',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 208,
-    trainingPrograms: 105,
-    consultingServices: 37,
-    totalBenefit: 245,
-    entityId: 'ent-0238',
-  },
-  {
-    rank: 3,
-    name: 'وزارة النقل والخدمات اللوجستية',
-    sector: 'النقل والخدمات اللوجستية',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 133,
-    trainingPrograms: 86,
-    consultingServices: 29,
-    totalBenefit: 162,
-    entityId: 'ent-0204',
-  },
-  {
-    rank: 4,
-    name: 'وزارة المالية',
-    sector: 'المالية والاستثمار الحكومي',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 151,
-    trainingPrograms: 74,
-    consultingServices: 11,
-    totalBenefit: 162,
-    entityId: 'ent-0117',
-  },
-  {
-    rank: 5,
-    name: 'وزارة العدل',
-    sector: 'العدل والقضاء',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 125,
-    trainingPrograms: 94,
-    consultingServices: 33,
-    totalBenefit: 158,
-    entityId: 'ent-0104',
-  },
-  {
-    rank: 6,
-    name: 'هيئة الحكومة الرقمية',
-    sector: 'الاتصالات وتقنية المعلومات والفضاء',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 129,
-    trainingPrograms: 76,
-    consultingServices: 6,
-    totalBenefit: 135,
-    entityId: 'ent-0179',
-  },
-  {
-    rank: 7,
-    name: 'صندوق تنمية الموارد البشرية',
-    sector: 'العمل والتنمية الاجتماعية',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 89,
-    trainingPrograms: 77,
-    consultingServices: 45,
-    totalBenefit: 134,
-    entityId: 'ent-0335',
-  },
-  {
-    rank: 8,
-    name: 'وزارة التعليم',
-    sector: 'التعليم العام والتدريب',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 95,
-    trainingPrograms: 75,
-    consultingServices: 27,
-    totalBenefit: 122,
-    entityId: 'ent-0283',
-  },
-  {
-    rank: 9,
-    name: 'الهيئة السعودية للبيانات والذكاء الاصطناعي',
-    sector: 'الاتصالات وتقنية المعلومات والفضاء',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 59,
-    trainingPrograms: 54,
-    consultingServices: 61,
-    totalBenefit: 120,
-    entityId: 'ent-0180',
-  },
-  {
-    rank: 10,
-    name: 'وزارة الداخلية',
-    sector: 'الداخلية والأمن',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 88,
-    trainingPrograms: 72,
-    consultingServices: 16,
-    totalBenefit: 104,
-    entityId: 'ent-0064',
-  },
-  {
-    rank: 11,
-    name: 'الشؤون الصحية بوزارة الحرس الوطني',
-    sector: 'الصحة',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 64,
-    trainingPrograms: 47,
-    consultingServices: 39,
-    totalBenefit: 103,
-    entityId: 'ent-0239',
-  },
-  {
-    rank: 12,
-    name: 'هيئة الزكاة والضريبة والجمارك',
-    sector: 'المالية والاستثمار الحكومي',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 55,
-    trainingPrograms: 45,
-    consultingServices: 45,
-    totalBenefit: 100,
-    entityId: 'ent-0118',
-  },
-  {
-    rank: 13,
-    name: 'وزارة الموارد البشرية والتنمية الاجتماعية',
-    sector: 'العمل والتنمية الاجتماعية',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 46,
-    trainingPrograms: 35,
-    consultingServices: 53,
-    totalBenefit: 99,
-    entityId: 'ent-0336',
-  },
-  {
-    rank: 14,
-    name: 'جامعة الإمام عبدالرحمن بن فيصل',
-    sector: 'التعليم العالي والجامعات',
-    region: 'المنطقة الشرقية',
-    trainingBeneficiaries: 89,
-    trainingPrograms: 31,
-    consultingServices: 9,
-    totalBenefit: 98,
-    entityId: 'ent-0292',
-  },
-  {
-    rank: 15,
-    name: 'وزارة الدفاع',
-    sector: 'الدفاع والحرس الوطني',
-    region: 'منطقة الرياض',
-    trainingBeneficiaries: 86,
-    trainingPrograms: 65,
-    consultingServices: 10,
-    totalBenefit: 96,
-    entityId: 'ent-0092',
-  },
-]
+/** @deprecated P4-SHIM(p2): the «أعلى 10» ranking was removed (DECISION §2 row 5); always empty. */
+export const topEntitiesByBenefit: TopEntity[] = []
+
+/* ----------------------------------------------------------- P4 constants */
+
+/** Cut-off of both source workbooks, shown next to every national figure. */
+export const govServiceCutoff: L = {
+  ar: 'ملفا المصدر حتى نهاية الربع الثالث 2026',
+  en: 'Both source workbooks up to the end of Q3 2026',
+}
+
+export const govServicePeriods: { training: L; consulting: L } = {
+  training: { ar: '2021 إلى 2026', en: '2021 to 2026' },
+  consulting: { ar: '2023 إلى نهاية الربع الثالث 2026', en: '2023 to the end of Q3 2026' },
+}
+
+/** Reconciliation with the program's live register (claims method-gov-training-register / -consulting-register). */
+export const govServiceReconciliation = {
+  trainingRegister: 7891,
+  consultingRegister: 2918,
+  verifiedOn: '2026-10-18',
+} as const
+
+/** The partial year in the training series (figures up to the cut-off). */
+export const PARTIAL_YEAR = 2026
