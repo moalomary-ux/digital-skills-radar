@@ -3,14 +3,16 @@ import type { Claim, ClaimSource } from './types'
 /**
  * Claims behind «تقنيات تغيّر العمل الحكومي» (packet P5b). Ids are stable, kebab-case,
  * prefixed 'tech-'. Counts, horizons and the TRL scale reuse `method-tech-*` claims.
- * Registered 2026-10-22 without network access.
+ * Registered 2026-10-22; web-verified the same day (reviews/claims-verification-20261022.md).
  */
 
 const REVIEWED = '2026-10-22'
 
 const DGA_ADOPTION_2026: ClaimSource = {
-  title: { ar: 'مؤشر تبني التقنيات الناشئة 2026', en: 'Emerging Technologies Adoption Index 2026' },
+  title: { ar: 'مؤشر جاهزية تبني التقنيات الناشئة 2026 (الدورة الرابعة)', en: 'Emerging Technologies Adoption Readiness Index 2026 (fourth cycle)' },
   publisher: { ar: 'هيئة الحكومة الرقمية', en: 'Digital Government Authority (DGA)' },
+  url: 'https://aawsat.com/node/5265391',
+  locator: 'DGA announcement, 22 April 2026, as reported by Asharq Al-Awsat',
   year: 2026,
 }
 
@@ -24,19 +26,19 @@ export const techClaims: Claim[] = [
   {
     id: 'tech-dga-adoption-index-2026',
     text: {
-      ar: 'تجاوز مؤشر تبني التقنيات الناشئة في الجهات الحكومية 76% في قياس عام 2026 الذي تنشره هيئة الحكومة الرقمية.',
-      en: 'The emerging-technologies adoption index for government entities exceeded 76% in the 2026 measurement published by the Digital Government Authority.',
+      ar: 'بلغت النتيجة العامة لمؤشر جاهزية تبني التقنيات الناشئة 76.04% في دورته الرابعة لعام 2026، بمشاركة 54 جهة حكومية، مقارنة بـ74.69% في 2025.',
+      en: 'The Emerging Technologies Adoption Readiness Index reached an overall 76.04% in its fourth cycle (2026), across 54 participating government entities, up from 74.69% in 2025.',
     },
     value: { ar: '76%', en: '76%' },
-    scope: { ar: 'الجهات الحكومية في المملكة', en: 'Saudi government entities' },
+    scope: { ar: '54 جهة حكومية مشاركة في القياس', en: '54 government entities that took part' },
     period: '2026',
     kind: 'official',
     confidence: 'medium',
     source: DGA_ADOPTION_2026,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'يُراجع الرابط: القيمة منقولة عن مراجعة سابقة للمؤشر ولم تُطابق مع الصفحة الرسمية في هذه المراجعة.',
-      en: 'Check the link: the value is carried over from an earlier review of the index and was not matched to the official page in this review.',
+      ar: 'الرقم من إعلان الهيئة كما نقلته الصحف في 22 أبريل 2026، ولم يُعثر على صفحة التقرير في موقع الهيئة. المؤشر يقيس جاهزية الجهات المشاركة لا كل الجهات الحكومية.',
+      en: 'The figure is from the authority’s announcement as reported on 22 April 2026; no report page was found on the DGA site. The index measures the readiness of participating entities, not all government entities.',
     },
   },
   {

@@ -210,7 +210,7 @@ describe('content: figures go through registered claims', () => {
     for (const c of coursera) expect(['survey', 'self-report'], c.id).toContain(c.kind)
     const adoption = claimById('tech-dga-adoption-index-2026')!
     expect([adoption.kind, adoption.confidence]).toEqual(['official', 'medium'])
-    expect(adoption.caveat?.ar).toContain('يُراجع الرابط')
+    expect(adoption.caveat?.ar).toContain('الجهات المشاركة')
   })
 
   it('every {{claim}} token and <Claim id> in P5b files resolves', () => {

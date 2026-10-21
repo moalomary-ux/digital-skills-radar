@@ -74,12 +74,12 @@ export default function Standards() {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[36rem] text-sm">
-            <caption className="sr-only">{t({ ar: 'مقابلة مستويات الرادار بإطاري SFIA 9 وDigComp', en: 'Radar levels against SFIA 9 and DigComp' })}</caption>
+            <caption className="sr-only">{t({ ar: 'مقابلة مستويات الرادار بإطاري SFIA 9 وDigComp 2.2', en: 'Radar levels against SFIA 9 and DigComp 2.2' })}</caption>
             <thead>
               <tr className="border-b border-dga-line text-xs text-dga-muted">
                 <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'مستوى الرادار', en: 'Radar level' })}</th>
                 <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'مستويات المسؤولية في SFIA 9', en: 'SFIA 9 responsibility levels' })}</th>
-                <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'نطاق DigComp ومستوياته', en: 'DigComp band and levels' })}</th>
+                <th scope="col" className="p-4 text-start font-semibold">{t({ ar: 'نطاق DigComp 2.2 ومستوياته', en: 'DigComp 2.2 band and levels' })}</th>
               </tr>
             </thead>
             <tbody>

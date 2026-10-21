@@ -39,7 +39,7 @@ export const domainTrajectories: DomainTrajectory[] = [
     evidence: [
       { ar: 'تأتي مهارات الذكاء الاصطناعي والبيانات الضخمة في {{future-wef-2025-ai-bigdata-top}} بين أسرع المهارات نموًا حتى 2030.', en: 'AI and big data rank {{future-wef-2025-ai-bigdata-top}} among the fastest-growing skills to 2030.' },
       { ar: 'نما تسجيل المتعلمين في المملكة في مقررات الذكاء الاصطناعي التوليدي على منصة تعلم عالمية بنحو {{future-coursera-2025-ksa-genai}} خلال عام.', en: 'Enrollments from Saudi Arabia in generative-AI courses on a global learning platform grew by about {{future-coursera-2025-ksa-genai}} in a year.' },
-      { ar: 'عالميًا، تتحدث المنصة نفسها عن نحو {{future-coursera-2026-genai-rate}} في مقررات الذكاء الاصطناعي التوليدي.', en: 'Globally, the same platform reports about {{future-coursera-2026-genai-rate}} in generative-AI courses.' },
+      { ar: 'عالميًا، تتحدث المنصة نفسها عن {{future-coursera-2026-genai-rate}} في محتوى الذكاء الاصطناعي التوليدي، محسوبةً مع بيانات منصة تعلم ثانية.', en: 'Globally, the same platform reports {{future-coursera-2026-genai-rate}} in generative-AI content, counted together with a second learning platform’s data.' },
       { ar: 'سريان نظام حماية البيانات الشخصية (2024) واستراتيجية سدايا يجعلان حوكمة البيانات متطلب امتثال.', en: 'The Personal Data Protection Law in force (2024) and SDAIA’s strategy make data governance a compliance requirement.' },
     ],
   },
@@ -54,7 +54,7 @@ export const domainTrajectories: DomainTrajectory[] = [
       { ar: 'تأتي مهارات الشبكات والأمن السيبراني في {{future-wef-2025-cyber-second}} بين أسرع المهارات نموًا حتى 2030.', en: 'Networks and cybersecurity rank {{future-wef-2025-cyber-second}} among the fastest-growing skills to 2030.' },
       { ar: 'نما تسجيل المتعلمين في المملكة في مقررات الأمن السيبراني على منصة تعلم عالمية بنحو {{future-coursera-2025-ksa-cyber}} خلال عام.', en: 'Enrollments from Saudi Arabia in cybersecurity courses on a global learning platform grew by about {{future-coursera-2025-ksa-cyber}} in a year.' },
       { ar: 'ضوابط الهيئة الوطنية للأمن السيبراني (ECC وOTCC) ملزمة للجهات الحكومية والبنى التحتية الحساسة.', en: 'The National Cybersecurity Authority’s controls (ECC, OTCC) are binding on government entities and critical infrastructure.' },
-      { ar: 'تقدّر دراسة دولية فجوة القوى العاملة السيبرانية في العالم {{future-isc2-cyber-gap}}.', en: 'An international study estimates the global cyber workforce gap in the {{future-isc2-cyber-gap}}.' },
+      { ar: 'قدّرت دراسة دولية فجوة القوى العاملة السيبرانية في العالم بنحو {{future-isc2-cyber-gap}} شخص في 2024.', en: 'An international study put the global cyber workforce gap at about {{future-isc2-cyber-gap}} people in 2024.' },
     ],
   },
   {
@@ -92,7 +92,7 @@ export const domainTrajectories: DomainTrajectory[] = [
     },
     evidence: [
       { ar: 'سريان نظام حماية البيانات الشخصية (سبتمبر 2024) ومتطلبات البيانات المفتوحة وأطر حوكمة الذكاء الاصطناعي توسّع النطاق التنظيمي.', en: 'The Personal Data Protection Law in force (September 2024), open-data requirements and AI-governance frameworks widen the regulatory scope.' },
-      { ar: 'يرى {{leaders-wef-2025-skill-gaps}} من أصحاب العمل أن فجوات المهارات العائق الأول أمام التحول.', en: '{{leaders-wef-2025-skill-gaps}} of employers see skill gaps as the main barrier to transformation.' },
+      { ar: 'يعدّ {{leaders-wef-2025-skill-gaps}} من أصحاب العمل فجوات المهارات عائقًا رئيسًا أمام التحول، وهي أكبر العوائق في التقرير.', en: '{{leaders-wef-2025-skill-gaps}} of employers name skill gaps a major barrier to transformation, the biggest barrier in the report.' },
       { ar: 'إصلاح الشراء التقني أولوية حكومية معلنة.', en: 'Technology-procurement reform is a stated government priority.' },
     ],
   },
@@ -104,7 +104,6 @@ export const domainTrajectories: DomainTrajectory[] = [
       en: 'Precision requires a distinction: the agile job title has declined globally, but the practice itself (product lifecycle, user stories, benefits measurement) is now the usual way government digital services are built. Demand is therefore shifting: steady for deep practice, low for formal certificates alone.',
     },
     evidence: [
-      { ar: 'ترصد منصة توظيف عالمية مهارات إدارة المنتجات المجاورة للعمل الرشيق بوصفها {{future-linkedin-2025-product}}.', en: 'A global hiring platform reports agile-adjacent product-management skills as {{future-linkedin-2025-product}}.' },
       { ar: 'مسمى الوظيفة الرشيقة خفت عالميًا منذ 2023 بينما تستمر الممارسة داخل الفرق.', en: 'The agile job title has softened globally since 2023 while the practice continues inside teams.' },
     ],
   },
@@ -116,7 +115,7 @@ export const domainTrajectories: DomainTrajectory[] = [
       en: 'AI agents, digital twins and the Internet of Things moved in 2025–2026 from demos to actual government operations (smart cities, project monitoring, proactive services). This is the radar’s fastest-changing domain, so it needs a content review every six months.',
     },
     evidence: [
-      { ar: 'تضع منصة تعلم عالمية مهارات وكلاء الذكاء الاصطناعي {{future-coursera-2026-agentic}} بين مهارات الذكاء الاصطناعي على منصتها.', en: 'A global learning platform places AI-agent skills {{future-coursera-2026-agentic}} AI skills on its platform.' },
+      { ar: 'تقول منصة تعلم عالمية إن اهتمام المتعلمين بوكلاء الذكاء الاصطناعي يكشف {{future-coursera-2026-agentic}}.', en: 'A global learning platform says learner interest in AI agents reveals {{future-coursera-2026-agentic}}.' },
       { ar: 'يتوقع {{future-wef-2025-robotics}} من أصحاب العمل أن تحوّل الروبوتات والأنظمة الذاتية أعمالهم.', en: '{{future-wef-2025-robotics}} of employers expect robots and autonomous systems to transform their business.' },
       { ar: 'برامج وطنية في المدن الذكية وخدمات الأقمار الصناعية والاعتمادات الرقمية توسّع الحاجة إلى هذه المهارات.', en: 'National programmes in smart cities, satellite services and digital credentials widen the need for these skills.' },
     ],
@@ -154,7 +153,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'هندسة الأوامر', en: 'Prompt engineering' },
     description: { ar: 'صياغة تعليمات منظمة للنماذج اللغوية للحصول على مخرجات دقيقة وقابلة للتكرار في سياقات العمل.', en: 'Structuring instructions to language models for accurate, repeatable outputs in work contexts.' },
     parentDomain: 'ai-data',
-    demandSignal: { ar: 'ترافق موجة الذكاء الاصطناعي التوليدي: نحو {{future-coursera-2026-genai-rate}} عالميًا على منصة تعلم واحدة، ونمو تسجيل المتعلمين في المملكة {{future-coursera-2025-ksa-genai}}.', en: 'It rides the generative-AI wave: about {{future-coursera-2026-genai-rate}} worldwide on one learning platform, and enrollments from Saudi Arabia up {{future-coursera-2025-ksa-genai}}.' },
+    demandSignal: { ar: 'ترافق موجة الذكاء الاصطناعي التوليدي: {{future-coursera-2026-genai-rate}} عالميًا على منصتي تعلم مجتمعتين، ونمو تسجيل المتعلمين في المملكة {{future-coursera-2025-ksa-genai}}.', en: 'It rides the generative-AI wave: {{future-coursera-2026-genai-rate}} worldwide across two learning platforms combined, and enrollments from Saudi Arabia up {{future-coursera-2025-ksa-genai}}.' },
     governmentRelevance: { ar: 'موظفو الجهات يستخدمون أدوات لغوية معتمدة للصياغة والتلخيص، والأمر الجيد هو الفرق بين ناتج يُعتمد عليه وهلوسة مكلفة.', en: 'Entity staff use approved language tools for drafting and summarizing; a well-built prompt is the difference between dependable output and a costly hallucination.' },
     firstStep: { ar: 'دورة تطبيقية قصيرة، ثم بناء مكتبة أوامر لمهام إدارتك المتكررة.', en: 'A short applied course, then build a prompt library for your unit’s recurring tasks.' },
   },
@@ -163,7 +162,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'تنسيق وكلاء الذكاء الاصطناعي', en: 'AI agent orchestration' },
     description: { ar: 'تصميم سلاسل من وكلاء الذكاء الاصطناعي تنفذ مهامًا متعددة الخطوات ومراقبتها ضمن حدود صلاحيات واضحة.', en: 'Designing and supervising chains of AI agents executing multi-step tasks within clear permission boundaries.' },
     parentDomain: 'emerging',
-    demandSignal: { ar: 'مهارات وكلاء الذكاء الاصطناعي {{future-coursera-2026-agentic}} على منصة تعلم عالمية، ويتوقع {{leaders-wef-2025-ai-transform}} من أصحاب العمل أن يحوّل الذكاء الاصطناعي أعمالهم.', en: 'AI-agent skills are {{future-coursera-2026-agentic}} on a global learning platform, and {{leaders-wef-2025-ai-transform}} of employers expect AI to transform their business.' },
+    demandSignal: { ar: 'مهارات وكلاء الذكاء الاصطناعي تشهد {{future-coursera-2026-agentic}} على منصة تعلم عالمية، ويتوقع {{leaders-wef-2025-ai-transform}} من أصحاب العمل أن يحوّل الذكاء الاصطناعي أعمالهم.', en: 'AI-agent skills show {{future-coursera-2026-agentic}} on a global learning platform, and {{leaders-wef-2025-ai-transform}} of employers expect AI to transform their business.' },
     governmentRelevance: { ar: 'الخدمات الاستباقية والمعاملات بين الإدارات ستعتمد على الوكلاء، والجهات تحتاج من يصمم حدود الصلاحيات ونقاط التدخل البشري.', en: 'Proactive services and cross-department case handling will rely on agents; entities need people who design permission boundaries and human checkpoints.' },
     firstStep: { ar: 'شغّل وكيلًا واحدًا على مهمة داخلية غير حساسة (كتلخيص الاجتماعات) مع سجل مراجعة بشرية كامل.', en: 'Run one agent on a low-sensitivity internal task (such as meeting summaries) with a full human-review log.' },
   },
@@ -262,7 +261,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'الأتمتة دون برمجة', en: 'No-code automation' },
     description: { ar: 'بناء تدفقات عمل آلية (موافقات، إشعارات، ربط نماذج) بأدوات مرئية دون كتابة شيفرة، مع حوكمة تمنع فوضى الأتمتة.', en: 'Building automated workflows (approvals, notifications, form wiring) with visual tools and no code, with governance that prevents automation sprawl.' },
     parentDomain: 'agile',
-    demandSignal: { ar: 'مهارات وكلاء الذكاء الاصطناعي والأتمتة {{future-coursera-2026-agentic}} على منصة تعلم عالمية، والأدوات دون برمجة توسّع دائرة من يستطيع الأتمتة داخل الإدارة.', en: 'AI-agent and automation skills are {{future-coursera-2026-agentic}} on a global learning platform, and no-code tools widen who inside a unit can automate.' },
+    demandSignal: { ar: 'مهارات وكلاء الذكاء الاصطناعي والأتمتة تشهد {{future-coursera-2026-agentic}} على منصة تعلم عالمية، والأدوات دون برمجة توسّع دائرة من يستطيع الأتمتة داخل الإدارة.', en: 'AI-agent and automation skills show {{future-coursera-2026-agentic}} on a global learning platform, and no-code tools widen who inside a unit can automate.' },
     governmentRelevance: { ar: 'طوابير الموافقات اليدوية من أسرع مكاسب التحول الرقمي، لكن الأتمتة غير المحوكمة تصنع أنظمة ظل خارج الرقابة.', en: 'Manual approval queues are among the quickest digital-transformation wins, but ungoverned automation creates shadow systems outside oversight.' },
     firstStep: { ar: 'أتمت إجراءً ورقيًا متكررًا واحدًا (كطلب إجازة داخلي) بالأداة المعتمدة في جهتك.', en: 'Automate one recurring paper procedure (such as an internal leave request) with your entity’s approved tool.' },
   },
@@ -321,7 +320,7 @@ export const decliningSkills: DecliningSkill[] = [
   {
     id: 'routine_bookkeeping',
     name: { ar: 'مسك الدفاتر الروتيني', en: 'Routine bookkeeping' },
-    evidence: { ar: 'يأتي موظفو المحاسبة ومسك الدفاتر في {{future-wef-2025-decline-bookkeeping}} بين أسرع الوظائف تراجعًا، والفوترة الإلكترونية في المملكة تؤتمت القيود من المصدر.', en: 'Accounting and bookkeeping clerks rank {{future-wef-2025-decline-bookkeeping}} among the fastest-declining jobs, and e-invoicing in the Kingdom automates entries at the source.' },
+    evidence: { ar: 'يأتي موظفو المحاسبة ومسك الدفاتر {{future-wef-2025-decline-bookkeeping}} بين أسرع الوظائف تراجعًا، والفوترة الإلكترونية في المملكة تؤتمت القيود من المصدر.', en: 'Accounting and bookkeeping clerks rank in the {{future-wef-2025-decline-bookkeeping}} fastest-declining jobs, and e-invoicing in the Kingdom automates entries at the source.' },
     nuance: { ar: 'المحاسبة مهنةٌ تتحوّل ولا تختفي: التحليل والامتثال ينموان بينما يتراجع القيد اليدوي.', en: 'Accounting as a profession is shifting, not disappearing: analysis and compliance grow while manual entry shrinks.' },
     pivot: { ar: 'امتثال الفوترة الإلكترونية والتحليل المالي للجهة، عبر شهادات قصيرة متاحة وطنيًا.', en: 'E-invoicing compliance and financial analysis for the entity, through short credentials available nationally.' },
   },
@@ -335,7 +334,7 @@ export const decliningSkills: DecliningSkill[] = [
   {
     id: 'template_graphic_production',
     name: { ar: 'الإنتاج الجرافيكي بالقوالب', en: 'Template-based graphic production' },
-    evidence: { ar: 'يرد مصممو الجرافيك في {{future-wef-2025-decline-graphic}} من قائمة الوظائف المتراجعة، وأدوات التوليد البصري تنتج القوالب الاجتماعية والإعلانية في ثوانٍ.', en: 'Graphic designers appear at {{future-wef-2025-decline-graphic}} on the declining-jobs list, and image-generation tools produce social and campaign templates in seconds.' },
+    evidence: { ar: 'يقع مصممو الجرافيك {{future-wef-2025-decline-graphic}} من قائمة أسرع الوظائف تراجعًا لأول مرة، وأدوات التوليد البصري تنتج القوالب الاجتماعية والإعلانية في ثوانٍ.', en: 'Graphic designers sit {{future-wef-2025-decline-graphic}} fastest-declining jobs for the first time, and image-generation tools produce social and campaign templates in seconds.' },
     nuance: { ar: 'الهوية البصرية الاستراتيجية وتجربة المستخدم تنموان؛ ما يتراجع هو تنفيذ القوالب، لا التصميم بوصفه تفكيرًا.', en: 'Strategic visual identity and user experience are growing; what declines is template execution, not design as thinking.' },
     pivot: { ar: 'تصميم تجربة المستخدم للخدمات الحكومية الرقمية باللغة العربية.', en: 'User-experience design for Arabic-first government digital services.' },
   },

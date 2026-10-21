@@ -2,8 +2,9 @@ import type { Claim, ClaimSource } from './types'
 
 /**
  * Claims behind the Standards page (packet P5a). Ids are stable, kebab-case, prefixed 'standards-'.
- * Desk review 2026-10-22 without network access: figures the reviewer is sure of are 'high';
- * figures carried over or not yet matched to the source text are 'medium'/'low' with a caveat.
+ * Web-verified 2026-10-22 (reviews/claims-verification-20261022.md): figures matched to the primary
+ * source are 'high'; figures matched only to secondary sources, and platform self-reports, stay
+ * 'medium' with a caveat.
  */
 
 const REVIEWED = '2026-10-22'
@@ -29,8 +30,10 @@ const digcomp22: ClaimSource = {
 }
 
 const digcomp30: ClaimSource = {
-  title: { ar: 'DigComp 3.0: الإطار الأوروبي للكفاءة الرقمية (تحديث 2025)', en: 'DigComp 3.0: European Digital Competence Framework (2025 update)' },
+  title: { ar: 'DigComp 3.0: الإطار الأوروبي للكفاءة الرقمية، الإصدار الخامس', en: 'DigComp 3.0: European Digital Competence Framework, fifth edition' },
   publisher: { ar: 'المفوضية الأوروبية، مركز البحوث المشترك (JRC)', en: 'European Commission, Joint Research Centre (JRC)' },
+  url: 'https://publications.jrc.ec.europa.eu/repository/handle/JRC144121',
+  locator: 'JRC144121, published 2025-11-27; levels listed on the JRC DigComp 3.0 page',
   year: 2025,
 }
 
@@ -40,8 +43,8 @@ const dlgf: ClaimSource = {
     en: 'A Global Framework of Reference on Digital Literacy Skills for Indicator 4.4.2',
   },
   publisher: { ar: 'معهد اليونسكو للإحصاء', en: 'UNESCO Institute for Statistics (UIS)' },
-  url: 'https://uis.unesco.org/sites/default/files/documents/ip51-global-framework-reference-digital-literacy-skills-2018-en.pdf',
-  locator: 'Information Paper No. 51',
+  url: 'https://www.uis.unesco.org/sites/default/files/medias/fichiers/2025/08/ip51-global-framework-reference-digital-literacy-skills-2018-en.pdf',
+  locator: 'Information Paper No. 51, Table 5 (p. 23)',
   year: 2018,
 }
 
@@ -51,14 +54,15 @@ const esco: ClaimSource = {
     en: 'ESCO classification of Skills, Competences, Qualifications and Occupations, v1.2',
   },
   publisher: { ar: 'المفوضية الأوروبية', en: 'European Commission' },
-  url: 'https://esco.ec.europa.eu',
+  url: 'https://esco.ec.europa.eu/en/about-esco/escopedia/escopedia/esco-v12',
+  locator: 'v1.2.0 (13 May 2024) launch deck: 3,039 occupations, 13,939 skills/competences and knowledge concepts',
   year: 2024,
 }
 
 const ituSkills: ClaimSource = {
   title: { ar: 'حقيبة أدوات المهارات الرقمية', en: 'Digital Skills Toolkit' },
   publisher: { ar: 'الاتحاد الدولي للاتصالات', en: 'International Telecommunication Union (ITU)' },
-  url: 'https://www.itu.int/en/ITU-D/Digital-Inclusion/Pages/Digital-Skills.aspx',
+  url: 'https://academy.itu.int/itu-d/projects-activities/research-publications/digital-skills-toolkit',
   year: 2018,
 }
 
@@ -73,6 +77,7 @@ const wefFoj: ClaimSource = {
   title: { ar: 'تقرير مستقبل الوظائف 2025', en: 'The Future of Jobs Report 2025' },
   publisher: { ar: 'المنتدى الاقتصادي العالمي', en: 'World Economic Forum' },
   url: 'https://www.weforum.org/publications/the-future-of-jobs-report-2025/',
+  locator: 'Executive summary, key findings',
   year: 2025,
 }
 
@@ -82,12 +87,16 @@ const ilo2025: ClaimSource = {
     en: 'Generative AI and Jobs: A Refined Global Index of Occupational Exposure',
   },
   publisher: { ar: 'منظمة العمل الدولية', en: 'International Labour Organization (ILO)' },
+  url: 'https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure',
+  locator: 'ILO Working Paper 140 (ILO–NASK), 20 May 2025',
   year: 2025,
 }
 
 const oecdDgi: ClaimSource = {
   title: { ar: 'مؤشر الحكومة الرقمية 2023: النتائج والاستنتاجات الرئيسة', en: '2023 OECD Digital Government Index: Results and key findings' },
   publisher: { ar: 'منظمة التعاون الاقتصادي والتنمية', en: 'OECD' },
+  url: 'https://www.oecd.org/en/publications/2023-oecd-digital-government-index_1a89ed5e-en.html',
+  locator: 'OECD Public Governance Policy Papers, 30 January 2024',
   year: 2024,
 }
 
@@ -107,6 +116,7 @@ const unEgov: ClaimSource = {
 const gtmi: ClaimSource = {
   title: { ar: 'تحديث مؤشر نضج التقنية الحكومية (GTMI) لعام 2022', en: 'GovTech Maturity Index (GTMI) 2022 Update' },
   publisher: { ar: 'البنك الدولي', en: 'World Bank' },
+  url: 'https://www.worldbank.org/en/programs/govtech/2022-gtmi',
   year: 2022,
 }
 
@@ -120,31 +130,29 @@ const coursera: ClaimSource = {
   title: { ar: 'تقرير المهارات العالمي 2025', en: 'Global Skills Report 2025' },
   publisher: { ar: 'كورسيرا', en: 'Coursera' },
   url: 'https://www.coursera.org/skills-reports/global',
+  locator: 'p. 2 (executive summary)',
   year: 2025,
 }
 
 const linkedin: ClaimSource = {
   title: { ar: 'المهارات الصاعدة 2025', en: 'Skills on the Rise 2025' },
   publisher: { ar: 'لينكدإن', en: 'LinkedIn' },
-  url: 'https://www.linkedin.com/business/talent/blog/skills-on-the-rise',
+  url: 'https://www.techrepublic.com/article/news-linkedin-skills-rise-ai/',
+  locator: 'U.S. list of 15; secondary coverage of LinkedIn News (LinkedIn’s own post not retrieved)',
   year: 2025,
 }
 
 const qatarDsf: ClaimSource = {
   title: { ar: 'إطار المهارات الرقمية 2025', en: 'Digital Skills Framework 2025' },
   publisher: { ar: 'وزارة الاتصالات وتقنية المعلومات، قطر', en: 'Ministry of Communications and Information Technology, Qatar' },
-  url: 'https://www.mcit.gov.qa',
+  url: 'https://digital.mcit.gov.qa/about-us/programs/82811ca1-2fc4-41c7-925e-139021b669fc',
+  locator: 'Launched February 2025; counts per QNA interview with MCIT, 18 May 2025',
   year: 2025,
 }
 
 const crosswalkCaveat = {
   ar: 'مواءمة تحريرية استرشادية لا تطابق مباشر: الأطر تصف أشياء مختلفة (المسؤولية والاستقلالية في SFIA، وكفاءة المواطن في DigComp)، ومستوياتنا تصف تطبيق مهارة عمل في دور حكومي.',
   en: 'An indicative editorial crosswalk, not a direct mapping: the frameworks describe different things (responsibility and autonomy in SFIA, citizen competence in DigComp), and our levels describe applying a work skill in a government role.',
-}
-
-const notMatched = {
-  ar: 'لم يُطابق الرقم مع نص المصدر مباشرة في هذه المراجعة؛ يُتحقق منه قبل الاستشهاد به.',
-  en: 'Not matched directly to the source text in this review; verify before quoting.',
 }
 
 /** Our four levels in the binding glossary order (value 1..4). */
@@ -185,17 +193,17 @@ const crosswalkClaims: Claim[] = lv.flatMap((name, i): Claim[] => [
   {
     id: `standards-xwalk-digcomp-${i + 1}`,
     text: {
-      ar: `نقابل مستوى «${name.ar}» تحريريًا بـ${digcompBandNames[i].ar} في DigComp (المستويات ${digcompBands[i]}).`,
-      en: `We editorially align the “${name.en}” level with the DigComp ${digcompBandNames[i].en} (levels ${digcompBands[i]}).`,
+      ar: `نقابل مستوى «${name.ar}» تحريريًا بـ${digcompBandNames[i].ar} في DigComp 2.2 (المستويات ${digcompBands[i]}).`,
+      en: `We editorially align the “${name.en}” level with the DigComp 2.2 ${digcompBandNames[i].en} (levels ${digcompBands[i]}).`,
     },
     value: { ar: `DigComp ${digcompBands[i]}`, en: `DigComp ${digcompBands[i]}` },
-    scope: { ar: 'مستويات الرادار الأربعة مقابل نطاقات DigComp', en: 'The radar’s four levels against DigComp bands' },
+    scope: { ar: 'مستويات الرادار الأربعة مقابل نطاقات DigComp 2.2', en: 'The radar’s four levels against DigComp 2.2 bands' },
     kind: 'editorial',
     confidence: 'medium',
     source: ourMethod,
     derivation: {
-      ar: 'تشابه في الشكل: أربعة مستويات عندنا وأربعة نطاقات في DigComp، لكل نطاق مستويان.',
-      en: 'A similarity of shape: four levels here and four DigComp bands, each band holding two levels.',
+      ar: 'تشابه في الشكل: أربعة مستويات عندنا وأربعة نطاقات في DigComp 2.2، لكل نطاق مستويان.',
+      en: 'A similarity of shape: four levels here and four DigComp 2.2 bands, each band holding two levels.',
     },
     reviewedOn: REVIEWED,
     caveat: crosswalkCaveat,
@@ -279,18 +287,18 @@ export const standardsClaims: Claim[] = [
   {
     id: 'standards-digcomp30-levels',
     text: {
-      ar: 'يحافظ DigComp 3.0 على 8 مستويات إتقان مجمّعة في 4 نطاقات.',
-      en: 'DigComp 3.0 keeps 8 proficiency levels grouped into 4 bands.',
+      ar: 'يعتمد DigComp 3.0 الصادر في نوفمبر 2025 أربعة مستويات إتقان: أساسي، ومتوسط، ومتقدم، ومتقدم جدًا، بدل المستويات الثمانية في الإصدار 2.2.',
+      en: 'DigComp 3.0, published in November 2025, uses four proficiency levels: Basic, Intermediate, Advanced and Highly advanced, instead of the eight levels of version 2.2.',
     },
-    value: { ar: '8 مستويات · 4 نطاقات', en: '8 levels · 4 bands' },
-    period: '2025',
+    value: { ar: '4 مستويات', en: '4 levels' },
+    period: '2025-11',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: digcomp30,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'لم تُطابق التفاصيل مع نص الإصدار 3.0 مباشرة؛ العنوان وصفي، ويُضاف الرابط بعد التحقق.',
-      en: 'Details not yet matched directly to the 3.0 text; the title is descriptive and the link will be added after verification.',
+      ar: 'يحتفظ الإصدار 3.0 بالمجالات الخمسة والكفاءات الـ21؛ أما المستويات الثمانية والنطاقات الأربعة فتخص الإصدار 2.2.',
+      en: 'Version 3.0 keeps the five areas and 21 competences; the eight levels and four bands belong to version 2.2.',
     },
   },
   ...crosswalkClaims,
@@ -307,15 +315,14 @@ export const standardsClaims: Claim[] = [
   {
     id: 'standards-unesco-dlgf-competences',
     text: {
-      ar: 'يضم إطار اليونسكو 26 كفاءة، بإضافة كفاءات لتشغيل الأجهزة والبرمجيات وكفاءات مرتبطة بالمهنة إلى كفاءات DigComp.',
-      en: 'The UNESCO framework has 26 competences, adding device and software operation and career-related competences to DigComp’s.',
+      ar: 'يضم إطار اليونسكو 26 كفاءة: كفاءات DigComp الـ21 وخمس كفاءات مضافة لتشغيل الأجهزة والبرمجيات، والتفكير الحاسوبي، والكفاءات المرتبطة بالمهنة.',
+      en: 'The UNESCO framework has 26 competences: DigComp’s 21 plus five added ones for device and software operations, computational thinking and career-related competences.',
     },
     value: { ar: '26 كفاءة', en: '26 competences' },
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: dlgf,
     reviewedOn: REVIEWED,
-    caveat: notMatched,
   },
   {
     id: 'standards-unesco-dlgf-sdg',
@@ -339,12 +346,12 @@ export const standardsClaims: Claim[] = [
     value: { ar: '13,939', en: '13,939' },
     unit: { ar: 'مفهوم مهارة ومعرفة', en: 'skill and knowledge concepts' },
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: esco,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'العدد يتغير بين الإصدارات، ولم يُطابق مع صفحة الإصدار مباشرة في هذه المراجعة.',
-      en: 'The count changes between versions and was not matched directly to the release page in this review.',
+      ar: 'العدد للإصدار 1.2.0 (مايو 2024)؛ الإصدار الجاري 1.2.1 (ديسمبر 2025)، وقد يختلف العدد فيه قليلًا.',
+      en: 'The count is for v1.2.0 (May 2024); the current release is v1.2.1 (December 2025), whose count may differ slightly.',
     },
   },
   // ---- ITU
@@ -378,17 +385,20 @@ export const standardsClaims: Claim[] = [
     value: { ar: '194 دولة', en: '194 countries' },
     period: '2024',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: ituGci,
+    derivation: {
+      ar: 'مجموع الدول في المستويات الخمسة في بيان الاتحاد: 46 + 29 + 49 + 56 + 14 = 194.',
+      en: 'Sum of countries across the five tiers in the ITU release: 46 + 29 + 49 + 56 + 14 = 194.',
+    },
     reviewedOn: REVIEWED,
-    caveat: notMatched,
   },
   // ---- WEF Future of Jobs 2025
   {
     id: 'standards-wef-core-skills',
     text: {
-      ar: 'يتوقع أصحاب العمل أن تتغير 39% من المهارات الأساسية للعاملين بين 2025 و2030.',
-      en: 'Employers expect 39% of workers’ core skills to change between 2025 and 2030.',
+      ar: 'يتوقع أصحاب العمل أن يتحول أو يتقادم 39% من المهارات الحالية للعاملين بين 2025 و2030.',
+      en: 'Employers expect 39% of workers’ existing skill sets to be transformed or become outdated between 2025 and 2030.',
     },
     value: { ar: '39%', en: '39%' },
     scope: { ar: 'العاملون لدى أصحاب العمل المشاركين في الاستطلاع، عالميًا', en: 'Workers at the surveyed employers, worldwide' },
@@ -427,12 +437,12 @@ export const standardsClaims: Claim[] = [
     scope: { ar: 'العمالة العالمية', en: 'Global employment' },
     period: '2025',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: ilo2025,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'التعرض لا يعني فقدان الوظيفة؛ يرجّح التقرير تحوّل المهام في أغلب المهن المعرضة. لم يُطابق الرقم مع نص التقرير مباشرة في هذه المراجعة.',
-      en: 'Exposure is not job loss; the report expects most exposed occupations to be transformed rather than replaced. Not matched directly to the report text in this review.',
+      ar: 'التعرض لا يعني فقدان الوظيفة؛ يرجّح التقرير تحوّل المهام في أغلب المهن المعرضة. النسبة 25% عالميًا و34% في الدول مرتفعة الدخل.',
+      en: 'Exposure is not job loss; the report expects most exposed occupations to be transformed rather than replaced. The share is 25% worldwide and 34% in high-income countries.',
     },
   },
   // ---- OECD
@@ -447,6 +457,10 @@ export const standardsClaims: Claim[] = [
     confidence: 'high',
     source: oecdDgi,
     reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'صدر إصدار 2025 من المؤشر في 16 فبراير 2026؛ يُنقل المصدر إليه بعد مطابقة الأبعاد فيه.',
+      en: 'A 2025 edition was published on 16 February 2026; move the source to it once its dimensions are matched.',
+    },
   },
   {
     id: 'standards-oecd-ourdata-pillars',
@@ -485,12 +499,12 @@ export const standardsClaims: Claim[] = [
     scope: { ar: 'مؤشر تنمية الحكومة الإلكترونية، الدول الأعضاء في الأمم المتحدة', en: 'E-Government Development Index, UN member states' },
     period: '2024',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: unEgov,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'منقول من التغطية المنشورة للمسح؛ يُطابق مع بيانات الأمم المتحدة قبل الاستشهاد، ويُحدَّث عند صدور إصدار 2026.',
-      en: 'Taken from published coverage of the survey; match it to the UN data before quoting, and update it when the 2026 edition is out.',
+      ar: 'المرتبة 6 من 193 بقيمة 0.9602، بعد المرتبة 31 في 2022. لم نعثر على صدور مسح 2026 حتى 22 أكتوبر 2026؛ يُحدَّث الادعاء عند صدوره.',
+      en: 'Rank 6 of 193 with an EGDI of 0.9602, up from 31st in 2022. No 2026 survey found as of 22 October 2026; update this claim when it is out.',
     },
   },
   // ---- World Bank GTMI
@@ -516,10 +530,13 @@ export const standardsClaims: Claim[] = [
     value: { ar: '198 اقتصادًا', en: '198 economies' },
     period: '2022',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: gtmi,
     reviewedOn: REVIEWED,
-    caveat: notMatched,
+    caveat: {
+      ar: 'صدر تحديث 2025 من المؤشر ويغطي 197 اقتصادًا، وهو الإصدار الجاري.',
+      en: 'The 2025 update covers 197 economies and is the current edition.',
+    },
   },
   // ---- IMD
   {
@@ -538,36 +555,37 @@ export const standardsClaims: Claim[] = [
   {
     id: 'standards-coursera-genai-growth',
     text: {
-      ar: 'أفادت كورسيرا بنمو التسجيل في مقررات الذكاء الاصطناعي التوليدي على منصتها بنسبة 195%.',
-      en: 'Coursera reported 195% growth in generative-AI course enrollments on its platform.',
+      ar: 'أفادت كورسيرا في تقرير 2025 بنمو التسجيل في مقررات الذكاء الاصطناعي التوليدي على منصتها بنسبة 195% على أساس سنوي.',
+      en: 'In its 2025 report, Coursera reported 195% year-on-year growth in generative-AI course enrollments on its platform.',
     },
     value: { ar: '+195%', en: '+195%' },
     scope: { ar: 'المسجلون في منصة كورسيرا', en: 'Learners on the Coursera platform' },
+    period: '2024–2025',
     kind: 'self-report',
-    confidence: 'low',
+    confidence: 'medium',
     source: coursera,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'رقم منقول من نسخة سابقة من الأداة ولم يُطابق مع نص التقرير؛ وهو بيانات تسجيل في منصة تجارية لا طلب سوق العمل.',
-      en: 'Carried over from an earlier version of the tool and not matched to the report text; it is enrollment data from a commercial platform, not labour-market demand.',
+      ar: 'بيانات تسجيل في منصة تجارية عن متعلميها، لا طلب سوق العمل.',
+      en: 'Enrollment data from a commercial platform about its own learners, not labour-market demand.',
     },
   },
   {
     id: 'standards-linkedin-ai-literacy',
     text: {
-      ar: 'وضعت لينكدإن «الإلمام بالذكاء الاصطناعي» في المرتبة 1 بين المهارات الصاعدة لعام 2025.',
-      en: 'LinkedIn ranked “AI literacy” 1st among its Skills on the Rise for 2025.',
+      ar: 'وضعت لينكدإن «الإلمام بالذكاء الاصطناعي» في المرتبة 1 في قائمتها الأمريكية للمهارات الصاعدة لعام 2025.',
+      en: 'LinkedIn ranked “AI literacy” 1st in its U.S. Skills on the Rise list for 2025.',
     },
     value: { ar: 'المرتبة 1', en: '#1' },
-    scope: { ar: 'أعضاء لينكدإن والوظائف المعلنة فيها', en: 'LinkedIn members and job postings' },
+    scope: { ar: 'أعضاء لينكدإن والوظائف المعلنة في الولايات المتحدة', en: 'LinkedIn members and job postings in the United States' },
     period: '2025',
     kind: 'self-report',
     confidence: 'medium',
     source: linkedin,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'مبني على بيانات منصة لينكدإن؛ لا يمثل سوق العمل السعودي ولا القطاع الحكومي.',
-      en: 'Based on LinkedIn platform data; it does not represent the Saudi labour market or the government sector.',
+      ar: 'القوائم تختلف من بلد إلى آخر، وإصدار 2026 صار قوائم حسب الوظيفة. بيانات منصة لا تمثل سوق العمل السعودي ولا القطاع الحكومي.',
+      en: 'Lists differ by country, and the 2026 edition switched to lists by job function. Platform data; it does not represent the Saudi labour market or the government sector.',
     },
   },
   // ---- regional
@@ -580,12 +598,12 @@ export const standardsClaims: Claim[] = [
     value: { ar: '115 مهارة · 4 مستويات', en: '115 skills · 4 levels' },
     period: '2025',
     kind: 'official',
-    confidence: 'low',
+    confidence: 'medium',
     source: qatarDsf,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'لم يُطابق مع الوثيقة المنشورة؛ الرابط للموقع الرئيس للوزارة لا للوثيقة نفسها.',
-      en: 'Not matched to the published document; the link is the ministry’s home page, not the document itself.',
+      ar: 'طوبق العدد مع تغطية وكالة الأنباء القطرية لإطلاق الإطار (115 مهارة في 19 فئة وأربعة مستويات)، ولم تُقرأ الوثيقة نفسها.',
+      en: 'Matched to Qatar News Agency coverage of the launch (115 skills in 19 categories, four levels); the document itself was not read.',
     },
   },
 ]

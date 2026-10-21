@@ -3,14 +3,13 @@ import type { Claim, ClaimSource } from './types'
 /**
  * Claims behind «مهارات 2030» (future skills) and the WEF headline figures (packet P5b).
  * Ids are stable (kebab-case, prefixed 'future-'). Figures already registered by another
- * packet are reused, not duplicated: 39% core-skill change (`standards-wef-core-skills`),
+ * packet are reused, not duplicated: 39% change in existing skill sets (`standards-wef-core-skills`),
  * 86% / 63% WEF employer expectations (`leaders-wef-2025-ai-transform`,
  * `leaders-wef-2025-skill-gaps`) and the ILO 2025 exposure findings (`leaders-ilo-2025-*`).
  *
- * Registration note (2026-10-22): written without network access. WEF figures were
- * spot-checked against the report by an earlier reviewer and are held at medium confidence;
- * platform figures published by Coursera or LinkedIn about their own users are tagged
- * `self-report` or `survey` and held at low confidence until matched to the source text.
+ * Registration note (2026-10-22): web-verified on 2026-10-22 (reviews/claims-verification-20261022.md).
+ * WEF figures are held at medium confidence; platform figures Coursera publishes about its own
+ * learners are tagged `self-report`, at medium once matched to the source text and low otherwise.
  */
 
 const REVIEWED = '2026-10-22'
@@ -30,30 +29,25 @@ const COURSERA_2025: ClaimSource = {
 }
 
 const COURSERA_2026: ClaimSource = {
-  title: { ar: 'تقارير المهارات لدى كورسيرا 2026', en: 'Coursera skills reporting 2026' },
+  title: { ar: 'تقرير المهارات العالمي 2026', en: 'Global Skills Report 2026' },
   publisher: { ar: 'كورسيرا', en: 'Coursera' },
-  url: 'https://www.coursera.org/skills-reports/global',
+  url: 'https://blog.coursera.org/global-skills-report-2026/',
+  locator: 'Coursera blog, 28 September 2026',
   year: 2026,
 }
 
-const LINKEDIN_2025: ClaimSource = {
-  title: { ar: 'المهارات الصاعدة 2025', en: 'Skills on the Rise 2025' },
-  publisher: { ar: 'لينكدإن', en: 'LinkedIn' },
-  url: 'https://www.linkedin.com/business/talent/blog/skills-on-the-rise',
-  year: 2025,
-}
-
 const ISC2: ClaimSource = {
-  title: { ar: 'دراسة القوى العاملة في الأمن السيبراني', en: 'Cybersecurity Workforce Study' },
+  title: { ar: 'دراسة القوى العاملة في الأمن السيبراني 2024', en: '2024 ISC2 Cybersecurity Workforce Study' },
   publisher: { ar: 'منظمة ISC2', en: 'ISC2' },
-  url: 'https://www.isc2.org/research',
+  url: 'https://www.isc2.org/Insights/2024/09/Employers-Must-Act-Cybersecurity-Workforce-Growth-Stalls-as-Skills-Gaps-Widen',
+  locator: 'First-look release, 11 September 2024',
   year: 2024,
 }
 
 const VISION_ENERGY: ClaimSource = {
-  title: { ar: 'مستهدفات مزيج الطاقة في رؤية المملكة 2030', en: 'Saudi Vision 2030 energy-mix targets' },
-  publisher: { ar: 'وزارة الطاقة', en: 'Ministry of Energy' },
-  url: 'https://www.vision2030.gov.sa',
+  title: { ar: 'البرنامج الوطني للطاقة المتجددة: قاعدة سياسات الطاقة', en: 'Saudi National Renewable Energy Program (NREP): policy database entry' },
+  publisher: { ar: 'الوكالة الدولية للطاقة', en: 'International Energy Agency (IEA)' },
+  url: 'https://www.iea.org/policies/14658',
 }
 
 const EDITORIAL: ClaimSource = {
@@ -75,6 +69,11 @@ const NOT_SAUDI_GOV = {
 const PLATFORM_DATA = {
   ar: 'رقم تنشره المنصة عن متعلميها؛ يصف من سجّلوا فيها لا سوق العمل، ولم يُطابق مع النص الأصلي في هذه المراجعة.',
   en: 'A figure the platform publishes about its own learners; it describes its enrollees, not the labour market, and was not matched to the source text in this review.',
+}
+
+const PLATFORM_DATA_MATCHED = {
+  ar: 'رقم تنشره المنصة عن متعلميها؛ يصف من سجّلوا فيها لا سوق العمل. طوبق مع نص التقرير.',
+  en: 'A figure the platform publishes about its own learners; it describes its enrollees, not the labour market. Matched to the report text.',
 }
 
 const wef = (id: string, text: Claim['text'], value: Claim['value'], extra: Partial<Claim> = {}): Claim => ({
@@ -211,18 +210,18 @@ export const futureClaims: Claim[] = [
   wef(
     'future-wef-2025-decline-bookkeeping',
     {
-      ar: 'يأتي موظفو المحاسبة ومسك الدفاتر والرواتب في المرتبة 7 بين أسرع الوظائف تراجعًا.',
-      en: 'Accounting, bookkeeping and payroll clerks rank #7 among the fastest-declining jobs.',
+      ar: 'يأتي موظفو المحاسبة ومسك الدفاتر والرواتب ضمن أسرع 10 وظائف تراجعًا في العالم حتى 2030.',
+      en: 'Accounting, bookkeeping and payroll clerks are among the 10 fastest-declining jobs worldwide to 2030.',
     },
-    { ar: 'المرتبة 7', en: '#7' }
+    { ar: 'ضمن أعلى 10', en: 'top 10' }
   ),
   wef(
     'future-wef-2025-decline-graphic',
     {
-      ar: 'يرد مصممو الجرافيك في المرتبة 11 من قائمة الوظائف المتراجعة.',
-      en: 'Graphic designers appear at #11 on the declining-jobs list.',
+      ar: 'يقع مصممو الجرافيك خارج قائمة أسرع 10 وظائف تراجعًا مباشرة، وهي أول مرة يتوقع فيها التقرير تراجعهم.',
+      en: 'Graphic designers sit just outside the 10 fastest-declining jobs, the first time the report has predicted their decline.',
     },
-    { ar: 'المرتبة 11', en: '#11' }
+    { ar: 'خارج أعلى 10 مباشرة', en: 'just outside the top 10' }
   ),
   wef(
     'future-wef-2025-decline-admin',
@@ -244,10 +243,10 @@ export const futureClaims: Claim[] = [
     scope: { ar: 'متعلمو كورسيرا في المملكة', en: 'Coursera learners in Saudi Arabia' },
     period: '2024–2025',
     kind: 'self-report',
-    confidence: 'low',
-    source: COURSERA_2025,
+    confidence: 'medium',
+    source: { ...COURSERA_2025, locator: 'p. 54, Saudi Arabia profile' },
     reviewedOn: REVIEWED,
-    caveat: PLATFORM_DATA,
+    caveat: PLATFORM_DATA_MATCHED,
   },
   {
     id: 'future-coursera-2025-ksa-cyber',
@@ -259,25 +258,25 @@ export const futureClaims: Claim[] = [
     scope: { ar: 'متعلمو كورسيرا في المملكة', en: 'Coursera learners in Saudi Arabia' },
     period: '2024–2025',
     kind: 'self-report',
-    confidence: 'low',
-    source: COURSERA_2025,
+    confidence: 'medium',
+    source: { ...COURSERA_2025, locator: 'p. 54, Saudi Arabia profile' },
     reviewedOn: REVIEWED,
-    caveat: PLATFORM_DATA,
+    caveat: PLATFORM_DATA_MATCHED,
   },
   {
     id: 'future-coursera-2026-genai-rate',
     text: {
-      ar: 'تقول كورسيرا إن التسجيل في مقررات الذكاء الاصطناعي التوليدي بلغ نحو 45 تسجيلًا في الدقيقة على منصتها عالميًا.',
-      en: 'Coursera reports about 45 generative-AI course enrollments per minute on its platform worldwide.',
+      ar: 'تقول كورسيرا إن التسجيل في محتوى الذكاء الاصطناعي التوليدي بلغ أكثر من 45 تسجيلًا في الدقيقة على منصتي كورسيرا ويوديمي مجتمعتين، ارتفاعًا من 25 في 2025.',
+      en: 'Coursera reports more than 45 generative-AI enrollments per minute across Coursera and Udemy combined, up from 25 per minute in 2025.',
     },
-    value: { ar: '45 تسجيلًا في الدقيقة', en: '45 enrollments per minute' },
-    scope: { ar: 'متعلمو كورسيرا حول العالم', en: 'Coursera learners worldwide' },
+    value: { ar: 'أكثر من 45 تسجيلًا في الدقيقة', en: 'more than 45 enrollments per minute' },
+    scope: { ar: 'متعلمو كورسيرا ويوديمي حول العالم (مجتمعتين)', en: 'Coursera and Udemy learners worldwide (combined)' },
     period: '2026',
     kind: 'self-report',
-    confidence: 'low',
+    confidence: 'medium',
     source: COURSERA_2026,
     reviewedOn: REVIEWED,
-    caveat: PLATFORM_DATA,
+    caveat: PLATFORM_DATA_MATCHED,
   },
   {
     id: 'future-coursera-2026-critical-thinking',
@@ -286,21 +285,21 @@ export const futureClaims: Claim[] = [
       en: 'Enrollments in critical-thinking courses on Coursera grew by about +107% in a year.',
     },
     value: { ar: '+107%', en: '+107%' },
-    scope: { ar: 'متعلمو كورسيرا حول العالم', en: 'Coursera learners worldwide' },
+    scope: { ar: 'متعلمو المنصة حول العالم (التقرير يجمع بيانات كورسيرا ويوديمي)', en: 'Platform learners worldwide (the report pools Coursera and Udemy data)' },
     period: '2025–2026',
     kind: 'self-report',
-    confidence: 'low',
+    confidence: 'medium',
     source: COURSERA_2026,
     reviewedOn: REVIEWED,
-    caveat: PLATFORM_DATA,
+    caveat: PLATFORM_DATA_MATCHED,
   },
   {
     id: 'future-coursera-2026-agentic',
     text: {
-      ar: 'تضع كورسيرا مهارات وكلاء الذكاء الاصطناعي ضمن أسرع مهارات الذكاء الاصطناعي نموًا على منصتها.',
-      en: 'Coursera places AI-agent skills among the fastest-growing AI skills on its platform.',
+      ar: 'تقول كورسيرا إن اهتمام المتعلمين بوكلاء الذكاء الاصطناعي وتنسيقها وأمنها يكشف طلبًا متناميًا.',
+      en: 'Coursera says learner interest in AI agents, their orchestration and security reveals growing demand.',
     },
-    value: { ar: 'ضمن الأسرع نموًا', en: 'among the fastest-growing' },
+    value: { ar: 'طلبًا متناميًا', en: 'growing demand' },
     scope: { ar: 'متعلمو كورسيرا حول العالم', en: 'Coursera learners worldwide' },
     period: '2026',
     kind: 'self-report',
@@ -310,38 +309,21 @@ export const futureClaims: Claim[] = [
     caveat: PLATFORM_DATA,
   },
   {
-    id: 'future-linkedin-2025-product',
-    text: {
-      ar: 'ترصد لينكدإن صعود مهارات إدارة المنتجات المجاورة للعمل الرشيق بين أعضائها.',
-      en: 'LinkedIn reports agile-adjacent product-management skills rising among its members.',
-    },
-    value: { ar: 'صاعدة', en: 'rising' },
-    scope: { ar: 'أعضاء لينكدإن وإعلانات الوظائف فيها', en: 'LinkedIn members and job posts' },
-    period: '2025',
-    kind: 'survey',
-    confidence: 'low',
-    source: LINKEDIN_2025,
-    reviewedOn: REVIEWED,
-    caveat: {
-      ar: 'بيانات منصة توظيف خاصة بأعضائها؛ لا تمثل القطاع الحكومي السعودي، ولم تُطابق مع النص الأصلي.',
-      en: 'Data from a private hiring platform about its own members; it does not represent the Saudi public sector and was not matched to the source text.',
-    },
-  },
-  {
     id: 'future-isc2-cyber-gap',
     text: {
-      ar: 'تقدّر دراسة ISC2 فجوة القوى العاملة في الأمن السيبراني عالميًا بالملايين.',
-      en: 'The ISC2 study estimates the global cybersecurity workforce gap in the millions.',
+      ar: 'قدّرت دراسة ISC2 لعام 2024 فجوة القوى العاملة في الأمن السيبراني عالميًا بنحو 4.8 مليون شخص.',
+      en: 'The 2024 ISC2 study put the global cybersecurity workforce gap at about 4.8 million people.',
     },
-    value: { ar: 'بالملايين', en: 'millions' },
+    value: { ar: '4.8 مليون', en: '4.8 million' },
     scope: { ar: 'القوى العاملة السيبرانية حول العالم', en: 'Global cybersecurity workforce' },
+    period: '2024',
     kind: 'survey',
     confidence: 'medium',
     source: ISC2,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'التقدير يتغير من إصدار إلى آخر؛ يُراجع الرقم الدقيق في أحدث إصدار قبل الاستشهاد به.',
-      en: 'The estimate changes between editions; check the exact figure in the latest edition before quoting it.',
+      ar: 'فجوة مقدّرة من مسح ISC2، لا عدد وظائف شاغرة. ركّز إصدار 2025 على فجوات المهارات بدل عدد الأفراد، ولم ينشر رقمًا مماثلًا وفق التغطية المنشورة.',
+      en: 'An estimated gap from the ISC2 survey, not a count of vacancies. The 2025 edition focused on skills gaps rather than headcount and, per published coverage, gave no comparable figure.',
     },
   },
   {

@@ -5,10 +5,9 @@ import type { Claim } from './types'
  * judgment check, the government work-shift map and the role sheets.
  * Ids are stable (kebab-case, prefixed 'leaders-').
  *
- * Registration note (2026-10-22): written without network access. Titles,
- * figures and links are from the editor's knowledge of the published sources;
- * every claim whose figure or link still needs a check against the document
- * says so in `caveat`, and is held at medium confidence or lower.
+ * Registration note (2026-10-22): web-verified on 2026-10-22
+ * (reviews/claims-verification-20261022.md). Claims matched only to secondary
+ * sources say so in `caveat` and stay at medium confidence.
  */
 
 const REVIEWED = '2026-10-22'
@@ -17,6 +16,7 @@ const WEF_2025 = {
   title: { ar: 'تقرير مستقبل الوظائف 2025', en: 'The Future of Jobs Report 2025' },
   publisher: { ar: 'المنتدى الاقتصادي العالمي', en: 'World Economic Forum' },
   url: 'https://reports.weforum.org/docs/WEF_Future_of_Jobs_Report_2025.pdf',
+  locator: 'Executive summary, key findings',
   year: 2025,
 }
 
@@ -26,8 +26,8 @@ const ILO_2025 = {
     en: 'Generative AI and Jobs: A Refined Global Index of Occupational Exposure',
   },
   publisher: { ar: 'منظمة العمل الدولية', en: 'International Labour Organization' },
-  url: 'https://www.ilo.org',
-  locator: 'ILO Working Paper, May 2025',
+  url: 'https://www.ilo.org/publications/generative-ai-and-jobs-refined-global-index-occupational-exposure',
+  locator: 'ILO Working Paper 140 (ILO–NASK), 20 May 2025',
   year: 2025,
 }
 
@@ -52,27 +52,31 @@ const UN_EGOV_2024 = {
 const PDPL = {
   title: { ar: 'نظام حماية البيانات الشخصية', en: 'Personal Data Protection Law (PDPL)' },
   publisher: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي', en: 'Saudi Data & AI Authority (SDAIA)' },
-  url: 'https://sdaia.gov.sa',
+  url: 'https://dgp.sdaia.gov.sa/wps/portal/pdp/home',
   year: 2023,
 }
 
 const NCA_ECC = {
-  title: { ar: 'الضوابط الأساسية للأمن السيبراني', en: 'Essential Cybersecurity Controls (ECC)' },
+  title: { ar: 'الضوابط الأساسية للأمن السيبراني (ECC-2:2024)', en: 'Essential Cybersecurity Controls (ECC-2:2024)' },
   publisher: { ar: 'الهيئة الوطنية للأمن السيبراني', en: 'National Cybersecurity Authority (NCA)' },
-  url: 'https://nca.gov.sa',
+  url: 'https://cdn.nca.gov.sa/api/files/public/upload/86e09090-44e4-481f-bc28-355673607654_ECC--2024-EN.pdf',
+  locator: 'Scope of Work and Applicability; subdomain 1-10; domain 4',
+  year: 2024,
 }
 
 const SDAIA_GENAI = {
   title: { ar: 'إرشادات الذكاء الاصطناعي التوليدي للجهات الحكومية', en: 'Generative AI Guidelines for Government' },
   publisher: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي', en: 'Saudi Data & AI Authority (SDAIA)' },
   url: 'https://sdaia.gov.sa',
+  locator: 'Government version 10 January 2024; public version 11 January 2024',
   year: 2024,
 }
 
 const SDAIA_ETHICS = {
   title: { ar: 'مبادئ أخلاقيات الذكاء الاصطناعي', en: 'AI Ethics Principles' },
   publisher: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي', en: 'Saudi Data & AI Authority (SDAIA)' },
-  url: 'https://sdaia.gov.sa',
+  url: 'https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf',
+  locator: 'Seven principles, September 2023',
   year: 2023,
 }
 
@@ -91,9 +95,10 @@ const EDITORIAL = {
   year: 2026,
 }
 
-const VERIFY_LINK: { ar: string; en: string } = {
-  ar: 'سُجّل دون اتصال بالشبكة؛ يُراجَع الرقم والرابط المباشر مقابل الوثيقة قبل النشر.',
-  en: 'Registered without network access; check the figure and the direct link against the document before release.',
+/** Saudi authority sites block automated reading; these claims were matched to published legal sources. */
+const SECONDARY_MATCH: { ar: string; en: string } = {
+  ar: 'طوبق مع مصادر قانونية منشورة؛ موقع الهيئة يحجب القراءة الآلية، فلم تُقرأ الوثيقة الأصلية آليًا.',
+  en: 'Matched to published legal sources; the authority’s site blocks automated reading, so the original document was not machine-read.',
 }
 
 export const leadersClaims: Claim[] = [
@@ -108,12 +113,12 @@ export const leadersClaims: Claim[] = [
     scope: { ar: 'التوظيف العالمي', en: 'Global employment' },
     period: '2025',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: ILO_2025,
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'التعرض يعني أن بعض المهام قابلة للتنفيذ بالأداة، لا أن الوظيفة ستختفي. ' + VERIFY_LINK.ar,
-      en: 'Exposure means some tasks can be done by the tool, not that the job will disappear. ' + VERIFY_LINK.en,
+      ar: 'التعرض يعني أن بعض المهام قابلة للتنفيذ بالأداة، لا أن الوظيفة ستختفي. النسبة 25% عالميًا و34% في الدول مرتفعة الدخل.',
+      en: 'Exposure means some tasks can be done by the tool, not that the job will disappear. The share is 25% worldwide and 34% in high-income countries.',
     },
   },
   {
@@ -150,8 +155,8 @@ export const leadersClaims: Claim[] = [
   {
     id: 'leaders-wef-2025-skills-change',
     text: {
-      ar: 'يتوقع أصحاب العمل أن تتغير 39% من المهارات الأساسية للعاملين بحلول 2030.',
-      en: 'Employers expect 39% of workers’ core skills to change by 2030.',
+      ar: 'يتوقع أصحاب العمل أن يتحول أو يتقادم 39% من المهارات الحالية للعاملين بين 2025 و2030.',
+      en: 'Employers expect 39% of workers’ existing skill sets to be transformed or become outdated between 2025 and 2030.',
     },
     value: { ar: '39%', en: '39%' },
     scope: { ar: 'أصحاب عمل شملهم مسح التقرير حول العالم', en: 'Employers surveyed worldwide for the report' },
@@ -175,7 +180,7 @@ export const leadersClaims: Claim[] = [
     scope: { ar: 'أصحاب عمل شملهم مسح التقرير حول العالم', en: 'Employers surveyed worldwide for the report' },
     period: '2025–2030',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: WEF_2025,
     reviewedOn: REVIEWED,
     caveat: {
@@ -186,8 +191,8 @@ export const leadersClaims: Claim[] = [
   {
     id: 'leaders-wef-2025-skill-gaps',
     text: {
-      ar: 'يرى 63% من أصحاب العمل أن فجوات المهارات هي العائق الأول أمام تحوّل أعمالهم حتى 2030.',
-      en: '63% of employers see skill gaps as the main barrier to transforming their business through 2030.',
+      ar: 'فجوات المهارات أكبر عائق أمام تحوّل الأعمال حتى 2030، إذ يعدّها 63% من أصحاب العمل عائقًا رئيسًا.',
+      en: 'Skill gaps are the biggest barrier to business transformation through 2030, named as a major barrier by 63% of employers.',
     },
     value: { ar: '63%', en: '63%' },
     scope: { ar: 'أصحاب عمل شملهم مسح التقرير حول العالم', en: 'Employers surveyed worldwide for the report' },
@@ -212,7 +217,6 @@ export const leadersClaims: Claim[] = [
     confidence: 'high',
     source: OECD_DGPF,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
   },
   {
     id: 'leaders-oecd-user-driven',
@@ -225,7 +229,6 @@ export const leadersClaims: Claim[] = [
     confidence: 'high',
     source: OECD_DGPF,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
   },
   {
     id: 'leaders-un-egov-2024',
@@ -237,12 +240,12 @@ export const leadersClaims: Claim[] = [
     scope: { ar: 'الدول الأعضاء في الأمم المتحدة', en: 'UN member states' },
     period: '2024',
     kind: 'international',
-    confidence: 'medium',
+    confidence: 'high',
     source: { ...UN_EGOV_2024, locator: 'E-Government Development Index (EGDI), annex table' },
     reviewedOn: REVIEWED,
     caveat: {
-      ar: 'يُراجَع الترتيب مقابل جدول الملحق في المسح قبل النشر.',
-      en: 'Check the rank against the survey’s annex table before release.',
+      ar: 'المرتبة 6 من 193 بقيمة 0.9602 في جدول المؤشر. لم نعثر على صدور مسح 2026 حتى 22 أكتوبر 2026.',
+      en: 'Rank 6 of 193 with an EGDI of 0.9602 in the index table. No 2026 survey found as of 22 October 2026.',
     },
   },
   // ── Saudi official references ───────────────────────────────────────
@@ -258,7 +261,10 @@ export const leadersClaims: Claim[] = [
     confidence: 'high',
     source: PDPL,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
+    caveat: {
+      ar: 'نفاذ النظام في 14 سبتمبر 2023، وانتهت مهلة السنة في 14 سبتمبر 2024.',
+      en: 'The law took effect on 14 September 2023; the one-year grace period ended on 14 September 2024.',
+    },
   },
   {
     id: 'leaders-nca-ecc-mandatory',
@@ -272,24 +278,23 @@ export const leadersClaims: Claim[] = [
     confidence: 'high',
     source: NCA_ECC,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
+    caveat: {
+      ar: 'الإصدار الجاري ECC-2:2024؛ التوعية والتدريب في المكوّن الفرعي 1-10.',
+      en: 'The current edition is ECC-2:2024; awareness and training are subdomain 1-10.',
+    },
   },
   {
     id: 'leaders-nca-ecc-third-party',
     text: {
-      ar: 'وتخصص الضوابط نفسها مجالاً للأمن السيبراني المتعلق بالأطراف الخارجية والحوسبة السحابية، فتصبح شروط الأمن جزءاً من كل عقد تقني.',
-      en: 'The same controls dedicate a domain to third-party and cloud-computing cybersecurity, so security terms become part of every technology contract.',
+      ar: 'وتخصص الضوابط نفسها المجال 4 للأمن السيبراني المتعلق بالأطراف الخارجية والحوسبة السحابية، فتصبح شروط الأمن جزءاً من كل عقد تقني.',
+      en: 'The same controls dedicate domain 4 to third-party and cloud-computing cybersecurity, so security terms become part of every technology contract.',
     },
     value: { ar: 'مجال مستقل', en: 'A dedicated domain' },
     scope: { ar: 'الجهات الحكومية', en: 'Government entities' },
     kind: 'official',
-    confidence: 'medium',
+    confidence: 'high',
     source: NCA_ECC,
     reviewedOn: REVIEWED,
-    caveat: {
-      ar: 'يُراجَع ترقيم المجال وعنوانه في الإصدار الأحدث من الضوابط. ' + VERIFY_LINK.ar,
-      en: 'Check the domain number and title in the latest edition of the controls. ' + VERIFY_LINK.en,
-    },
   },
   {
     id: 'leaders-sdaia-genai-guidelines',
@@ -302,7 +307,7 @@ export const leadersClaims: Claim[] = [
     confidence: 'medium',
     source: SDAIA_GENAI,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
+    caveat: SECONDARY_MATCH,
   },
   {
     id: 'leaders-sdaia-ai-ethics',
@@ -315,7 +320,7 @@ export const leadersClaims: Claim[] = [
     confidence: 'medium',
     source: SDAIA_ETHICS,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
+    caveat: SECONDARY_MATCH,
   },
   {
     id: 'leaders-ndmo-standards',
@@ -329,7 +334,7 @@ export const leadersClaims: Claim[] = [
     confidence: 'medium',
     source: NDMO,
     reviewedOn: REVIEWED,
-    caveat: VERIFY_LINK,
+    caveat: SECONDARY_MATCH,
   },
   // ── Editorial markers (shown as «تقدير تحريري») ─────────────────────
   {

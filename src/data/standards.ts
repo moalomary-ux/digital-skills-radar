@@ -58,8 +58,8 @@ export const frameworkCards: SourceCard[] = [
       'standards-digcomp30-levels',
     ],
     description: {
-      ar: 'الإطار الأوروبي المرجعي للكفاءة الرقمية للمواطنين. نطاقاته الأربعة تشبه مستوياتنا الأربعة في الشكل، لكن المقابلة بينهما مواءمة تحريرية استرشادية لا تطابق مباشر.',
-      en: 'The European reference framework for citizens’ digital competence. Its four bands resemble our four levels in shape, but the correspondence is an indicative editorial crosswalk, not a direct mapping.',
+      ar: 'الإطار الأوروبي المرجعي للكفاءة الرقمية للمواطنين. نطاقاته الأربعة في DigComp 2.2 ومستوياته الأربعة في DigComp 3.0 تشبه مستوياتنا الأربعة في الشكل، لكن المقابلة بينهما مواءمة تحريرية استرشادية لا تطابق مباشر.',
+      en: 'The European reference framework for citizens’ digital competence. Its four bands in DigComp 2.2 and four levels in DigComp 3.0 resemble our four levels in shape, but the correspondence is an indicative editorial crosswalk, not a direct mapping.',
     },
     limits: {
       ar: 'يصف كفاءة المواطن عمومًا، لا مهارات العمل في دور حكومي.',
