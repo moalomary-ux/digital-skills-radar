@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -78,7 +78,7 @@ describe('real application routes', () => {
     const suffix = `/directory/${entity.id}?source=directory&label=a%20b#services`
     const router = renderRoute(`/ar${suffix}`)
     await screen.findByRole('heading', { level: 1, name: entity.nameAr })
-    await user.click(screen.getByRole('button', { name: 'toggle language' }))
+    await user.click(within(document.querySelector('header.site-header') as HTMLElement).getByRole('link', { name: /English/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/en/directory/${entity.id}`))
     expect(router.state.location.search).toBe('?source=directory&label=a%20b')
     expect(router.state.location.hash).toBe('#services')
@@ -92,7 +92,7 @@ describe('real application routes', () => {
     expect(document.documentElement).toHaveAttribute('dir', 'rtl')
     await act(async () => { await router.navigate(1) })
     expect(router.state.location.pathname).toBe(`/en/directory/${entity.id}`)
-    await user.click(screen.getByRole('button', { name: 'toggle language' }))
+    await user.click(within(document.querySelector('header.site-header') as HTMLElement).getByRole('link', { name: /العربية/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/ar/directory/${entity.id}`))
     expect(router.state.location.search + router.state.location.hash).toBe('?source=directory&label=a%20b#services')
     expect(document.title).toBe('رادار المهارات الرقمية — تفاصيل الجهة')
@@ -104,8 +104,8 @@ describe('real application routes', () => {
 const expectedRoutes: Record<Exclude<View, 'not-found'>, string> = {
   home: '', wizard: '/assess', results: '/assess/results', pathways: '/assess/plan',
   roles: '/roles', skills: '/skills', 'future-skills': '/future-skills',
-  'tech-radar': '/tech-radar', explore: '/map', careers: '/careers',
-  lists: '/careers/trends', decide: '/guidance', entities: '/entities', impact: '/impact',
+  'tech-radar': '/tech-radar', entities: '/entities', impact: '/impact',
+  'roles-hub': '/capabilities', 'method-hub': '/method',
   sectors: '/sectors', directory: '/directory', entity: `/directory/${entity.id}`,
   standards: '/standards', methodology: '/methodology',
   evidence: '/evidence', about: '/about', report: '/assess/report', services: '/services',
@@ -120,19 +120,14 @@ describe.each(['ar', 'en'] as const)('route helpers in %s', (lang) => {
     expect(viewFromPath(path)).toBe(view)
   })
 
-  it('supports technology/career details and prioritizes career trends', () => {
+  it('supports technology details and multi-segment static routes', () => {
     const techPath = pathFor('tech-radar', lang, { techId: technology.id })
     expect(techPath).toBe(`/${lang}/tech-radar/${technology.id}`)
     expect(routeFromPath(techPath)).toMatchObject({ view: 'tech-radar', techId: technology.id, lang })
-    const careerId = 'a career/with unicode العربية'
-    const careerPath = pathFor('careers', lang, { careerId })
-    expect(careerPath).toBe(`/${lang}/careers/${encodeURIComponent(careerId)}`)
-    expect(routeFromPath(careerPath)).toMatchObject({ view: 'careers', careerId })
-    expect(routeFromPath(`/${lang}/careers/trends`)).toMatchObject({ view: 'lists', careerId: null })
+    expect(routeFromPath(`/${lang}/leaders/brief`)).toMatchObject({ view: 'leader-brief' })
   })
 
   it.each([
-    ['explore', 'domain', 'data & AI', '/map'],
     ['sectors', 'category', 'استشارات رقمية', '/sectors'],
   ] as const)('encodes the %s query', (view, key, value, slug) => {
     const url = new URL(pathFor(view, lang, { [key]: value }), 'https://example.test')

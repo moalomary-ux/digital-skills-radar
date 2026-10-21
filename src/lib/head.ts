@@ -11,10 +11,6 @@ export const pageTitles: Record<View, L> = {
   skills: { ar: 'سجل المهارات', en: 'Skill Registry' },
   'future-skills': { ar: 'مهارات المستقبل', en: 'Future Skills' },
   'tech-radar': { ar: 'رادار التقنيات', en: 'Technology Radar' },
-  explore: { ar: 'خريطة المهارات', en: 'Skills Map' },
-  careers: { ar: 'المسارات المهنية', en: 'Careers' },
-  lists: { ar: 'الاتجاهات المهنية', en: 'Career Trends' },
-  decide: { ar: 'التوجيه المهني', en: 'Career Guidance' },
   entities: { ar: 'الجهات', en: 'Entities' },
   impact: { ar: 'الأثر', en: 'Impact' },
   sectors: { ar: 'القطاعات', en: 'Sectors' },
@@ -35,6 +31,8 @@ export const pageTitles: Record<View, L> = {
   work: { ar: 'تحوّل العمل الحكومي', en: 'How government work is changing' },
   'work-shifts': { ar: 'خريطة تحوّل المهام', en: 'Task-shift map' },
   role: { ar: 'ورقة الدور', en: 'Role sheet' },
+  'roles-hub': { ar: 'الأدوار والمهارات', en: 'Roles & skills' },
+  'method-hub': { ar: 'المنهجية والمصادر', en: 'Method & sources' },
   'not-found': { ar: 'الصفحة غير موجودة', en: 'Page Not Found' },
 }
 

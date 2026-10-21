@@ -76,10 +76,10 @@ export const hubs: Hub[] = [
   },
   {
     id: 'roles',
-    view: 'roles',
+    view: 'roles-hub',
     nav: { ar: 'الأدوار والمهارات', en: 'Roles & skills' },
     title: { ar: 'الأدوار والمهارات', en: 'Roles & skills' },
-    views: ['roles', 'role', 'skills'],
+    views: ['roles-hub', 'roles', 'role', 'skills'],
     items: [
       { view: 'roles', label: { ar: 'الأدوار', en: 'Roles' } },
       { view: 'skills', label: { ar: 'قاموس المهارات', en: 'Skills dictionary' } },
@@ -87,10 +87,10 @@ export const hubs: Hub[] = [
   },
   {
     id: 'sectors',
-    view: 'sectors',
+    view: 'entities',
     nav: { ar: 'الجهات والقطاعات', en: 'Entities & sectors' },
     title: { ar: 'الجهات والقطاعات', en: 'Entities & sectors' },
-    views: ['sectors', 'sector', 'services', 'directory', 'entity'],
+    views: ['entities', 'sectors', 'sector', 'services', 'directory', 'entity'],
     items: [
       { view: 'sectors', label: { ar: 'احتياج القطاعات', en: 'Sector needs' } },
       { view: 'services', label: { ar: 'سجل خدمات التمكين', en: 'Enablement service record' } },
@@ -99,10 +99,10 @@ export const hubs: Hub[] = [
   },
   {
     id: 'method',
-    view: 'methodology',
+    view: 'method-hub',
     nav: { ar: 'المنهجية والمصادر', en: 'Method & sources' },
     title: { ar: 'المنهجية والمصادر', en: 'Method & sources' },
-    views: ['methodology', 'evidence', 'standards', 'about'],
+    views: ['method-hub', 'methodology', 'evidence', 'standards', 'about'],
     items: [
       { view: 'methodology', label: { ar: 'المنهجية', en: 'Methodology' } },
       { view: 'evidence', label: { ar: 'سجل الأدلة', en: 'Evidence register' } },

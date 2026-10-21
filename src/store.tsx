@@ -7,11 +7,7 @@ import { usePageTitle } from './lib/head'
 
 export type View =
   | 'home'
-  | 'careers'
-  | 'decide'
-  | 'lists'
   | 'future-skills'
-  | 'explore'
   | 'entities'
   | 'wizard'
   | 'results'
@@ -31,6 +27,8 @@ export type View =
   | 'services'
   | 'sector'
   | 'leaders'
+  | 'roles-hub'
+  | 'method-hub'
   | 'leader-brief'
   | 'leader-check'
   | 'leader-team'
@@ -156,12 +154,6 @@ interface AppState {
   pendingTechId: string | null
   openTech: (techId: string) => void
   clearPendingTech: () => void
-  pendingCareerId: string | null
-  openCareer: (careerId: string) => void
-  clearPendingCareer: () => void
-  pendingDomainId: string | null
-  openDomainAt: (domainId: string) => void
-  clearPendingDomain: () => void
   /** v8: entity detail page */
   pendingEntityId: string | null
   openEntity: (entityId: string) => void
@@ -216,10 +208,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [trackId, setTrackIdState] = useState<string | null>(typeof draft.trackId === 'string' ? draft.trackId : null)
   const [scenarioAnswers, setScenarioAnswers] = useState<Record<string, number>>(isNumRecord(draft.scenarios) ? draft.scenarios : {})
   const pendingTechId = route.techId
-  const pendingCareerId = route.careerId
   const pendingEntityId = route.entityId
   const search = new URLSearchParams(location.search)
-  const pendingDomainId = view === 'explore' ? search.get('domain') : null
   const pendingSectorCategory = view === 'sectors' ? search.get('category') : null
 
   useEffect(() => {
@@ -279,14 +269,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     window.scrollTo({ top: 0 })
   }, [lang, navigate])
   const openTech = useCallback((techId: string) => open('tech-radar', { techId }), [open])
-  const openCareer = useCallback((careerId: string) => open('careers', { careerId }), [open])
-  const openDomainAt = useCallback((domain: string) => open('explore', { domain }), [open])
   const openEntity = useCallback((entityId: string) => open('entity', { entityId }), [open])
   const openSectorsByCategory = useCallback((category: string) => open('sectors', { category }), [open])
   // Effect consumers must retain IDs in the URL for reloads and language changes.
   const clearPendingTech = useCallback(() => {}, [])
-  const clearPendingCareer = useCallback(() => {}, [])
-  const clearPendingDomain = useCallback(() => {}, [])
   const clearPendingEntity = useCallback(() => {}, [])
   // Sectors exposes an explicit reset button, rather than consuming its value in an effect.
   const clearPendingSectorCategory = useCallback(() => {
@@ -319,12 +305,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     pendingTechId,
     openTech,
     clearPendingTech,
-    pendingCareerId,
-    openCareer,
-    clearPendingCareer,
-    pendingDomainId,
-    openDomainAt,
-    clearPendingDomain,
     pendingEntityId,
     openEntity,
     clearPendingEntity,

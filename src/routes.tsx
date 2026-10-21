@@ -25,6 +25,12 @@ const LeaderCheck = lazy(() => import('./views/leaders/LeaderCheck'))
 const WorkShifts = lazy(() => import('./views/work/WorkShifts'))
 const RoleDetail = lazy(() => import('./views/RoleDetail'))
 const Report = lazy(() => import('./views/Report'))
+const About = lazy(() => import('./views/About'))
+const HubLeaders = lazy(() => import('./views/hubs/Leaders'))
+const HubWork = lazy(() => import('./views/hubs/Work'))
+const HubRolesSkills = lazy(() => import('./views/hubs/RolesSkills'))
+const HubEntitiesSectors = lazy(() => import('./views/hubs/EntitiesSectors'))
+const HubMethod = lazy(() => import('./views/hubs/Method'))
 
 const viewRoutes: RouteObject[] = [
   { index: true, element: <Home /> },
@@ -36,7 +42,14 @@ const viewRoutes: RouteObject[] = [
   { path: 'skills', element: <SkillRegistry /> },
   { path: 'future-skills', element: <FutureSkills /> },
   { path: 'tech-radar', element: <TechRadar /> },
-  { path: 'entities', element: <Entities /> },
+  { path: 'entities', element: <HubEntitiesSectors /> },
+  { path: 'leaders/adoption', element: <Entities /> },
+  { path: 'leaders', element: <HubLeaders /> },
+  { path: 'work', element: <HubWork /> },
+  { path: 'capabilities', element: <HubRolesSkills /> },
+  { path: 'method', element: <HubMethod /> },
+  { path: 'about', element: <About /> },
+  { path: 'services', element: <Impact /> },
   { path: 'impact', element: <Impact /> },
   { path: 'sectors', element: <GovSectors /> },
   { path: 'directory', element: <Directory /> },
