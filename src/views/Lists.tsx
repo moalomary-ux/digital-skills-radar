@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useApp } from '../store'
+import { womenMarketNote } from '../data/careers'
 import {
   absoluteNumbersNote,
   decliningCommonThread,
@@ -97,6 +98,17 @@ export default function Lists() {
           </div>
         </motion.section>
       </div>
+
+      {/* women's-market note (P1-16) */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="glass mt-8 border-s-4 !border-s-dga-amber p-6"
+      >
+        <h3 className="font-bold text-dga-amber-tx">{t({ ar: 'فرص ومؤشرات للنساء', en: 'Opportunities & signals for women' })}</h3>
+        <p className="mt-2 text-sm leading-loose text-dga-ink">{t(womenMarketNote)}</p>
+      </motion.div>
 
       {/* absolute-numbers nuance */}
       <motion.div

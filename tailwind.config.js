@@ -11,6 +11,7 @@ export default {
           'green-dark': '#067647',
           'green-ink': '#074D31',
           amber: '#DBA102',
+          'amber-tx': '#8A6A00', // darker amber — text-safe on white (WCAG AA)
           ink: '#212539',
           black: '#161616',
           muted: '#4D5761',

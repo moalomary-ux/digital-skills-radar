@@ -10,9 +10,13 @@ interface Props {
   targets: number[]
   /** optional previous-period values for comparison */
   previous?: number[]
+  /** v6-B: scenario-judgment polygon (0-4 scale), drawn in blue */
+  judgment?: number[]
   lang: Lang
   /** enable hover tooltip + vertex dots */
   interactive?: boolean
+  /** called when an axis label is clicked (index into labels) */
+  onAxisClick?: (idx: number) => void
   /** play draw-in animation */
   animate?: boolean
   /** overall stage text shown in center */
@@ -60,11 +64,13 @@ export default function RadarChart({
   values,
   targets,
   previous,
+  judgment,
   lang,
   interactive = false,
   animate = false,
   centerLabel,
   onHoverLabel,
+  onAxisClick,
 }: Props) {
   const [hover, setHover] = useState<number | null>(null)
   const size = 620
@@ -93,6 +99,7 @@ export default function RadarChart({
   const currentPts = polygonPoints(cx, cy, R, values, dir)
   const targetPts = polygonPoints(cx, cy, R, targets, dir)
   const prevPts = previous ? polygonPoints(cx, cy, R, previous, dir) : null
+  const judgmentPts = judgment ? polygonPoints(cx, cy, R, judgment, dir) : null
 
   const setHoverBoth = (idx: number | null) => {
     setHover(idx)
@@ -170,6 +177,20 @@ export default function RadarChart({
         />
       )}
 
+      {/* judgment polygon (scenario evidence) */}
+      {judgmentPts && (
+        <polygon
+          points={judgmentPts}
+          fill="#1849A9"
+          fillOpacity="0.10"
+          stroke="#1849A9"
+          strokeWidth="2"
+          strokeDasharray="7 4"
+          strokeLinejoin="round"
+          className={animate ? 'radar-poly radar-animate-late' : undefined}
+        />
+      )}
+
       {/* target polygon */}
       <polygon
         points={targetPts}
@@ -234,6 +255,7 @@ export default function RadarChart({
             className={interactive ? 'cursor-pointer' : undefined}
             onMouseEnter={interactive ? () => setHoverBoth(i) : undefined}
             onMouseLeave={interactive ? () => setHoverBoth(null) : undefined}
+            onClick={onAxisClick ? () => onAxisClick(i) : undefined}
           >
             {lines.map((ln, li) => (
               <tspan key={li} x={a.lp.x} dy={li === 0 ? 0 : 15}>

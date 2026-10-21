@@ -91,6 +91,30 @@ a {
   @apply text-dga-green-dark underline-offset-4 hover:underline;
 }
 
+/* Accessibility: visible focus + reduced motion (expert-review P0-7) */
+:focus-visible {
+  outline: 2px solid #1b8354;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .radar-animate,
+  .radar-animate-late,
+  .animate-floaty,
+  .animate-pulseSoft {
+    animation: none !important;
+  }
+}
+
 /* Print: clean report output */
 @media print {
   body {
@@ -109,4 +133,53 @@ a {
     color: #167248 !important;
     -webkit-text-fill-color: #167248;
   }
+}
+
+/* Interactive map intro (transform/opacity only — 60fps) */
+@keyframes mapNodeIn {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes mapEdgeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.map-intro-node {
+  /* 'backwards' fill: intro plays in, then inline hover/spotlight opacity takes over */
+  animation: mapNodeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.map-intro-node > circle:first-child {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.map-intro-edge {
+  animation: mapEdgeIn 0.7s ease backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-intro-node, .map-intro-edge { animation: none !important; }
+}
+
+/* v7 gov-impact bar charts (transform/opacity only — 60fps) */
+@keyframes barGrowX {
+  from { opacity: 0.25; transform: scaleX(0); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+@keyframes barGrowY {
+  from { opacity: 0.25; transform: scaleY(0); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+.bar-intro,
+.bar-intro-y {
+  transform-box: fill-box;
+}
+.bar-intro {
+  transform-origin: left center;
+  animation: barGrowX 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.bar-intro-y {
+  transform-origin: center bottom;
+  animation: barGrowY 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-intro, .bar-intro-y { animation: none !important; }
 }

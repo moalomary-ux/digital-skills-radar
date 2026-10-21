@@ -8,10 +8,10 @@ import { careers, type Career, type CommitKey, type Signal } from './careers'
 
 // ── Headline stats (WEF FoJ 2025) ───────────────────────────────────────────
 export const headlineStats: { value: string; label: L }[] = [
-  { value: '170M', label: { ar: 'وظيفة جديدة عالميًا بحلول 2030', en: 'new jobs globally by 2030' } },
-  { value: '92M', label: { ar: 'وظيفة ستُستبدل في الفترة نفسها', en: 'jobs displaced in the same period' } },
-  { value: '39%', label: { ar: 'من المهارات الأساسية ستتغير بحلول 2030', en: 'of core skills will change by 2030' } },
-  { value: '+78M', label: { ar: 'صافي الوظائف الجديدة — المستقبل يخلق أكثر مما يلغي', en: 'net new jobs — the future creates more than it removes' } },
+  { value: '170M', label: { ar: 'وظيفة جديدة متوقعة عالميًا بحلول 2030', en: 'new jobs expected globally by 2030' } },
+  { value: '92M', label: { ar: 'وظيفة متوقع استبدالها في الفترة نفسها', en: 'jobs expected to be displaced in the same period' } },
+  { value: '39%', label: { ar: 'من المهارات الأساسية متوقع أن تتغير بحلول 2030', en: 'of core skills are expected to change by 2030' } },
+  { value: '+78M', label: { ar: 'صافٍ متوقع للوظائف — التوقعات تخلق أكثر مما تلغي', en: 'expected net new jobs — projections create more than they remove' } },
 ]
 
 // ── WEF FoJ 2025 verbatim lists ─────────────────────────────────────────────
@@ -133,28 +133,62 @@ export const explainerParagraphs: ExplainerParagraph[] = [
   },
 ]
 
-// ── Decision wizard: 5 questions ────────────────────────────────────────────
+// ── Decision wizard: persona + 5 questions ──────────────────────────────────
+
+/** Who is answering — adapts wording and results framing (review P1-1). */
+export type Persona = 'student' | 'parent' | 'employee' | 'changer'
+
+export const personaMeta: Record<Persona, { name: L; resultsHeading: L; resultsIntro: L }> = {
+  student: {
+    name: { ar: 'طالب', en: 'Student' },
+    resultsHeading: { ar: 'ترشيحاتنا الثلاثة لك', en: 'Our three matches for you' },
+    resultsIntro: { ar: 'نقطة انطلاق للاستكشاف — ناقشها مع موجه مدرستك أو جامعتك.', en: 'A starting point for exploration — discuss it with your school or university counselor.' },
+  },
+  parent: {
+    name: { ar: 'والد أو وليّ', en: 'Parent / guardian' },
+    resultsHeading: { ar: 'ثلاثة اتجاهات لمناقشتها مع ابنك', en: 'Three directions to discuss with your child' },
+    resultsIntro: { ar: 'القرار قرار ابنك في النهاية — استخدم هذه النتائج لفتح حوار، لا لفرضه.', en: 'The decision is ultimately your child’s — use these results to open a conversation, not to settle it.' },
+  },
+  employee: {
+    name: { ar: 'موظف يبحث عن تطوير', en: 'Employee seeking growth' },
+    resultsHeading: { ar: 'ثلاثة اتجاهات لتطوير مسارك', en: 'Three directions to grow your path' },
+    resultsIntro: { ar: 'قارنها بدورك الحالي — أقربها قد يكون تطورًا داخل مسارك لا خروجًا منه.', en: 'Compare them with your current role — the closest may be growth within your track, not an exit.' },
+  },
+  changer: {
+    name: { ar: 'متغيّر مهني', en: 'Career changer' },
+    resultsHeading: { ar: 'ثلاثة اتجاهات لتحوّلك المهني', en: 'Three directions for your career change' },
+    resultsIntro: { ar: 'خبرتك السابقة رصيد — ابحث عن أوجه النقل بينها وبين الاتجاهات المقترحة.', en: 'Your prior experience is an asset — look for transferable overlap with the suggested directions.' },
+  },
+}
+
 export interface DecisionOption {
   key: string
   label: L
+  /** RIASEC-lite tag shown under interest options */
+  riasec?: L
 }
 export interface DecisionQuestion {
   id: 'q1' | 'q2' | 'q3' | 'q4' | 'q5'
   title: L
   options: DecisionOption[]
+  multi?: boolean
+  maxPicks?: number
 }
 
 export const decisionQuestions: DecisionQuestion[] = [
   {
     id: 'q1',
     title: { ar: 'أي نوع من المشكلات تستمتع بحلّها؟', en: 'What kind of problems do you enjoy solving?' },
+    multi: true,
+    maxPicks: 2,
     options: [
-      { key: 'people_care', label: { ar: 'مساعدة الناس ورعايتهم', en: 'Helping and caring for people' } },
-      { key: 'build_tech', label: { ar: 'بناء الأشياء بالتقنية والبرمجة', en: 'Building things with technology/code' } },
-      { key: 'build_physical', label: { ar: 'بناء وإصلاح الأشياء بيديّ', en: 'Building/fixing things with my hands' } },
-      { key: 'numbers_logic', label: { ar: 'الأرقام والأنماط والمنطق', en: 'Numbers, patterns and logic' } },
-      { key: 'persuade_create', label: { ar: 'إقناع الناس / صناعة المحتوى', en: 'Persuading people / creating content' } },
-      { key: 'organize_rule', label: { ar: 'تنظيم الأنظمة وتطبيق القواعد', en: 'Organizing systems and applying rules' } },
+      { key: 'people_care', label: { ar: 'مساعدة الناس ورعايتهم', en: 'Helping and caring for people' }, riasec: { ar: 'اجتماعي', en: 'Social' } },
+      { key: 'build_tech', label: { ar: 'بناء الأشياء بالتقنية والبرمجة', en: 'Building things with technology/code' }, riasec: { ar: 'بحثي + واقعي', en: 'Investigative + Realistic' } },
+      { key: 'build_physical', label: { ar: 'بناء وإصلاح الأشياء بيديّ', en: 'Building/fixing things with my hands' }, riasec: { ar: 'واقعي', en: 'Realistic' } },
+      { key: 'numbers_logic', label: { ar: 'الأرقام والأنماط والمنطق', en: 'Numbers, patterns and logic' }, riasec: { ar: 'بحثي', en: 'Investigative' } },
+      { key: 'persuade_create', label: { ar: 'إقناع الناس / صناعة المحتوى', en: 'Persuading people / creating content' }, riasec: { ar: 'فني + مغامر', en: 'Artistic + Enterprising' } },
+      { key: 'organize_rule', label: { ar: 'تنظيم الأنظمة وتطبيق القواعد', en: 'Organizing systems and applying rules' }, riasec: { ar: 'تقليدي', en: 'Conventional' } },
+      { key: 'unsure', label: { ar: 'لست متأكدًا بعد', en: 'Not sure yet' } },
     ],
   },
   {
@@ -198,7 +232,17 @@ export const decisionQuestions: DecisionQuestion[] = [
   },
 ]
 
-export type DecisionAnswers = Partial<Record<DecisionQuestion['id'], string>>
+export type DecisionAnswers = Partial<Record<'q2' | 'q3' | 'q4' | 'q5', string>> & { q1?: string[] }
+
+/** A fully answered flow. */
+export interface CompletedAnswers {
+  persona: Persona
+  q1: string[]
+  q2: string
+  q3: string
+  q4: string
+  q5: string
+}
 
 const COMMIT_ORDER: CommitKey[] = ['under_1y', 'y1_3', 'y4_6', 'over_6y']
 const MARKET_SCORE: Record<Signal, number> = { GROWING: 3, TRANSFORMING: 2, DECLINING: 1 }
@@ -213,46 +257,83 @@ export interface CareerMatch {
 export interface DecisionResult {
   top: CareerMatch[]
   warnings: Career[] // declining careers the user's interest points at
+  /** interest-matching careers excluded only by the commitment filter — shown flagged, never hidden */
+  commitmentMisses: Career[]
 }
 
+const EXPOSURE_RANK: Record<string, number> = { low: 0, medium: 1, high: 2 }
+
 /**
- * Mechanical mapping per research/future-careers.md §4 pseudocode:
- * hard filters (commitment, DECLINING never recommended) + weighted scoring.
+ * Mechanical mapping per research/future-careers.md §4 pseudocode,
+ * with expert-review fixes (P0-4):
+ *  - no fabricated aptitude reason when a career has no aptitude requirement;
+ *  - passion_first genuinely reshapes scoring (interest weighs more, market
+ *    weighs less — not zero information);
+ *  - deterministic, meaningful tie-break: lower automation exposure first;
+ *  - long/licensed careers excluded by the commitment filter are returned as
+ *    flagged near-matches instead of silently hidden.
  */
-export function recommendCareers(answers: Required<DecisionAnswers>): DecisionResult {
+export function recommendCareers(answers: CompletedAnswers): DecisionResult {
   const results: { career: Career; score: number; reasons: string[] }[] = []
+  const commitmentMisses: Career[] = []
 
   for (const c of careers) {
-    // HARD FILTER 1: commitment horizon
-    if (COMMIT_ORDER.indexOf(answers.q5 as CommitKey) < COMMIT_ORDER.indexOf(c.matching.minCommitment)) continue
-    // HARD FILTER 2: declining careers never surface in top-3
+    const fitsCommitment =
+      COMMIT_ORDER.indexOf(answers.q5 as CommitKey) >= COMMIT_ORDER.indexOf(c.matching.minCommitment)
+    const matchedInterests = c.matching.interestKeys.filter((k) => answers.q1.includes(k))
+    const interestHit = matchedInterests.length > 0
+
+    // declining careers are never recommended (shown as warnings below)
     if (MARKET_SCORE[c.signal] === 1) continue
+
+    // commitment filter: collect flagged near-matches instead of hiding
+    if (!fitsCommitment) {
+      if (interestHit) commitmentMisses.push(c)
+      continue
+    }
 
     let score = 0
     const reasons: string[] = []
 
-    const interestOverlap = c.matching.interestKeys.includes(answers.q1)
-    if (interestOverlap) {
-      score += 3
-      reasons.push(`interest:${answers.q1}`)
+    // interests: dominant factor (per matched interest, up to 2);
+    // weighs even more when the user is passion-first
+    const interestWeight = answers.q3 === 'passion_first' ? 3 : 2
+    for (const k of matchedInterests.slice(0, 2)) {
+      score += interestWeight
+      reasons.push(`interest:${k}`)
     }
-    if (c.matching.aptitudeKeys.length === 0 || c.matching.aptitudeKeys.includes(answers.q2)) {
+
+    // aptitude: only score (and explain) when the career actually declares an aptitude fit
+    if (c.matching.aptitudeKeys.length > 0 && c.matching.aptitudeKeys.includes(answers.q2)) {
       score += 2
       reasons.push(`aptitude:${answers.q2}`)
+    } else if (c.matching.aptitudeKeys.length === 0) {
+      score += 1 // open to all aptitudes — neutral small bonus, no fabricated reason
     }
+
     if (c.matching.learningStyles.includes(answers.q4)) {
       score += 1
       reasons.push(`style:${answers.q4}`)
     }
-    if (answers.q3 === 'market_first') score += 2 * (MARKET_SCORE[c.signal] - 2)
-    else if (answers.q3 === 'balanced') score += 1 * (MARKET_SCORE[c.signal] - 2)
+
+    // market weighting: strong under market_first, mild under balanced,
+    // and still counted (halved) under passion_first — passion mutes, never blinds
+    const marketDelta = MARKET_SCORE[c.signal] - 2 // +1 GROWING, 0 TRANSFORMING
+    if (answers.q3 === 'market_first') score += 2 * marketDelta
+    else if (answers.q3 === 'balanced') score += 1 * marketDelta
+    else score += 0.5 * marketDelta
     if (c.signal === 'GROWING' && answers.q3 !== 'passion_first') reasons.push('market:growing')
 
     results.push({ career: c, score, reasons })
   }
 
   const top = results
-    .sort((a, b) => b.score - a.score || a.career.id.localeCompare(b.career.id))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        EXPOSURE_RANK[a.career.automationExposure] - EXPOSURE_RANK[b.career.automationExposure] ||
+        a.career.id.localeCompare(b.career.id)
+    )
     .slice(0, 3)
     .map((r): CareerMatch => {
       const c = r.career
@@ -266,10 +347,10 @@ export function recommendCareers(answers: Required<DecisionAnswers>): DecisionRe
 
   // honest warnings: declining careers matching the user's interest
   const warnings = careers.filter(
-    (c) => MARKET_SCORE[c.signal] === 1 && c.matching.interestKeys.includes(answers.q1)
+    (c) => MARKET_SCORE[c.signal] === 1 && c.matching.interestKeys.some((k) => answers.q1.includes(k))
   )
 
-  return { top, warnings }
+  return { top, warnings, commitmentMisses }
 }
 
 // ── Community learning features ─────────────────────────────────────────────
@@ -323,8 +404,8 @@ export const communityFeatures: CommunityFeature[] = [
       ar: 'ممارسون من مهن قاعدة البيانات الثلاثين يتطوعون كموجّهين؛ والمطابقة حسب المسار المهني والمدينة وتفضيل الجنس. يقدم الموجهون جلسات شهرية «يوم في الحياة» ويراجعون ملفات الأعمال. يرتبط بشبكات خريجي الأكاديميات السعودية (طويق، SDA، سدايا).',
       en: "Practitioners from the 30 dataset careers volunteer as mentors; matching is by career track, city, and gender preference. Mentors run monthly 'day in the life' sessions and review portfolios. Ties into Saudi academies' alumni networks (Tuwaiq, SDA, SDAIA).",
     },
-    rationale: "WEF FoJ 2025 lists teaching & mentoring among rising skills and 77% of employers plan reskilling — mentoring is how tacit, non-course knowledge transfers; Tuwaiq's ~80% placement rate shows the power of structured practitioner pipelines in Saudi Arabia.",
-    rationaleAr: 'يصنف تقرير مستقبل الوظائف 2025 التعليم والإرشاد ضمن المهارات الصاعدة و77% من أصحاب العمل يخططون لإعادة التأهيل — فالإرشاد هو كيفية انتقال المعرفة الضمنية التي لا تقدمها المساقات؛ ومعدل توظيف طويق ~80% يظهر قوة مسارات الممارسين المنظمة في السعودية.',
+    rationale: "WEF FoJ 2025 lists teaching & mentoring among rising skills and 77% of employers plan reskilling — mentoring is how tacit, non-course knowledge transfers; Tuwaiq's self-reported ~80% placement rate illustrates the power of structured practitioner pipelines in Saudi Arabia.",
+    rationaleAr: 'يصنف تقرير مستقبل الوظائف 2025 التعليم والإرشاد ضمن المهارات الصاعدة و77% من أصحاب العمل يخططون لإعادة التأهيل — فالإرشاد هو كيفية انتقال المعرفة الضمنية التي لا تقدمها المساقات؛ ومعدل التوظيف الذي تفيد به أكاديمية طويق (~80% من خريجيها، بحسب إعلانها) يظهر قوة مسارات الممارسين المنظمة في السعودية.',
     sources: ['WEF FoJ 2025', 'Tuwaiq Academy placement data (SPA 2024)'],
   },
   {

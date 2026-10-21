@@ -78,12 +78,21 @@ export const stages: Stage[] = [
   },
 ]
 
-export const stageForScore = (avg: number): Stage =>
-  stages.find((s) => avg >= s.min && avg <= s.max) ?? stages[stages.length - 1]
+/**
+ * Single documented scoring scheme (expert-review P0-9, defect-fix v6-A1):
+ * BOTH the per-domain level and the overall stage use the SAME contiguous
+ * upper-bound thresholds — 1.25 / 2.25 / 3.25. The previous min/max band
+ * lookup had open gaps (1.24–1.25 etc.) whose fallback wrongly returned
+ * the top stage ("رائد") for any score inside a gap. Covered by
+ * scripts/levels.selftest.mjs (boundary values 0, 1.24, 1.25, …, 4.0).
+ */
+export const stageForScore = (avg: number): Stage => {
+  const id = avg < 1.25 ? 'foundation' : avg < 2.25 ? 'developing' : avg < 3.25 ? 'proficient' : 'leading'
+  return stages.find((s) => s.id === id)!
+}
 
-/** Map a domain score (0-4) to the nearest proficiency level (1-4). */
 export const levelForScore = (score: number): Level => {
-  const v = Math.max(1, Math.min(4, Math.round(score))) as 1 | 2 | 3 | 4
+  const v = score < 1.25 ? 1 : score < 2.25 ? 2 : score < 3.25 ? 3 : 4
   return levels.find((l) => l.value === v)!
 }
 

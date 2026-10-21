@@ -557,12 +557,12 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'ai_data_q1', domainId: 'ai-data', format: 'mcq',
     q: { ar: 'أي مما يلي ليس مهمة من مهام تعلم الآلة الموجّه (بإشراف)؟', en: 'Which of the following is NOT a supervised machine-learning task?' },
     options: [
-      { key: 'a', text: { ar: 'تصنيف رسائل البريد الإلكتروني إلى مزعجة أو غير مزعجة', en: 'Classification of emails as spam or not spam' } },
-      { key: 'b', text: { ar: 'الانحدار للتنبؤ بالطلب على الخدمة في الشهر القادم', en: "Regression to predict next month's service demand" } },
-      { key: 'c', text: { ar: 'تجميع العملاء في مجموعات دون فئات محددة مسبقاً', en: 'Clustering customers into groups with no predefined labels' } },
+      { key: 'a', text: { ar: 'تجميع العملاء في مجموعات دون فئات محددة مسبقاً', en: 'Clustering customers into groups with no predefined labels' } },
+      { key: 'b', text: { ar: 'تصنيف رسائل البريد الإلكتروني إلى مزعجة أو غير مزعجة', en: 'Classification of emails as spam or not spam' } },
+      { key: 'c', text: { ar: 'الانحدار للتنبؤ بالطلب على الخدمة في الشهر القادم', en: "Regression to predict next month's service demand" } },
       { key: 'd', text: { ar: 'تصنيف المشاعر في ملاحظات المواطنين', en: 'Sentiment classification of citizen feedback' } },
     ],
-    answer: 'c',
+    answer: 'a',
     explanation: {
       ar: 'التجميع (Clustering) هو تعلم غير موجّه — فهو يكتشف البنية في بيانات بلا تصنيفات، بينما يتعلم التصنيف والانحدار من أمثلة مصنّفة.',
       en: 'Clustering is unsupervised learning — it finds structure in unlabeled data, while classification and regression learn from labeled examples.',
@@ -572,10 +572,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'ai_data_q2', domainId: 'ai-data', format: 'true_false',
     q: { ar: 'النموذج الذي يحقق دقة عالية جداً على بيانات التدريب مضمون أن يؤدي جيداً على بيانات جديدة لم يرها من قبل.', en: 'A model that achieves very high accuracy on its training data is guaranteed to perform well on new, unseen data.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
-    answer: 'b',
+    answer: 'a',
     explanation: {
       ar: 'الدقة العالية على بيانات التدريب قد تعني فرط التخصيص (Overfitting) — أي أن النموذج حفظ بيانات التدريب. يجب التحقق من الأداء على بيانات اختبار مستقلة.',
       en: 'High training accuracy can mean overfitting — the model memorised the training data. Performance must be validated on held-out test data.',
@@ -586,11 +586,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ماذا يعني "تسرب البيانات" في مشروع تعلم الآلة؟', en: 'What does "data leakage" mean in a machine-learning project?' },
     options: [
       { key: 'a', text: { ar: 'نشر مجموعة بيانات عن طريق الخطأ على منصة البيانات المفتوحة', en: 'Accidentally publishing a dataset on an open-data portal' } },
-      { key: 'b', text: { ar: 'تأثير معلومات من خارج مجموعة التدريب (مثل بيانات الاختبار أو المتغير الهدف نفسه) في تدريب النموذج، ما يضخّم الأداء المقاس', en: 'Information from outside the training set (e.g., test data or the target itself) influencing model training, inflating measured performance' } },
-      { key: 'c', text: { ar: 'فقدان بيانات التدريب بسبب فشل النسخ الاحتياطي', en: 'Losing training data because of a failed backup' } },
+      { key: 'b', text: { ar: 'فقدان بيانات التدريب بسبب فشل النسخ الاحتياطي', en: 'Losing training data because of a failed backup' } },
+      { key: 'c', text: { ar: 'تأثير معلومات من خارج مجموعة التدريب (مثل بيانات الاختبار أو المتغير الهدف نفسه) في تدريب النموذج، ما يضخّم الأداء المقاس', en: 'Information from outside the training set (e.g., test data or the target itself) influencing model training, inflating measured performance' } },
       { key: 'd', text: { ar: 'مشاركة بيانات مجهولة الهوية بين فريقين حكوميين', en: 'Sharing anonymised data between two government teams' } },
     ],
-    answer: 'b',
+    answer: 'c',
     explanation: {
       ar: 'يتيح تسرب البيانات للنموذج رؤية معلومات لن تتوفر له وقت التنبؤ، فينتج درجات تقييم مضللة تبدو أفضل من الواقع.',
       en: 'Data leakage lets the model see information it would not have at prediction time, producing misleadingly good evaluation scores.',
@@ -602,11 +602,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ماذا يرمز "الثلاثي CIA" في أمن المعلومات؟', en: 'What does the "CIA triad" of information security stand for?' },
     options: [
       { key: 'a', text: { ar: 'التحكم، النزاهة، المصادقة', en: 'Control, Integrity, Authentication' } },
-      { key: 'b', text: { ar: 'السرية، النزاهة، التوافر', en: 'Confidentiality, Integrity, Availability' } },
-      { key: 'c', text: { ar: 'الامتثال، الهوية، الوصول', en: 'Compliance, Identity, Access' } },
-      { key: 'd', text: { ar: 'التشفير، العزل، التدقيق', en: 'Cryptography, Isolation, Auditing' } },
+      { key: 'b', text: { ar: 'الامتثال، الهوية، الوصول', en: 'Compliance, Identity, Access' } },
+      { key: 'c', text: { ar: 'التشفير، العزل، التدقيق', en: 'Cryptography, Isolation, Auditing' } },
+      { key: 'd', text: { ar: 'السرية، النزاهة، التوافر', en: 'Confidentiality, Integrity, Availability' } },
     ],
-    answer: 'b',
+    answer: 'd',
     explanation: {
       ar: 'الثلاثي CIA — السرية والنزاهة والتوافر — هو النموذج الأساسي لأهداف الأمن.',
       en: 'The CIA triad — Confidentiality, Integrity, Availability — is the foundational model for security objectives.',
@@ -645,12 +645,12 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'cloud_infra_q1', domainId: 'cloud', format: 'mcq',
     q: { ar: 'أي مما يلي ليس من نماذج الخدمة السحابية القياسية الثلاثة؟', en: 'Which of the following is NOT one of the three standard cloud service models?' },
     options: [
-      { key: 'a', text: { ar: 'البنية التحتية كخدمة (IaaS)', en: 'Infrastructure as a Service (IaaS)' } },
-      { key: 'b', text: { ar: 'المنصة كخدمة (PaaS)', en: 'Platform as a Service (PaaS)' } },
-      { key: 'c', text: { ar: 'البرمجيات كخدمة (SaaS)', en: 'Software as a Service (SaaS)' } },
-      { key: 'd', text: { ar: 'الأجهزة كأجهزة مُدارة (داخل المقر)', en: 'Hardware as a Managed Appliance (on-premises)' } },
+      { key: 'a', text: { ar: 'الأجهزة كأجهزة مُدارة (داخل المقر)', en: 'Hardware as a Managed Appliance (on-premises)' } },
+      { key: 'b', text: { ar: 'البنية التحتية كخدمة (IaaS)', en: 'Infrastructure as a Service (IaaS)' } },
+      { key: 'c', text: { ar: 'المنصة كخدمة (PaaS)', en: 'Platform as a Service (PaaS)' } },
+      { key: 'd', text: { ar: 'البرمجيات كخدمة (SaaS)', en: 'Software as a Service (SaaS)' } },
     ],
-    answer: 'd',
+    answer: 'a',
     explanation: {
       ar: 'النماذج القياسية الثلاثة هي IaaS وPaaS وSaaS؛ أما الأجهزة المدارة داخل المقر فليست نموذج خدمة سحابية.',
       en: 'The three standard models are IaaS, PaaS and SaaS; on-premises managed appliances are not a cloud service model.',
@@ -661,11 +661,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'وفق نموذج المسؤولية المشتركة، من المسؤول عن تحديث نظام التشغيل الضيف في جهاز افتراضي بنموذج IaaS؟', en: 'Under the shared responsibility model, who is responsible for patching the guest operating system in an IaaS virtual machine?' },
     options: [
       { key: 'a', text: { ar: 'مزود السحابة، دائماً', en: 'The cloud provider, always' } },
-      { key: 'b', text: { ar: 'العميل', en: 'The customer' } },
-      { key: 'c', text: { ar: 'مصنّع الأجهزة', en: 'The hardware manufacturer' } },
+      { key: 'b', text: { ar: 'مصنّع الأجهزة', en: 'The hardware manufacturer' } },
+      { key: 'c', text: { ar: 'العميل', en: 'The customer' } },
       { key: 'd', text: { ar: 'لا أحد — فأنظمة IaaS تحدّث نفسها', en: 'No one — IaaS systems patch themselves' } },
     ],
-    answer: 'b',
+    answer: 'c',
     explanation: {
       ar: 'في نموذج IaaS يؤمّن المزود الطبقة المادية والطبقة الافتراضية؛ بينما يدير العميل نظام التشغيل الضيف والوسائط والبيانات والوصول.',
       en: 'In IaaS, the provider secures the physical layer and hypervisor; the customer manages the guest OS, middleware, data and access.',
@@ -690,11 +690,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'أي مما يلي مخرَج أساسي في تصميم الخدمات؟', en: 'Which of the following is a core artefact of service design?' },
     options: [
       { key: 'a', text: { ar: 'مخطط هيكلي تنظيمي', en: 'An organisational chart' } },
-      { key: 'b', text: { ar: 'مخطط خدمة يربط إجراءات المستخدم بعمليات الواجهة الأمامية والكواليس', en: 'A service blueprint mapping user actions to frontstage and backstage processes' } },
-      { key: 'c', text: { ar: 'مخطط جانت لخطة المشروع', en: 'A Gantt chart of the project plan' } },
-      { key: 'd', text: { ar: 'مخطط كيانات وعلاقات لقاعدة البيانات', en: 'An entity-relationship diagram of the database' } },
+      { key: 'b', text: { ar: 'مخطط جانت لخطة المشروع', en: 'A Gantt chart of the project plan' } },
+      { key: 'c', text: { ar: 'مخطط كيانات وعلاقات لقاعدة البيانات', en: 'An entity-relationship diagram of the database' } },
+      { key: 'd', text: { ar: 'مخطط خدمة يربط إجراءات المستخدم بعمليات الواجهة الأمامية والكواليس', en: 'A service blueprint mapping user actions to frontstage and backstage processes' } },
     ],
-    answer: 'b',
+    answer: 'd',
     explanation: {
       ar: 'يربط مخطط الخدمة بين ما يختبره المستخدم والعمليات والأنظمة الداخلية التي تقدم الخدمة — وهو الأداة المميزة لتصميم الخدمات.',
       en: 'The service blueprint connects what the user experiences with the internal processes and systems that deliver it — the signature tool of service design.',
@@ -733,12 +733,12 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'policy_gov_q1', domainId: 'policy', format: 'mcq',
     q: { ar: 'أي مما يلي ليس دوراً معترفاً به في حوكمة البيانات؟', en: 'Which of the following is NOT a recognised data governance role?' },
     options: [
-      { key: 'a', text: { ar: 'مالك البيانات', en: 'Data owner' } },
-      { key: 'b', text: { ar: 'أمين البيانات', en: 'Data steward' } },
-      { key: 'c', text: { ar: 'وصي البيانات', en: 'Data custodian' } },
-      { key: 'd', text: { ar: 'منقّب البيانات', en: 'Data miner' } },
+      { key: 'a', text: { ar: 'منقّب البيانات', en: 'Data miner' } },
+      { key: 'b', text: { ar: 'مالك البيانات', en: 'Data owner' } },
+      { key: 'c', text: { ar: 'أمين البيانات', en: 'Data steward' } },
+      { key: 'd', text: { ar: 'وصي البيانات', en: 'Data custodian' } },
     ],
-    answer: 'd',
+    answer: 'a',
     explanation: {
       ar: 'يضع المالك السياسات، ويدير الأمين الجودة والتعريفات، ويتولى الوصي الحفظ التقني؛ أما "منقّب البيانات" فهو أسلوب تحليلي وليس دوراً في الحوكمة.',
       en: 'Owners set policy, stewards manage quality and definitions, custodians handle technical custody; "data miner" describes an analysis technique, not a governance role.',
@@ -762,11 +762,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'أي جهة هي الجهة التنظيمية المختصة بنظام حماية البيانات الشخصية (PDPL) في السعودية؟', en: 'Which authority is the competent regulator for the Saudi Personal Data Protection Law (PDPL)?' },
     options: [
       { key: 'a', text: { ar: 'هيئة الاتصالات والفضاء والتقنية', en: 'The Communications, Space and Technology Commission (CST)' } },
-      { key: 'b', text: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)', en: 'The Saudi Data and Artificial Intelligence Authority (SDAIA)' } },
-      { key: 'c', text: { ar: 'وزارة التجارة', en: 'The Ministry of Commerce' } },
+      { key: 'b', text: { ar: 'وزارة التجارة', en: 'The Ministry of Commerce' } },
+      { key: 'c', text: { ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)', en: 'The Saudi Data and Artificial Intelligence Authority (SDAIA)' } },
       { key: 'd', text: { ar: 'الهيئة الوطنية للأمن السيبراني', en: 'The National Cybersecurity Authority (NCA)' } },
     ],
-    answer: 'b',
+    answer: 'c',
     explanation: {
       ar: 'سدايا هي الجهة المختصة بنظام حماية البيانات الشخصية ولائحته التنفيذية، بما فيها قواعد نقل البيانات والإبلاغ عن الحوادث.',
       en: 'SDAIA is the competent authority for the PDPL and its implementing regulations, including data-transfer and breach-notification rules.',
@@ -821,12 +821,12 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'emerging_tech_q1', domainId: 'emerging', format: 'mcq',
     q: { ar: 'أي مما يلي ليس من مجالات التقنيات الناشئة للحكومة؟', en: 'Which of the following is NOT an emerging technology domain for government?' },
     options: [
-      { key: 'a', text: { ar: 'الحوسبة الكمومية', en: 'Quantum computing' } },
-      { key: 'b', text: { ar: 'الحوسبة الطرفية', en: 'Edge computing' } },
-      { key: 'c', text: { ar: 'شبكات الاتصال الهاتفي (Dial-up)', en: 'Dial-up networking' } },
+      { key: 'a', text: { ar: 'شبكات الاتصال الهاتفي (Dial-up)', en: 'Dial-up networking' } },
+      { key: 'b', text: { ar: 'الحوسبة الكمومية', en: 'Quantum computing' } },
+      { key: 'c', text: { ar: 'الحوسبة الطرفية', en: 'Edge computing' } },
       { key: 'd', text: { ar: 'الحوسبة المكانية والواقع الممتد', en: 'Spatial computing and extended reality' } },
     ],
-    answer: 'c',
+    answer: 'a',
     explanation: {
       ar: 'الاتصال الهاتفي تقنية وصول قديمة؛ أما الحوسبة الكمومية والطرفية والمكانية فهي مجالات ناشئة نشطة يتتبعها رادار التقنيات الحكومي.',
       en: 'Dial-up is a legacy access technology; quantum, edge and spatial computing are active emerging-technology domains tracked on government tech radars.',
@@ -837,11 +837,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ما الخاصية التي تجعل السجل في سلسلة الكتل (Blockchain) كاشفاً للتلاعب عملياً؟', en: 'What property makes a blockchain record effectively tamper-evident?' },
     options: [
       { key: 'a', text: { ar: 'كل سجل مخزّن على خادم مركزي واحد', en: 'Each record is stored on a single central server' } },
-      { key: 'b', text: { ar: 'كل كتلة مرتبطة تشفيرياً بالكتلة السابقة، فأي تعديل في السجل يكسر السلسلة', en: 'Each block is cryptographically linked to the previous block, so altering history breaks the chain' } },
-      { key: 'c', text: { ar: 'تُحذف السجلات بعد 24 ساعة', en: 'Records are deleted after 24 hours' } },
+      { key: 'b', text: { ar: 'تُحذف السجلات بعد 24 ساعة', en: 'Records are deleted after 24 hours' } },
+      { key: 'c', text: { ar: 'كل كتلة مرتبطة تشفيرياً بالكتلة السابقة، فأي تعديل في السجل يكسر السلسلة', en: 'Each block is cryptographically linked to the previous block, so altering history breaks the chain' } },
       { key: 'd', text: { ar: 'يمكن للمسؤولين فقط قراءة السجل', en: 'Only administrators can read the ledger' } },
     ],
-    answer: 'b',
+    answer: 'c',
     explanation: {
       ar: 'يربط التجزئة التشفيرية كل كتلة بسابقتها؛ وأي تغيير في كتلة سابقة يبطل جميع التجزئات اللاحقة ويكتشف فوراً.',
       en: 'Cryptographic hashing links each block to its predecessor; changing any past block invalidates all subsequent hashes and is immediately detectable.',
@@ -851,10 +851,10 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     id: 'emerging_tech_q3', domainId: 'emerging', format: 'true_false',
     q: { ar: 'ستحل الحواسيب الكمومية محل الحواسيب التقليدية في جميع مهام الحوسبة.', en: 'Quantum computers will replace classical computers for all computing tasks.' },
     options: [
-      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
-      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
     ],
-    answer: 'b',
+    answer: 'a',
     explanation: {
       ar: 'تتفوق الحواسيب الكمومية في فئات محددة من المسائل فقط (كبعض مسائل التحسين والتحليل إلى عوامل)؛ وستبقى الأحمال اليومية على الحوسبة التقليدية.',
       en: 'Quantum computers excel only at specific problem classes (e.g., certain optimisation and factoring problems); everyday workloads will remain classical.',
@@ -866,11 +866,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     q: { ar: 'ماذا تعني "السلامة النفسية" في فريق رقمي عالي الأداء؟', en: 'What does "psychological safety" mean in a high-performing digital team?' },
     options: [
       { key: 'a', text: { ar: 'ضمان بألا يتعرض أحد للنقد إطلاقاً', en: 'A guarantee that no one will ever be criticised' } },
-      { key: 'b', text: { ar: 'قناعة مشتركة بأن المخاطرة بين الأشخاص آمنة — كالاعتراف بالأخطاء وطرح الأسئلة وتحدي الأفكار', en: 'A shared belief that it is safe to take interpersonal risks — admitting mistakes, asking questions, challenging ideas' } },
-      { key: 'c', text: { ar: 'سياسة تقنية معلومات تحمي أجهزة الموظفين', en: 'An IT policy that protects employee devices' } },
-      { key: 'd', text: { ar: 'برنامج صحة وعافية تديره الموارد البشرية', en: 'A wellness programme run by HR' } },
+      { key: 'b', text: { ar: 'سياسة تقنية معلومات تحمي أجهزة الموظفين', en: 'An IT policy that protects employee devices' } },
+      { key: 'c', text: { ar: 'برنامج صحة وعافية تديره الموارد البشرية', en: 'A wellness programme run by HR' } },
+      { key: 'd', text: { ar: 'قناعة مشتركة بأن المخاطرة بين الأشخاص آمنة — كالاعتراف بالأخطاء وطرح الأسئلة وتحدي الأفكار', en: 'A shared belief that it is safe to take interpersonal risks — admitting mistakes, asking questions, challenging ideas' } },
     ],
-    answer: 'b',
+    answer: 'd',
     explanation: {
       ar: 'السلامة النفسية — التي حددها مشروع أرسطو في Google كأهم عامل في فاعلية الفرق — تتيح الصراحة والتعلم، لا غياب المعايير.',
       en: "Psychological safety — identified by Google's Project Aristotle as the top factor in team effectiveness — enables candour and learning, not absence of standards.",
@@ -903,8 +903,281 @@ export const calibrationQuestions: CalibrationQuestion[] = [
       ar: 'التغيير المعقد لا يمكن التخطيط له بالكامل مسبقاً؛ فالقادة التكيفيون يحددون الاتجاه والضوابط بينما تتعلم الفرق الممكّنة وتعدّل التسليم باستمرار.',
       en: 'Complex change cannot be fully planned upfront; adaptive leaders set direction and guardrails while empowered teams learn and adjust delivery continuously.',
     },
+  },  // ── Round-3 expansion (P1-8): +2 per domain → 5 per domain ──
+  {
+    id: 'ai_data_q4', domainId: 'ai-data', format: 'mcq',
+    q: { ar: 'ما الغرض الرئيسي من تقسيم البيانات إلى مجموعة تدريب ومجموعة اختبار؟', en: 'What is the main purpose of splitting data into training and test sets?' },
+    options: [
+      { key: 'a', text: { ar: 'تقييم أداء النموذج على بيانات لم يرها أثناء التدريب', en: 'Evaluating model performance on data it did not see during training' } },
+      { key: 'b', text: { ar: 'تسريع تدريب النموذج', en: 'Speeding up model training' } },
+      { key: 'c', text: { ar: 'تقليل حجم ملفات البيانات', en: 'Reducing data file sizes' } },
+      { key: 'd', text: { ar: 'حماية البيانات من التسرب الأمني', en: 'Protecting data from security leaks' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'مجموعة الاختبار تقيس التعميم: أداء النموذج على بيانات جديدة هو ما يهم عمليًا، لا حفظه لبيانات التدريب.',
+      en: 'The test set measures generalization: performance on unseen data is what matters in practice, not memorizing the training data.',
+    },
+  },
+  {
+    id: 'ai_data_q5', domainId: 'ai-data', format: 'true_false',
+    q: { ar: 'الذكاء الاصطناعي التوليدي يضمن صحة الحقائق في مخرجاته.', en: 'Generative AI guarantees the factual accuracy of its outputs.' },
+    options: [
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'النماذج التوليدية قد «تهلوس» — تنتج نصوصًا واثقة وخاطئة؛ لذا تُراجَع المخرجات مقابل مصادر موثوقة قبل الاستخدام.',
+      en: 'Generative models can hallucinate — producing confident but wrong text — so outputs must be checked against trusted sources before use.',
+    },
+  },
+  {
+    id: 'cyber_trust_q4', domainId: 'cyber', format: 'mcq',
+    q: { ar: 'ما الذي تصفه المصادقة متعددة العوامل (MFA) بدقة؟', en: 'What does multi-factor authentication (MFA) precisely describe?' },
+    options: [
+      { key: 'a', text: { ar: 'استخدام كلمتي مرور قويتين معًا', en: 'Using two strong passwords together' } },
+      { key: 'b', text: { ar: 'تسجيل الدخول من جهازين مختلفين', en: 'Logging in from two different devices' } },
+      { key: 'c', text: { ar: 'إثبات الهوية بدليلين من فئتين مختلفتين (معرفة/ملكية/سمة حيوية)', en: 'Proving identity with two factors from different categories (knowledge / possession / biometric)' } },
+      { key: 'd', text: { ar: 'تغيير كلمة المرور مرتين في السنة', en: 'Changing your password twice a year' } },
+    ],
+    answer: 'c',
+    explanation: {
+      ar: 'قوة MFA في الجمع بين فئات أدلة مختلفة — سرقة كلمة مرور وحدها لا تكفي المهاجم.',
+      en: 'MFA’s strength comes from combining different factor categories — a stolen password alone is no longer enough for an attacker.',
+    },
+  },
+  {
+    id: 'cyber_trust_q5', domainId: 'cyber', format: 'true_false',
+    q: { ar: 'وجود القفل (HTTPS) في المتصفح يعني أن محتوى الموقع موثوق دائمًا.', en: 'The padlock (HTTPS) in a browser means a site’s content is always trustworthy.' },
+    options: [
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'HTTPS يشفر الاتصال فقط؛ فموقع تصيّد قد يستخدم HTTPS أيضًا. القفل يحمي القناة لا نوايا الموقع.',
+      en: 'HTTPS only encrypts the connection; phishing sites use it too. The padlock protects the channel, not the site’s intentions.',
+    },
+  },
+  {
+    id: 'cloud_infra_q4', domainId: 'cloud', format: 'mcq',
+    q: { ar: 'في نموذج SaaS، ما الذي يديره مزود الخدمة مقارنة بـIaaS؟', en: 'In the SaaS model, what does the provider manage compared with IaaS?' },
+    options: [
+      { key: 'a', text: { ar: 'العتاد فقط', en: 'Hardware only' } },
+      { key: 'b', text: { ar: 'العتاد والشبكة فقط', en: 'Hardware and network only' } },
+      { key: 'c', text: { ar: 'لا شيء — العميل يدير كل شيء', en: 'Nothing — the customer manages everything' } },
+      { key: 'd', text: { ar: 'كل الطبقات تقريبًا بما فيها التطبيق وبياناته التشغيلية', en: 'Almost all layers, including the application itself' } },
+    ],
+    answer: 'd',
+    explanation: {
+      ar: 'في SaaS يدير المزود التطبيق كاملًا وما تحته؛ وفي IaaS يدير العميل نظام التشغيل وما فوقه.',
+      en: 'In SaaS the provider manages the whole application stack; in IaaS the customer manages the guest OS and everything above it.',
+    },
+  },
+  {
+    id: 'cloud_infra_q5', domainId: 'cloud', format: 'true_false',
+    q: { ar: 'استخدام السحابة يعني بالضرورة أن بياناتك تُخزَّن خارج بلدك.', en: 'Using the cloud necessarily means your data is stored outside your country.' },
+    options: [
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'المناطق السحابية المحلية والسحابة السيادية تبقي البيانات داخل المملكة — الموقع قرار تصميمي وتعاقدي.',
+      en: 'Local cloud regions and sovereign cloud keep data inside the Kingdom — residency is a design and contracting decision.',
+    },
+  },
+  {
+    id: 'service_design_q4', domainId: 'service-design', format: 'mcq',
+    q: { ar: 'ما الغرض الأساسي من النموذج الأولي منخفض الدقة في تصميم الخدمات؟', en: 'What is the main purpose of a low-fidelity prototype in service design?' },
+    options: [
+      { key: 'a', text: { ar: 'إبهار أصحاب المصلحة بتصميم نهائي', en: 'Impressing stakeholders with a final design' } },
+      { key: 'b', text: { ar: 'اختبار الفكرة مع المستخدمين بأقل كلفة قبل البناء', en: 'Testing the idea with users at the lowest cost before building' } },
+      { key: 'c', text: { ar: 'توثيق المتطلبات التقنية للمطورين', en: 'Documenting technical requirements for developers' } },
+      { key: 'd', text: { ar: 'استبدال بحث المستخدمين كليًا', en: 'Replacing user research entirely' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'النموذج منخفض الدقة أداة تعلم رخيصة وسريعة — يكشف سوء الفهم مبكرًا قبل كلفة البناء.',
+      en: 'A low-fidelity prototype is a cheap, fast learning tool — it surfaces misunderstandings early, before build costs.',
+    },
+  },
+  {
+    id: 'service_design_q5', domainId: 'service-design', format: 'true_false',
+    q: { ar: 'اختبار قابلية الاستخدام المفيد يتطلب مختبرًا متخصصًا وعشرات المستخدمين.', en: 'Useful usability testing requires a dedicated lab and dozens of users.' },
+    options: [
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'خمسة مستخدمين يكشفون غالبية مشكلات قابلية الاستخدام الشائعة؛ وجلسة بسيطة بمكالمة فيديو تكفي للبدء.',
+      en: 'Five users surface most common usability problems; a simple video-call session is enough to start.',
+    },
+  },
+  {
+    id: 'policy_gov_q4', domainId: 'policy', format: 'mcq',
+    q: { ar: 'ما مبدأ «مرة واحدة فقط» (Once-Only) في الحكومة الرقمية؟', en: 'What is the “once-only” principle in digital government?' },
+    options: [
+      { key: 'a', text: { ar: 'لا تطلب الجهة من المواطن بيانات تملكها جهة حكومية أخرى أصلًا', en: 'An agency never asks citizens for data another government body already holds' } },
+      { key: 'b', text: { ar: 'يقدّم المواطن وثائقه مرة واحدة فقط في حياته', en: 'Citizens submit their documents only once in their lifetime' } },
+      { key: 'c', text: { ar: 'كل خدمة تُستخدم مرة واحدة فقط', en: 'Each service is used only once' } },
+      { key: 'd', text: { ar: 'نشر البيانات مرة واحدة في السنة', en: 'Publishing data once a year' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'المبدأ يعني إعادة استخدام البيانات بين الجهات بموافقة — فلا يُطلب من المواطن ما تملكه الحكومة سلفًا.',
+      en: 'The principle means reusing data across agencies with consent — citizens are never asked for what government already holds.',
+    },
+  },
+  {
+    id: 'policy_gov_q5', domainId: 'policy', format: 'true_false',
+    q: { ar: 'البيانات المفتوحة تشمل البيانات الشخصية ما دامت منشورة بصيغة مقروءة آليًا.', en: 'Open data includes personal data as long as it is published in a machine-readable format.' },
+    options: [
+      { key: 'a', text: { ar: 'خطأ', en: 'False' } },
+      { key: 'b', text: { ar: 'صحيح', en: 'True' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'البيانات المفتوحة تستثني البيانات الشخصية والسرية بموجب أنظمة حماية البيانات — الصيغة لا علاقة لها بجواز النشر.',
+      en: 'Open data excludes personal and confidential data under data-protection law — format has nothing to do with publishability.',
+    },
+  },
+  {
+    id: 'agile_delivery_q4', domainId: 'agile', format: 'mcq',
+    q: { ar: 'ما الغرض الأساسي من اجتماع الاسترجاع (Retrospective)؟', en: 'What is the main purpose of a retrospective?' },
+    options: [
+      { key: 'a', text: { ar: 'عرض المنتج على أصحاب المصلحة', en: 'Demoing the product to stakeholders' } },
+      { key: 'b', text: { ar: 'تخطيط عمل الدورة القادمة بالتفصيل', en: 'Planning the next sprint in detail' } },
+      { key: 'c', text: { ar: 'تأمل طريقة عمل الفريق وتحسينها', en: 'Reflecting on how the team works and improving it' } },
+      { key: 'd', text: { ar: 'تقييم أداء الأفراد للمدير', en: 'Evaluating individual performance for the manager' } },
+    ],
+    answer: 'c',
+    explanation: {
+      ar: 'الاسترجاع يحسّن طريقة العمل نفسها؛ والعرض للمراجع (Review) والتخطيط للتخطيط (Planning) — فعاليات مختلفة.',
+      en: 'The retrospective improves the way of working itself; demos belong to the review and planning to planning — different events.',
+    },
+  },
+  {
+    id: 'agile_delivery_q5', domainId: 'agile', format: 'true_false',
+    q: { ar: 'في التسليم الرشيق، يُقاس نجاح المنتج باكتمال قائمة المهام المتفق عليها مسبقًا.', en: 'In agile delivery, product success is measured by completing the pre-agreed task list.' },
+    options: [
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'النجاح يُقاس بالنتائج والأثر على المستخدمين (Outcomes) لا بكمية المخرجات المنجزة (Outputs).',
+      en: 'Success is measured by user outcomes and impact, not by the volume of completed outputs.',
+    },
+  },
+  {
+    id: 'emerging_tech_q4', domainId: 'emerging', format: 'mcq',
+    q: { ar: 'ما «التوأم الرقمي»؟', en: 'What is a digital twin?' },
+    options: [
+      { key: 'a', text: { ar: 'نسخة احتياطية من قاعدة البيانات', en: 'A backup copy of a database' } },
+      { key: 'b', text: { ar: 'حساب مزيف على الشبكات الاجتماعية', en: 'A fake social-media account' } },
+      { key: 'c', text: { ar: 'جهازان متطابقان يعملان بالتناوب', en: 'Two identical devices running in alternation' } },
+      { key: 'd', text: { ar: 'نموذج رقمي حي لأصل أو نظام مادي يتغذى ببياناته الفعلية', en: 'A live digital model of a physical asset or system fed by its real data' } },
+    ],
+    answer: 'd',
+    explanation: {
+      ar: 'التوأم الرقمي يعكس حالة الأصل المادي لحظيًا، ما يتيح المحاكاة والتنبؤ قبل أي تغيير مادي.',
+      en: 'A digital twin mirrors the physical asset’s state in near real time, enabling simulation and prediction before any physical change.',
+    },
+  },
+  {
+    id: 'emerging_tech_q5', domainId: 'emerging', format: 'true_false',
+    q: { ar: 'الحوسبة الطرفية (Edge) تعني معالجة البيانات قرب مصدرها بدل إرسالها كاملة إلى السحابة.', en: 'Edge computing means processing data near its source instead of sending it all to the cloud.' },
+    options: [
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+    ],
+    answer: 'a',
+    explanation: {
+      ar: 'المعالجة الطرفية تقلل الكمون وحركة البيانات — أساسية للخدمات اللحظية كالمرور الذكي.',
+      en: 'Edge processing cuts latency and data movement — essential for real-time services like smart traffic.',
+    },
+  },
+  {
+    id: 'leadership_collab_q4', domainId: 'leadership', format: 'mcq',
+    q: { ar: 'ما الخطوة الأولى الأصح في إدارة تغيير لمبادرة رقمية؟', en: 'What is the right first step in managing change for a digital initiative?' },
+    options: [
+      { key: 'a', text: { ar: 'شراء الأداة الجديدة فورًا', en: 'Buying the new tool immediately' } },
+      { key: 'b', text: { ar: 'فهم من يتأثر بالتغيير وما الذي يتغير لهم', en: 'Understanding who is affected and what changes for them' } },
+      { key: 'c', text: { ar: 'إرسال تعميم إلزامي لجميع الموظفين', en: 'Sending a mandatory circular to all staff' } },
+      { key: 'd', text: { ar: 'انتظار اكتمال التطوير التقني', en: 'Waiting for technical development to finish' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'خريطة المتأثرين واحتياجاتهم أساس أي خطة تغيير ناجحة — الأدوات والتعاميم لاحقة لا بادئة.',
+      en: 'A map of who is affected and their needs is the foundation of any successful change plan — tools and circulars come later.',
+    },
+  },
+  {
+    id: 'leadership_collab_q5', domainId: 'leadership', format: 'true_false',
+    q: { ar: 'العمل بانفتاح (Working in the open) يعني نشر كل شيء بما فيه البيانات الحساسة للمشروع.', en: 'Working in the open means publishing everything, including a project’s sensitive data.' },
+    options: [
+      { key: 'a', text: { ar: 'صحيح', en: 'True' } },
+      { key: 'b', text: { ar: 'خطأ', en: 'False' } },
+    ],
+    answer: 'b',
+    explanation: {
+      ar: 'الانفتاح يعني مشاركة التقدم والدروس والقرارات — مع حماية البيانات الحساسة والشخصية صراحة.',
+      en: 'Openness means sharing progress, lessons and decisions — while explicitly protecting sensitive and personal data.',
+    },
   },
 ]
 
 export const questionsForDomain = (domainId: string): CalibrationQuestion[] =>
   calibrationQuestions.filter((q) => q.domainId === domainId)
+
+// ── Saudi national learning & employment support (expert-review P1) ─────────
+// Free/عبد-funded national rails that make the recommended paths affordable.
+
+export interface NationalProgram {
+  id: string
+  name: L
+  description: L
+  url: string
+}
+
+export const nationalPrograms: NationalProgram[] = [
+  {
+    id: 'drob',
+    name: { ar: 'منصة دروب', en: 'Doroob Platform' },
+    description: {
+      ar: 'المنصة الوطنية للتدريب المجاني عن بُعد — مقررات قصيرة معتمدة في التقنية واللغة والمهارات المهنية، مجانية بالكامل للسعوديين.',
+      en: 'The national free e-training platform — short accredited courses in tech, language and professional skills, fully free for Saudis.',
+    },
+    url: 'https://doroob.sa',
+  },
+  {
+    id: 'tamheer',
+    name: { ar: 'برنامج تمهير', en: 'Tamheer Program' },
+    description: {
+      ar: 'تدريب أثناء العمل بمكافأة شهرية لحديثي التخرج — جسر حقيقي من الدراسة إلى أول وظيفة.',
+      en: 'On-the-job training with a monthly stipend for fresh graduates — a real bridge from study to the first job.',
+    },
+    url: 'https://eservices.taqat.sa',
+  },
+  {
+    id: 'cert_support',
+    name: { ar: 'دعم الشهادات الاحترافية (هدف)', en: 'Professional Certificate Support (Hadaf)' },
+    description: {
+      ar: 'صندوق الموارد البشرية يعوّض رسوم الشهادات الدولية المعتمدة (AWS وCompTIA وPMP وغيرها) بعد اجتيازها — تحقق من قائمة الشهادات المدعومة قبل الدفع.',
+      en: 'The HR Development Fund reimburses fees for accredited international certificates (AWS, CompTIA, PMP and more) after passing — check the supported list before paying.',
+    },
+    url: 'https://hrdf.gov.sa',
+  },
+  {
+    id: 'jadarat',
+    name: { ar: 'منصة جدارات', en: 'Jadarat Platform' },
+    description: {
+      ar: 'المنصة الوطنية الموحدة للوظائف الحكومية — للترشح والمفاضلة على الوظائف العامة.',
+      en: 'The unified national platform for government jobs — application and selection for public-sector roles.',
+    },
+    url: 'https://jadarat.sa',
+  },
+]

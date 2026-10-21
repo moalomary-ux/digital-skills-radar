@@ -1,0 +1,253 @@
+import type { L } from './types'
+import type { TrackId } from './tracks'
+import { domains } from './domains'
+
+/**
+ * v6 Round B — versioned skill records: every skill is its own record
+ * (the review's «كل مهارة سجلًا مستقلًا»). 8 domains × 5 skills = 40.
+ * Fields: definition, audience tracks, example task, evidence basis,
+ * prerequisites, linked assessment statement, version, last-reviewed.
+ *
+ * Editorial conventions (documented):
+ *  - `evidence` is shared per domain (the frameworks cover skill families,
+ *    not single skills) and says so.
+ *  - `audienceTracks` follows a declared rule: awareness+applied for all;
+ *    specialist for technical domains; team_lead for delivery/governance;
+ *    executive for strategy/leadership skills.
+ *  - `assessmentRef` links each record to its radar statement (behavioral
+ *    anchor), so record ↔ question ↔ plan stay traceable.
+ * Version 1.0 · editorially authored · not yet field-validated.
+ */
+
+export interface SkillRecord {
+  id: string
+  domainId: string
+  skillIndex: number
+  name: L
+  definition: L
+  audienceTracks: TrackId[]
+  exampleTask: L
+  evidence: L
+  prerequisites: L
+  /** the radar statement measuring this skill (statements.ts id) */
+  assessmentRef: string
+  version: string
+  lastReviewed: string
+}
+
+const ALL: TrackId[] = ['awareness', 'applied']
+const SPEC: TrackId[] = ['awareness', 'applied', 'specialist']
+const LEAD: TrackId[] = ['awareness', 'team_lead', 'executive']
+const FULL: TrackId[] = ['awareness', 'applied', 'specialist', 'team_lead']
+const EXEC: TrackId[] = ['awareness', 'team_lead', 'executive']
+
+/** Per-domain evidence basis — family-level, declared honestly. */
+const domainEvidence: Record<string, L> = {
+  'ai-data': { ar: 'SFIA 9 (DATS/DAAN/MLNG/AIDE) وDigComp (البيانات) واستراتيجية سدايا الوطنية للبيانات والذكاء الاصطناعي.', en: 'SFIA 9 (DATS/DAAN/MLNG/AIDE), DigComp (data), and SDAIA’s national data & AI strategy.' },
+  cyber: { ar: 'SFIA 9 (SCTY/INAS/IAMT/SCAD) وضوابط الهيئة الوطنية للأمن السيبراني (ECC/OTCC) ونظام حماية البيانات الشخصية.', en: 'SFIA 9 (SCTY/INAS/IAMT/SCAD), NCA binding controls (ECC/OTCC), and the Personal Data Protection Law.' },
+  cloud: { ar: 'SFIA 9 (ARCH/IFDN/ITOP) وسياسة السحابة أولًا ومعايير التشغيل البيني الحكومية.', en: 'SFIA 9 (ARCH/IFDN/ITOP), the cloud-first policy, and government interoperability standards.' },
+  'service-design': { ar: 'معايير الخدمة الحكومية الرقمية (DGA) ومنهجية GDS البريطانية وDigComp (المحتوى والتعاون).', en: 'DGA digital-service standards, the UK GDS service manual, and DigComp (content & collaboration).' },
+  policy: { ar: 'أطر OECD للحكومة الرقمية والمواهب الرقمية، ونظام حماية البيانات الشخصية، وأطر الحوكمة المفتوحة.', en: 'OECD digital-government and digital-talent frameworks, PDPL, and open-government frameworks.' },
+  agile: { ar: 'SFIA 9 (PROD/REQM/DEMG) ومبادئ أجايل ومعايير قياس المنافع الحكومية.', en: 'SFIA 9 (PROD/REQM/DEMG), agile principles, and government benefits-measurement standards.' },
+  emerging: { ar: 'رادارات التقنيات الحكومية (منهجية TRL) وتقارير WEF/غارتنر للتقنيات الناشئة.', en: 'Government tech-radar methodology (TRL) and WEF/Gartner emerging-technology reporting.' },
+  leadership: { ar: 'SFIA 9 (CIPM/OCEN/RLMT) وإطار OECD للقيادة الرقمية وبحوث السلامة النفسية للفرق.', en: 'SFIA 9 (CIPM/OCEN/RLMT), OECD digital-leadership frameworks, and team psychological-safety research.' },
+}
+
+interface Draft { def: L; task: L; prereq: L; tracks: TrackId[] }
+
+/** Per-skill authored content, keyed `<domain>:<skillIndex>`. */
+const drafts: Record<string, Draft> = {
+  // ── ai-data ──
+  'ai-data:0': { tracks: ALL,
+    def: { ar: 'قراءة البيانات والرسوم وتفسير دلالتها العملية بثقة.', en: 'Reading data and charts and interpreting their practical meaning with confidence.' },
+    task: { ar: 'فسّر مؤشر خدمة أسبوعيًا لمديرك في جملة واحدة صحيحة.', en: 'Explain a weekly service metric to your manager in one correct sentence.' },
+    prereq: { ar: 'لا شيء — نقطة دخول للجميع.', en: 'None — an entry point for everyone.' } },
+  'ai-data:1': { tracks: SPEC,
+    def: { ar: 'تطبيق قواعد الملكية والجودة والتصنيف على بيانات الجهة كأصل موثق.', en: 'Applying ownership, quality and classification rules to entity data as a documented asset.' },
+    task: { ar: 'صنّف مجموعة بيانات واحدة في إدارتك وفق سياسة التصنيف.', en: 'Classify one dataset in your unit per the classification policy.' },
+    prereq: { ar: 'محو أمية البيانات.', en: 'Data literacy.' } },
+  'ai-data:2': { tracks: SPEC,
+    def: { ar: 'تحويل التحليل إلى تصوير بصري يفهمه غير المختصين ويقود قرارًا.', en: 'Turning analysis into visuals that non-specialists understand and that drive a decision.' },
+    task: { ar: 'حوّل نتيجة تحليل حقيقية إلى رسم واحد يشرحها لمدير غير تقني.', en: 'Turn a real analysis result into a single chart that explains it to a non-technical manager.' },
+    prereq: { ar: 'محو أمية البيانات.', en: 'Data literacy.' } },
+  'ai-data:3': { tracks: ALL,
+    def: { ar: 'توجيه النماذج التوليدية بأوامر منظمة ومراجعة مخرجاتها نقديًا قبل الاستخدام.', en: 'Directing generative models with structured prompts and critically reviewing outputs before use.' },
+    task: { ar: 'اكتب أمرًا لمساعد ذكي لصياغة مسودة خطاب، ثم راجعها قبل الاعتماد.', en: 'Prompt an AI assistant to draft a letter, then review it before adoption.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'ai-data:4': { tracks: FULL,
+    def: { ar: 'تمييز مخاطر التحيز والشفافية والمساءلة في استخدام الذكاء الاصطناعي الحكومي واقتراح ضوابطها.', en: 'Recognizing bias, transparency and accountability risks in government AI use and proposing safeguards.' },
+    task: { ar: 'قيّم حالة استخدام ذكاء اصطناعي مقترحة مقابل قائمة مخاطر أخلاقية.', en: 'Assess a proposed AI use case against an ethical-risk checklist.' },
+    prereq: { ar: 'استخدام الذكاء التوليدي + محو أمية البيانات.', en: 'Generative-AI use + data literacy.' } },
+  // ── cyber ──
+  'cyber:0': { tracks: ALL,
+    def: { ar: 'التعرف على التصيد والروابط المشبوهة وممارسة العادات الآمنة اليومية.', en: 'Recognizing phishing and suspicious links and practicing safe daily habits.' },
+    task: { ar: 'افحص رسالة مشبوهة وحدد ثلاث علامات تصيد فيها ثم بلّغ عنها.', en: 'Inspect a suspicious message, identify three phishing signs, then report it.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'cyber:1': { tracks: ALL,
+    def: { ar: 'تطبيق التقليل والموافقة والأساس النظامي عند معالجة بيانات شخصية.', en: 'Applying minimization, consent and legal basis when processing personal data.' },
+    task: { ar: 'راجع نموذج جمع بيانات في عملك واحذف حقلًا غير ضروري.', en: 'Review a data-collection form in your work and remove one unnecessary field.' },
+    prereq: { ar: 'الوعي الأمني.', en: 'Security awareness.' } },
+  'cyber:2': { tracks: ALL,
+    def: { ar: 'معرفة خطوات الإبلاغ الأولى عن حادثة أمنية مشتبه بها ومتى وكيف.', en: 'Knowing the first reporting steps for a suspected security incident — when and how.' },
+    task: { ar: 'احفظ قناة الإبلاغ الأمني لجهتك وجرّبها في تمرين محاكاة.', en: 'Save your entity’s security-reporting channel and try it in a drill.' },
+    prereq: { ar: 'الوعي الأمني.', en: 'Security awareness.' } },
+  'cyber:3': { tracks: SPEC,
+    def: { ar: 'منح الصلاحيات بمبدأ الحد الأدنى ومراجعتها دوريًا.', en: 'Granting access on least-privilege and reviewing it periodically.' },
+    task: { ar: 'راجع من لديه صلاحية على نظام تستخدمه وأزل صلاحية واحدة زائدة.', en: 'Review who has access to a system you use and remove one excess grant.' },
+    prereq: { ar: 'الوعي الأمني.', en: 'Security awareness.' } },
+  'cyber:4': { tracks: SPEC,
+    def: { ar: 'إدخال اعتبارات الأمن في التصميم منذ الفكرة لا بعد البناء.', en: 'Embedding security considerations in design from the idea, not after the build.' },
+    task: { ar: 'أضف سؤال أمن واحدًا إلى وثيقة فكرة مشروع قادم.', en: 'Add one security question to an upcoming project-concept document.' },
+    prereq: { ar: 'الوعي الأمني + أساسيات المخاطر.', en: 'Security awareness + risk basics.' } },
+  // ── cloud ──
+  'cloud:0': { tracks: ALL,
+    def: { ar: 'فهم نماذج الخدمة السحابية (IaaS/PaaS/SaaS) ومتى تناسب كل واحدة.', en: 'Understanding the cloud service models (IaaS/PaaS/SaaS) and when each fits.' },
+    task: { ar: 'صنّف ثلاث أدوات تستخدمها جهتك حسب نموذج الخدمة.', en: 'Classify three tools your entity uses by service model.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'cloud:1': { tracks: SPEC,
+    def: { ar: 'فهم كيف تتبادل الأنظمة البيانات عبر واجهات البرمجة وأهمية المعايير المفتوحة.', en: 'Understanding how systems exchange data via APIs and why open standards matter.' },
+    task: { ar: 'اقرأ وثيقة واجهة برمجة واحدة لنظامين مترابطين في جهتك.', en: 'Read the API documentation of one integration between two systems in your entity.' },
+    prereq: { ar: 'نماذج السحابة.', en: 'Cloud service models.' } },
+  'cloud:2': { tracks: SPEC,
+    def: { ar: 'تقييم خيارات تحديث الأنظمة القديمة (استضافة/بناء/استبدال) بمبررات.', en: 'Assessing legacy-modernization options (rehost/rebuild/replace) with rationale.' },
+    task: { ar: 'اكتب مذكرة خيارات لنظام قديم واحد مع توصية.', en: 'Write an options memo for one legacy system with a recommendation.' },
+    prereq: { ar: 'نماذج السحابة + التشغيل البيني.', en: 'Cloud models + interoperability.' } },
+  'cloud:3': { tracks: ALL,
+    def: { ar: 'فهم دور الهوية الرقمية الوطنية في تقديم الخدمات ومتطلباتها.', en: 'Understanding the role of national digital identity in service delivery and its requirements.' },
+    task: { ar: 'اشرح لزميل كيف يقلل الدخول الموحد رحلة المستفيد.', en: 'Explain to a colleague how single sign-on shortens a beneficiary journey.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'cloud:4': { tracks: SPEC,
+    def: { ar: 'وضع متطلبات استمرارية الأعمال والتعافي وإدارة مخاطر الموردين.', en: 'Defining business-continuity and recovery requirements and managing vendor risk.' },
+    task: { ar: 'حدد هدف زمن الاستعادة لخدمة حرجة واحدة في جهتك.', en: 'Define a recovery-time objective for one critical service in your entity.' },
+    prereq: { ar: 'نماذج السحابة.', en: 'Cloud service models.' } },
+  // ── service-design ──
+  'service-design:0': { tracks: ALL,
+    def: { ar: 'استخلاص الاحتياجات الحقيقية للمستفيدين عبر مقابلات منظمة.', en: 'Drawing out real beneficiary needs through structured interviews.' },
+    task: { ar: 'قابل مستفيدًا واحدًا وسجّل ثلاث ملاحظات عن تجربته الفعلية.', en: 'Interview one beneficiary and record three observations about their real experience.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'service-design:1': { tracks: SPEC,
+    def: { ar: 'رسم رحلة المستفيد من الطرف إلى الطرف وتحديد نقاط الألم.', en: 'Mapping the end-to-end beneficiary journey and marking its pain points.' },
+    task: { ar: 'ارسم رحلة خدمة تعرفها وحدد فيها نقطة ألم واحدة على الأقل.', en: 'Map a journey for a service you know and mark at least one pain point.' },
+    prereq: { ar: 'بحث المستخدمين.', en: 'User research.' } },
+  'service-design:2': { tracks: SPEC,
+    def: { ar: 'ضمان وصول ذوي الإعاقة وكبار السن إلى الخدمات الرقمية بالتساوي.', en: 'Ensuring people with disabilities and seniors access digital services equally.' },
+    task: { ar: 'افحص صفحة خدمة واحدة مقابل معايير الوصول واقترح إصلاحًا.', en: 'Check one service page against accessibility standards and propose one fix.' },
+    prereq: { ar: 'بحث المستخدمين.', en: 'User research.' } },
+  'service-design:3': { tracks: ALL,
+    def: { ar: 'كتابة محتوى خدمة بلغة بسيطة تطابق فهم الجمهور.', en: 'Writing service content in plain language matched to the audience’s understanding.' },
+    task: { ar: 'أعد كتابة فقرة تقنية من خدمة ما بلغة يفهمها مراهق.', en: 'Rewrite a technical paragraph from a service so a teenager understands it.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'service-design:4': { tracks: SPEC,
+    def: { ar: 'اختبار الخدمة مع مستخدمين حقيقيين وتحويل الملاحظات إلى تحسينات.', en: 'Testing the service with real users and turning observations into improvements.' },
+    task: { ar: 'نفّذ اختبار قابلية استخدام واحدًا بخمسة مستخدمين ووثّق أعلى ثلاث مشكلات.', en: 'Run one usability test with five users and document the top three issues.' },
+    prereq: { ar: 'بحث المستخدمين + رسم الرحلات.', en: 'User research + journey mapping.' } },
+  // ── policy ──
+  'policy:0': { tracks: LEAD,
+    def: { ar: 'ربط المبادرات الرقمية بالأهداف الاستراتيجية الوطنية وقياس تقدمها.', en: 'Linking digital initiatives to national strategic goals and measuring their progress.' },
+    task: { ar: 'اربط مبادرة واحدة في جهتك بهدف رؤية 2030 محدد بمؤشر.', en: 'Link one initiative in your entity to a specific Vision 2030 goal with a metric.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'policy:1': { tracks: FULL,
+    def: { ar: 'تحديد التشريعات الرقمية المنطبقة على مشروع (حماية بيانات، ذكاء اصطناعي) وتطبيقها.', en: 'Identifying the digital regulations applying to a project (data protection, AI) and applying them.' },
+    task: { ar: 'حدد تشريعين ينطبقان على مشروعك الحالي وما يغيرانه فيه.', en: 'Identify two regulations applying to your current project and what they change in it.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'policy:2': { tracks: SPEC,
+    def: { ar: 'تقييم ما يُنشر كبيانات مفتوحة وحوكمته بضوابط خصوصية وجودة.', en: 'Assessing what can be published as open data and governing it with privacy and quality controls.' },
+    task: { ar: 'قيّم مجموعة بيانات واحدة لملاءمة النشر المفتوح بقائمة فحص.', en: 'Assess one dataset for open-publication suitability with a checklist.' },
+    prereq: { ar: 'الوعي بالتشريعات.', en: 'Legislation awareness.' } },
+  'policy:3': { tracks: FULL,
+    def: { ar: 'كشف الفئات المستبعدة رقميًا وضمان قنوات بديلة مكافئة لها.', en: 'Detecting digitally excluded groups and ensuring equivalent alternative channels for them.' },
+    task: { ar: 'حدد فئة قد تستبعدها خدمة رقمية في جهتك واقترح قناة بديلة.', en: 'Identify a group a digital service in your entity might exclude and propose an alternative channel.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'policy:4': { tracks: LEAD,
+    def: { ar: 'صياغة شراء تقني مبني على النتائج يتجنب قفل الموردين.', en: 'Drafting outcome-based technology procurement that avoids vendor lock-in.' },
+    task: { ar: 'أعد صياغة متطلب واحد في وثيقة شراء من مواصفة إلى نتيجة.', en: 'Rewrite one requirement in a procurement document from a specification into an outcome.' },
+    prereq: { ar: 'الوعي بالتشريعات.', en: 'Legislation awareness.' } },
+  // ── agile ──
+  'agile:0': { tracks: ALL,
+    def: { ar: 'العمل في دورات تسليم قصيرة بأدوار وطقوس واضحة.', en: 'Working in short delivery cycles with clear roles and ceremonies.' },
+    task: { ar: 'احضر دورة كاملة (تخطيط/مراجعة/استرجاع) وسجّل دورك في كل منها.', en: 'Attend a full sprint cycle (planning/review/retrospective) and record your role in each.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'agile:1': { tracks: SPEC,
+    def: { ar: 'قيادة منتج رقمي عبر الاكتشاف والتجربة والإطلاق والتحسين المستمر.', en: 'Leading a digital product through discovery, beta, launch and continuous improvement.' },
+    task: { ar: 'حدد مرحلة منتجك الحالية وما يثبت انتقاله للمرحلة التالية.', en: 'Identify your product’s current stage and what evidence would move it to the next.' },
+    prereq: { ar: 'طرق العمل الرشيقة.', en: 'Agile ways of working.' } },
+  'agile:2': { tracks: ALL,
+    def: { ar: 'كتابة قصص مستخدم بمعايير قبول قابلة للاختبار يفهمها الجميع.', en: 'Writing user stories with testable acceptance criteria everyone understands.' },
+    task: { ar: 'حوّل طلب عمل واحدًا إلى قصة مستخدم بمعيار قبول.', en: 'Turn one work request into a user story with an acceptance criterion.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'agile:3': { tracks: FULL,
+    def: { ar: 'إدارة توقعات أصحاب المصلحة المتعارضة نحو قرارات موثقة.', en: 'Managing conflicting stakeholder expectations toward documented decisions.' },
+    task: { ar: 'وثّق قرارًا خلافيًا واحدًا: من قرر وماذا ولماذا.', en: 'Document one contested decision: who decided, what, and why.' },
+    prereq: { ar: 'قصص المستخدم.', en: 'User stories.' } },
+  'agile:4': { tracks: LEAD,
+    def: { ar: 'تعريف مؤشرات النجاح وقياس الأثر الفعلي بعد الإطلاق لا التسليم وحده.', en: 'Defining success metrics and measuring real impact after launch, not delivery alone.' },
+    task: { ar: 'عرّف مؤشر نتيجة واحدًا لمشروعك وقِسه بعد شهر.', en: 'Define one outcome metric for your project and measure it after a month.' },
+    prereq: { ar: 'دورة حياة المنتج.', en: 'Product lifecycle.' } },
+  // ── emerging ──
+  'emerging:0': { tracks: SPEC,
+    def: { ar: 'تقييم أين تضيف الأتمتة والوكلاء الأذكياء قيمة حقيقية وأين لا.', en: 'Assessing where automation and AI agents add real value and where they do not.' },
+    task: { ar: 'قيّم إجراءً ورقيًا واحدًا في إدارتك لملاءمته للأتمتة بمعايير معلنة.', en: 'Assess one paper procedure in your unit for automation fit with declared criteria.' },
+    prereq: { ar: 'محو أمية البيانات.', en: 'Data literacy.' } },
+  'emerging:1': { tracks: SPEC,
+    def: { ar: 'فهم تطبيقات إنترنت الأشياء في المدن الذكية ومتطلبات بياناتها وأمنها.', en: 'Understanding IoT applications in smart cities and their data and security requirements.' },
+    task: { ar: 'تتبع حالة استخدام موثقة لإنترنت الأشياء في مدينة سعودية.', en: 'Follow one documented IoT use case in a Saudi city.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'emerging:2': { tracks: SPEC,
+    def: { ar: 'التمييز بين ما يبرر سلسلة الكتل (كالاعتمادات الرقمية) وما لا يبررها.', en: 'Distinguishing cases that justify blockchain (like digital credentials) from those that do not.' },
+    task: { ar: 'اكتب فقرة: لماذا لا تحتاج أرشيفًا داخليًا بسيطًا إلى سلسلة كتل؟', en: 'Write a paragraph: why does a simple internal archive not need a blockchain?' },
+    prereq: { ar: 'أساسيات التشغيل البيني.', en: 'Interoperability basics.' } },
+  'emerging:3': { tracks: SPEC,
+    def: { ar: 'توظيف البيانات المكانية ومفهوم التوأم الرقمي في تحسين خدمة أو قرار.', en: 'Applying geospatial data and the digital-twin concept to improve a service or decision.' },
+    task: { ar: 'ارسم توزيع مستفيدي خدمة واحدة على خريطة واستنتج فجوة.', en: 'Plot one service’s beneficiary distribution on a map and infer one gap.' },
+    prereq: { ar: 'محو أمية البيانات.', en: 'Data literacy.' } },
+  'emerging:4': { tracks: FULL,
+    def: { ar: 'تقييم تقنية ناشئة بمنهجية تفصل الضجيج الإعلامي عن القيمة الفعلية.', en: 'Evaluating an emerging technology with a method that separates media hype from real value.' },
+    task: { ar: 'قيّم تقنية ناشئة واحدة بمصفوفة (قيمة/جاهزية/مخاطر/كلفة).', en: 'Evaluate one emerging technology with a matrix (value/readiness/risk/cost).' },
+    prereq: { ar: 'الوعي بالتقنيات الناشئة.', en: 'Emerging-tech awareness.' } },
+  // ── leadership ──
+  'leadership:0': { tracks: LEAD,
+    def: { ar: 'قيادة تغيير مبادرة رقمية: تواصل وتدريب ومعالجة مقاومة.', en: 'Leading change for a digital initiative: communication, training, addressing resistance.' },
+    task: { ar: 'ارسم خريطة متأثرين لمبادرة واحدة مع رسالة لكل فئة.', en: 'Map the stakeholders of one initiative with a message per group.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'leadership:1': { tracks: FULL,
+    def: { ar: 'شرح قرار تقني معقد لقيادات غير تقنية بلغة الأعمال والأثر.', en: 'Explaining a complex technical decision to non-technical leaders in the language of business and impact.' },
+    task: { ar: 'اشرح قرارًا تقنيًا لزميل غير تقني في خمس دقائق بلا مصطلحات.', en: 'Explain a technical decision to a non-technical colleague in five minutes without jargon.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'leadership:2': { tracks: ALL,
+    def: { ar: 'مشاركة تقدم العمل والدروس علنًا لتعميم الفائدة بين الجهات.', en: 'Sharing work progress and lessons openly to spread the benefit across entities.' },
+    task: { ar: 'انشر ملخص درس مستفاد واحدًا من مشروعك هذا الفصل.', en: 'Publish one lessons-learned summary from your project this quarter.' },
+    prereq: { ar: 'لا شيء.', en: 'None.' } },
+  'leadership:3': { tracks: LEAD,
+    def: { ar: 'بناء سرد بالبيانات يقود جمهورًا محددًا إلى قرار محدد.', en: 'Building a data-driven narrative that leads a specific audience to a specific decision.' },
+    task: { ar: 'حوّل تقريرًا رقميًا إلى عرض قصصي من ثلاث شرائح بقرار مطلوب.', en: 'Turn a data report into a three-slide narrative with a requested decision.' },
+    prereq: { ar: 'تحليل البيانات وتصويرها.', en: 'Data analysis & visualization.' } },
+  'leadership:4': { tracks: LEAD,
+    def: { ar: 'توجيه الزملاء لتطوير مهاراتهم وبناء خطط تعلم مستمرة.', en: 'Coaching colleagues to develop their skills and building continuous learning plans.' },
+    task: { ar: 'وجّه زميلًا واحدًا في مهارة رقمية لمدة شهر بخطة موثقة.', en: 'Coach one colleague on a digital skill for a month with a documented plan.' },
+    prereq: { ar: 'التأثير في غير التقنيين.', en: 'Influencing non-technical stakeholders.' } },
+}
+
+export const skillRecords: SkillRecord[] = domains.flatMap((d) =>
+  d.skills.map((skill, skillIndex) => {
+    const key = `${d.id}:${skillIndex}`
+    const draft = drafts[key]
+    const statementId = `${d.id === 'ai-data' ? 'ai' : d.id === 'cyber' ? 'cyb' : d.id === 'cloud' ? 'cld' : d.id === 'service-design' ? 'srv' : d.id === 'policy' ? 'pol' : d.id === 'agile' ? 'agl' : d.id === 'emerging' ? 'emg' : 'led'}-${skillIndex + 1}`
+    return {
+      id: `sr-${d.id}-${skillIndex}`,
+      domainId: d.id,
+      skillIndex,
+      name: skill,
+      definition: draft.def,
+      audienceTracks: draft.tracks,
+      exampleTask: draft.task,
+      evidence: domainEvidence[d.id],
+      prerequisites: draft.prereq,
+      assessmentRef: statementId,
+      version: '1.0',
+      lastReviewed: '2026-10',
+    }
+  })
+)
+
+export const skillRecordById = (id: string): SkillRecord | undefined =>
+  skillRecords.find((r) => r.id === id)

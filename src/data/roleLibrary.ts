@@ -1,5 +1,6 @@
 import type { L } from './types'
 import { roles } from './roles'
+import { careerById, careerTargetsFor } from './careers'
 
 /**
  * Role Library — 20 digital-government roles.
@@ -111,7 +112,7 @@ export const libraryRoles: LibraryRole[] = [
       { ar: 'بناء لوحات معلومات ونماذج جغرافية مكانية لفرق تشغيل المدن والسياسات.', en: 'Build geospatial dashboards and models for city operations and policy teams.' },
       { ar: 'تقييم مصادر بيانات إنترنت الأشياء والمدن الذكية من حيث الجودة وقابلية التشغيل البيني والقيمة.', en: 'Evaluate IoT and smart-city data sources for quality, interoperability and value.' },
     ],
-    sfia: ['DAAN', 'DTAN', 'VISL', 'SCMO'],
+    sfia: ['DAAN', 'DTAN', 'VISL', 'BINT'],
   },
   {
     id: 'cybersecurity_analyst',
@@ -353,12 +354,77 @@ export const libraryRoles: LibraryRole[] = [
     ],
     sfia: ['PROD', 'MLNG', 'AIDE', 'REQM'],
   },
+  {
+    id: 'software_engineer',
+    name: { ar: 'مهندس برمجيات', en: 'Software Engineer' },
+    family: 'Engineering',
+    mission: {
+      ar: 'يصمم ويبني ويختبر الخدمات الرقمية الحكومية بشيفرة عالية الجودة وآمنة وقابلة للصيانة.',
+      en: 'Designs, builds and tests government digital services with high-quality, secure and maintainable code.',
+    },
+    targets: { 'ai-data': 2, cyber: 3, cloud: 3, 'service-design': 2, policy: 1, agile: 3, emerging: 2, leadership: 2 },
+    responsibilities: [
+      { ar: 'تطوير مكونات الخدمات الرقمية واختبارها وفق معايير الجودة والأمن.', en: 'Develop and test digital-service components against quality and security standards.' },
+      { ar: 'مراجعة الشيفرة والمساهمة في المعمارية التقنية وقرارات الأدوات.', en: 'Review code and contribute to technical architecture and tooling decisions.' },
+      { ar: 'أتمتة الاختبار والنشر ودعم التشغيل ضمن دورات التسليم الرشيقة.', en: 'Automate testing and deployment and support operations within agile delivery cycles.' },
+    ],
+    sfia: ['PROG', 'SWDN', 'TEST', 'METL'],
+  },
+  {
+    id: 'data_engineer',
+    name: { ar: 'مهندس البيانات', en: 'Data Engineer' },
+    family: 'Data & AI',
+    mission: {
+      ar: 'يبني خطوط البيانات ومخازنها التي تغذي التحليلات والذكاء الاصطناعي ببيانات موثوقة وآمنة.',
+      en: 'Builds the data pipelines and stores that feed analytics and AI with reliable, secure data.',
+    },
+    targets: { 'ai-data': 4, cyber: 2, cloud: 3, 'service-design': 1, policy: 2, agile: 3, emerging: 2, leadership: 1 },
+    responsibilities: [
+      { ar: 'تصميم خطوط البيانات وتشغيلها ومراقبتها من المصدر إلى الاستهلاك.', en: 'Design, operate and monitor data pipelines from source to consumption.' },
+      { ar: 'نمذجة البيانات وتخزينها بما يخدم التحليلات ومشاركة البيانات بين الجهات.', en: 'Model and store data to serve analytics and cross-entity data sharing.' },
+      { ar: 'تضمين الجودة والأمن والخصوصية في البنية التحتية للبيانات منذ التصميم.', en: 'Embed quality, security and privacy into data infrastructure by design.' },
+    ],
+    sfia: ['DENG', 'DBDS', 'DATM', 'DTAN'],
+  },
+  {
+    id: 'security_architect',
+    name: { ar: 'معماري الأمن السيبراني', en: 'Security Architect' },
+    family: 'Engineering',
+    mission: {
+      ar: 'يصمم البنية الأمنية للأنظمة الحكومية ويضمن أن الأمن مدمج منذ الفكرة لا ملحق بعد البناء.',
+      en: 'Designs the security architecture of government systems, ensuring security is embedded from the idea, not bolted on after the build.',
+    },
+    targets: { 'ai-data': 2, cyber: 4, cloud: 3, 'service-design': 1, policy: 3, agile: 2, emerging: 2, leadership: 2 },
+    responsibilities: [
+      { ar: 'وضع المعمارية والمعايير الأمنية (انعدام الثقة، التشفير، الهوية) للأنظمة والخدمات.', en: 'Set security architecture and standards (zero trust, encryption, identity) for systems and services.' },
+      { ar: 'تقييم مخاطر التصاميم الجديدة ومراجعة الحلول قبل الاعتماد.', en: 'Assess risks of new designs and review solutions before approval.' },
+      { ar: 'ترجمة المتطلبات التنظيمية والوطنية إلى ضوابط تقنية قابلة للتنفيذ.', en: 'Translate regulatory and national requirements into implementable technical controls.' },
+    ],
+    sfia: ['SCTY', 'ARCH', 'INAS', 'BURM'],
+  },
+  {
+    id: 'performance_analyst',
+    name: { ar: 'محلل أداء الخدمات', en: 'Performance Analyst' },
+    family: 'Data & AI',
+    mission: {
+      ar: 'يقيس أداء الخدمات الرقمية بالبيانات ويحوّل المقاييس إلى قرارات تحسين ملموسة.',
+      en: 'Measures digital-service performance with data and turns metrics into concrete improvement decisions.',
+    },
+    targets: { 'ai-data': 3, cyber: 1, cloud: 1, 'service-design': 3, policy: 2, agile: 3, emerging: 1, leadership: 2 },
+    responsibilities: [
+      { ar: 'تعريف مؤشرات الأداء وبناء لوحات القياس للخدمات الحية.', en: 'Define performance indicators and build dashboards for live services.' },
+      { ar: 'تحليل رحلات المستخدمين ونقاط التسرب وتقديم الرؤى لفرق المنتج.', en: 'Analyze user journeys and drop-off points, delivering insight to product teams.' },
+      { ar: 'دعم قرارات التحسين بأدلة قياس صادقة — لا بمقاييس زينة.', en: 'Support improvement decisions with honest measurement evidence — not vanity metrics.' },
+    ],
+    sfia: ['MEAS', 'BINT', 'DAAN', 'VISL'],
+  },
 ]
 
 export const libraryRoleById = (id: string): LibraryRole | undefined =>
   libraryRoles.find((r) => r.id === id)
 
 export const LIB_PREFIX = 'lib:'
+export const CAREER_PREFIX = 'career:'
 
 /**
  * Resolve a stored role id (generic profile id or `lib:<library id>`)
@@ -369,6 +435,10 @@ export function resolveTargets(roleId: string | null | undefined): Record<string
     const lib = libraryRoleById(roleId.slice(LIB_PREFIX.length))
     if (lib) return lib.targets
   }
+  if (roleId && roleId.startsWith(CAREER_PREFIX)) {
+    const career = careerById(roleId.slice(CAREER_PREFIX.length))
+    if (career) return careerTargetsFor(career)
+  }
   const generic = roles.find((r) => r.id === roleId) ?? roles[0]
   return generic.targets
 }
@@ -378,6 +448,10 @@ export function resolveRoleName(roleId: string | null | undefined): L {
   if (roleId && roleId.startsWith(LIB_PREFIX)) {
     const lib = libraryRoleById(roleId.slice(LIB_PREFIX.length))
     if (lib) return lib.name
+  }
+  if (roleId && roleId.startsWith(CAREER_PREFIX)) {
+    const career = careerById(roleId.slice(CAREER_PREFIX.length))
+    if (career) return { ar: `جاهزية لمهنة: ${career.name.ar}`, en: `Readiness for: ${career.name.en}` }
   }
   const generic = roles.find((r) => r.id === roleId)
   return generic ? generic.name : roles[0].name

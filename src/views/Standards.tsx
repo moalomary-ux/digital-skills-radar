@@ -1,11 +1,59 @@
 import { motion } from 'framer-motion'
 import { useApp } from '../store'
+import type { L } from '../data/types'
 import { levels } from '../data/levels'
 import { frameworkCards, reportCards } from '../data/standards'
 import Icon from '../components/Icon'
 
+
+// v6-B: global indices that justify and anchor the tool (from the external review's table)
+const globalIndices: { id: string; name: L; publisher: L; connects: L; url: string }[] = [
+  {
+    id: 'gtmi',
+    name: { ar: 'مؤشر نضج GovTech (GTMI)', en: 'GovTech Maturity Index (GTMI)' },
+    publisher: { ar: 'البنك الدولي', en: 'World Bank' },
+    connects: { ar: 'السند المباشر الأقوى: يتناول برامج المهارات الحكومية ويربط انتشار التدريب بمكاسب إنتاجية قابلة للقياس.', en: 'The strongest direct anchor: covers government skills programs and links training penetration to measurable productivity gains.' },
+    url: 'https://thedocs.worldbank.org/en/doc/18230a0f33e201615caa954f2d354891-0350052025/original/2025GTMI-Online-Survey-Guidance-Note-eng.pdf',
+  },
+  {
+    id: 'dgi',
+    name: { ar: 'مؤشر الحكومة الرقمية (DGI)', en: 'OECD Digital Government Index (DGI)' },
+    publisher: { ar: 'منظمة التعاون والتنمية', en: 'OECD' },
+    connects: { ar: 'يربط القدرات بحكومة قائمة على البيانات ومتمحورة حول المستخدم ومتكاملة واستباقية — وهي مجالات رادارنا الثمانية بعينها.', en: 'Ties capabilities to a data-driven, user-centred, integrated and proactive government — precisely our radar’s eight domains.' },
+    url: 'https://www.oecd.org/en/publications/digital-government-outlook_0496b2bc-en/full-report/digital-governments-at-a-turning-point_0491aad4.html',
+  },
+  {
+    id: 'ourdata',
+    name: { ar: 'مؤشر البيانات الحكومية المفتوحة (OURdata)', en: 'OECD OURdata Index' },
+    publisher: { ar: 'منظمة التعاون والتنمية', en: 'OECD' },
+    connects: { ar: 'يتضمن برامج الثقافة البيانية داخل الحكومة ودعم إعادة استخدام البيانات — أساس مجال «الذكاء والبيانات».', en: 'Covers in-government data-literacy programs and data-reuse support — the basis of our AI & Data domain.' },
+    url: 'https://www.oecd.org/en/publications/digital-government-outlook_0496b2bc-en.html',
+  },
+  {
+    id: 'egdi',
+    name: { ar: 'مؤشر الحكومة الإلكترونية ومؤشر الخدمات والمشاركة (EGDI/OSI)', en: 'UN EGDI / OSI / e-Participation' },
+    publisher: { ar: 'الأمم المتحدة', en: 'United Nations' },
+    connects: { ar: 'تدعم الصلة بجودة الخدمة والإتاحة والمشاركة؛ لا تقيس مهارة الموظف مباشرة — وهي حدود نعلنها.', en: 'Supports the link to service quality, accessibility and participation; it does not measure employee skill directly — a limit we declare.' },
+    url: 'https://desapublications.un.org/sites/default/files/publications/2024-10/Technical%20Appendix%20%28Web%20version%29%2030102024.pdf',
+  },
+  {
+    id: 'gci',
+    name: { ar: 'المؤشر العالمي للأمن السيبراني (GCI)', en: 'ITU Global Cybersecurity Index (GCI)' },
+    publisher: { ar: 'الاتحاد الدولي للاتصالات', en: 'ITU' },
+    connects: { ar: 'يتضمن تنمية القدرات والتوعية والتدريب الأمني — سند مجال «الأمن السيبراني والثقة الرقمية».', en: 'Includes capacity development, awareness and security training — the anchor for our Cybersecurity & Digital Trust domain.' },
+    url: 'https://www.itu.int/en/mediacentre/Pages/PR-2024-09-10-Global-Cybersecurity-Index.aspx',
+  },
+  {
+    id: 'imd',
+    name: { ar: 'ترتيب التنافسية الرقمية العالمي', en: 'IMD World Digital Competitiveness Ranking' },
+    publisher: { ar: 'IMD', en: 'IMD' },
+    connects: { ar: 'يوفر السياق الأوسع لأهمية المعرفة والتدريب والاستعداد المستقبلي في التنافسية الوطنية.', en: 'Provides the broader context for why knowledge, training and future-readiness drive national competitiveness.' },
+    url: 'https://www.imd.org/centers/wcc/world-competitiveness-center/rankings/world-digital-competitiveness-ranking/methodology',
+  },
+]
+
 export default function Standards() {
-  const { t, go } = useApp()
+  const { t, go, lang } = useApp()
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -60,6 +108,16 @@ export default function Standards() {
               ))}
             </tbody>
           </table>
+        </div>
+        {/* scoring scheme note (expert-review P0-9) */}
+        <div className="border-t border-dga-line bg-dga-bg p-6 text-xs leading-relaxed text-dga-muted">
+          <p className="font-bold text-dga-ink">{t({ ar: 'منهجية الاحتساب الموثقة', en: 'Documented scoring scheme' })}</p>
+          <p className="mt-1.5">
+            {t({
+              ar: 'عتبات موحدة للمستوى والمرحلة معًا: أقل من 1.25 = وعي/تأسيسي، 1.25–2.24 = تطبيق/نامٍ، 2.25–3.24 = ممارس/متمكّن، 3.25 فأكثر = خبير/رائد. درجة المجال = متوسط عباراته الخمس. هذه عتبات تحريرية مُعلنة (لا معايرة تجريبية بعد)، والنتيجة أداة تأمل ذاتي لا قياسًا معتمدًا، ولا يجوز استخدامها في قرارات توظيف أو مفاضلة.',
+              en: 'One shared threshold set for both level and stage: below 1.25 = Awareness/Foundation, 1.25–2.24 = Working/Developing, 2.25–3.24 = Practitioner/Proficient, 3.25+ = Expert/Leading. A domain score is the mean of its five statements. These are documented editorial thresholds (not yet empirically calibrated), and the result is a self-reflection aid, not a validated measurement — it must not be used for hiring or selection decisions.',
+            })}
+          </p>
         </div>
       </motion.section>
 
@@ -118,8 +176,8 @@ export default function Standards() {
             className="glass group flex flex-col p-6 no-underline transition-all duration-300 hover:border-dga-amber/50"
           >
             <div className="mb-2 flex items-start justify-between gap-3">
-              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-amber">{t(c.name)}</h3>
-              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-amber" aria-hidden>
+              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-amber-tx">{t(c.name)}</h3>
+              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-amber-tx" aria-hidden>
                 ↗
               </span>
             </div>
@@ -127,6 +185,54 @@ export default function Standards() {
             <p className="border-s-2 border-dga-amber ps-3 text-sm leading-relaxed text-dga-ink">{t(c.highlight)}</p>
           </motion.a>
         ))}
+      </div>
+
+      {/* global indices (v6-B) */}
+      <h2 className="mb-2 mt-14 text-2xl font-bold">
+        {t({ ar: 'المؤشرات العالمية المرتبطة', en: 'Linked global indices' })}
+        <span className="ms-3 text-sm font-normal text-dga-muted">{globalIndices.length}</span>
+      </h2>
+      <p className="mb-6 max-w-3xl text-sm text-dga-muted">
+        {t({
+          ar: 'هذه المؤشرات تدعم مبرر بناء الأداة وترتبط بمجالاتها — وتثبت نجاحها يتطلب قياس أثرها محليًا.',
+          en: 'These indices justify building the tool and connect to its domains — while proving its success requires measuring its local impact.',
+        })}
+      </p>
+      <div className="mb-14 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {globalIndices.map((g, i) => (
+          <motion.a
+            key={g.id}
+            href={g.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+            className="glass group flex flex-col p-6 no-underline transition-all duration-300 hover:border-dga-green"
+          >
+            <div className="mb-2 flex items-start justify-between gap-3">
+              <h3 className="text-lg font-bold leading-snug text-dga-black group-hover:text-dga-green-dark">{t(g.name)}</h3>
+              <span className="text-dga-muted transition-transform group-hover:-translate-y-0.5 group-hover:text-dga-green" aria-hidden>↗</span>
+            </div>
+            <p className="mb-3 text-xs font-semibold text-dga-muted">{t(g.publisher)}</p>
+            <p className="border-s-2 border-dga-green/50 ps-3 text-sm leading-relaxed text-dga-ink">{t(g.connects)}</p>
+          </motion.a>
+        ))}
+      </div>
+
+      {/* skill registry link */}
+      <div className="mb-14 glass flex flex-wrap items-center justify-between gap-4 p-6">
+        <div>
+          <h2 className="text-lg font-bold text-dga-black">{t({ ar: 'كل مهارة سجل مستقل', en: 'Every skill is its own record' })}</h2>
+          <p className="mt-1 text-sm text-dga-muted">
+            {t({ ar: 'أربعون سجلًا موثقًا بنسخة وتاريخ مراجعة — مربوطة بعبارات التقييم وخطط التطوير.', en: 'Forty documented, versioned, review-dated records — linked to assessment items and development plans.' })}
+          </p>
+        </div>
+        <button onClick={() => go('skills')} className="btn-primary px-5 py-2.5 text-sm">
+          {t({ ar: 'افتح سجل المهارات', en: 'Open the skill registry' })}
+          <span aria-hidden>{lang === 'ar' ? '←' : '→'}</span>
+        </button>
       </div>
 
       {/* CTA */}

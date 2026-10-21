@@ -12,6 +12,7 @@ import {
   trlZones,
 } from '../data/technologies'
 import type { Horizon } from '../data/technologies'
+import { localizeTech } from '../data/techAr'
 import TechRadarChart from '../components/TechRadarChart'
 import Icon from '../components/Icon'
 
@@ -22,6 +23,21 @@ export default function TechRadar() {
   const [filterHorizon, setFilterHorizon] = useState<Horizon | null>(null)
   const [filterDomain, setFilterDomain] = useState<string | null>(null)
   const [openEssay, setOpenEssay] = useState<string | null>(null)
+  // P1-13: below 640px the radar defaults to an accessible card list
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 639px)').matches : false
+  )
+  // 'auto' = chart on desktop, list on mobile; explicit choice overrides (v6 defect A7)
+  const [mode, setMode] = useState<'auto' | 'chart' | 'list'>('auto')
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  const showChart = mode === 'chart' ? true : mode === 'list' ? false : !isMobile
 
   // open a technology deep-linked from another view
   useEffect(() => {
@@ -55,6 +71,7 @@ export default function TechRadar() {
   )
 
   const selected = selectedId ? techById(selectedId) : null
+  const loc = selected ? localizeTech(selected, lang) : null
 
   const zoneForTrl = (trl: number) => trlZones.find((z) => trl >= z.from && trl <= z.to)!
 
@@ -62,15 +79,15 @@ export default function TechRadar() {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       {/* header */}
       <div className="mb-6 max-w-3xl">
-        <p className="eyebrow">{t({ ar: 'مستوحى من رادار التقنيات الحكومية — هيئة الحكومة الرقمية', en: 'Inspired by DGA’s GovTech Radar' })}</p>
+        <p className="eyebrow">{t({ ar: 'مستلهم من منهجية رادارات التقنيات الحكومية العالمية', en: 'Inspired by government tech-radar methodology' })}</p>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
           {t({ ar: 'رادار ', en: 'The ' })}
-          <span className="gradient-text">{t({ ar: 'التقنيات الناشئة', en: 'Emerging Tech Radar' })}</span>
+          <span className="gradient-text">{t({ ar: 'التقنيات الحكومية', en: 'Government Tech Radar' })}</span>
         </h1>
         <p className="mt-3 leading-relaxed text-dga-muted">
           {t({
-            ar: '48 تقنية في 6 مجموعات، موزعة حسب مقياس نضج التقنية (TRL 1–9) وملوّنة حسب أفق التبني. انقر أي نقطة لاستكشاف التقنية والمهارات التي تتطلبها.',
-            en: '48 technologies in 6 clusters, plotted by Technology Readiness Level (TRL 1–9) and colored by adoption horizon. Click any dot to explore the technology and the skills it demands.',
+            ar: '48 تقنية في 6 مجموعات عبر مستويات النضج كافة — من البحث المبكر إلى التشغيل الفعلي — موزعة حسب مقياس نضج التقنية (TRL 1–9) وملوّنة حسب أفق التبني. ملاحظة منهجية: TRL هنا يقيس النضج العالمي للتقنية لا نضج تبنيها في السعودية، والناضج منها موسوم بنضجه لا بوصف «ناشئ». انقر أي نقطة لاستكشاف التقنية والمهارات التي تتطلبها.',
+            en: "48 technologies in 6 clusters across all maturity levels — from early research to live operation — plotted by Technology Readiness Level (TRL 1–9) and colored by adoption horizon. Methodology note: TRL here measures the technology's global maturity, not its adoption maturity in Saudi Arabia, and mature technologies are tagged as such, never as “emerging”. Click any dot to explore the technology and the skills it demands.",
           })}
         </p>
       </div>
@@ -109,18 +126,41 @@ export default function TechRadar() {
         </p>
       </div>
 
+      {/* view toggle — chart vs accessible list */}
+      <div className="no-print mb-4 flex items-center gap-2">
+        <span className="text-xs font-semibold text-dga-muted">{t({ ar: 'العرض:', en: 'View:' })}</span>
+        <button
+          onClick={() => setMode('chart')}
+          className={`chip ${showChart ? 'border-dga-green bg-dga-green font-semibold !text-white' : ''}`}
+        >
+          {t({ ar: 'الرادار', en: 'Radar' })}
+        </button>
+        <button
+          onClick={() => setMode('list')}
+          className={`chip ${!showChart ? 'border-dga-green bg-dga-green font-semibold !text-white' : ''}`}
+        >
+          {t({ ar: 'قائمة البطاقات', en: 'Card list' })}
+        </button>
+        {isMobile && mode === 'auto' && (
+          <span className="text-[11px] text-dga-muted">{t({ ar: 'الافتراضي على الجوال', en: 'Default on mobile' })}</span>
+        )}
+      </div>
+
       {/* chart + detail */}
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }} className="glass-strong p-3 sm:p-5">
-          <TechRadarChart
-            technologies={technologies}
-            lang={lang}
-            selectedId={selectedId}
-            onSelect={handleSelect}
-            filterCluster={filterCluster}
-            filterHorizon={filterHorizon}
-            filterDomain={filterDomain}
-          />
+        {showChart ? (
+        <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }} className="glass-strong overflow-x-auto p-3 sm:p-5">
+          <div className="min-w-[540px]">
+            <TechRadarChart
+              technologies={technologies}
+              lang={lang}
+              selectedId={selectedId}
+              onSelect={handleSelect}
+              filterCluster={filterCluster}
+              filterHorizon={filterHorizon}
+              filterDomain={filterDomain}
+            />
+          </div>
           <div className="mt-1 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-dga-muted">
             {(Object.keys(horizonMeta) as Horizon[]).map((h) => (
               <span key={h} className="flex items-center gap-2">
@@ -131,6 +171,34 @@ export default function TechRadar() {
             <span className="text-dga-muted">{t({ ar: 'الحلقات = TRL 1–9', en: 'Rings = TRL 1–9' })}</span>
           </div>
         </motion.div>
+        ) : (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+            {technologies
+              .filter(
+                (x) =>
+                  (!filterCluster || x.clusterId === filterCluster) &&
+                  (!filterHorizon || x.horizon === filterHorizon) &&
+                  (!filterDomain || x.domainIds.includes(filterDomain))
+              )
+              .sort((a, b) => b.trl - a.trl)
+              .map((x) => (
+                <button
+                  key={x.id}
+                  onClick={() => handleSelect(x.id)}
+                  className={`glass flex w-full items-center gap-3 p-4 text-start transition-all hover:border-dga-green ${
+                    selectedId === x.id ? 'border-dga-green bg-dga-green/5' : ''
+                  }`}
+                >
+                  <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: horizonMeta[x.horizon].color }} />
+                  <span className="flex-1">
+                    <span className="block text-sm font-bold text-dga-black">{t(x.name)}</span>
+                    <span className="mt-0.5 block text-[11px] text-dga-muted">{t(techClusterById(x.clusterId).name)}</span>
+                  </span>
+                  <span className="font-mono text-xs font-bold text-dga-green-dark" dir="ltr">TRL {x.trl}</span>
+                </button>
+              ))}
+          </motion.div>
+        )}
 
         {/* detail panel */}
         <div className="min-h-[300px]">
@@ -171,8 +239,8 @@ export default function TechRadar() {
                     <p className="mt-1 text-[11px] text-dga-muted">{t(horizonMeta[selected.horizon].years)}</p>
                   </div>
                 </div>
-                <p className="mt-3 rounded-lg bg-dga-bg p-3 text-[11.5px] italic leading-relaxed text-dga-muted" dir="ltr">
-                  {selected.trlRationale}
+                <p className="mt-3 rounded-lg bg-dga-bg p-3 text-[11.5px] leading-relaxed text-dga-muted">
+                  {loc!.rationale}
                 </p>
 
                 {/* sectors */}
@@ -196,8 +264,8 @@ export default function TechRadar() {
 
                 {/* employee skills */}
                 <h3 className="mt-5 text-xs font-bold uppercase tracking-wider text-dga-muted">{t({ ar: 'مهارات مطلوبة للموظفين', en: 'Skills employees need' })}</h3>
-                <ul className="mt-2 space-y-1.5" dir="ltr">
-                  {selected.employeeSkills.map((s, i) => (
+                <ul className="mt-2 space-y-1.5">
+                  {loc!.skills.map((s, i) => (
                     <li key={i} className="flex gap-2 text-start text-[12.5px] text-dga-ink">
                       <span className="text-dga-green-dark">▸</span>
                       {s}
@@ -210,11 +278,11 @@ export default function TechRadar() {
                 <div className="mt-2 grid gap-2.5">
                   <div className="rounded-xl border border-dga-green/30 bg-dga-green/5 p-3">
                     <p className="text-[11px] font-bold text-dga-green-dark">{t({ ar: 'للجميع — مستوى الوعي', en: 'For everyone — Awareness' })}</p>
-                    <p className="mt-1 text-[12.5px] leading-relaxed text-dga-ink" dir="ltr">{selected.learningFocus.awareness}</p>
+                    <p className="mt-1 text-[12.5px] leading-relaxed text-dga-ink">{loc!.focus.awareness}</p>
                   </div>
                   <div className="rounded-xl border border-dga-amber/40 bg-dga-amber/5 p-3">
-                    <p className="text-[11px] font-bold text-dga-amber">{t({ ar: 'للمختصين — مستوى الممارس', en: 'For specialists — Practitioner' })}</p>
-                    <p className="mt-1 text-[12.5px] leading-relaxed text-dga-ink" dir="ltr">{selected.learningFocus.practitioner}</p>
+                    <p className="text-[11px] font-bold text-dga-amber-tx">{t({ ar: 'للمختصين — مستوى الممارس', en: 'For specialists — Practitioner' })}</p>
+                    <p className="mt-1 text-[12.5px] leading-relaxed text-dga-ink">{loc!.focus.practitioner}</p>
                   </div>
                 </div>
               </motion.div>
@@ -227,7 +295,7 @@ export default function TechRadar() {
                 className="glass grid h-full min-h-[300px] place-items-center p-8 text-center"
               >
                 <div>
-                  <Icon name="radar" className="mx-auto h-10 w-10 animate-pulseSoft text-dga-amber" />
+                  <Icon name="radar" className="mx-auto h-10 w-10 animate-pulseSoft text-dga-amber-tx" />
                   <p className="mt-4 font-semibold text-dga-ink">{t({ ar: 'انقر أي تقنية على الرادار', en: 'Click any technology on the radar' })}</p>
                   <p className="mt-2 text-sm text-dga-muted">
                     {t({ ar: 'ستظهر هنا التفاصيل الكاملة: النضج، القطاعات، والمهارات المطلوبة.', en: 'Full details will appear here: maturity, sectors, and required skills.' })}

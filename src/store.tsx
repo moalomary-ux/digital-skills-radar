@@ -7,22 +7,35 @@ export type View =
   | 'careers'
   | 'decide'
   | 'lists'
+  | 'future-skills'
+  | 'explore'
+  | 'entities'
   | 'wizard'
   | 'results'
   | 'pathways'
   | 'tech-radar'
   | 'roles'
   | 'standards'
+  | 'methodology'
+  | 'skills'
+  | 'impact'
+  | 'sectors'
+  | 'directory'
+  | 'entity'
 
 export interface ResultRecord {
   id: string
   date: string // ISO
-  roleId: string // generic profile id or `lib:<library role id>`
+  roleId: string // generic profile id or `lib:<library role id>` or `career:<career id>`
+  /** v6: chosen audience track (optional for legacy records) */
+  trackId?: string
   answers: Record<string, number>
   scores: Record<string, number>
   overall: number
   /** calibration: correct answers 0-3 per domain id (optional for legacy records) */
   calibration?: Record<string, number>
+  /** v6-B: scenario judgment score 0-3 per domain id (optional for legacy records) */
+  scenario?: Record<string, number>
 }
 
 interface AppState {
@@ -37,8 +50,12 @@ interface AppState {
   setRoleId: (id: string) => void
   answers: Record<string, number>
   setAnswer: (statementId: string, value: number) => void
+  trackId: string | null
+  setTrackId: (id: string) => void
   calibrationAnswers: Record<string, string> // questionId → option key
   setCalibrationAnswer: (questionId: string, optionKey: string) => void
+  scenarioAnswers: Record<string, number> // scenarioId → chosen option index
+  setScenarioAnswer: (scenarioId: string, optionIndex: number) => void
   resetDraft: () => void
   // results history
   history: ResultRecord[]
@@ -51,6 +68,17 @@ interface AppState {
   pendingCareerId: string | null
   openCareer: (careerId: string) => void
   clearPendingCareer: () => void
+  pendingDomainId: string | null
+  openDomainAt: (domainId: string) => void
+  clearPendingDomain: () => void
+  /** v8: entity detail page */
+  pendingEntityId: string | null
+  openEntity: (entityId: string) => void
+  clearPendingEntity: () => void
+  /** v8: open sectors ranked by demand for a consulting category */
+  pendingSectorCategory: string | null
+  openSectorsByCategory: (category: string) => void
+  clearPendingSectorCategory: () => void
 }
 
 const Ctx = createContext<AppState | null>(null)
@@ -74,17 +102,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [history, setHistory] = useState<ResultRecord[]>(() => load<ResultRecord[]>(LS_HISTORY, []))
   const draft = useMemo(
     () =>
-      load<{ roleId: string | null; answers: Record<string, number>; calibration: Record<string, string> }>(
+      load<{ roleId: string | null; answers: Record<string, number>; calibration: Record<string, string>; trackId: string | null; scenarios: Record<string, number> }>(
         LS_DRAFT,
-        { roleId: null, answers: {}, calibration: {} }
+        { roleId: null, answers: {}, calibration: {}, trackId: null, scenarios: {} }
       ),
     []
   )
   const [roleId, setRoleIdState] = useState<string | null>(draft.roleId)
   const [answers, setAnswers] = useState<Record<string, number>>(draft.answers)
   const [calibrationAnswers, setCalibrationAnswers] = useState<Record<string, string>>(draft.calibration ?? {})
+  const [trackId, setTrackIdState] = useState<string | null>(draft.trackId ?? null)
+  const [scenarioAnswers, setScenarioAnswers] = useState<Record<string, number>>(draft.scenarios ?? {})
   const [pendingTechId, setPendingTechId] = useState<string | null>(null)
   const [pendingCareerId, setPendingCareerId] = useState<string | null>(null)
+  const [pendingDomainId, setPendingDomainId] = useState<string | null>(null)
+  const [pendingEntityId, setPendingEntityId] = useState<string | null>(null)
+  const [pendingSectorCategory, setPendingSectorCategory] = useState<string | null>(null)
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -93,8 +126,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [lang])
 
   useEffect(() => {
-    localStorage.setItem(LS_DRAFT, JSON.stringify({ roleId, answers, calibration: calibrationAnswers }))
-  }, [roleId, answers, calibrationAnswers])
+    localStorage.setItem(LS_DRAFT, JSON.stringify({ roleId, answers, calibration: calibrationAnswers, trackId, scenarios: scenarioAnswers }))
+  }, [roleId, answers, calibrationAnswers, trackId, scenarioAnswers])
 
   useEffect(() => {
     localStorage.setItem(LS_HISTORY, JSON.stringify(history))
@@ -115,10 +148,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (questionId: string, optionKey: string) => setCalibrationAnswers((p) => ({ ...p, [questionId]: optionKey })),
     []
   )
+  const setScenarioAnswer = useCallback(
+    (scenarioId: string, optionIndex: number) => setScenarioAnswers((p) => ({ ...p, [scenarioId]: optionIndex })),
+    []
+  )
+  const setTrackId = useCallback((id: string) => setTrackIdState(id), [])
   const resetDraft = useCallback(() => {
     setRoleIdState(null)
     setAnswers({})
     setCalibrationAnswers({})
+    setTrackIdState(null)
+    setScenarioAnswers({})
   }, [])
   const saveResult = useCallback((rec: ResultRecord) => setHistory((p) => [...p, rec]), [])
   const clearHistory = useCallback(() => setHistory([]), [])
@@ -137,6 +177,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     window.scrollTo({ top: 0 })
   }, [])
   const clearPendingCareer = useCallback(() => setPendingCareerId(null), [])
+  const openDomainAt = useCallback((domainId: string) => {
+    setPendingDomainId(domainId)
+    setView('explore')
+    window.scrollTo({ top: 0 })
+  }, [])
+  const clearPendingDomain = useCallback(() => setPendingDomainId(null), [])
+  const openEntity = useCallback((entityId: string) => {
+    setPendingEntityId(entityId)
+    setView('entity')
+    window.scrollTo({ top: 0 })
+  }, [])
+  const clearPendingEntity = useCallback(() => setPendingEntityId(null), [])
+  const openSectorsByCategory = useCallback((category: string) => {
+    setPendingSectorCategory(category)
+    setView('sectors')
+    window.scrollTo({ top: 0 })
+  }, [])
+  const clearPendingSectorCategory = useCallback(() => setPendingSectorCategory(null), [])
 
   const value: AppState = {
     lang,
@@ -149,8 +207,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRoleId,
     answers,
     setAnswer,
+    trackId,
+    setTrackId,
     calibrationAnswers,
     setCalibrationAnswer,
+    scenarioAnswers,
+    setScenarioAnswer,
     resetDraft,
     history,
     saveResult,
@@ -161,6 +223,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     pendingCareerId,
     openCareer,
     clearPendingCareer,
+    pendingDomainId,
+    openDomainAt,
+    clearPendingDomain,
+    pendingEntityId,
+    openEntity,
+    clearPendingEntity,
+    pendingSectorCategory,
+    openSectorsByCategory,
+    clearPendingSectorCategory,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

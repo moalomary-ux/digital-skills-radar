@@ -199,8 +199,8 @@ export default function TechRadarChart({
               strokeWidth="2"
               style={{ transition: 'r 0.18s ease' }}
             />
-            {/* generous hit area */}
-            <circle cx={x} cy={y} r="16" fill="transparent" />
+            {/* generous hit area — meets touch-target guidance on mobile */}
+            <circle cx={x} cy={y} r="20" fill="transparent" />
           </g>
         )
       })}

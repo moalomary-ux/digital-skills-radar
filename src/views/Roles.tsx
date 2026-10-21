@@ -98,7 +98,7 @@ export default function Roles() {
             >
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
-                  <span className="chip border-dga-amber/40 bg-dga-amber/10 text-[11px] text-dga-amber">{t(familyNames[open.family])}</span>
+                  <span className="chip border-dga-amber/40 bg-dga-amber/10 text-[11px] text-dga-amber-tx">{t(familyNames[open.family])}</span>
                   <h2 className="mt-3 text-2xl font-bold">{t(open.name)}</h2>
                   <p className="mt-1 text-sm text-dga-muted" dir={lang === 'ar' ? 'ltr' : 'rtl'} style={{ textAlign: lang === 'ar' ? 'right' : 'left' }}>
                     {lang === 'ar' ? open.name.en : open.name.ar}

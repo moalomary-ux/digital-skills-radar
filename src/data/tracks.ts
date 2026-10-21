@@ -1,0 +1,86 @@
+import type { L } from './types'
+
+/**
+ * v6-B9: audience tracks — the review's five entry tracks as a first-class
+ * concept. A track declares what the user should be able to PROVE, not how
+ * much they know. Proficiency level stays an independent axis: an executive
+ * may need awareness of a technology but advanced judgment in investing in it.
+ *
+ * Branching groundwork (B11): each track carries example tasks per domain
+ * (`examples`), the slot where per-track statement scenarios will land in
+ * the next iteration without schema changes.
+ */
+
+export type TrackId = 'awareness' | 'applied' | 'specialist' | 'team_lead' | 'executive'
+
+export interface Track {
+  id: TrackId
+  name: L
+  /** who this track serves */
+  audience: L
+  /** what the user must be able to prove — the review's core column */
+  proves: L
+  /** example tasks per skill domain (samples, not the full matrix) */
+  examples: Partial<Record<string, L>>
+}
+
+export const tracks: Track[] = [
+  {
+    id: 'awareness',
+    name: { ar: 'توعوي', en: 'Awareness' },
+    audience: { ar: 'كل موظف — بلا استثناء', en: 'Every employee — no exceptions' },
+    proves: { ar: 'يفهم التغيّر والفرصة والمخاطر وحدود الاستخدام.', en: 'Understands the change, the opportunity, the risks and the limits of use.' },
+    examples: {
+      'ai-data': { ar: 'يشرح متى يمكن الوثوق بمخرجات ذكاء اصطناعي ومتى لا.', en: 'Explains when AI output can be trusted and when it cannot.' },
+      cyber: { ar: 'يتعرف على تصيّد ويبلّغ عنه.', en: 'Recognizes and reports phishing.' },
+      'service-design': { ar: 'يفهم لماذا تُصمم الخدمات حول المستفيد.', en: 'Understands why services are designed around the beneficiary.' },
+    },
+  },
+  {
+    id: 'applied',
+    name: { ar: 'أساسي تطبيقي', en: 'Applied foundation' },
+    audience: { ar: 'موظف ينجز مهامًا تشغيلية يومية', en: 'An employee performing daily operational tasks' },
+    proves: { ar: 'ينجز مهمة صحيحة وآمنة بكفاءة.', en: 'Completes a task correctly, safely and efficiently.' },
+    examples: {
+      'ai-data': { ar: 'يستخدم أداة ذكاء اصطناعي معتمدة مع مراجعة المخرجات قبل الإرسال.', en: 'Uses an approved AI tool with output review before sending.' },
+      cyber: { ar: 'يطبق قواعد حماية البيانات في معاملة حقيقية.', en: 'Applies data-protection rules in a real transaction.' },
+      agile: { ar: 'يكتب قصة مستخدم بمعيار قبول واضح.', en: 'Writes a user story with a clear acceptance criterion.' },
+    },
+  },
+  {
+    id: 'specialist',
+    name: { ar: 'تخصصي', en: 'Specialist' },
+    audience: { ar: 'مختص يصمم أو يبني أو يشغّل حلولًا رقمية', en: 'A specialist who designs, builds or operates digital solutions' },
+    proves: { ar: 'يصمم ويطبق ويحسن حلًا مرتبطًا بدوره.', en: 'Designs, applies and improves a solution tied to their role.' },
+    examples: {
+      'ai-data': { ar: 'يبني تحليلًا من مجموعة بيانات حقيقية ويتحقق من جودته.', en: 'Builds an analysis from a real dataset and validates its quality.' },
+      cloud: { ar: 'يقيّم خيار ترحيل سحابي بمبررات موثقة.', en: 'Evaluates a cloud-migration option with documented rationale.' },
+      emerging: { ar: 'يجري تقييم جدوى لتقنية ناشئة قبل تجربتها.', en: 'Runs a feasibility assessment of an emerging technology before piloting it.' },
+    },
+  },
+  {
+    id: 'team_lead',
+    name: { ar: 'قيادة الفرق والتحول', en: 'Team & transformation leadership' },
+    audience: { ar: 'مدير فريق أو برنامج تحول', en: 'A team lead or transformation-program manager' },
+    proves: { ar: 'يقود التبني والجودة والتغيير ويتابع المنافع.', en: 'Leads adoption, quality and change, and tracks benefits.' },
+    examples: {
+      leadership: { ar: 'يبني خطة تغيير لمبادرة ويقيس تبنيها بعد الإطلاق.', en: 'Builds a change plan for an initiative and measures adoption after launch.' },
+      agile: { ar: 'يربط تسليم الفريق بمؤشر منفعة يُقاس فعلًا.', en: 'Ties team delivery to a benefit metric that is actually measured.' },
+      policy: { ar: 'يترجم متطلبًا تنظيميًا جديدًا إلى خطة امتثال لفريقه.', en: 'Translates a new regulatory requirement into a compliance plan for the team.' },
+    },
+  },
+  {
+    id: 'executive',
+    name: { ar: 'تنفيذي واستراتيجي', en: 'Executive & strategic' },
+    audience: { ar: 'قيادي يقرر الاستثمار والأولويات', en: 'An executive deciding investment and priorities' },
+    proves: { ar: 'يرتب الاستثمار والأولويات والمخاطر والمساءلة والتكامل.', en: 'Orders investment, priorities, risk, accountability and integration.' },
+    examples: {
+      policy: { ar: 'يقرر استثمارًا تقنيًا بشروط نجاح وتوقف معلنة.', en: 'Decides a technology investment with declared success and stop conditions.' },
+      emerging: { ar: 'يرفض تقنية ضجيج بلا قيمة بمنهجية موثقة.', en: 'Rejects a hyped technology without value using a documented method.' },
+      'ai-data': { ar: 'يسأل الأسئلة الصحيحة عن نموذج ذكاء اصطناعي قبل اعتماده.', en: 'Asks the right questions about an AI model before approving it.' },
+    },
+  },
+]
+
+export const trackById = (id: TrackId | null | undefined): Track | undefined =>
+  tracks.find((tr) => tr.id === id)
