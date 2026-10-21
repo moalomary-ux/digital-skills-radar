@@ -1,25 +1,30 @@
 import { useApp } from '../store'
+import type { L } from '../data/types'
+
+/** The binding development-only guard (DECISION §6; plan P2 item 6): step 0, results and print. */
+export const devOnlyNotice: L = {
+  ar: 'للتطوير الذاتي فقط — لا يُستخدم في التقييم الوظيفي أو الترقية أو المفاضلة.',
+  en: 'For self-development only — not for performance appraisal, promotion or selection.',
+}
+
+export const selfAssessmentNote: L = {
+  ar: 'هذا تقييم ذاتي يساعدك على استكشاف أولويات تطويرك، وليس قياسًا نفسيًا معتمدًا. المستهدفات استرشادية، والأولويات مقترحة لحوار تطويري مع مديرك.',
+  en: 'This is a self-assessment that helps you explore your development priorities; it is not a validated psychometric measure. Targets are indicative, and the priorities are suggestions for a development conversation with your manager.',
+}
 
 /**
- * Honest scope disclaimer — shown before any assessment/decision output.
- * (Expert review P0-8: the tool is a structured reflection & development-
- * planning aid, not a validated psychometric instrument or a substitute
- * for a human career counselor.)
+ * Development-only notice for government employees, shown before any assessment output.
+ * `compact` shows the guard sentence only.
  */
-export default function Disclaimer({ compact = false }: { compact?: boolean }) {
+export default function Disclaimer({ compact = false, className = '' }: { compact?: boolean; className?: string }) {
   const { t } = useApp()
   return (
     <div
       role="note"
-      className={`rounded-btn border border-dga-amber/50 bg-dga-amber/5 text-dga-ink ${
-        compact ? 'px-4 py-2.5 text-xs' : 'px-5 py-3.5 text-sm'
-      }`}
+      className={`rounded-btn border border-dga-amber/50 bg-dga-amber/5 text-dga-ink ${compact ? 'px-4 py-2.5 text-xs' : 'px-5 py-3.5 text-sm'} ${className}`}
     >
-      <span className="font-bold text-[#8A6A00]">{t({ ar: 'تنبيه: ', en: 'Note: ' })}</span>
-      {t({
-        ar: 'هذه أداة تأمل وتخطيط تطويري — ليست قياسًا نفسيًا معتمدًا، ولا بديلًا عن الموجه المهني أو عن شروط القبول الرسمية. الترشيحات ميكانيكية استرشادية والتوقعات ليست ضمانًا.',
-        en: 'This is a reflection and development-planning tool — not a validated psychometric assessment, and no substitute for a human career counselor or official admission requirements. Matches are mechanical guidance and projections are not guarantees.',
-      })}
+      <p className="font-bold text-[#8A6A00]">{t(devOnlyNotice)}</p>
+      {!compact && <p className="mt-1 leading-relaxed">{t(selfAssessmentNote)}</p>}
     </div>
   )
 }
