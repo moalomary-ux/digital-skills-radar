@@ -275,21 +275,16 @@ describe('entry points', () => {
     expect(sections.indexOf(section)).toBe(1)
   })
 
-  it('the roles & skills hub lands on the map preview with its sub-links', async () => {
-    const user = userEvent.setup()
+  it('the roles & skills hub lands on the full map explorer with its sub-links', () => {
     renderView(RolesSkillsHub, '/en/capabilities')
     const title = screen.getByRole('heading', { level: 2, name: 'Interactive skills map' })
     const section = title.closest('section') as HTMLElement
     expect(within(section).getByRole('link', { name: 'Open the map' })).toHaveAttribute('href', '/en/map')
-    expect(within(section).getByRole('link', { name: /Roles and their sheets/ })).toHaveAttribute('href', '/en/roles')
-    expect(within(section).getByRole('link', { name: /Skills dictionary/ })).toHaveAttribute('href', '/en/skills')
-    const preview = section.querySelector('[data-map-preview]') as HTMLElement
-    expect(within(preview).getAllByRole('link')).toHaveLength(TOTAL_NODES)
-    const role = within(preview).getByRole('link', { name: /^Data Scientist — Digital role/ })
-    expect(role).toHaveAttribute('href', '/en/map?node=role.data_scientist')
-    await act(async () => {
-      role.focus()
-    })
-    expect(within(section).getAllByText('Data Scientist').length).toBeGreaterThan(0)
+    expect(within(section).getAllByRole('link', { name: /Roles and their sheets/ })[0]).toHaveAttribute('href', '/en/roles')
+    expect(within(section).getAllByRole('link', { name: /Skills dictionary/ })[0]).toHaveAttribute('href', '/en/skills')
+    // the hub embeds the full explorer (owner directive 2026-10-22: explore instead of read)
+    const explorer = section.querySelector('[data-map-explorer]') as HTMLElement
+    expect(explorer).toBeTruthy()
+    expect(within(explorer).getAllByRole('img').length).toBeGreaterThan(0)
   })
 })

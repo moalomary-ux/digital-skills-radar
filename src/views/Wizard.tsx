@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { useSearchParams } from 'react-router-dom'
 import { useApp, computeScores, RESULT_SCHEMA_VERSION } from '../store'
 import type { KnowledgeTally, ResultRecord } from '../store'
 import { domains, domainById } from '../data/domains'
@@ -57,8 +58,12 @@ export default function Wizard() {
 
   // Entrances that set only a role (home employee card, role cards, role sheet) never skip step 0:
   // without a role category we start at the category question with the role preselected.
+  // `/assess?domain=<id>` (from the skills map) starts the questions at that domain once a category exists.
+  const [search] = useSearchParams()
+  const wantedDomainIndex = domains.findIndex((d) => d.id === search.get('domain'))
   const [step, setStep] = useState(() => {
     if (!category || Object.keys(answers).length === 0) return 0
+    if (wantedDomainIndex >= 0) return wantedDomainIndex + 1
     if (firstOpenDomain >= 0) return firstOpenDomain + 1
     const firstOpenScenario = trackScenarios.findIndex((s) => scenarioAnswers[s.id] === undefined)
     return SCENARIO_BASE + Math.max(0, firstOpenScenario === -1 ? trackScenarios.length - 1 : firstOpenScenario)
@@ -310,7 +315,7 @@ export default function Wizard() {
             {!category && <p id="cat-hint" className="text-xs text-dga-muted">{t({ ar: 'اختر فئة دورك للمتابعة.', en: 'Choose your role category to continue.' })}</p>}
             <button
               type="button"
-              onClick={() => category && goToStep(firstOpenDomain >= 0 ? firstOpenDomain + 1 : SCENARIO_BASE)}
+              onClick={() => category && goToStep(wantedDomainIndex >= 0 ? wantedDomainIndex + 1 : firstOpenDomain >= 0 ? firstOpenDomain + 1 : SCENARIO_BASE)}
               disabled={!category}
               aria-describedby={!category ? 'cat-hint' : undefined}
               className="btn-primary disabled:cursor-not-allowed disabled:opacity-40"

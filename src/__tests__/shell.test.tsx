@@ -347,6 +347,6 @@ describe('about and hubs', () => {
     expect(radios).toHaveLength(32)
     await user.click(screen.getByRole('radio', { name: 'Cybersecurity & Digital Trust — Proficiency' }))
     expect(screen.getByRole('heading', { level: 3, name: /Proficiency/ })).toBeInTheDocument()
-    expect(screen.getByText(/Security awareness/)).toBeInTheDocument()
+    expect(screen.getAllByText(/Security awareness/).length).toBeGreaterThan(0)
   })
 })

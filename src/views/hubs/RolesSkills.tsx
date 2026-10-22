@@ -8,7 +8,7 @@ import Icon from '../../components/Icon'
 import { ClaimText } from '../../components/Claim'
 import { HubCard, HubHeader, HubSection } from '../../components/shell/Hub'
 import { useArrow } from '../../components/shell/hooks'
-import MapPreview from '../../components/map/MapPreview'
+import MapExplorer from '../../components/map/MapExplorer'
 import { defaultSources } from '../../components/map/sources'
 import { countOf } from '../../components/map/copy'
 import { libraryRoles } from '../../data/roleLibrary'
@@ -68,7 +68,7 @@ export default function RolesSkillsHub() {
         }}
       >
         <div className="grid gap-6 rounded-card border border-dga-line bg-white p-4 shadow-card sm:p-6 lg:grid-cols-[minmax(0,1fr),minmax(0,21rem)] lg:items-center">
-          <MapPreview sources={HUB_MAP_SOURCES} kinds={HUB_MAP_KINDS} className="mx-auto w-full max-w-[32rem]" />
+          <MapExplorer headingLevel={3} />
           <div>
             <ul className="flex flex-wrap gap-2">
               {[

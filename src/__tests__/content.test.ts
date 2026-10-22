@@ -250,7 +250,7 @@ describe('content: citizen lane out of v9, data model consistent', () => {
     for (const rel of ['views/Careers.tsx', 'views/Decide.tsx', 'views/Lists.tsx', 'views/Explore.tsx', 'components/NetworkMap.tsx', 'data/careers.ts'])
       expect(sources[`../${rel}`], rel).toBeUndefined()
     const routes = sourceOf('src/routes.tsx')
-    for (const path of ["'careers'", "'careers/:careerId'", "'careers/trends'", "'guidance'", "'map'"]) expect(routes.includes(`path: ${path}`), path).toBe(false)
+    for (const path of ["'careers'", "'careers/:careerId'", "'careers/trends'", "'guidance'"]) expect(routes.includes(`path: ${path}`), path).toBe(false)
     for (const rel of P5B_FILES) expect(/careers/i.test(sourceOf(rel) ?? ''), rel).toBe(false)
   })
 
