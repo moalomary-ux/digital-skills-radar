@@ -120,7 +120,7 @@ const expectedRoutes: Record<Exclude<View, 'not-found'>, string> = {
   home: '', wizard: '/assess', results: '/assess/results', pathways: '/assess/plan',
   roles: '/roles', skills: '/skills', 'future-skills': '/future-skills',
   'tech-radar': '/tech-radar', entities: '/entities',
-  'roles-hub': '/capabilities', 'method-hub': '/method',
+  'roles-hub': '/capabilities', 'method-hub': '/method', map: '/map',
   sectors: '/sectors', directory: '/directory', entity: `/directory/${entity.id}`,
   standards: '/standards', methodology: '/methodology',
   evidence: '/evidence', about: '/about', report: '/assess/report', services: '/services',

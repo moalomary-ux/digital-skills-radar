@@ -27,7 +27,7 @@ const LANGS: Lang[] = ['ar', 'en']
  */
 const PUBLIC_STATIC_VIEWS: View[] = [
   'home', 'future-skills', 'entities', 'tech-radar', 'roles-hub', 'method-hub',
-  'roles', 'standards', 'methodology', 'skills', 'sectors', 'directory', 'evidence',
+  'roles', 'standards', 'methodology', 'skills', 'map', 'sectors', 'directory', 'evidence',
   'about', 'services', 'leaders', 'leader-brief', 'adoption', 'work', 'work-shifts',
 ]
 

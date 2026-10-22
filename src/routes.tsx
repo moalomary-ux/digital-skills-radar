@@ -32,6 +32,7 @@ const About = lazy(() => import('./views/About'))
 const HubLeaders = lazy(() => import('./views/hubs/Leaders'))
 const HubWork = lazy(() => import('./views/hubs/Work'))
 const HubRolesSkills = lazy(() => import('./views/hubs/RolesSkills'))
+const SkillsMap = lazy(() => import('./views/SkillsMap'))
 const HubEntitiesSectors = lazy(() => import('./views/hubs/EntitiesSectors'))
 const HubMethod = lazy(() => import('./views/hubs/Method'))
 
@@ -56,6 +57,7 @@ const viewRoutes: RouteObject[] = [
   { path: 'leaders', element: <HubLeaders /> },
   { path: 'work', element: <HubWork /> },
   { path: 'capabilities', element: <HubRolesSkills /> },
+  { path: 'map', element: <SkillsMap /> },
   { path: 'method', element: <HubMethod /> },
   { path: 'about', element: <About /> },
   { path: 'services', element: <Services /> },

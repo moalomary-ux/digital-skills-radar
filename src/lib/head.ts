@@ -37,6 +37,7 @@ export const pageTitles: Record<View, L> = {
   'work-shifts': { ar: 'خريطة تحوّل المهام', en: 'Task-shift map' },
   role: { ar: 'ورقة الدور', en: 'Role sheet' },
   'roles-hub': { ar: 'الأدوار والمهارات', en: 'Roles & skills' },
+  map: { ar: 'خريطة المهارات التفاعلية', en: 'Interactive skills map' },
   'method-hub': { ar: 'المنهجية والمصادر', en: 'Method & sources' },
   'not-found': { ar: 'الصفحة غير موجودة', en: 'Page Not Found' },
 }
@@ -102,6 +103,10 @@ export const pageDescriptions: Record<View, L> = {
   evidence: {
     ar: 'سجل الأدلة: مصدر كل رقم وادعاء يعرضه الرادار، مع حدود استخدامه، لتراجعه بنفسك قبل الاعتماد عليه.',
     en: 'Evidence register: the source behind every figure and claim the radar shows, with its limits, so you can check it before relying on it.',
+  },
+  map: {
+    ar: 'خريطة تفاعلية تربط المجالات الثمانية بمهاراتها الأربعين، وبالأسر الوظيفية والأدوار والتقنيات التي تطلبها، تُستكشف بالنقر والتحويم لا بالقراءة.',
+    en: 'An interactive map linking the eight domains to their forty skills and to the job families, roles and technologies that demand them, explored by click and hover rather than reading.',
   },
   'roles-hub': {
     ar: 'الأدوار والمهارات: المجالات الثمانية ومستوياتها الأربعة، ومكتبة الأدوار الحكومية، وقاموس المهارات في مكان واحد.',

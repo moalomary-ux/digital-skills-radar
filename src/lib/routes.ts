@@ -10,7 +10,7 @@ const slugs: Record<View, string> = {
   evidence: 'evidence', about: 'about', report: 'assess/report', services: 'services',
   sector: 'sectors/:sectorId', leaders: 'leaders', 'leader-brief': 'leaders/brief', 'leader-check': 'leaders/check',
   'leader-team': 'leaders/team', adoption: 'leaders/adoption', work: 'work', 'work-shifts': 'work/shifts', role: 'roles/:roleId',
-  'roles-hub': 'capabilities', 'method-hub': 'method',
+  'roles-hub': 'capabilities', 'method-hub': 'method', map: 'map',
   'not-found': '404',
 }
 

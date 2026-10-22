@@ -27,6 +27,7 @@ export type View =
   | 'sector'
   | 'leaders'
   | 'roles-hub'
+  | 'map'
   | 'method-hub'
   | 'leader-brief'
   | 'leader-check'
