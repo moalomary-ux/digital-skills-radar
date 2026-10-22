@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import type { L, Lang } from '../data/types'
 import { libraryRoleById } from '../data/roleLibrary'
+import { peekEntitiesIndex } from '../data/gov/loaders'
+import { label, sectorById } from '../data/gov/taxonomy'
 import type { View } from '../store'
 import { pathFor, routeFromPath } from './routes'
 
@@ -241,6 +243,27 @@ export function headFor(view: View, lang: Lang, params: Record<string, string> =
         : `Role sheet for ${name}: mission, responsibilities and target level per skill domain, with a link to assess yourself against it.`
     }
   }
+  if (view === 'sector' && params.sectorId) {
+    // the sector's name comes from the static taxonomy, so the title is known on every render
+    const name = label(sectorById(params.sectorId), lang, '')
+    if (name) {
+      title = `${site} — ${name} — ${pageTitles.sector[lang]}`
+      description = lang === 'ar'
+        ? `موجز قطاع «${name}»: مجالات التطوير المرتبطة بسجل الاستشارات في هذا القطاع، والأدوار المرتبطة بها، في صفحة قابلة للطباعة.`
+        : `Sector brief for ${name}: the development domains associated with this sector’s consulting record and the roles connected to them, on a printable page.`
+    }
+  }
+  if (view === 'entity' && params.entityId) {
+    // the entity's name is in the index: known at prerender time (seeded) and once the page has it
+    const entity = peekEntitiesIndex()?.find((row) => row.id === params.entityId)
+    if (entity) {
+      const name = lang === 'ar' ? entity.nameAr : entity.nameEn ?? entity.nameAr
+      title = `${site} — ${name} — ${pageTitles.entity[lang]}`
+      description = lang === 'ar'
+        ? `«${entity.nameAr}»: قطاعها، وخدماتها الرقمية، واحتياجها من المهارات، وما يرتبط بها من أدوار وخطط تطوير.`
+        : `${name}: its sector, digital services, skill needs and the roles and paths connected to it.`
+    }
+  }
   const canonical = canonicalUrl(view, lang, params)
   return {
     lang,
@@ -338,7 +361,7 @@ export function applyHead(head: HeadData): void {
   }
 }
 
-/** Route params that affect the head (today only the role id changes the title). */
+/** Route params that affect the head (the role, sector and entity ids change the title). */
 function headParamsFromPath(pathname: string): Record<string, string> {
   const route = routeFromPath(pathname)
   const params: Record<string, string> = {}

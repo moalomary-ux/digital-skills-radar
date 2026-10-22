@@ -285,6 +285,30 @@ describe('head helpers', () => {
     expect(firstHead.dir).toBe('ltr')
   })
 
+  it('gives each sector page a title with the sector name from the taxonomy', () => {
+    const sector = sectorsFile.sectors.find((s) => !s.pooled)!
+    const head = headFor('sector', 'en', { sectorId: sector.id })
+    expect(head.title).toContain(sector.nameEn)
+    expect(head.title).toContain(pageTitles.sector.en)
+    expect(head.description).toContain(sector.nameEn)
+    expect(headFor('sector', 'ar', { sectorId: sector.id }).title).not.toBe(headFor('sector', 'ar').title)
+    expect(headFor('sector', 'ar', { sectorId: 'no-such-sector' }).title).toBe(headFor('sector', 'ar').title)
+  })
+
+  it('gives each entity page a title with the entity name once the index is loaded, generic before', () => {
+    const entity = entityIndex[5]
+    clearGovDataCache()
+    expect(headFor('entity', 'ar', { entityId: entity.id }).title).toBe(headFor('entity', 'ar').title)
+    seedGovData({ '/data/entities-index.json': entityIndex })
+    const head = headFor('entity', 'ar', { entityId: entity.id })
+    expect(head.title).toContain(entity.nameAr)
+    expect(head.title).toContain(pageTitles.entity.ar)
+    expect(head.description).toContain(entity.nameAr)
+    expect(headForPath(`/ar/directory/${entity.id}`).title).toBe(head.title)
+    expect(headFor('entity', 'en', { entityId: 'no-such-entity' }).title).toBe(headFor('entity', 'en').title)
+    clearGovDataCache()
+  })
+
   it('fills the Open Graph block from the same data', () => {
     const head = headFor('methodology', 'en')
     expect(head.og.image).toBe('https://radar.omary.me/og/default.png')

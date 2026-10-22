@@ -10,7 +10,7 @@
 npm ci
 npm run dev          # تطوير محلي
 npm test             # vitest + فحص المحتوى الصارم (CONTENT_LINT_STRICT=1)
-npm run build        # prebuild: توليد بيانات الجهات (JSON) → vite → 404 → SSR → ترميز مسبق 88 صفحة → sitemap → ختم وضع البناء
+npm run build        # prebuild: توليد بيانات الجهات (JSON) → vite → 404 → SSR → ترميز مسبق 1,336 صفحة (1,324 عامة بالبيانات + 12 قشرة noindex للمسارات الشخصية) → sitemap → ختم وضع البناء
 npm run guard        # حارس النشر: يفشل إن تسرّب شعار أو سجل جهة أو ترتيب إلى البناء العام
 npm run size-budget  # ≤ 180KB لأكبر حزمة، ≤ 220KB لمجموع الصفحة الأولى (مضغوطة)
 VITE_DATA_MODE=full npm run build && scripts/deploy-gh-pages.sh   # النشر إلى gh-pages (البناء الكامل)

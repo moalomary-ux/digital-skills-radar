@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../store'
 import { pathFor } from '../lib/routes'
+import { applyHead, headFor } from '../lib/head'
 import { bdi } from '../lib/format'
 import { isFullMode } from '../lib/flags'
 import EntityLogo, { EnglishNameFallback } from '../components/EntityLogo'
@@ -273,10 +275,14 @@ function Profile({ entity, detail }: { entity: EntityIndexRow; detail: EntityDet
 }
 
 export default function EntityDetail() {
-  const { t, go, pendingEntityId } = useApp()
+  const { t, lang, go, pendingEntityId } = useApp()
   const id = pendingEntityId ?? ''
   const { data: entity, error, loading } = useGovData(() => (id ? findEntity(id) : Promise.resolve(null)), `entity:${id}`)
   const detailState = useGovData(() => (id && isFullMode() ? findEntityDetail(id) : Promise.resolve(null)), `entity-detail-logo:${id}`)
+  // the generic head is applied on navigation (store); once the index is here the title carries the name
+  useEffect(() => {
+    if (entity) applyHead(headFor('entity', lang, { entityId: entity.id }))
+  }, [entity, lang])
 
   if (!id) {
     return (

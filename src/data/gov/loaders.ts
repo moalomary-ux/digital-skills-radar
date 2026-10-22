@@ -137,6 +137,16 @@ function cached<T>(key: string, make: () => Promise<T>): Promise<T> {
   return p
 }
 
+/**
+ * The entity index when it is already in the cache and settled (seeded by the prerender, or fetched
+ * earlier in the session); undefined otherwise. Never starts a request: the page head uses it to put
+ * the entity's name in the title without owning a fetch.
+ */
+export function peekEntitiesIndex(): EntityIndexRow[] | undefined {
+  const p = cache.get('entities-index')
+  return p ? (settled.get(p)?.value as EntityIndexRow[] | undefined) : undefined
+}
+
 export function loadEntitiesIndex(): Promise<EntityIndexRow[]> {
   return cached('entities-index', () => fetchJson<EntityIndexRow[]>('entities-index.json'))
 }
