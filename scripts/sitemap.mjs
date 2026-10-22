@@ -5,14 +5,17 @@
  *   node scripts/sitemap.mjs     # after scripts/prerender.mjs
  *
  * Reads dist/prerender-manifest.json (written by scripts/prerender.mjs) and writes
- * dist/sitemap.xml with one <url> per prerendered page (canonical, trailing-slash form) and
- * xhtml:link alternates for ar / en / x-default. No lastmod or changefreq: no invented dates.
- * Personal routes are never in the manifest, so they never reach the sitemap.
- * Contract: every manifest page must exist on disk (dist/<lang>/<path>/index.html) and gets
- * exactly one <url>; a missing file is a hard error (exit 3), never a silently shorter sitemap.
+ * dist/sitemap.xml with one <url> per indexable prerendered page (canonical, trailing-slash form)
+ * and xhtml:link alternates for ar / en / x-default. No lastmod or changefreq: no invented dates.
+ * Personal routes are in the manifest as `noindex: true` shell pages (P11) and never reach the
+ * sitemap, neither as a <url> nor as an alternate.
+ * Contract: every manifest page must exist on disk (dist/<lang>/<path>/index.html) and every
+ * indexable page gets exactly one <url>; a missing file is a hard error (exit 3), never a silently
+ * shorter sitemap.
  *
  * Also keeps public/robots.txt (committed) in sync and copies it to dist/robots.txt so the first
- * build after a fresh checkout ships it even if public/ was copied before this script ran.
+ * build after a fresh checkout ships it even if public/ was copied before this script ran. Its
+ * Sitemap line follows the site's own origin (the manifest's canonical URLs).
  *
  * Diagnostics only: PRERENDER_DIST overrides dist/.
  */
@@ -26,7 +29,6 @@ const MANIFEST_PATH = join(DIST, 'prerender-manifest.json')
 const SITEMAP_PATH = join(DIST, 'sitemap.xml')
 const ROBOTS_PUBLIC = join(ROOT, 'public', 'robots.txt')
 const ROBOTS_DIST = join(DIST, 'robots.txt')
-const SITEMAP_URL = 'https://omary.me/sitemap.xml'
 
 const rel = (p) => relative(ROOT, p) || '.'
 const log = (...args) => console.log('[sitemap]', ...args)
@@ -49,11 +51,17 @@ if (missing.length > 0) {
   process.exit(3)
 }
 
-const writtenUrls = new Set(pages.map((p) => p.canonical))
+// Personal shells (noindex) exist on disk for HTTP 200, but are never advertised.
+const indexable = pages.filter((p) => !p.noindex)
+if (indexable.length === 0) {
+  console.error(`[sitemap] ${rel(MANIFEST_PATH)} lists no indexable page; refusing to write an empty sitemap.`)
+  process.exit(3)
+}
+const writtenUrls = new Set(indexable.map((p) => p.canonical))
 
 // Group by route: pages that list each other as alternates form one ar/en pair.
 const urls = []
-for (const page of [...pages].sort((a, b) => a.canonical.localeCompare(b.canonical))) {
+for (const page of [...indexable].sort((a, b) => a.canonical.localeCompare(b.canonical))) {
   const alternates = (page.alternates ?? [])
     // Only point at pages that were actually written (a language skipped by the prerender is omitted).
     .filter((alt) => writtenUrls.has(alt.href))
@@ -73,13 +81,14 @@ const xml = [
   '',
 ].join('\n')
 
-if (urls.length !== pages.length) {
-  console.error(`[sitemap] built ${urls.length} urls for ${pages.length} manifest pages; refusing to write a partial sitemap.`)
+if (urls.length !== indexable.length) {
+  console.error(`[sitemap] built ${urls.length} urls for ${indexable.length} indexable manifest pages; refusing to write a partial sitemap.`)
   process.exit(3)
 }
 mkdirSync(DIST, { recursive: true })
 writeFileSync(SITEMAP_PATH, xml)
 
+const SITEMAP_URL = `${new URL(indexable[0].canonical).origin}/sitemap.xml`
 const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITEMAP_URL}\n`
 if (!existsSync(ROBOTS_PUBLIC) || readFileSync(ROBOTS_PUBLIC, 'utf8') !== robots) {
   mkdirSync(dirname(ROBOTS_PUBLIC), { recursive: true })
@@ -88,7 +97,7 @@ if (!existsSync(ROBOTS_PUBLIC) || readFileSync(ROBOTS_PUBLIC, 'utf8') !== robots
 }
 writeFileSync(ROBOTS_DIST, robots)
 
-log(`${urls.length} urls -> ${rel(SITEMAP_PATH)}; robots -> ${rel(ROBOTS_DIST)}`)
+log(`${urls.length} urls (${pages.length - indexable.length} noindex shells left out) -> ${rel(SITEMAP_PATH)}; robots -> ${rel(ROBOTS_DIST)}`)
 
 function escapeXml(value) {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')

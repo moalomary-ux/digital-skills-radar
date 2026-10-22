@@ -423,6 +423,12 @@ describe('4. no logo references in aggregate mode', () => {
     for (const a of links) expect(a.getAttribute('href')).toMatch(/^\/ar\/directory\/ent-\d{4}$/)
     const buttons = [...container.querySelectorAll<HTMLButtonElement>('button[aria-pressed]')]
     expect(buttons.length).toBeGreaterThanOrEqual(5)
+    // P11 (axe): the count on a selected green chip is full white, never faded by opacity
+    for (const b of buttons.filter((x) => x.getAttribute('aria-pressed') === 'true')) {
+      const count = b.querySelector('.tabular-nums')
+      if (count) expect(count.className).not.toMatch(/opacity-/)
+      if (count) expect(count.className).toContain('text-white')
+    }
     const pressed = buttons.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.textContent?.replace(/[\d,]+$/, '').trim())
     expect(new Set(pressed)).toEqual(new Set(DEFAULT_DIRECTORY_TYPES.map((ty) => label(entityTypeById(ty), 'ar'))))
     const govQuasi = index.filter((r) => DEFAULT_DIRECTORY_TYPES.includes(r.type)).length

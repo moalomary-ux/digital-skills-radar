@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://omary.me/sitemap.xml
+Sitemap: https://radar.omary.me/sitemap.xml

@@ -97,6 +97,9 @@ interface Props {
 
 /** Node mark half-size in screen pixels. Outer rings are quieter than the skills (review P1-2). */
 const MARK_PX: Record<NodeKind, number> = { domain: 30, skill: 6.4, role: 5, family: 5, tech: 4.2, sector: 4.8 }
+/** Below this many pixels left in the first screen, the canvas sizes for the scrolled-to screen instead. */
+const MIN_FIRST_SCREEN = 360
+
 /** Label max width in screen pixels. */
 const LABEL_W: Record<NodeKind, number> = { domain: 108, skill: 150, role: 150, family: 150, tech: 170, sector: 150 }
 const PILL_METRICS = { fontPx: 12, lineHeight: 15, padX: 9, padY: 5 }
@@ -207,25 +210,39 @@ export default function MapCanvas(props: Props) {
   }, [])
   const [viewport, setViewport] = useState(900)
   const [topInPage, setTopInPage] = useState(0)
+  const [headerHeight, setHeaderHeight] = useState(0)
   useEffect(() => {
     if (typeof window === 'undefined') return
+    let alive = true
     const onResize = () => {
+      if (!alive) return
       setViewport(window.innerHeight || 900)
       const el = wrapRef.current
       if (el) setTopInPage(el.getBoundingClientRect().top + (window.scrollY || 0))
+      // the sticky site header covers the top of the screen once the page scrolls
+      const header = document.querySelector<HTMLElement>('.site-header')
+      setHeaderHeight(header && getComputedStyle(header).position === 'sticky' ? header.offsetHeight : 0)
     }
     onResize()
+    // the web font can rewrap the headings above the canvas after the first measure
+    document.fonts?.ready?.then(onResize, () => {})
     window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
+    return () => {
+      alive = false
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
-  // P10b (review P1-11): min(72vh, 760 px) on wide screens, and never past the bottom of the first
-  // viewport where the canvas starts inside it, nor taller than the canvas is wide; narrow screens
-  // get a square-ish wheel that leaves room for the lists below it. Measured on load and resize only,
-  // so typing in the search never resizes the map.
-  const fold = topInPage > 0 && topInPage < viewport - 440 ? viewport - topInPage - 12 : Infinity
+  // P10b (review P1-11): min(72vh, 760 px) on wide screens, nor taller than the canvas is wide;
+  // narrow screens get a square-ish wheel that leaves room for the lists below it. Measured on load
+  // and resize only, so typing in the search never resizes the map.
+  // P11: the canvas always fits the viewport, measured from where it sits: inside the first screen
+  // when it starts there with room for a usable disc (/capabilities at 1024 × 768 used to overflow by
+  // 114 px), otherwise in the screen below the sticky header once scrolled to.
+  const firstScreen = viewport - topInPage - 16
+  const fold = topInPage > 0 && firstScreen >= MIN_FIRST_SCREEN ? firstScreen : viewport - headerHeight - 24
   const height = compact
     ? Math.round(Math.max(300, Math.min(width, viewport * 0.62)))
-    : Math.round(Math.max(440, Math.min(760, viewport * 0.72, fold, Math.max(width, 440))))
+    : Math.round(Math.max(Math.min(440, fold), Math.min(760, viewport * 0.72, fold, Math.max(width, 440))))
 
   useEffect(() => {
     onHeight?.(height)

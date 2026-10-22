@@ -25,8 +25,21 @@ interface Props {
  * The accessible equivalent of a chart: every plotted value in a real table. Visually hidden by
  * default (`sr-only`), optionally shown under the chart. Never `display: none`, so screen readers
  * and the browser's find-in-page both reach it.
+ *
+ * Hidden, it sits inside a 1 px `sr-only` block (P11, as the map does since P10b): a table ignores
+ * `height` and `overflow`, so a bare `table.sr-only` still lays out at full height and can stretch
+ * the page or add a printed page; the block wrapper clips it to zero layout height on screen and paper.
  */
-export default function VisuallyHiddenTable({ id, lang, caption, columns, rowHeader, rows, visible = false, className = '' }: Props) {
+export default function VisuallyHiddenTable(props: Props) {
+  // the wrapper stays when the table is shown (it only loses `sr-only`), so the table keeps its identity
+  return (
+    <div className={props.visible ? undefined : 'sr-only'} data-chart-table-wrap="">
+      <ChartTable {...props} />
+    </div>
+  )
+}
+
+function ChartTable({ id, lang, caption, columns, rowHeader, rows, visible = false, className = '' }: Props) {
   return (
     <table
       id={id}

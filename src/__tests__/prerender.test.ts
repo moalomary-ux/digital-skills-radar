@@ -1,7 +1,15 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
+// @ts-ignore: the app has no @types/node; these imports are test-side only
+import { readFileSync } from 'node:fs'
+// @ts-ignore: see above
+import process from 'node:process'
 import { libraryRoles } from '../data/roleLibrary'
 import type { Lang } from '../data/types'
-import { headForPath, isRouted, prerenderManifest } from '../entry-server'
+import { clearGovDataCache, findEntity, loadEntitiesIndex, loadSectors, peekGovData, seedGovData } from '../data/gov/loaders'
+import { settleGovData, startGovDataCollection, stopGovDataCollection, useGovData } from '../data/gov/useGovData'
+import { govSeeds, headForPath, isRouted, prerenderManifest, renderShell } from '../entry-server'
 import {
   alternateLinks,
   applyHead,
@@ -40,6 +48,11 @@ const ALL_VIEWS: View[] = [
 const PERSONAL_PATHS = ['/ar/assess', '/en/assess', '/ar/assess/results', '/en/assess/results',
   '/ar/assess/plan', '/en/assess/plan', '/ar/assess/report', '/en/assess/report',
   '/ar/leaders/check', '/en/leaders/check', '/ar/leaders/team', '/en/leaders/team']
+const PERSONAL: View[] = ['wizard', 'results', 'pathways', 'report', 'leader-check', 'leader-team']
+
+const ROOT = `${process.cwd()}/`
+const sectorsFile = JSON.parse(readFileSync(`${ROOT}public/data/sectors.json`, 'utf8')) as { sectors: { id: string; pooled?: boolean; nameEn: string }[] }
+const entityIndex = JSON.parse(readFileSync(`${ROOT}public/data/entities-index.json`, 'utf8')) as { id: string; nameAr: string }[]
 
 describe('prerender manifest', () => {
   const manifest = prerenderManifest()
@@ -54,8 +67,9 @@ describe('prerender manifest', () => {
       }
     }
     const views = new Set(manifest.map((entry) => entry.view))
-    expect([...views].sort()).toEqual([...PUBLIC_STATIC_VIEWS, 'role'].sort())
+    expect([...views].sort()).toEqual([...PUBLIC_STATIC_VIEWS, 'role', ...PERSONAL].sort())
     expect(new Set(paths).size).toBe(paths.length)
+    for (const entry of manifest.filter((item) => !PERSONAL.includes(item.view))) expect(entry.noindex, entry.path).toBe(false)
   })
 
   it('expands /roles/:roleId for every library role in both languages', () => {
@@ -69,19 +83,43 @@ describe('prerender manifest', () => {
     }
   })
 
-  it('excludes personal routes and never leaves a parameter placeholder', () => {
+  it('lists every personal route once, as a noindex shell, and never leaves a parameter placeholder', () => {
     for (const path of paths) {
-      expect(path.startsWith('/ar/assess'), path).toBe(false)
-      expect(path.startsWith('/en/assess'), path).toBe(false)
       expect(path).not.toContain(':')
       expect(path).not.toMatch(/\/$/)
       expect(path).toMatch(/^\/(ar|en)(\/|$)/)
     }
-    for (const personal of PERSONAL_PATHS) expect(paths).not.toContain(personal)
-    for (const view of PERSONAL_VIEWS) expect(manifest.some((entry) => entry.view === view)).toBe(false)
+    const shells = manifest.filter((entry) => entry.noindex)
+    expect(shells.map((entry) => entry.path).sort()).toEqual([...PERSONAL_PATHS].sort())
+    for (const entry of shells) {
+      expect(PERSONAL_VIEWS, entry.path).toContain(entry.view)
+      expect(entry.params).toEqual({})
+      expect(headForPath(entry.path).robots, entry.path).toContain('noindex')
+    }
+    for (const view of PERSONAL_VIEWS) expect(manifest.filter((entry) => entry.view === view)).toHaveLength(2)
     expect(manifest.some((entry) => entry.view === 'not-found')).toBe(false)
+    // sector and entity pages come from the generated data, through govSeeds() (see below)
     expect(manifest.some((entry) => entry.view === 'entity')).toBe(false)
     expect(manifest.some((entry) => entry.view === 'sector')).toBe(false)
+  })
+
+  it('expands every non-pooled sector and every public entity, indexable, in both languages', () => {
+    const seeds = govSeeds(sectorsFile.sectors, entityIndex.map((row) => row.id))
+    const full = prerenderManifest(seeds)
+    const open = sectorsFile.sectors.filter((sector) => !sector.pooled)
+    expect(open.length).toBe(30)
+    expect(full.filter((entry) => entry.view === 'sector')).toHaveLength(2 * open.length)
+    expect(full.filter((entry) => entry.view === 'entity')).toHaveLength(2 * entityIndex.length)
+    for (const sector of sectorsFile.sectors) {
+      const has = full.some((entry) => entry.path === `/ar/sectors/${sector.id}`)
+      expect(has, sector.id).toBe(!sector.pooled)
+    }
+    const entity = entityIndex[0]
+    const entry = full.find((item) => item.path === `/en/directory/${entity.id}`)
+    expect(entry?.params).toEqual({ entityId: entity.id })
+    expect(entry?.noindex).toBe(false)
+    for (const item of full) if (item.view === 'sector' || item.view === 'entity') expect(isRouted(item.path), item.path).toBe(true)
+    expect(full).toHaveLength(manifest.length + 2 * open.length + 2 * entityIndex.length)
   })
 
   it('accepts extra seeds without duplicating existing paths', () => {
@@ -114,6 +152,77 @@ describe('prerender manifest', () => {
     expect(head.canonical).toBe(`https://radar.omary.me/en/roles/${role.id}/`)
     expect(headForPath('/ar/methodology').title).toBe(headFor('methodology', 'ar').title)
     expect(headForPath('/ar/assess').robots).toContain('noindex')
+  })
+})
+
+describe('personal shell pages', () => {
+  it('render the page title and one fixed sentence, never the view', () => {
+    for (const path of PERSONAL_PATHS) {
+      const html = renderShell(path)
+      const lang = path.startsWith('/en') ? 'en' : 'ar'
+      expect(html).toContain('data-prerender-shell')
+      expect(html).toMatch(/<h1[\s>]/)
+      const view = PERSONAL.find((item) => pathFor(item, lang) === path)!
+      expect(html).toContain(`>${pageTitles[view][lang]}</h1>`)
+      // no form, no script, no stored data: the same bytes for every visitor
+      expect(html).not.toMatch(/<(form|input|script|svg|table)\b/)
+      expect(html).not.toMatch(/dsr-|localStorage|result code|رمز النتيجة/i)
+      expect(html.length).toBeLessThan(600)
+    }
+    expect(renderShell('/ar/assess')).not.toBe(renderShell('/en/assess'))
+  })
+
+  it('refuse a public route', () => {
+    expect(() => renderShell('/ar/methodology')).toThrow(/not a personal route/)
+  })
+})
+
+describe('government data seeded for the prerender', () => {
+  afterEach(() => {
+    stopGovDataCollection()
+    clearGovDataCache()
+  })
+
+  const files = () => ({
+    '/data/sectors.json': JSON.parse(readFileSync(`${ROOT}public/data/sectors.json`, 'utf8')),
+    '/data/entities-index.json': JSON.parse(readFileSync(`${ROOT}public/data/entities-index.json`, 'utf8')),
+    '/data/unknown.json': { ignored: true },
+  })
+
+  it('seedGovData fills the cache: the loaders resolve synchronously, without fetching', () => {
+    clearGovDataCache()
+    expect(peekGovData(loadSectors())).toBeUndefined()
+    clearGovDataCache()
+    expect(seedGovData(files())).toBe(2)
+    expect(peekGovData(loadSectors())?.value.sectors.length).toBe(sectorsFile.sectors.length)
+    expect(peekGovData(loadEntitiesIndex())?.value).toHaveLength(entityIndex.length)
+    expect(peekGovData(findEntity(entityIndex[3].id))?.value?.nameAr).toBe(entityIndex[3].nameAr)
+    expect(peekGovData(findEntity('no-such-entity'))?.value).toBeNull()
+  })
+
+  it('useGovData renders seeded data on the first (server) render', () => {
+    clearGovDataCache()
+    seedGovData(files())
+    function Probe() {
+      const { data, loading } = useGovData(loadSectors)
+      return createElement('p', null, loading ? 'loading' : `sectors:${data?.sectors.length}`)
+    }
+    expect(renderToString(createElement(Probe))).toContain(`sectors:${sectorsFile.sectors.length}`)
+  })
+
+  it('a composed loader resolves on the second render pass of the collection', async () => {
+    clearGovDataCache()
+    seedGovData(files())
+    const composed = async () => (await loadSectors()).sectors.length
+    function Probe() {
+      const { data, loading } = useGovData(composed, 'probe:composed')
+      return createElement('p', null, loading ? 'loading' : `count:${data}`)
+    }
+    startGovDataCollection()
+    expect(renderToString(createElement(Probe))).toContain('loading')
+    expect(await settleGovData()).toBe(1)
+    expect(renderToString(createElement(Probe))).toContain(`count:${sectorsFile.sectors.length}`)
+    expect(await settleGovData()).toBe(0)
   })
 })
 

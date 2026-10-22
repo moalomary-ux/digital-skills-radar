@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useApp } from '../store'
-import { domains, domainById } from '../data/domains'
+import { domains } from '../data/domains'
 import { skillRecords } from '../data/skillRecords'
 import type { SkillRecord } from '../data/skillRecords'
 import { statements } from '../data/statements'
@@ -186,73 +186,88 @@ export default function SkillRegistry() {
         </div>
       </div>
 
-      <ul className="grid gap-3 md:grid-cols-2">
-        {skillRecords.map((r) => {
-          const d = domainById(r.domainId)
-          const isOpen = open.has(r.id)
-          const shown = visibleIds.has(r.id)
-          const st = statementText.get(r.assessmentRef)
-          const panelId = `sr-panel-${r.id}`
+      {/* one section per domain: /skills#domain-<id> (the map's «مهارات المجال في قاموس المهارات») lands on it */}
+      <div className="space-y-8">
+        {domains.map((dom) => {
+          const records = skillRecords.filter((r) => r.domainId === dom.id)
+          if (records.length === 0) return null
+          const anyShown = records.some((r) => visibleIds.has(r.id))
           return (
-            <li key={r.id} id={r.id} className={`glass flex-col p-5 ${shown ? 'flex' : 'hidden print:flex'}`}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="chip text-[10.5px]">
-                  <Icon name={d.icon} className="h-3 w-3 text-dga-green" />
-                  {t(d.shortName)}
-                </span>
-              </div>
-              <h2 className="mt-3 font-bold leading-snug text-dga-black">
-                <button
-                  type="button"
-                  aria-expanded={isOpen}
-                  aria-controls={panelId}
-                  onClick={() => toggle(r.id)}
-                  className="flex w-full items-start justify-between gap-3 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green"
-                >
-                  <span>{t(r.name)}</span>
-                  <span className={`no-print shrink-0 text-dga-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden>
-                    ▾
-                  </span>
-                </button>
+            <section
+              key={dom.id}
+              id={`domain-${dom.id}`}
+              aria-labelledby={`domain-${dom.id}-title`}
+              className={`scroll-mt-24 ${anyShown ? '' : 'hidden print:block'}`}
+            >
+              <h2 id={`domain-${dom.id}-title`} className="mb-3 flex items-center gap-2 text-lg font-bold text-dga-green-deep">
+                <Icon name={dom.icon} className="h-5 w-5 text-dga-green" />
+                {t(dom.name)}
               </h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-dga-ink">{t(r.definition)}</p>
+              <ul className="grid gap-3 md:grid-cols-2">
+                {records.map((r) => {
+                  const isOpen = open.has(r.id)
+                  const shown = visibleIds.has(r.id)
+                  const st = statementText.get(r.assessmentRef)
+                  const panelId = `sr-panel-${r.id}`
+                  return (
+                    <li key={r.id} id={r.id} className={`glass flex-col p-5 ${shown ? 'flex' : 'hidden print:flex'}`}>
+                      {/* the domain is the section heading above, so the card no longer repeats it */}
+                      <h3 className="font-bold leading-snug text-dga-black">
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          aria-controls={panelId}
+                          onClick={() => toggle(r.id)}
+                          className="flex w-full items-start justify-between gap-3 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green"
+                        >
+                          <span>{t(r.name)}</span>
+                          <span className={`no-print shrink-0 text-dga-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden>
+                            ▾
+                          </span>
+                        </button>
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-dga-ink">{t(r.definition)}</p>
 
-              <div id={panelId} className={`mt-3 space-y-2 text-[12.5px] leading-relaxed ${isOpen ? 'block' : 'hidden print:block'}`}>
-                <p className="rounded-btn bg-dga-bg p-2.5 text-dga-ink">
-                  <span className="font-bold text-dga-green-dark">{`${t(ui.task)}: `}</span>
-                  {t(r.exampleTask)}
-                </p>
-                {st ? (
-                  <p className="rounded-btn border border-dga-line p-2.5 text-dga-ink">
-                    <span className="font-bold text-dga-green-dark">{`${t(ui.statement)}: `}</span>
-                    {t(st)}
-                  </p>
-                ) : null}
-                <p className="text-dga-muted">
-                  <span className="font-bold text-dga-ink">{`${t(ui.prereq)}: `}</span>
-                  {t(r.prerequisites)}
-                </p>
-                <p className="text-dga-muted">
-                  <span className="font-bold text-dga-ink">{`${t(ui.evidence)}: `}</span>
-                  {t(r.evidence)}
-                </p>
-                <div className="flex flex-wrap items-center gap-1.5 border-t border-dga-line pt-2.5">
-                  <span className="text-[11px] font-semibold text-dga-muted">{`${t(ui.categories)}: `}</span>
-                  {r.audienceTracks.map((tid) => (
-                    <span key={tid} className="chip-info text-[10.5px]">
-                      {t(trackById(tid)!.name)}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-[11px] text-dga-muted">
-                  {`${t(ui.version)}: `}
-                  <span dir="ltr">{`v${r.version} · ${r.lastReviewed}`}</span>
-                </p>
-              </div>
-            </li>
+                      <div id={panelId} className={`mt-3 space-y-2 text-[12.5px] leading-relaxed ${isOpen ? 'block' : 'hidden print:block'}`}>
+                        <p className="rounded-btn bg-dga-bg p-2.5 text-dga-ink">
+                          <span className="font-bold text-dga-green-dark">{`${t(ui.task)}: `}</span>
+                          {t(r.exampleTask)}
+                        </p>
+                        {st ? (
+                          <p className="rounded-btn border border-dga-line p-2.5 text-dga-ink">
+                            <span className="font-bold text-dga-green-dark">{`${t(ui.statement)}: `}</span>
+                            {t(st)}
+                          </p>
+                        ) : null}
+                        <p className="text-dga-muted">
+                          <span className="font-bold text-dga-ink">{`${t(ui.prereq)}: `}</span>
+                          {t(r.prerequisites)}
+                        </p>
+                        <p className="text-dga-muted">
+                          <span className="font-bold text-dga-ink">{`${t(ui.evidence)}: `}</span>
+                          {t(r.evidence)}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-1.5 border-t border-dga-line pt-2.5">
+                          <span className="text-[11px] font-semibold text-dga-muted">{`${t(ui.categories)}: `}</span>
+                          {r.audienceTracks.map((tid) => (
+                            <span key={tid} className="chip-info text-[10.5px]">
+                              {t(trackById(tid)!.name)}
+                            </span>
+                          ))}
+                        </div>
+                        <p className="text-[11px] text-dga-muted">
+                          {`${t(ui.version)}: `}
+                          <span dir="ltr">{`v${r.version} · ${r.lastReviewed}`}</span>
+                        </p>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
           )
         })}
-      </ul>
+      </div>
 
       {filtered.length === 0 && <div className="glass mt-3 p-10 text-center text-dga-muted">{t(ui.none)}</div>}
     </div>

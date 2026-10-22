@@ -117,7 +117,14 @@ export default function MapExplorer({ syncUrl = false, headingLevel = 2 }: { syn
   const [params, setParams] = useSearchParams()
   const initial = useRef(syncUrl ? new URLSearchParams(params) : new URLSearchParams()).current
   const initialNode = initial.get('node')
-  const compact = useMediaQuery('(max-width: 767px)')
+  // P11: the layout is chosen by the screen, never by the paper. An A4 page (~720 px) matches the
+  // narrow query, and the re-render it started landed after Chrome had counted the printed pages,
+  // so the stacked layout was cut at the page break; while printing, the screen's choice is kept.
+  const narrow = useMediaQuery('(max-width: 767px)')
+  const printing = useMediaQuery('print')
+  const screenNarrow = useRef(narrow)
+  if (!printing) screenNarrow.current = narrow
+  const compact = printing ? screenNarrow.current : narrow
   const coarse = useMediaQuery('(pointer: coarse)')
   const reduced = usePrefersReducedMotion()
   const touch = compact || coarse
@@ -579,7 +586,7 @@ export default function MapExplorer({ syncUrl = false, headingLevel = 2 }: { syn
   const spotStrip = spot && members ? <SpotStrip graph={graph} domainId={spot} members={members} horizon={horizon} setHorizon={setHorizon} onExit={exitSpotlight} onSwitch={enterSpotlight} /> : null
 
   return (
-    <div className={`map-explorer ${sheetOpen ? 'pb-[50vh]' : ''}`} onKeyDown={onRootKeyDown} data-map-explorer="" data-compact={compact ? 'true' : 'false'}>
+    <div className={`map-explorer ${sheetOpen ? 'pb-[50vh]' : ''}`} onKeyDown={onRootKeyDown} data-map-explorer="" data-compact={compact ? 'true' : 'false'} data-spot={spot ? 'true' : undefined}>
       {/* toolbar: search (its results come next in the tab order, review P2-13), ring filters, story, text table */}
       <div className="map-toolbar mb-3 rounded-card border border-dga-line bg-white p-2.5 shadow-subtle print:hidden">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -676,7 +683,7 @@ export default function MapExplorer({ syncUrl = false, headingLevel = 2 }: { syn
       {compact ? (
         <div className="space-y-4">
           {canvas}
-          <p className="text-xs leading-relaxed text-dga-muted">{t(MAP_COPY.touchHint)}</p>
+          <p className="text-xs leading-relaxed text-dga-muted print:hidden">{t(MAP_COPY.touchHint)}</p>
           {spotStrip}
           {!sheetOpen && <div ref={panelRef}>{panel}</div>}
           <MapList

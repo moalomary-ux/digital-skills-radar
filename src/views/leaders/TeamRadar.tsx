@@ -415,13 +415,13 @@ export default function TeamRadar() {
             <li className="flex gap-2">
               <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-dga-green" />
               <span>
-                {t(tt.privacyCode)} <Link to={pathFor('adoption', lang)}>{t(tt.adoptionLink)}</Link>
+                {t(tt.privacyCode)} <Link to={pathFor('adoption', lang)} className="underline underline-offset-2">{t(tt.adoptionLink)}</Link>
               </span>
             </li>
             <li className="flex gap-2">
               <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-dga-green" />
               <span>
-                {t(tt.howTo)} <Link to={pathFor('results', lang)}>{t(tt.resultsLink)}</Link>
+                {t(tt.howTo)} <Link to={pathFor('results', lang)} className="underline underline-offset-2">{t(tt.resultsLink)}</Link>
               </span>
             </li>
           </ul>

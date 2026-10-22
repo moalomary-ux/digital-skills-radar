@@ -166,7 +166,8 @@ export default function Directory() {
                   className={`chip cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green ${on ? 'border-dga-green bg-dga-green font-semibold !text-white' : ''}`}
                 >
                   {label(entityTypeById(ty), lang, ty)}
-                  <span className="tabular-nums opacity-80" dir="ltr">
+                  {/* the count keeps full contrast on the selected green chip (white on #1B8354 ≈ 4.8:1) */}
+                  <span className={`tabular-nums ${on ? 'font-normal text-white' : 'text-dga-muted'}`} dir="ltr">
                     {fmt(typeCounts.get(ty) ?? 0)}
                   </span>
                 </button>

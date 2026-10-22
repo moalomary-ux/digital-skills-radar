@@ -14,6 +14,13 @@
  *
  * The client (src/main.tsx) uses createRoot, not hydrateRoot, so the prerendered markup is
  * replaced at runtime; it exists for crawlers, link previews and first paint only.
+ *
+ * P11: personal routes (assessment, results, plan, report, leader check, team radar) get a SHELL
+ * page — their head with robots noindex and a fixed, non-personal placeholder from renderShell(),
+ * never a render of the view — so GitHub Pages answers them with 200 instead of the 404 page; they
+ * are listed with `noindex: true` and kept out of the sitemap. Government pages render with their
+ * data: the prerender seeds the gov-data cache from the built JSON (seedGovData) and renders in
+ * passes until no loader is left pending (startGovDataCollection / settleGovData).
  */
 import { isValidElement } from 'react'
 import { renderToString } from 'react-dom/server'
@@ -22,13 +29,15 @@ import type { RouteObject } from 'react-router-dom'
 import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router-dom/server'
 import { libraryRoles } from './data/roleLibrary'
 import type { Lang } from './data/types'
-import { headFor, pageTitles, PERSONAL_VIEWS, renderHeadTags, SITE_URL } from './lib/head'
+import { headFor, pageTitles, PERSONAL_VIEWS, renderHeadTags, SITE_URL, escapeHtml } from './lib/head'
 import type { HeadData } from './lib/head'
 import { pathFor, routeFromPath } from './lib/routes'
 import { routes } from './routes'
 import type { View } from './store'
+import { seedGovData } from './data/gov/loaders'
+import { settleGovData, startGovDataCollection, stopGovDataCollection } from './data/gov/useGovData'
 
-export { renderHeadTags, SITE_URL }
+export { renderHeadTags, SITE_URL, seedGovData, settleGovData, startGovDataCollection, stopGovDataCollection }
 export type { HeadData }
 
 export interface PrerenderEntry {
@@ -37,6 +46,8 @@ export interface PrerenderEntry {
   /** Path without trailing slash, e.g. '/ar', '/en/methodology', '/ar/roles/data_scientist'. */
   path: string
   params: Record<string, string>
+  /** Personal route: a shell page (renderShell), robots noindex, never in the sitemap. */
+  noindex: boolean
 }
 
 /** A view plus the params that identify one concrete page of it. */
@@ -48,17 +59,17 @@ export interface PrerenderSeed {
 export const LANGS: readonly Lang[] = ['ar', 'en']
 
 /**
- * Views that only exist with a parameter and have no per-id expansion wired yet.
- * 'role' is parameterized too but is expanded below from the role library.
- * To prerender sectors later: remove 'sector' here and add an expansion next to the roles one
- * in parameterizedSeeds(), or pass seeds through the `extra` argument of prerenderManifest().
+ * Views that only exist with a parameter. 'role' is parameterized too but is expanded below from the
+ * role library; 'sector' and 'entity' are expanded from the generated data by govSeeds(), which the
+ * prerender passes through the `extra` argument of prerenderManifest().
  */
 const PARAMETER_ONLY_VIEWS: readonly View[] = ['entity', 'sector']
 
 /** Every View (the key set of pageTitles is Record<View, L>, so it is complete by type). */
 export const ALL_VIEWS: readonly View[] = Object.keys(pageTitles) as View[]
 
-/** Public by type: not personal, not the 404 view, not parameter-only. Says nothing about routing. */
+/** Public by type: not personal, not the 404 view, not parameter-only. Says nothing about routing.
+ *  (Personal views still get a noindex shell page each; see personalShellViews and renderShell.) */
 export function isPublicView(view: View): boolean {
   return !PERSONAL_VIEWS.includes(view) && view !== 'not-found' && !PARAMETER_ONLY_VIEWS.includes(view)
 }
@@ -90,6 +101,44 @@ export function parameterizedSeeds(): PrerenderSeed[] {
   return libraryRoles.map((role) => ({ view: 'role' as View, params: { roleId: role.id } }))
 }
 
+/**
+ * Seeds for the government pages that need the generated data to enumerate: one sector brief per
+ * non-pooled sector of `sectors.json`, one entity page per row of `entities-index.json`. The prerender
+ * reads both files from the build output and passes the result as `extra` to prerenderManifest().
+ */
+export function govSeeds(sectors: readonly { id: string; pooled?: boolean }[], entityIds: readonly string[]): PrerenderSeed[] {
+  return [
+    ...sectors.filter((s) => !s.pooled).map((s) => ({ view: 'sector' as View, params: { sectorId: s.id } })),
+    ...entityIds.map((entityId) => ({ view: 'entity' as View, params: { entityId } })),
+  ]
+}
+
+/** Personal views that have a route: each gets a noindex shell page per language. */
+export function personalShellViews(): View[] {
+  return PERSONAL_VIEWS.filter((view) => isRouted(pathWithoutSlash(view, 'ar', {})))
+}
+
+const SHELL_NOTE = {
+  ar: 'تُفتح هذه الصفحة في متصفحك، وتبقى بياناتك على جهازك.',
+  en: 'This page opens in your browser, and your data stays on your device.',
+} as const
+
+/**
+ * The root markup of a personal route's shell page: the page title and one fixed sentence, the same
+ * for every visitor. Nothing from the view is rendered, so no personal content can reach the file.
+ */
+export function renderShell(path: string): string {
+  const route = routeFromPath(path)
+  const lang: Lang = route.lang ?? 'ar'
+  if (!PERSONAL_VIEWS.includes(route.view)) throw new Error(`renderShell: ${path} is not a personal route`)
+  return (
+    `<main id="main" data-prerender-shell=""><div class="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">` +
+    `<h1 class="text-3xl font-bold text-dga-green-deep">${escapeHtml(pageTitles[route.view][lang])}</h1>` +
+    `<p class="mt-3 leading-relaxed text-dga-muted">${escapeHtml(SHELL_NOTE[lang])}</p>` +
+    `</div></main>`
+  )
+}
+
 function pathWithoutSlash(view: View, lang: Lang, params: Record<string, string>): string {
   const path = pathFor(view, lang, params).split('?')[0].split('#')[0]
   return path.length > 1 ? path.replace(/\/+$/, '') : path
@@ -105,6 +154,7 @@ export function prerenderManifest(extra: PrerenderSeed[] = []): PrerenderEntry[]
   const seeds: PrerenderSeed[] = [
     ...publicStaticViews().map((view) => ({ view })),
     ...parameterizedSeeds(),
+    ...personalShellViews().map((view) => ({ view })),
     ...extra,
   ]
   const seen = new Set<string>()
@@ -115,7 +165,7 @@ export function prerenderManifest(extra: PrerenderSeed[] = []): PrerenderEntry[]
       const path = pathWithoutSlash(seed.view, lang, params)
       if (seen.has(path)) continue
       seen.add(path)
-      entries.push({ view: seed.view, lang, path, params })
+      entries.push({ view: seed.view, lang, path, params, noindex: PERSONAL_VIEWS.includes(seed.view) })
     }
   }
   return entries

@@ -67,6 +67,10 @@ describe('team radar view (/ar/leaders/team)', () => {
     expect(screen.getAllByText('للتخطيط التطويري فقط — ليس تقييماً للأداء').length).toBeGreaterThan(0)
     expect(screen.getByText(/لا يُرسل أي رمز إلى أي جهة/)).toBeInTheDocument()
     expect(screen.getByTestId('team-gate')).toBeInTheDocument()
+    // P11 (axe link-in-text-block): the links inside the privacy sentences are underlined, not colour-only
+    const inText = [...document.querySelectorAll('#main a[href$="adoption"], #main a[href$="assess/results"]'), ...document.querySelectorAll('section[aria-labelledby="team-title"] li a')]
+    expect(inText.length).toBeGreaterThan(0)
+    for (const a of inText) expect(a.className).toContain('underline')
   })
 
   it('4 codes → the bilingual gate message, and nothing else', async () => {

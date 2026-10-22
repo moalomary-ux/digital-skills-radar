@@ -417,5 +417,14 @@ describe('P5b views: interactive and keyboard reachable (jsdom)', () => {
     expect((container.textContent ?? '').match(ARABIC_RUN) ?? []).toEqual([])
     const shown = [...container.querySelectorAll('li[id^="sr-"]')].filter((li) => !li.className.includes('hidden'))
     expect(shown).toHaveLength(skillRecords.filter((r) => r.domainId === 'policy').length)
+    // P11: every domain has its own section, the target of the map's «the domain's skills» link
+    for (const d of domains) {
+      const section = container.querySelector(`section#domain-${d.id}`)
+      expect(section, d.id).not.toBeNull()
+      expect(section!.querySelector('h2')?.textContent).toBe(d.name.en)
+      expect(section!.querySelectorAll('li[id^="sr-"]')).toHaveLength(skillRecords.filter((r) => r.domainId === d.id).length)
+    }
+    expect(container.querySelector('section#domain-policy')!.className).not.toContain('hidden')
+    expect(container.querySelector('section#domain-cyber')!.className).toContain('hidden')
   })
 })

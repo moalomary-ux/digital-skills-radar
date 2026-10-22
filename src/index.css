@@ -425,8 +425,9 @@ a {
     opacity: 0.55;
   }
 }
-/* narrow screens: every control of the map is a 44 px target */
-@media (max-width: 767px) {
+/* narrow screens: every control of the map is a 44 px target (screen only: an A4 page is
+   narrower than 768 px too, and 44 px chips on paper pushed the spotlight to a second page) */
+@media screen and (max-width: 767px) {
   .map-explorer .map-toolbar button,
   .map-explorer .map-search,
   .map-explorer .map-panel button,
@@ -542,5 +543,75 @@ a {
   .map-halo,
   .map-gap {
     animation: none !important;
+  }
+  /* P11: «إضاءة المجال» prints on one A4 page — a shorter disc, the strip and the legend set tight,
+     and the panel's lists as three columns of plain marked items instead of pills */
+  .map-explorer[data-spot] .map-canvas {
+    max-height: 88mm;
+  }
+  /* the page intro is about clicking; on paper the spotlight title says what the page is */
+  .map-page:has(.map-explorer[data-spot]) > header p:not(.eyebrow) {
+    display: none;
+  }
+  .map-explorer[data-spot] .map-spot {
+    break-inside: avoid;
+    margin-top: 2mm !important;
+    padding: 2.5mm 3.5mm !important;
+    box-shadow: none !important;
+  }
+  .map-explorer[data-spot] .map-spot p,
+  .map-explorer[data-spot] .map-spot li,
+  .map-explorer[data-spot] .map-spot legend,
+  .map-explorer[data-spot] .map-spot label {
+    font-size: 9.5px !important;
+    line-height: 1.35 !important;
+  }
+  .map-explorer[data-spot] .map-spot label {
+    min-height: 0 !important;
+    padding: 1px 4px !important;
+  }
+  .map-explorer[data-spot] .map-spot .mt-3,
+  .map-explorer[data-spot] .map-spot .mt-2,
+  .map-explorer[data-spot] .map-spot .mt-1\.5 {
+    margin-top: 2px !important;
+  }
+  .map-explorer[data-spot] .map-legend {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 1px 8px !important;
+    margin-top: 1.5mm !important;
+    padding: 2px 6px !important;
+    font-size: 8.5px !important;
+  }
+  .map-explorer[data-spot] .map-panel {
+    column-count: 3;
+    column-gap: 5mm;
+    margin-top: 0 !important;
+  }
+  .map-explorer[data-spot] .map-panel-wrap {
+    margin-top: 2mm;
+  }
+  .map-explorer[data-spot] .map-panel p,
+  .map-explorer[data-spot] .map-panel li,
+  .map-explorer[data-spot] .map-panel dd,
+  .map-explorer[data-spot] .map-panel dt,
+  .map-explorer[data-spot] .map-panel button,
+  .map-explorer[data-spot] .map-panel a,
+  .map-explorer[data-spot] .map-panel span {
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+  }
+  .map-explorer[data-spot] .map-panel h2,
+  .map-explorer[data-spot] .map-panel h3 {
+    font-size: 12px !important;
+  }
+  .map-explorer[data-spot] .map-panel .map-chip {
+    border: 0 !important;
+    background: none !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+  }
+  .map-explorer[data-spot] .map-panel ul {
+    gap: 0 6px !important;
   }
 }
