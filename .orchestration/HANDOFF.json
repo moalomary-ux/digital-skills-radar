@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "RELEASED v9.2 at https://radar.omary.me — gh-pages 96a7b44 from main e77d669: map round 2 (P10b), terminology audit applied (20 sourced renamings; domain 6 = «إدارة المنتجات الرقمية والنهج المرن»), function-and-grade addressing (equivalents + grade bands), content-evidence audit applied (33 corrections, editorial labels, 25 reference sources, source-year flags), claim kinds academic/expert",
+  "state": "RELEASED v9.3 at https://radar.omary.me — gh-pages 2181404 from main 25020f7 (2026-10-22 15:01Z): P11 finishing packet (hub map fits 1024×768, hidden chart tables 1 px, spotlight prints on one A4 page, 12 personal routes as noindex shells → HTTP 200, 1,240 government pages prerendered WITH data = 1,336 pages, axe clean on the two flagged pages, dictionary domain anchors) + named titles for sector and entity pages (1,174 distinct entity titles). 441 tests, guard and size budget clean.",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -51,6 +51,12 @@
       "date": "2026-10-22",
       "text": "Owner: sources must be scientific/recognized/current (DECISION §5-ب); address people by function and grade, not title (§5); map round 2 applied per independent visual review",
       "status": "applied"
+    },
+    {
+      "id": "D8",
+      "date": "2026-10-22",
+      "text": "Owner approved all remaining terminology defaults (DECISION §5-ج) and asked to finish to the end («كمل الى النهاية»); P11 shipped per the acceptance list; sector/entity titles carry names (lead decision on the builder's flagged duplicate titles).",
+      "status": "applied"
     }
   ],
   "outputs": {
@@ -59,7 +65,7 @@
     "plan": "repo/docs/plan/PLAN-20261021.md",
     "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "owner answers on open terminology questions; 35 unsettled technology terms await SDAIA glossary text; screen-reader/real-device checks; CI workflow push after gh workflow scope",
+  "next_step": "nothing pending from the owner's request. Optional later: SDAIA glossary text for the 35 technology terms (PDF is WAF-blocked for automated reading; owner-approved default keeps them flagged); CI workflow push after `gh auth refresh -h github.com -s workflow`; screen-reader and real-device checks; wave-6 ideas in REPORT §6.",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
   "leader": "fable",
   "worktrees": {
@@ -72,14 +78,20 @@
     "wt-p4": "wave2/p4-govdata (omary)",
     "wt-p7": "wave2/p7-seo (omary)",
     "wt-p8": "wave3/p8-team-radar",
-    "wt-p9": "wave3/p9-charts-a11y"
+    "wt-p9": "wave3/p9-charts-a11y",
+    "wt-p10": "merged (map P10)",
+    "wt-p11": "merged (wave5/p11-finish 3cad4c5)",
+    "wt-ci": "ci/deploy-workflow parked (needs gh workflow scope)",
+    "wt-ghpages": "gh-pages publish worktree (scripts/deploy-gh-pages.sh)"
   },
   "owner_directive_2026-10-22": "«التفاعل مهم جداً» — recorded in DECISION §1-ب and sent to all builders",
   "known_issues": [
     "omary.py crashed in prepare_dirs when a scope path is an extension-less file (public/CNAME) — P1 was imported manually after the independent review; report to the owner for omary-evolve",
     "guidance.ts still carries dead communityFeatures (remove in final cleanup)",
-    "claims written offline need the verification report applied"
+    "SDAIA Data & AI glossary PDF (sdaia.gov.sa …/SDAIAPublications15.pdf) rejects automated fetches (WAF) and the session browser was not allowed to open the site: 35 technology terms stay flagged per the owner's approved default",
+    "shell.test and skillsMap.test can time out (findByRole 1 s) when the machine load average is above ~40; they pass on rerun — not a code defect",
+    "dist of the full build is ~35 MB (1,336 pages + 474 logos); GitHub Pages limit is 1 GB"
   ],
   "report": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/REPORT-20261022.md",
-  "open_owner_questions": "none — terminology defaults approved by the owner 2026-10-22 (DECISION §5-ج); 35 technology terms pending SDAIA glossary text"
+  "open_owner_questions": "none"
 }
