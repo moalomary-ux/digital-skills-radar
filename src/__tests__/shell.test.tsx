@@ -332,9 +332,10 @@ describe('about and hubs', () => {
     const user = userEvent.setup()
     renderView(MethodHub, '/en/methodology')
     const tabs = within(screen.getByRole('tablist', { name: 'Source types' })).getAllByRole('tab')
-    expect(tabs).toHaveLength(5)
-    await user.click(tabs[4])
-    const panel = document.getElementById(tabs[4].getAttribute('aria-controls')!)!
+    expect(tabs).toHaveLength(7)
+    expect(tabs.map((tab) => tab.textContent)).toEqual(expect.arrayContaining([expect.stringContaining('Peer-reviewed'), expect.stringContaining('Expert house')]))
+    await user.click(tabs[6]) // editorial: the kind with the most examples
+    const panel = document.getElementById(tabs[6].getAttribute('aria-controls')!)!
     const first = within(panel).getByText(/An example from the register/).parentElement!.textContent
     await user.click(within(panel).getByRole('button', { name: /Another example/ }))
     expect(within(panel).getByText(/An example from the register/).parentElement!.textContent).not.toBe(first)
@@ -347,6 +348,6 @@ describe('about and hubs', () => {
     expect(radios).toHaveLength(32)
     await user.click(screen.getByRole('radio', { name: 'Cybersecurity & Digital Trust — Proficiency' }))
     expect(screen.getByRole('heading', { level: 3, name: /Proficiency/ })).toBeInTheDocument()
-    expect(screen.getAllByText(/Security awareness/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/Cybersecurity awareness/).length).toBeGreaterThan(0)
   })
 })

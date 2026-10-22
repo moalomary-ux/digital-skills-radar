@@ -1,7 +1,15 @@
 import type { L } from '../types'
 
-/** Source class of a claim — rendered as the confidence badge. */
-export type ClaimKind = 'official' | 'international' | 'survey' | 'self-report' | 'editorial'
+/**
+ * Source class of a claim — rendered as the confidence badge (DECISION §5-ب source policy).
+ * - `international`: intergovernmental organizations and standards bodies (WEF, OECD, ILO, UN, World Bank, ITU, UNESCO, SFIA…)
+ * - `academic`: peer-reviewed research and universities (journals, MIT, Stanford HAI, Harvard, Oxford…)
+ * - `expert`: recognized expert houses (Gartner, McKinsey, Deloitte, BCG, PwC, Accenture, IDC, Forrester)
+ */
+export type ClaimKind = 'official' | 'international' | 'academic' | 'expert' | 'survey' | 'self-report' | 'editorial'
+
+/** Every claim kind in display order (legend, filters, counts): strongest evidence class first. */
+export const CLAIM_KINDS: readonly ClaimKind[] = ['official', 'international', 'academic', 'expert', 'survey', 'self-report', 'editorial']
 
 export type Confidence = 'high' | 'medium' | 'low'
 

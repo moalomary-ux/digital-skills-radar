@@ -52,7 +52,13 @@ export interface RisingSkill {
 
 export interface WorkFamily {
   id: string
+  /** a general function name, never one entity's exact title */
   name: L
+  /**
+   * Titles entities use for the same function («ومن في حكمه»; owner directive 2026-10-22,
+   * audit question 9): the family keeps its general name and lists its equivalents.
+   */
+  equivalents: L[]
   /** how the family's work moves, in one line */
   summary: L
   lanes: Record<Lane, L[]>
@@ -71,6 +77,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'policy-analyst',
     name: { ar: 'محلل السياسات', en: 'Policy analyst' },
+    equivalents: [
+      { ar: 'أخصائي السياسات', en: 'Policy specialist' },
+      { ar: 'باحث السياسات العامة', en: 'Public policy researcher' },
+      { ar: 'أخصائي الدراسات والتخطيط', en: 'Studies and planning specialist' },
+    ],
     summary: {
       ar: 'ينتقل من جمع المعلومات وتلخيصها إلى اختبار الخيارات بالبيانات وتقدير نتائجها على المستفيدين.',
       en: 'Moves from gathering and summarising information to testing options with data and weighing their consequences for beneficiaries.',
@@ -113,7 +124,12 @@ export const workFamilies: WorkFamily[] = [
   },
   {
     id: 'procurement',
-    name: { ar: 'مسؤول المشتريات', en: 'Procurement officer' },
+    name: { ar: 'أخصائي المشتريات', en: 'Procurement specialist' },
+    equivalents: [
+      { ar: 'مسؤول المشتريات', en: 'Procurement officer' },
+      { ar: 'أخصائي المنافسات والمشتريات', en: 'Tenders and procurement specialist' },
+      { ar: 'أخصائي العقود', en: 'Contracts specialist' },
+    ],
     summary: {
       ar: 'ينتقل من إدارة إجراءات الطرح إلى شراء النتائج: عقود تقنية بشروط أمن وخروج ومؤشرات خدمة.',
       en: 'Moves from running tender procedures to buying outcomes: technology contracts with security, exit and service-level terms.',
@@ -142,8 +158,8 @@ export const workFamilies: WorkFamily[] = [
       ],
     },
     rising: [
-      { skill: { ar: 'الشراء والتعاقد التقني', en: 'Technology procurement' }, domainId: 'policy' },
-      { skill: { ar: 'المرونة وإدارة الموردين', en: 'Resilience & vendor management' }, domainId: 'cloud' },
+      { skill: { ar: 'المشتريات الرقمية', en: 'Digital procurement' }, domainId: 'policy' },
+      { skill: { ar: 'استمرارية الأعمال وإدارة الموردين', en: 'Business continuity & supplier management' }, domainId: 'cloud' },
       { skill: { ar: 'متطلبات الأمن والخصوصية في العقود', en: 'Security and privacy requirements in contracts' }, domainId: 'cyber' },
     ],
     relatedRoleIds: ['cloud_architect', 'security_architect', 'delivery_manager'],
@@ -157,6 +173,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'hr',
     name: { ar: 'أخصائي الموارد البشرية', en: 'HR officer' },
+    equivalents: [
+      { ar: 'أخصائي شؤون الموظفين', en: 'Personnel affairs specialist' },
+      { ar: 'أخصائي التطوير الوظيفي والتدريب', en: 'Career development and training specialist' },
+      { ar: 'شريك أعمال الموارد البشرية', en: 'HR business partner' },
+    ],
     summary: {
       ar: 'ينتقل من معالجة المعاملات إلى تخطيط المهارات: من يحتاج ماذا، ومتى، ولماذا.',
       en: 'Moves from processing transactions to planning skills: who needs what, when and why.',
@@ -187,7 +208,7 @@ export const workFamilies: WorkFamily[] = [
     rising: [
       { skill: { ar: 'إدارة التغيير', en: 'Change management' }, domainId: 'leadership' },
       { skill: { ar: 'الإلمام بالبيانات', en: 'Data literacy' }, domainId: 'ai-data' },
-      { skill: { ar: 'الذكاء الاصطناعي المسؤول والأخلاقي', en: 'Responsible & ethical AI' }, domainId: 'ai-data' },
+      { skill: { ar: 'أخلاقيات الذكاء الاصطناعي واستخدامه المسؤول', en: 'AI ethics & responsible use' }, domainId: 'ai-data' },
     ],
     relatedRoleIds: ['performance_analyst', 'ai_ethics_officer', 'digital_transformation_lead'],
     managerActions: [
@@ -200,6 +221,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'beneficiary-service',
     name: { ar: 'موظف خدمة المستفيدين', en: 'Beneficiary service agent' },
+    equivalents: [
+      { ar: 'أخصائي خدمة العملاء', en: 'Customer service specialist' },
+      { ar: 'موظف مركز الاتصال', en: 'Contact centre agent' },
+      { ar: 'موظف استقبال المراجعين', en: 'Front-desk service officer' },
+    ],
     summary: {
       ar: 'ينتقل من الإجابة عن الأسئلة المتكررة إلى حل الحالات المعقدة والحساسة التي لا تحلها القنوات الآلية.',
       en: 'Moves from answering repeat questions to resolving the complex and sensitive cases automated channels cannot.',
@@ -228,8 +254,8 @@ export const workFamilies: WorkFamily[] = [
       ],
     },
     rising: [
-      { skill: { ar: 'تصميم الخدمات ورسم الرحلات', en: 'Service design & journey mapping' }, domainId: 'service-design' },
-      { skill: { ar: 'الشمول الرقمي', en: 'Digital inclusion' }, domainId: 'policy' },
+      { skill: { ar: 'تصميم الخدمات ورسم رحلة المستفيد', en: 'Service design & beneficiary journey mapping' }, domainId: 'service-design' },
+      { skill: { ar: 'الشمولية الرقمية', en: 'Digital inclusion' }, domainId: 'policy' },
       { skill: { ar: 'الخصوصية وحماية البيانات الشخصية', en: 'Privacy & personal data protection' }, domainId: 'cyber' },
     ],
     relatedRoleIds: ['service_designer', 'digital_inclusion_officer', 'content_designer'],
@@ -243,6 +269,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'legal',
     name: { ar: 'المستشار القانوني', en: 'Legal advisor' },
+    equivalents: [
+      { ar: 'أخصائي قانوني', en: 'Legal specialist' },
+      { ar: 'الباحث القانوني', en: 'Legal researcher' },
+      { ar: 'المحامي', en: 'Lawyer' },
+    ],
     summary: {
       ar: 'ينتقل من البحث في النصوص إلى تقدير المخاطر النظامية لاستخدام البيانات والذكاء الاصطناعي.',
       en: 'Moves from searching legal texts to judging the regulatory risks of using data and AI.',
@@ -273,7 +304,7 @@ export const workFamilies: WorkFamily[] = [
     rising: [
       { skill: { ar: 'الوعي بالتشريعات الرقمية', en: 'Digital legislation awareness' }, domainId: 'policy' },
       { skill: { ar: 'الخصوصية وحماية البيانات الشخصية', en: 'Privacy & personal data protection' }, domainId: 'cyber' },
-      { skill: { ar: 'الذكاء الاصطناعي المسؤول والأخلاقي', en: 'Responsible & ethical AI' }, domainId: 'ai-data' },
+      { skill: { ar: 'أخلاقيات الذكاء الاصطناعي واستخدامه المسؤول', en: 'AI ethics & responsible use' }, domainId: 'ai-data' },
     ],
     relatedRoleIds: ['ai_ethics_officer', 'digital_policy_advisor', 'digital_identity_specialist'],
     managerActions: [
@@ -286,6 +317,12 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'finance',
     name: { ar: 'المسؤول المالي', en: 'Finance officer' },
+    equivalents: [
+      { ar: 'أخصائي مالي', en: 'Finance specialist' },
+      { ar: 'المحاسب', en: 'Accountant' },
+      { ar: 'أخصائي الميزانية', en: 'Budget specialist' },
+      { ar: 'المراقب المالي', en: 'Financial controller' },
+    ],
     summary: {
       ar: 'ينتقل من تسجيل القيود والمطابقة إلى تحليل الإنفاق وربطه بنتائج الخدمات.',
       en: 'Moves from recording entries and reconciling to analysing spend and linking it to service results.',
@@ -314,9 +351,9 @@ export const workFamilies: WorkFamily[] = [
       ],
     },
     rising: [
-      { skill: { ar: 'تحليل البيانات وتصويرها', en: 'Data analysis & visualization' }, domainId: 'ai-data' },
-      { skill: { ar: 'قياس المنافع', en: 'Benefits measurement' }, domainId: 'agile' },
-      { skill: { ar: 'المرونة وإدارة الموردين', en: 'Resilience & vendor management' }, domainId: 'cloud' },
+      { skill: { ar: 'تحليل البيانات وتمثيلها مرئياً', en: 'Data analysis & visualization' }, domainId: 'ai-data' },
+      { skill: { ar: 'تحقيق المنافع وقياس الأثر', en: 'Benefits realisation & impact measurement' }, domainId: 'agile' },
+      { skill: { ar: 'استمرارية الأعمال وإدارة الموردين', en: 'Business continuity & supplier management' }, domainId: 'cloud' },
     ],
     relatedRoleIds: ['performance_analyst', 'data_scientist', 'business_analyst'],
     managerActions: [
@@ -329,6 +366,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'communications',
     name: { ar: 'مسؤول الاتصال', en: 'Communications officer' },
+    equivalents: [
+      { ar: 'أخصائي الاتصال المؤسسي', en: 'Corporate communications specialist' },
+      { ar: 'أخصائي العلاقات العامة', en: 'Public relations specialist' },
+      { ar: 'أخصائي الإعلام والتواصل', en: 'Media and outreach specialist' },
+    ],
     summary: {
       ar: 'ينتقل من إنتاج المحتوى إلى التحقق منه وحماية ثقة الجمهور في ما تنشره الجهة.',
       en: 'Moves from producing content to verifying it and protecting public trust in what the entity publishes.',
@@ -372,6 +414,11 @@ export const workFamilies: WorkFamily[] = [
   {
     id: 'programme-manager',
     name: { ar: 'مدير المشاريع والبرامج', en: 'Project & programme manager' },
+    equivalents: [
+      { ar: 'أخصائي إدارة المشاريع', en: 'Project management specialist' },
+      { ar: 'مدير مكتب إدارة المشاريع', en: 'Project management office manager' },
+      { ar: 'منسق البرامج', en: 'Programme coordinator' },
+    ],
     summary: {
       ar: 'ينتقل من متابعة الخطط والتقارير إلى إدارة المنتج والمنفعة: تسليم متكرر، ومؤشرات حقيقية، وقرارات توقف معلنة.',
       en: 'Moves from tracking plans and reports to managing products and benefits: frequent delivery, real indicators and declared stop decisions.',
@@ -399,8 +446,8 @@ export const workFamilies: WorkFamily[] = [
       ],
     },
     rising: [
-      { skill: { ar: 'طرق العمل الرشيقة', en: 'Agile ways of working' }, domainId: 'agile' },
-      { skill: { ar: 'قياس المنافع', en: 'Benefits measurement' }, domainId: 'agile' },
+      { skill: { ar: 'العمل بالنهج المرن', en: 'Agile ways of working' }, domainId: 'agile' },
+      { skill: { ar: 'تحقيق المنافع وقياس الأثر', en: 'Benefits realisation & impact measurement' }, domainId: 'agile' },
       { skill: { ar: 'إدارة التغيير', en: 'Change management' }, domainId: 'leadership' },
     ],
     relatedRoleIds: ['delivery_manager', 'product_manager', 'digital_transformation_lead'],

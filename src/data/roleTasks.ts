@@ -301,7 +301,7 @@ export const roleTasks: Record<string, RoleTaskProfile> = {
   security_architect: {
     tasks: [
       t('تصميم ضوابط أمن لأنظمة الذكاء الاصطناعي', 'Designing security controls for AI systems', 'grows', ['cyber', 'ai-data']),
-      t('الانتقال من مراجعة التصاميم بعد اكتمالها إلى الأمن منذ التصميم', 'Moving from reviewing finished designs to security by design', 'shifts', ['cyber', 'agile']),
+      t('الانتقال من مراجعة التصاميم بعد اكتمالها إلى الأمن من خلال التصميم', 'Moving from reviewing finished designs to secure by design', 'shifts', ['cyber', 'agile']),
       t('تقييم أمن الموردين والخدمات السحابية', 'Assessing the security of suppliers and cloud services', 'grows', ['cyber', 'cloud']),
     ],
     workProduct: {

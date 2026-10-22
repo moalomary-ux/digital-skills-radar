@@ -7,6 +7,7 @@ import { techClaims } from './tech'
 import { leadersClaims } from './leaders'
 
 export type { Claim, ClaimKind, ClaimSource, Confidence } from './types'
+export { CLAIM_KINDS } from './types'
 
 export const claims: Claim[] = [...govClaims, ...standardsClaims, ...methodClaims, ...futureClaims, ...techClaims, ...leadersClaims]
 

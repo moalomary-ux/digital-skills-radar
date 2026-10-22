@@ -22,7 +22,7 @@ export interface LearningResource {
 export const transitionNames: Record<TransitionKey, L> = {
   '1_to_2': { ar: 'من الوعي إلى التطبيق', en: 'Awareness → Application' },
   '2_to_3': { ar: 'من التطبيق إلى الإتقان', en: 'Application → Proficiency' },
-  '3_to_4': { ar: 'من الإتقان إلى الريادة', en: 'Proficiency → Leadership' },
+  '3_to_4': { ar: 'من الإتقان إلى الريادة', en: 'Proficiency → Leading' },
 }
 
 export const learningResources: Record<string, Record<TransitionKey, [LearningResource, LearningResource]>> = {
@@ -295,7 +295,7 @@ export const learningResources: Record<string, Record<TransitionKey, [LearningRe
     ],
     '2_to_3': [
       {
-        title: { ar: 'تخصص التطوير الرشيق', en: 'Agile Development Specialization' },
+        title: { ar: 'تخصص التطوير بالنهج المرن', en: 'Agile Development Specialization' },
         provider: 'University of Virginia (via Coursera)',
         type: 'course',
         url: 'https://www.coursera.org/specializations/agile-development',
@@ -510,7 +510,7 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       en: 'Move from independent practice to leading best practice in {{domain_en}} — setting standards, teaching and influencing the organisation.',
     },
     weeks: [
-      { w: 1, text: { ar: 'حدد هدف «الريادة» — صف معنى قيادة أفضل الممارسات في جهتك؛ واحصل على راعٍ أقدم.', en: 'Define the Leadership target — describe what leading best practice means for your organisation; secure a senior sponsor.' } },
+      { w: 1, text: { ar: 'حدد هدف «الريادة» — صف معنى قيادة أفضل الممارسات في جهتك؛ واحصل على راعٍ أقدم.', en: 'Define the Leading-level target — describe what leading best practice means for your organisation; secure a senior sponsor.' } },
       { w: 2, text: { ar: 'حدد مبادرة على مستوى الجهة في {{domain_ar}} ستقودها خلال هذا الربع.', en: 'Identify an organisation-level initiative in {{domain_en}} you will lead over the quarter.' } },
       { w: 3, text: { ar: 'كتلة بحث — قارن ثلاثة نماذج خارجية (أطر، دراسات حالة، معايير) ولخّص الممارسات القابلة للنقل.', en: 'Research block — benchmark 3 external exemplars (frameworks, case studies, standards) and summarise transferable practice.' } },
       { w: 4, text: { ar: 'صُغ مساهمة في معايير الجهة أو دليلها الإرشادي لمجال {{domain_ar}}.', en: "Draft a contribution to the organisation's standards or playbook for {{domain_en}}." } },
@@ -802,7 +802,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'agile_delivery_q2', domainId: 'agile', format: 'true_false',
-    q: { ar: 'في التسليم الرشيق، يمكن إعادة ترتيب أولويات النطاق أثناء المشروع بناءً على الأدلة وملاحظات المستخدمين.', en: 'In agile delivery, scope can be reprioritised during the project based on evidence and user feedback.' },
+    q: { ar: 'في النهج المرن، يمكن إعادة ترتيب أولويات النطاق أثناء المشروع بناءً على الأدلة وملاحظات المستخدمين.', en: 'In agile delivery, scope can be reprioritised during the project based on evidence and user feedback.' },
     options: [
       { key: 'a', text: { ar: 'خطأ', en: 'False' } },
       { key: 'b', text: { ar: 'صحيح', en: 'True' } },
@@ -1073,7 +1073,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'agile_delivery_q5', domainId: 'agile', format: 'true_false',
-    q: { ar: 'في التسليم الرشيق، يُقاس نجاح المنتج باكتمال قائمة المهام المتفق عليها مسبقًا.', en: 'In agile delivery, product success is measured by completing the pre-agreed task list.' },
+    q: { ar: 'في النهج المرن، يُقاس نجاح المنتج باكتمال قائمة المهام المتفق عليها مسبقًا.', en: 'In agile delivery, product success is measured by completing the pre-agreed task list.' },
     options: [
       { key: 'a', text: { ar: 'صحيح', en: 'True' } },
       { key: 'b', text: { ar: 'خطأ', en: 'False' } },

@@ -106,7 +106,7 @@ export const techClusters: TechCluster[] = [
   },
   {
     id: 'citizen-experience-delivery',
-    name: { ar: 'تجربة المستفيد وتقديم الخدمات', en: 'Citizen Experience & Service Delivery' },
+    name: { ar: 'تجربة المستفيد وتقديم الخدمات', en: 'Beneficiary Experience & Service Delivery' },
     essay: {
       en: 'The frontier of digital government has shifted from putting forms online to anticipating needs before citizens ask. Recent OECD work describes the move from reactive to proactive and life-event-based services as the defining test of digital maturity, and conversational AI is collapsing the distance between beneficiaries and government procedures — in Arabic and English alike. For Saudi Arabia, where platforms like Tawakkalna and Absher have already normalized high-quality digital public services, the next skills frontier is empathy at scale: journey mapping, inclusive design, service analytics, and the ability to orchestrate AI-driven personalization without eroding trust or excluding the vulnerable.',
       ar: 'انتقلت حدود الحكومة الرقمية من مجرد إتاحة النماذج عبر الإنترنت إلى استباق احتياجات المواطنين قبل أن يطلبوها. وتصف أعمال OECD الحديثة التحول من الخدمات التفاعلية إلى الخدمات الاستباقية المبنية على أحداث الحياة بأنه الاختبار الحقيقي للنضج الرقمي، فيما تختصر المساعدات الحوارية المسافة بين المستفيد والإجراءات الحكومية — بالعربية والإنجليزية معاً. وفي المملكة، حيث رسّخت منصات كتوكلنا وأبشر تجربة خدمات حكومية رقمية عالية الجودة، فإن الحدود المهارية التالية هي التعاطف على نطاق واسع: رسم رحلات المستفيد، والتصميم الشامل، وتحليلات الخدمة، والقدرة على توظيف التخصيص الذكي دون إضعاف الثقة أو إقصاء الفئات الأكثر احتياجاً.',
@@ -179,7 +179,7 @@ export const technologies: Technology[] = [
     skills: ['sr-emerging-0', 'sr-ai-data-4', 'sr-cyber-3'],
     employeeSkills: [
       { ar: 'تصميم سير عمل الوكلاء والإشراف البشري', en: 'Agent workflow design and human-in-the-loop supervision' },
-      { ar: 'مفاهيم تنسيق الأدوات وواجهات البرمجة (مثل MCP)', en: 'Tool/API orchestration concepts (e.g., MCP)' },
+      { ar: 'مفاهيم تنسيق الأدوات وواجهات برمجة التطبيقات (مثل MCP)', en: 'Tool/API orchestration concepts (e.g., MCP)' },
       { ar: 'تقييم مخاطر الاستقلالية وتصميم مسارات التصعيد', en: 'Autonomy risk assessment and escalation design' },
     ],
     horizon: 'near',
@@ -310,7 +310,7 @@ export const technologies: Technology[] = [
     employeeSkills: [
       { ar: 'مفاهيم تصميم المعاملات بين الأنظمة', en: 'Machine-to-machine transaction design concepts' },
       { ar: 'الأطر القانونية والمسؤولية عن المعاملات الذاتية', en: 'Legal and liability frameworks for autonomous transactions' },
-      { ar: 'أساسيات اقتصاد واجهات البرمجة', en: 'API economy fundamentals' },
+      { ar: 'أساسيات اقتصاد واجهات برمجة التطبيقات', en: 'API economy fundamentals' },
     ],
     horizon: 'far',
     learningFocus: {
@@ -414,7 +414,7 @@ export const technologies: Technology[] = [
     skills: ['sr-ai-data-1', 'sr-cloud-1', 'sr-cyber-1'],
     employeeSkills: [
       { ar: 'حوكمة مشاركة البيانات ونماذج الموافقة', en: 'Data-sharing governance and consent models' },
-      { ar: 'معايير التشغيل البيني (واجهات البرمجة والأنطولوجيات)', en: 'Interoperability standards (APIs, ontologies)' },
+      { ar: 'معايير التشغيل البيني (واجهات برمجة التطبيقات والأنطولوجيات)', en: 'Interoperability standards (APIs, ontologies)' },
       { ar: 'الإلمام بتنظيم تدفق البيانات عبر الحدود', en: 'Cross-border data flow regulation literacy' },
     ],
     horizon: 'near',
@@ -477,7 +477,7 @@ export const technologies: Technology[] = [
   },
   {
     id: 'C2-T06', clusterId: 'data-infrastructure-sovereignty',
-    name: { ar: 'الرسوم البيانية المعرفية والويب الدلالي', en: 'Knowledge Graphs & Semantic Interoperability' },
+    name: { ar: 'المخططات المعرفية والتشغيل البيني الدلالي', en: 'Knowledge Graphs & Semantic Interoperability' },
     description: {
       ar: 'نمذجة العلاقات بين الكيانات الحكومية (الأشخاص، التراخيص، المنشآت) كشبكة معرفية موحدة تتيح الاستعلام الذكي وخدمات «مرة واحدة فقط» عبر الجهات.',
       en: "Modeling relationships between government entities (persons, licenses, businesses) as a unified knowledge network enabling intelligent queries and 'once-only' services across agencies.",
@@ -624,7 +624,7 @@ export const technologies: Technology[] = [
     employeeSkills: [
       { ar: 'مبادئ انعدام الثقة وتصميم السياسات', en: 'Zero-trust principles and policy design' },
       { ar: 'إدارة الوصول المتمحورة حول الهوية', en: 'Identity-centric access management' },
-      { ar: 'الوعي الأمني لغير المختصين', en: 'Security awareness for non-specialists' },
+      { ar: 'الوعي بالأمن السيبراني لغير المختصين', en: 'Cybersecurity awareness for non-specialists' },
     ],
     horizon: 'now',
     learningFocus: {
@@ -634,14 +634,14 @@ export const technologies: Technology[] = [
   },
   {
     id: 'C3-T04', clusterId: 'trust-security-digital-identity',
-    name: { ar: 'الحوسبة السرية والتشفير المتماثل', en: 'Confidential Computing & Homomorphic Encryption' },
+    name: { ar: 'الحوسبة السرية والتشفير المتجانس', en: 'Confidential Computing & Homomorphic Encryption' },
     description: {
       ar: 'تقنيات تتيح معالجة البيانات وهي مشفرة دون فكها، ما يسمح بتحليلات مشتركة بين الجهات على بيانات حساسة دون كشفها.',
       en: 'Technologies that process data while it remains encrypted, enabling joint analytics across entities on sensitive data without exposing it.',
     },
     trl: 4,
     trlRationale: {
-      ar: 'عتاد الحوسبة السرية (TEEs) يُشحن تجاريًا، لكن التشفير المتماثل الكامل ما يزال مخبريًا؛ ويصنفها غارتنر ضرورة ناشئة لعصر الكم.',
+      ar: 'عتاد الحوسبة السرية (TEEs) يُشحن تجاريًا، لكن التشفير المتجانس الكامل ما يزال مخبريًا؛ ويصنفها غارتنر ضرورة ناشئة لعصر الكم.',
       en: 'Confidential computing hardware (TEEs) is shipping, but fully homomorphic encryption remains at lab/pilot stage; Gartner lists encrypted computing as an emerging necessity for the quantum era.',
     },
     sectors: ['healthcare', 'trade-finance-economy', 'social-development-justice'],
@@ -655,7 +655,7 @@ export const technologies: Technology[] = [
     horizon: 'far',
     learningFocus: {
       awareness: { ar: 'يمكن حماية البيانات حتى أثناء استخدامها', en: 'Data can be protected even while in use' },
-      practitioner: { ar: 'بيئات التنفيذ الموثوقة، وحدود التشفير المتماثل، وتصميم التحليلات الآمنة', en: 'TEEs, homomorphic encryption limits, secure analytics design' },
+      practitioner: { ar: 'بيئات التنفيذ الموثوقة، وحدود التشفير المتجانس، وتصميم التحليلات الآمنة', en: 'TEEs, homomorphic encryption limits, secure analytics design' },
     },
   },
   {
@@ -762,7 +762,7 @@ export const technologies: Technology[] = [
       practitioner: { ar: 'مقاومة الانتحال، ورحلات FIDO2، وخصوصية البيومترية', en: 'Spoofing resistance, FIDO2 journeys, biometric privacy (PDPL)' },
     },
   },
-  // Cluster 4 — Citizen Experience & Service Delivery
+  // Cluster 4 — Beneficiary Experience & Service Delivery
   {
     id: 'C4-T01', clusterId: 'citizen-experience-delivery',
     name: { ar: 'الخدمات الحكومية الاستباقية', en: 'Proactive & Anticipatory Government Services' },
@@ -937,7 +937,7 @@ export const technologies: Technology[] = [
     employeeSkills: [
       { ar: 'تصميم تجربة الصوت', en: 'Voice UX design' },
       { ar: 'تغطية اللهجات وتقييم بيانات الكلام', en: 'Dialect coverage and speech-data evaluation' },
-      { ar: 'تقييم احتياجات الشمول الرقمي', en: 'Digital inclusion needs assessment' },
+      { ar: 'تقييم احتياجات الشمولية الرقمية', en: 'Digital inclusion needs assessment' },
     ],
     horizon: 'near',
     learningFocus: {
@@ -947,7 +947,7 @@ export const technologies: Technology[] = [
   },
   {
     id: 'C4-T08', clusterId: 'citizen-experience-delivery',
-    name: { ar: 'تقنيات الوصول الشامل والتصميم الجامع', en: 'Accessibility & Inclusive Design Technology' },
+    name: { ar: 'تقنيات إمكانية الوصول والتصميم الشامل', en: 'Accessibility & Inclusive Design Technology' },
     description: {
       ar: 'أدوات ومعايير (WCAG، قارئات الشاشة، الترجمة الآلية المبسطة) تضمن وصول جميع المواطنين — بمن فيهم ذوي الإعاقة — إلى الخدمات الرقمية على قدم المساواة.',
       en: 'Tools and standards (WCAG, screen readers, plain-language machine translation) ensuring all citizens — including people with disabilities — access digital services equally.',
@@ -988,7 +988,7 @@ export const technologies: Technology[] = [
     domainIds: ['emerging', 'ai-data', 'cloud'],
     skills: ['sr-emerging-3', 'sr-emerging-1', 'sr-ai-data-2'],
     employeeSkills: [
-      { ar: 'الإلمام بالبيانات المكانية وأنظمة GIS', en: 'Geospatial data and GIS literacy' },
+      { ar: 'الإلمام بالبيانات الجيومكانية وأنظمة GIS', en: 'Geospatial data and GIS literacy' },
       { ar: 'تصميم سيناريوهات المحاكاة والتحقق منها', en: 'Simulation scenario design and validation' },
       { ar: 'تكامل بيانات إنترنت الأشياء في النماذج الحضرية', en: 'IoT data integration for urban models' },
     ],

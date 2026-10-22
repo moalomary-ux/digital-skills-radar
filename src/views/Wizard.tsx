@@ -6,7 +6,7 @@ import { useApp, computeScores, RESULT_SCHEMA_VERSION } from '../store'
 import type { KnowledgeTally, ResultRecord } from '../store'
 import { domains, domainById } from '../data/domains'
 import { statementsByDomain, statements } from '../data/statements'
-import { familyNames, familyOrder, libraryRoles, LIB_PREFIX, libraryRoleById } from '../data/roleLibrary'
+import { familyNames, familyOrder, libraryRoles, LIB_PREFIX, libraryRoleById, matchRoles, withPeers } from '../data/roleLibrary'
 import { levelForScore, levelForTarget, scaleOptions } from '../data/levels'
 import { questionsForDomain } from '../data/learning'
 import { tracks, trackById } from '../data/tracks'
@@ -70,6 +70,9 @@ export default function Wizard() {
   })
   const [knowledgeOpen, setKnowledgeOpen] = useState(false)
   const [roleListOpen, setRoleListOpen] = useState(() => !!roleId && roleId.startsWith(LIB_PREFIX))
+  /** search by the reader's own job title: matches role names and the titles entities use («ومن في حكمه») */
+  const [roleQuery, setRoleQuery] = useState('')
+  const roleMatches = useMemo(() => matchRoles(roleQuery), [roleQuery])
   const headingRef = useRef<HTMLHeadingElement>(null)
   const firstRender = useRef(true)
 
@@ -236,7 +239,7 @@ export default function Wizard() {
                       </span>
                       <span>
                         <span className="block text-sm font-bold text-dga-black">{t(tr.name)}</span>
-                        <span className="mt-0.5 block text-xs text-dga-muted">{t(tr.audience)}</span>
+                        <span className="mt-0.5 block text-xs text-dga-muted">{t(tr.who)}</span>
                         <span className="mt-1 block text-xs leading-relaxed text-dga-ink">{t(tr.proves)}</span>
                       </span>
                     </span>
@@ -259,7 +262,7 @@ export default function Wizard() {
                 <span className="block text-sm font-bold text-dga-ink">{t({ ar: 'اختيار دور دقيق (اختياري)', en: 'Choose a precise role (optional)' })}</span>
                 <span className="mt-0.5 block text-xs text-dga-muted">
                   {preciseRole
-                    ? t({ ar: `اخترت: ${preciseRole.name.ar} — يحل مستهدفه محل مستهدف الفئة.`, en: `Selected: ${preciseRole.name.en} — its target replaces the category target.` })
+                    ? t({ ar: `اخترت: ${withPeers(preciseRole.name).ar} — يحل مستهدفه محل مستهدف الفئة.`, en: `Selected: ${withPeers(preciseRole.name).en} — its target replaces the category target.` })
                     : t({ ar: 'من مكتبة الأدوار؛ يحل مستهدف الدور محل مستهدف الفئة.', en: 'From the role library; the role target replaces the category target.' })}
                 </span>
               </span>
@@ -271,8 +274,42 @@ export default function Wizard() {
                 <ChoiceChip name="precise-role" checked={!preciseRole} onChange={() => setRoleId(null)}>
                   {t({ ar: 'بلا دور دقيق — استخدم مستهدف الفئة', en: 'No precise role — use the category target' })}
                 </ChoiceChip>
+                <label className="mt-4 block text-xs font-semibold text-dga-ink">
+                  {t({ ar: 'ابحث بمسماك الوظيفي في جهتك', en: 'Search by your job title in your entity' })}
+                  <input
+                    type="search"
+                    value={roleQuery}
+                    onChange={(e) => setRoleQuery(e.target.value)}
+                    placeholder={t({ ar: 'مثل: مدير عام التحول الرقمي', en: 'e.g. Director-General of Digital Transformation' })}
+                    className="mt-1.5 w-full rounded-btn border border-dga-line bg-white px-3 py-2 text-sm font-normal text-dga-ink focus:border-dga-green focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green/40"
+                  />
+                  <span className="mt-1 block font-normal text-dga-muted">
+                    {t({
+                      ar: 'المسميات تختلف بين الجهات؛ نبحث في اسم الدور وفي المسميات المكافئة له (ومن في حكمه).',
+                      en: 'Titles differ between entities; the search covers each role’s name and its equivalent titles.',
+                    })}
+                  </span>
+                </label>
+                {roleQuery.trim() !== '' && (
+                  <div className="mt-3" role="status" aria-live="polite">
+                    {roleMatches.length === 0 ? (
+                      <p className="text-xs text-dga-muted">
+                        {t({ ar: 'لا دور مطابق. اختر فئة دورك أعلاه، أو جرّب كلمة أقصر.', en: 'No matching role. Choose your role category above, or try a shorter word.' })}
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {roleMatches.map(({ role: r, via }) => (
+                          <ChoiceChip key={r.id} name="precise-role" checked={preciseRole?.id === r.id} onChange={() => setRoleId(LIB_PREFIX + r.id)}>
+                            {t(r.name)}
+                            {via && <span className="ms-1 font-normal text-dga-muted">{t({ ar: `(يطابق: ${via.ar})`, en: `(matches: ${via.en})` })}</span>}
+                          </ChoiceChip>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="mt-3 space-y-3">
-                  {familyOrder.map((fam) => {
+                  {roleQuery.trim() === '' && familyOrder.map((fam) => {
                     const famRoles = libraryRoles.filter((r) => r.family === fam)
                     if (famRoles.length === 0) return null
                     return (
@@ -583,7 +620,7 @@ export default function Wizard() {
       <div className="mx-auto mt-10 flex max-w-6xl flex-wrap items-center justify-between gap-3 text-xs text-dga-muted">
         <span>
           {category ? `${t({ ar: 'فئة الدور:', en: 'Role category:' })} ${t(trackById(category)!.name)}` : ''}
-          {preciseRole ? ` · ${t({ ar: 'الدور:', en: 'Role:' })} ${t(preciseRole.name)}` : ''}
+          {preciseRole ? ` · ${t({ ar: 'الدور:', en: 'Role:' })} ${t(withPeers(preciseRole.name))}` : ''}
         </span>
         <button
           type="button"

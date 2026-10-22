@@ -57,7 +57,7 @@ const levels: { name: L; meaning: L }[] = [
   { name: { ar: 'وعي', en: 'Awareness' }, meaning: { ar: 'تفهم المفاهيم الأساسية وتعرف متى تطلب المساعدة.', en: 'You understand the core concepts and know when to ask for help.' } },
   { name: { ar: 'تطبيق', en: 'Application' }, meaning: { ar: 'تطبّق المهارة في مهامك المعتادة بإرشاد محدود.', en: 'You apply the skill in routine tasks with limited guidance.' } },
   { name: { ar: 'إتقان', en: 'Proficiency' }, meaning: { ar: 'تطبّقها باستقلالية في المواقف المعقدة وتساعد زملاءك.', en: 'You apply it independently in complex situations and help colleagues.' } },
-  { name: { ar: 'ريادة', en: 'Leadership' }, meaning: { ar: 'تقود الممارسة في جهتك وتضع معاييرها وتطوّر غيرك.', en: 'You lead the practice in your entity, set its standards and develop others.' } },
+  { name: { ar: 'ريادة', en: 'Leading' }, meaning: { ar: 'تقود الممارسة في جهتك وتضع معاييرها وتطوّر غيرك.', en: 'You lead the practice in your entity, set its standards and develop others.' } },
 ]
 
 /** The home preview of the skills map draws the domains and their skills only (light chunk). */

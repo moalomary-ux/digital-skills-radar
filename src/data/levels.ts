@@ -3,7 +3,7 @@ import type { TrackId } from './tracks'
 
 /**
  * ONE level vocabulary for the whole product (DECISION §5, binding glossary):
- * «وعي · تطبيق · إتقان · ريادة» / "Awareness · Application · Proficiency · Leadership".
+ * «وعي · تطبيق · إتقان · ريادة» / "Awareness · Application · Proficiency · Leading".
  * Same words as the registered claim `method-levels-count` (src/data/claims/method.ts).
  */
 export const levels: Level[] = [
@@ -33,7 +33,7 @@ export const levels: Level[] = [
   },
   {
     value: 4,
-    name: { ar: 'ريادة', en: 'Leadership' },
+    name: { ar: 'ريادة', en: 'Leading' },
     description: {
       ar: 'تقود الممارسة وتضع المعايير وتوجّه الآخرين.',
       en: 'You lead the practice, set standards and guide others.',
@@ -49,7 +49,7 @@ export const stages: Stage[] = [
   { id: 'foundation', name: { ar: 'وعي', en: 'Awareness' }, min: 0, max: 1.24, description: levels[0].description },
   { id: 'developing', name: { ar: 'تطبيق', en: 'Application' }, min: 1.25, max: 2.24, description: levels[1].description },
   { id: 'proficient', name: { ar: 'إتقان', en: 'Proficiency' }, min: 2.25, max: 3.24, description: levels[2].description },
-  { id: 'leading', name: { ar: 'ريادة', en: 'Leadership' }, min: 3.25, max: 4, description: levels[3].description },
+  { id: 'leading', name: { ar: 'ريادة', en: 'Leading' }, min: 3.25, max: 4, description: levels[3].description },
 ]
 
 /**

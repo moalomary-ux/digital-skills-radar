@@ -46,7 +46,7 @@ export const roles: Role[] = [
     name: { ar: 'قائد رقمي', en: 'Digital Leader' },
     description: {
       ar: 'تقود التحول الرقمي والفرق والقرارات الاستراتيجية. الهدف: مستوى «ريادة» في السياسات والقيادة، و«إتقان» في معظم المجالات الأخرى.',
-      en: 'You lead digital transformation, teams and strategic decisions. Target: the leadership level in policy and in digital leadership, and proficiency in most other domains.',
+      en: 'You lead digital transformation, teams and strategic decisions. Target: the leading level in policy and in digital leadership, and proficiency in most other domains.',
     },
     targets: {
       'ai-data': 3,

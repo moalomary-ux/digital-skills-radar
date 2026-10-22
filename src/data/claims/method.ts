@@ -86,12 +86,12 @@ const rows: { key: string; name: L; weights: [string, number][]; text: L; why: L
     name: { ar: 'تخطيط وتمكين البنية التقنية', en: 'Technical infrastructure planning and enablement' },
     weights: [['cloud', 0.7], ['cyber', 0.3]],
     text: {
-      ar: 'تُوزَّع فئة «تخطيط وتمكين البنية التقنية» تحريريًا على مجال السحابة والبنية التحتية الرقمية بوزن 0.7 ومجال الأمن السيبراني والثقة الرقمية بوزن 0.3.',
-      en: 'The “technical infrastructure planning and enablement” category is split editorially: Cloud & Digital Infrastructure 0.7, Cybersecurity & Digital Trust 0.3.',
+      ar: 'تُوزَّع فئة «تخطيط وتمكين البنية التقنية» تحريريًا على مجال الحوسبة السحابية والبنية التحتية الرقمية بوزن 0.7 ومجال الأمن السيبراني والثقة الرقمية بوزن 0.3.',
+      en: 'The “technical infrastructure planning and enablement” category is split editorially: Cloud Computing & Digital Infrastructure 0.7, Cybersecurity & Digital Trust 0.3.',
     },
     why: {
-      ar: 'تخطيط البنية والمنصات جوهره السحابة وتحديث الأنظمة، مع الأمن منذ التصميم.',
-      en: 'Planning infrastructure and platforms is cloud and system modernization at its core, with security by design.',
+      ar: 'تخطيط البنية والمنصات جوهره السحابة وتحديث الأنظمة، مع الأمن من خلال التصميم.',
+      en: 'Planning infrastructure and platforms is cloud and system modernization at its core, with secure by design.',
     },
     extra: {
       ar: 'لا يتجاوز وزن الأمن السيبراني 0.3 من فئة واحدة لأن خدمات الأمن السيبراني الوطنية ليست ضمن هذه الاستشارات؛ لذا يقل ظهوره في المؤشر، ولا يعني ذلك قلة الحاجة إليه.',
@@ -116,8 +116,8 @@ const rows: { key: string; name: L; weights: [string, number][]; text: L; why: L
     name: { ar: 'التميز المؤسسي واستمرارية الأعمال', en: 'Institutional excellence and business continuity' },
     weights: [['agile', 0.6], ['leadership', 0.4]],
     text: {
-      ar: 'تُوزَّع فئة «التميز المؤسسي واستمرارية الأعمال» تحريريًا على مجال المنتجات والتسليم الرشيق بوزن 0.6 ومجال القيادة والتعاون الرقمي بوزن 0.4.',
-      en: 'The “institutional excellence and business continuity” category is split editorially: Agile Product & Delivery 0.6, Digital Leadership & Collaboration 0.4.',
+      ar: 'تُوزَّع فئة «التميز المؤسسي واستمرارية الأعمال» تحريريًا على مجال إدارة المنتجات الرقمية والنهج المرن بوزن 0.6 ومجال القيادة والتعاون الرقمي بوزن 0.4.',
+      en: 'The “institutional excellence and business continuity” category is split editorially: Digital Products & Agile Approach 0.6, Digital Leadership & Collaboration 0.4.',
     },
     why: {
       ar: 'التميز المؤسسي تحسين مستمر للعمليات والتسليم، واستمرارية الأعمال إدارة للتغيير.',
@@ -142,8 +142,8 @@ const rows: { key: string; name: L; weights: [string, number][]; text: L; why: L
     name: { ar: 'البيانات والتكامل', en: 'Data and integration' },
     weights: [['ai-data', 0.8], ['cloud', 0.2]],
     text: {
-      ar: 'تُوزَّع فئة «البيانات والتكامل» تحريريًا على مجال الذكاء الاصطناعي والبيانات بوزن 0.8 ومجال السحابة والبنية التحتية الرقمية بوزن 0.2.',
-      en: 'The “data and integration” category is split editorially: AI & Data 0.8, Cloud & Digital Infrastructure 0.2.',
+      ar: 'تُوزَّع فئة «البيانات والتكامل» تحريريًا على مجال الذكاء الاصطناعي والبيانات بوزن 0.8 ومجال الحوسبة السحابية والبنية التحتية الرقمية بوزن 0.2.',
+      en: 'The “data and integration” category is split editorially: AI & Data 0.8, Cloud Computing & Digital Infrastructure 0.2.',
     },
     why: {
       ar: 'جوهر الفئة الإلمام بالبيانات وحوكمتها، والتكامل يجري عبر البنية والتشغيل البيني.',
@@ -155,8 +155,8 @@ const rows: { key: string; name: L; weights: [string, number][]; text: L; why: L
     name: { ar: 'مؤشرات الأداء الرقمي', en: 'Digital performance indicators' },
     weights: [['ai-data', 0.6], ['agile', 0.4]],
     text: {
-      ar: 'تُوزَّع فئة «مؤشرات الأداء الرقمي» تحريريًا على مجال الذكاء الاصطناعي والبيانات بوزن 0.6 ومجال المنتجات والتسليم الرشيق بوزن 0.4.',
-      en: 'The “digital performance indicators” category is split editorially: AI & Data 0.6, Agile Product & Delivery 0.4.',
+      ar: 'تُوزَّع فئة «مؤشرات الأداء الرقمي» تحريريًا على مجال الذكاء الاصطناعي والبيانات بوزن 0.6 ومجال إدارة المنتجات الرقمية والنهج المرن بوزن 0.4.',
+      en: 'The “digital performance indicators” category is split editorially: AI & Data 0.6, Digital Products & Agile Approach 0.4.',
     },
     why: {
       ar: 'المؤشرات تحليل بيانات وقياس لمنافع التسليم.',
@@ -235,7 +235,7 @@ export const methodClaims: Claim[] = [
   },
   {
     id: 'method-levels-count',
-    text: { ar: 'يستخدم الرادار مقياسًا واحدًا من 4 مستويات: وعي، وتطبيق، وإتقان، وريادة.', en: 'The radar uses one scale of 4 levels: awareness, application, proficiency and leadership.' },
+    text: { ar: 'يستخدم الرادار مقياسًا واحدًا من 4 مستويات: وعي، وتطبيق، وإتقان، وريادة.', en: 'The radar uses one scale of 4 levels: awareness, application, proficiency and leading.' },
     value: { ar: '4 مستويات', en: '4 levels' },
     kind: 'editorial',
     confidence: 'high',
@@ -271,7 +271,7 @@ export const methodClaims: Claim[] = [
     source: ourMethod,
     derivation: {
       ar: 'أقل من 1.25 وعي، ومن 1.25 إلى أقل من 2.25 تطبيق، ومن 2.25 إلى أقل من 3.25 إتقان، و3.25 فأكثر ريادة.',
-      en: 'Below 1.25 awareness; 1.25 to under 2.25 application; 2.25 to under 3.25 proficiency; 3.25 and above leadership.',
+      en: 'Below 1.25 awareness; 1.25 to under 2.25 application; 2.25 to under 3.25 proficiency; 3.25 and above leading.',
     },
     reviewedOn: REVIEWED,
     caveat: {
@@ -586,6 +586,34 @@ export const methodClaims: Claim[] = [
     kind: 'editorial',
     confidence: 'high',
     source: ourMethod,
+    reviewedOn: REVIEWED,
+  },
+  // ---- function and grade, not exact titles (owner directive 2026-10-22)
+  {
+    id: 'method-grade-bands',
+    text: {
+      ar: 'تفرّق اللائحة التنفيذية للموارد البشرية في الخدمة المدنية في شروط الترقية بين 3 شرائح من المراتب: العاشرة فما دون، والحادية عشرة إلى الثالثة عشرة، والرابعة عشرة والخامسة عشرة، وتعتدّ بما يعادلها في السلالم الوظيفية الأخرى.',
+      en: 'The Executive Regulation of Human Resources in the Civil Service sets promotion rules for 3 grade bands: grade 10 and below, grades 11 to 13, and grades 14 and 15, and recognises the equivalent grades on other job scales.',
+    },
+    value: { ar: '3 شرائح', en: '3 grade bands' },
+    scope: { ar: 'السلم العام للخدمة المدنية في المملكة', en: 'The general civil-service scale in Saudi Arabia' },
+    kind: 'official',
+    confidence: 'high',
+    source: {
+      title: { ar: 'اللائحة التنفيذية للموارد البشرية في الخدمة المدنية', en: 'Executive Regulation of Human Resources in the Civil Service' },
+      publisher: { ar: 'وزارة الموارد البشرية والتنمية الاجتماعية', en: 'Ministry of Human Resources and Social Development (HRSD)' },
+      url: 'https://www.hrsd.gov.sa/sites/default/files/2023-03/%D8%A7%D9%84%D9%84%D8%A7%D8%A6%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0%D9%8A%D8%A9%20%D9%84%D9%84%D9%85%D9%88%D8%A7%D8%B1%D8%AF%20%D8%A7%D9%84%D8%A8%D8%B4%D8%B1%D9%8A%D8%A9.pdf',
+      locator: 'Articles 48, 50 and 53',
+      year: 2022,
+    },
+    derivation: {
+      ar: 'الشرائح الثلاث من نص المواد 48 و50 و53 (بتعديلات القرار الوزاري 111624 في 1443/6/3هـ). أما ربط فئات الدور وأدوار المكتبة بهذه الشرائح فتقدير تحريري استرشادي.',
+      en: 'The three bands come from articles 48, 50 and 53 (as amended by ministerial decision 111624 of 3/6/1443 AH). Linking the role categories and library roles to these bands is an indicative editorial estimate.',
+    },
+    caveat: {
+      ar: 'تختلف السلالم بين الجهات (الهندسية والصحية والتعليمية وسلالم الشركات والهيئات)، فالعبرة بالوظيفة ومن في حكمها لا برقم المرتبة. ويُراجع الادعاء عند صدور نظام أحدث للموارد البشرية.',
+      en: 'Scales differ between entities (engineering, health, education, company and authority scales), so the function and its equivalents decide, not the grade number. The claim is reviewed when a newer HR system is issued.',
+    },
     reviewedOn: REVIEWED,
   },
 ]

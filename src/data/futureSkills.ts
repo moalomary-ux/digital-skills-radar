@@ -47,8 +47,8 @@ export const domainTrajectories: DomainTrajectory[] = [
     domainId: 'cyber',
     rating: 'surging',
     rationale: {
-      ar: 'الضوابط الملزمة من الهيئة الوطنية للأمن السيبراني تجعل الوعي الأمني وإدارة الهويات والخصوصية متطلبات نظامية على كل جهة لا خيارات تقنية. والحوادث الموجهة إلى القطاع الحكومي تبقي الطلب في نمو قوي حتى 2030 على الأقل.',
-      en: 'Binding controls from the National Cybersecurity Authority make security awareness, identity management and privacy regulatory requirements for every entity, not technical options. Incidents aimed at the public sector keep demand growing strongly to at least 2030.',
+      ar: 'الضوابط الملزمة من الهيئة الوطنية للأمن السيبراني تجعل الوعي بالأمن السيبراني وإدارة الهويات والخصوصية متطلبات نظامية على كل جهة لا خيارات تقنية. والحوادث الموجهة إلى القطاع الحكومي تبقي الطلب في نمو قوي حتى 2030 على الأقل.',
+      en: 'Binding controls from the National Cybersecurity Authority make cybersecurity awareness, identity management and privacy regulatory requirements for every entity, not technical options. Incidents aimed at the public sector keep demand growing strongly to at least 2030.',
     },
     evidence: [
       { ar: 'تأتي مهارات الشبكات والأمن السيبراني في {{future-wef-2025-cyber-second}} بين أسرع المهارات نموًا حتى 2030.', en: 'Networks and cybersecurity rank {{future-wef-2025-cyber-second}} among the fastest-growing skills to 2030.' },
@@ -62,7 +62,7 @@ export const domainTrajectories: DomainTrajectory[] = [
     rating: 'rising',
     rationale: {
       ar: 'موجة النقل السحابي الحكومية مستمرة لكنها انتقلت من القرار إلى التشغيل: الطلب ينمو على فهم النماذج السحابية والتشغيل البيني والهوية الرقمية أكثر من البناء من الصفر. التصنيف «ينمو» لا «ينمو بقوة» لأن الجهات تشتري السحابة غالبًا خدمةً، فالمهارة المطلوبة هي الحوكمة وإدارة الموردين لا تشغيل الخوادم.',
-      en: 'The government cloud wave continues but has moved from decision to operations: demand grows for cloud models, interoperability and digital identity more than for building from scratch. Rated “growing” rather than “growing strongly” because entities mostly buy cloud as a service, so the needed skill is governance and vendor management, not running servers.',
+      en: 'The government cloud wave continues but has moved from decision to operations: demand grows for cloud models, interoperability and digital identity more than for building from scratch. Rated “growing” rather than “growing strongly” because entities mostly buy cloud as a service, so the needed skill is governance and supplier management, not running servers.',
     },
     evidence: [
       { ar: 'يرى {{future-wef-2025-digital-access}} من أصحاب العمل أن توسيع الوصول الرقمي أكثر الاتجاهات تحويلًا لأعمالهم.', en: '{{future-wef-2025-digital-access}} of employers see broadening digital access as the most transformative trend for their business.' },
@@ -100,11 +100,11 @@ export const domainTrajectories: DomainTrajectory[] = [
     domainId: 'agile',
     rating: 'stable',
     rationale: {
-      ar: 'الدقة تقتضي التمييز: الطلب على المسمى الوظيفي المرتبط بالعمل الرشيق أقل ثباتًا من الطلب على الممارسة نفسها (تقدير تحريري)، والممارسة (دورة حياة المنتج وقصص المستخدم وقياس المنافع) صارت الطريقة المعتادة لبناء الخدمات الحكومية الرقمية. لذلك يتحوّل الطلب: ثابت على الممارسة العميقة، ومنخفض على الشهادات الشكلية.',
-      en: 'Precision requires a distinction: demand for the agile job title is less steady than demand for the practice itself (editorial estimate), and the practice (product lifecycle, user stories, benefits measurement) is now the usual way government digital services are built. Demand is therefore shifting: steady for deep practice, low for formal certificates alone.',
+      ar: 'الدقة تقتضي التمييز: الطلب على المسمى الوظيفي المرتبط بالنهج المرن أقل ثباتًا من الطلب على الممارسة نفسها (تقدير تحريري)، والممارسة (دورة حياة المنتج وقصص المستخدم وتحقيق المنافع) صارت الطريقة المعتادة لبناء الخدمات الحكومية الرقمية. لذلك يتحوّل الطلب: ثابت على الممارسة العميقة، ومنخفض على الشهادات الشكلية.',
+      en: 'Precision requires a distinction: demand for the agile job title is less steady than demand for the practice itself (editorial estimate), and the practice (product lifecycle, user stories, benefits realisation) is now the usual way government digital services are built. Demand is therefore shifting: steady for deep practice, low for formal certificates alone.',
     },
     evidence: [
-      { ar: 'يقوم دليل الخدمة الحكومية البريطاني على مراحل التسليم الرشيق (اكتشاف، ألفا، بيتا، تشغيل)، والطلب على الممارسة أثبت من الطلب على المسمى (تقدير تحريري).', en: 'The UK Government Service Manual is built on agile delivery phases (discovery, alpha, beta, live); demand for the practice is steadier than for the job title (editorial estimate).' },
+      { ar: 'يقوم دليل الخدمة الحكومية البريطاني على مراحل التسليم بالنهج المرن (اكتشاف، ألفا، بيتا، تشغيل)، والطلب على الممارسة أثبت من الطلب على المسمى (تقدير تحريري).', en: 'The UK Government Service Manual is built on agile delivery phases (discovery, alpha, beta, live); demand for the practice is steadier than for the job title (editorial estimate).' },
     ],
   },
   {
@@ -198,7 +198,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'نمذجة التهديدات', en: 'Threat modeling' },
     description: { ar: 'تحليل منهجي لما قد يهاجم النظام قبل بنائه: الأصول، والمهاجمون، والمسارات المحتملة، ووسائل التخفيف.', en: 'Systematic pre-build analysis of what could attack a system: assets, attackers, likely paths and mitigations.' },
     parentDomain: 'cyber',
-    demandSignal: { ar: 'تأتي مهارات الشبكات والأمن السيبراني في {{future-wef-2025-cyber-second}} بين أسرع المهارات نموًا، وضوابط الهيئة الوطنية للأمن السيبراني تتطلب الأمن منذ التصميم.', en: 'Networks and cybersecurity rank {{future-wef-2025-cyber-second}} among the fastest-growing skills, and the National Cybersecurity Authority’s controls require security by design.' },
+    demandSignal: { ar: 'تأتي مهارات الشبكات والأمن السيبراني في {{future-wef-2025-cyber-second}} بين أسرع المهارات نموًا، وضوابط الهيئة الوطنية للأمن السيبراني تتطلب الأمن من خلال التصميم.', en: 'Networks and cybersecurity rank {{future-wef-2025-cyber-second}} among the fastest-growing skills, and the National Cybersecurity Authority’s controls require secure by design.' },
     governmentRelevance: { ar: 'الخدمات الحكومية أهداف دائمة، ونمذجة التهديدات المبكرة أرخص بكثير من معالجة اختراق خدمة حية يعتمد عليها المستفيدون.', en: 'Government services are standing targets; early threat modeling is far cheaper than remediating a breach of a live service beneficiaries depend on.' },
     firstStep: { ar: 'تعلّم منهجية واحدة (STRIDE) وطبّقها على خدمة رقمية واحدة في جهتك في ورشة نصف يوم.', en: 'Learn one method (STRIDE) and apply it to one of your entity’s digital services in a half-day workshop.' },
   },
@@ -268,9 +268,9 @@ export const microSkills: MicroSkill[] = [
   {
     id: 'geospatial_analysis',
     name: { ar: 'التحليل الجيومكاني', en: 'Geospatial analysis' },
-    description: { ar: 'تحليل البيانات المكانية (الخرائط، وصور الأقمار الصناعية، والحدود الإدارية) لدعم قرارات التخطيط والخدمات الميدانية.', en: 'Analyzing spatial data (maps, satellite imagery, administrative boundaries) to support planning and field-service decisions.' },
+    description: { ar: 'تحليل البيانات الجيومكانية (الخرائط، وصور الأقمار الصناعية، والحدود الإدارية) لدعم قرارات التخطيط والخدمات الميدانية.', en: 'Analyzing spatial data (maps, satellite imagery, administrative boundaries) to support planning and field-service decisions.' },
     parentDomain: 'emerging',
-    demandSignal: { ar: 'الرصد الأرضي والتوائم الرقمية والبرنامج الفضائي الوطني توسّع الحاجة إلى قراءة البيانات المكانية.', en: 'Earth observation, digital twins and the national space programme widen the need to read spatial data.' },
+    demandSignal: { ar: 'الرصد الأرضي والتوائم الرقمية والبرنامج الفضائي الوطني توسّع الحاجة إلى قراءة البيانات الجيومكانية.', en: 'Earth observation, digital twins and the national space programme widen the need to read spatial data.' },
     governmentRelevance: { ar: 'قرارات البلديات والنقل والبيئة مكانية بطبيعتها، وتحليل «أين» يحسّن توزيع الخدمات وكشف الفجوات.', en: 'Municipal, transport and environmental decisions are spatial by nature; analysing “where” improves service distribution and gap detection.' },
     firstStep: { ar: 'ابدأ بأداة خرائط مفتوحة (QGIS) وارسم توزيع مستفيدي خدمة واحدة على الخريطة.', en: 'Start with an open mapping tool (QGIS) and plot one service’s beneficiary distribution.' },
   },
@@ -370,7 +370,7 @@ export const playbookSections: PlaybookSection[] = [
     title: { ar: 'نقاط التخصيص', en: 'Customization points' },
     items: [
       { ar: 'مطابقة الأدوار: طابق العائلات الوظيفية في جهتك مع مكتبة الأدوار، وابدأ بالأدوار الأكثر عددًا لا بكل الأدوار.', en: 'Role mapping: match your entity’s job families to the role library, starting with the most populous roles rather than all of them.' },
-      { ar: 'أوزان المجالات: رتّب أولوية المجالات الثمانية بحسب مهام جهتك (جهة صحية تقدّم البيانات والمعلوماتية؛ وبلدية تقدّم البيانات المكانية وتصميم الخدمات).', en: 'Domain priorities: order the eight domains by your entity’s mandate (a health entity puts data and informatics first; a municipality puts spatial data and service design first).' },
+      { ar: 'أوزان المجالات: رتّب أولوية المجالات الثمانية بحسب مهام جهتك (جهة صحية تقدّم البيانات والمعلوماتية؛ وبلدية تقدّم البيانات الجيومكانية وتصميم الخدمات).', en: 'Domain priorities: order the eight domains by your entity’s mandate (a health entity puts data and informatics first; a municipality puts spatial data and service design first).' },
       { ar: 'العربية أولًا: اعتمد المحتوى العربي أساسًا، مع ذكر المصطلح الإنجليزي للمفاهيم التقنية عند أول ورود.', en: 'Arabic first: use Arabic content as the default, giving the English term for technical concepts on first use.' },
     ],
   },

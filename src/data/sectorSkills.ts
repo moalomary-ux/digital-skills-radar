@@ -13,7 +13,7 @@ import type { DomainSignal, SectorAggregate } from './gov/types.ts'
  * | الفئة (category)                        | المجالات (domains)            | المبرر — rationale |
  * |-----------------------------------------|-------------------------------|--------------------|
  * | 1. الاستراتيجيات الرقمية                | policy .7, leadership .3      | صياغة استراتيجية التحول عمل حوكمي، وتنفيذها يتطلب قيادة تغيير — drafting a digital strategy is governance work; delivering it needs change leadership |
- * | 2. تخطيط وتمكين البنية التقنية          | cloud .7, cyber .3            | تخطيط البنية والمنصات جوهره سحابة وبنية وتحديث أنظمة، مع أمن منذ التصميم — infrastructure/platform planning is cloud & modernization at its core, with security by design |
+ * | 2. تخطيط وتمكين البنية التقنية          | cloud .7, cyber .3            | تخطيط البنية والمنصات جوهره سحابة وبنية وتحديث أنظمة، مع أمن منذ التصميم — infrastructure/platform planning is cloud & modernization at its core, with secure by design |
  * | 3. الابتكار والتقنيات الناشئة           | emerging .8, ai-data .2       | الفئة تدور حول استكشاف التقنيات الناشئة، وأغلبها اليوم ذكاء اصطناعي — the category is emerging-tech scouting, most of it AI today |
  * | 4. التميز المؤسسي واستمرارية الأعمال    | agile .6, leadership .4       | التميز المؤسسي تحسين مستمر للعمليات والتسليم، واستمرارية الأعمال إدارة تغيير — organizational excellence is continuous delivery improvement; continuity is change management |
  * | 5. الاستثمار والخدمات الرقمية           | service-design .6, policy .4  | الخدمات الرقمية تصميم حول المستفيد، والاستثمار شراء وتعاقد تقني — digital services are beneficiary-centred design; investment is tech procurement |

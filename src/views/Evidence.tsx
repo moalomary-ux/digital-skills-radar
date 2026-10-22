@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useInRouterContext, useLocation } from 'react-router-dom'
 import { useApp } from '../store'
 import type { L } from '../data/types'
-import { claims } from '../data/claims'
+import { CLAIM_KINDS, claims } from '../data/claims'
 import type { Claim, ClaimKind, Confidence } from '../data/claims'
 import { REVIEW_STALE_MONTHS } from '../data/claims/method'
 import { isOutdatedSource, outdatedLabel, referenceSourceKindLabel, referenceSources, SOURCE_CURRENT_FROM } from '../data/claims/sources'
@@ -16,7 +16,7 @@ import { BidiValue, ClaimText, confHint, confLabel, confRank, formatClaimDate, k
  * SOURCE_CURRENT_FROM carry «قديم — يُحدَّث». The page ends with the approved reference sources.
  */
 
-const KINDS: ClaimKind[] = ['official', 'international', 'survey', 'self-report', 'editorial']
+const KINDS = CLAIM_KINDS
 const CONFS: Confidence[] = ['high', 'medium', 'low']
 
 const PACKETS: Record<string, L> = {

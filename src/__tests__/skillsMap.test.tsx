@@ -86,7 +86,7 @@ describe('skills map page', () => {
     for (const s of domains.find((d) => d.id === 'cyber')!.skills) expect(within(region).getByRole('button', { name: s.en })).toBeInTheDocument()
     expect(within(region).getByText(/5 skills/)).toBeInTheDocument()
     // the four-level ladder and the assessment link
-    for (const lv of ['Awareness', 'Application', 'Proficiency', 'Leadership']) expect(within(region).getAllByText(lv).length).toBeGreaterThan(0)
+    for (const lv of ['Awareness', 'Application', 'Proficiency', 'Leading']) expect(within(region).getAllByText(lv).length).toBeGreaterThan(0)
     expect(within(region).getByRole('link', { name: 'Start the assessment from this domain' })).toHaveAttribute('href', '/en/assess?domain=cyber')
     expect(screen.getByRole('button', { name: /^Cybersecurity & Digital Trust — Domain/ })).toHaveAttribute('aria-pressed', 'true')
     await waitFor(() => expect(router.state.location.search).toBe('?node=domain.cyber'))
@@ -94,8 +94,8 @@ describe('skills map page', () => {
     expect(document.querySelector('[data-ring] button[data-node="skill.sr-cyber-0"]')).toHaveAttribute('data-state', 'near')
     expect(document.querySelector('[data-ring] button[data-node="skill.sr-ai-data-0"]')).toHaveAttribute('data-state', 'dim')
     // a skill chip in the panel moves the selection
-    await user.click(within(region).getByRole('button', { name: 'Security awareness' }))
-    expect(screen.getByRole('region', { name: 'Security awareness' })).toBeInTheDocument()
+    await user.click(within(region).getByRole('button', { name: 'Cybersecurity awareness' }))
+    expect(screen.getByRole('region', { name: 'Cybersecurity awareness' })).toBeInTheDocument()
     expect(within(panel()).getByText(skillRecordById('sr-cyber-0')!.definition.en)).toBeInTheDocument()
   })
 
@@ -108,7 +108,7 @@ describe('skills map page', () => {
     const items = within(list).getAllByRole('listitem')
     expect(items.length).toBeGreaterThan(0)
     expect(items.length).toBeLessThan(TOTAL_NODES)
-    expect(within(list).getByRole('button', { name: /Security awareness/ })).toBeInTheDocument()
+    expect(within(list).getByRole('button', { name: /Cybersecurity awareness/ })).toBeInTheDocument()
     const skills = canvasButtons('skill.')
     expect(skills.length).toBeLessThan(40)
     expect(skills.map((b) => b.dataset.node)).toContain('skill.sr-cyber-0')
@@ -269,7 +269,7 @@ describe('entry points', () => {
     const links = within(preview).getAllByRole('link')
     expect(links).toHaveLength(domains.length + 40)
     expect(links.every((a) => /^\/ar\/map\?node=(domain|skill)\./.test(a.getAttribute('href') ?? ''))).toBe(true)
-    expect(within(preview).getByRole('link', { name: /^الوعي الأمني — مهارة/ })).toHaveAttribute('href', '/ar/map?node=skill.sr-cyber-0')
+    expect(within(preview).getByRole('link', { name: /^الوعي بالأمن السيبراني — مهارة/ })).toHaveAttribute('href', '/ar/map?node=skill.sr-cyber-0')
     // the section sits right after the hero
     const sections = [...document.querySelectorAll('main section')]
     expect(sections.indexOf(section)).toBe(1)

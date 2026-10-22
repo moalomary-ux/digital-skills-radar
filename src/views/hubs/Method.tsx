@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../../store'
-import { claims } from '../../data/claims'
+import { CLAIM_KINDS, claims } from '../../data/claims'
 import type { Claim as ClaimRecord, ClaimKind } from '../../data/claims'
 import { pathFor } from '../../lib/routes'
 import Claim, { kindHint, kindLabel } from '../../components/Claim'
 import { HubCard, HubHeader, HubSection } from '../../components/shell/Hub'
 import { useArrow, useTabs } from '../../components/shell/hooks'
 
-const kinds: ClaimKind[] = ['official', 'international', 'survey', 'self-report', 'editorial']
+const kinds = CLAIM_KINDS
 const confOrder = { high: 0, medium: 1, low: 2 } as const
 
 /** Claims of one kind, best-supported first, so the first example shown is a solid one. */
@@ -42,7 +42,7 @@ export default function MethodHub() {
           en: `The evidence register now holds ${claims.length} registered claims. Pick a source type to see how many rest on it, with one example.`,
         }}
       >
-        <div role="tablist" aria-label={t({ ar: 'أنواع المصادر', en: 'Source types' })} className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 print:hidden">
+        <div role="tablist" aria-label={t({ ar: 'أنواع المصادر', en: 'Source types' })} className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7 print:hidden">
           {kinds.map((k, i) => {
             const active = i === index
             return (

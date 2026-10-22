@@ -122,7 +122,7 @@ const gtmi: ClaimSource = {
 
 const imd: ClaimSource = {
   title: { ar: 'ترتيب IMD للتنافسية الرقمية العالمية: المنهجية', en: 'IMD World Digital Competitiveness Ranking: methodology' },
-  publisher: { ar: 'مركز التنافسية العالمي في IMD', en: 'IMD World Competitiveness Center' },
+  publisher: { ar: 'مركز التنافسية العالمي في IMD (مركز بحثي في كلية IMD لإدارة الأعمال)', en: 'IMD World Competitiveness Center (a research centre of IMD Business School)' },
   url: 'https://www.imd.org/centers/wcc/world-competitiveness-center/rankings/world-digital-competitiveness-ranking/methodology',
 }
 
@@ -160,7 +160,7 @@ const lv = [
   { ar: 'وعي', en: 'Awareness' },
   { ar: 'تطبيق', en: 'Application' },
   { ar: 'إتقان', en: 'Proficiency' },
-  { ar: 'ريادة', en: 'Leadership' },
+  { ar: 'ريادة', en: 'Leading' },
 ]
 const sfiaBands = ['1–2', '3', '4–5', '6–7']
 const digcompBands = ['1–2', '3–4', '5–6', '7–8']
@@ -546,7 +546,7 @@ export const standardsClaims: Claim[] = [
       en: 'The IMD World Digital Competitiveness Ranking measures 3 factors: knowledge, technology and future readiness.',
     },
     value: { ar: '3 عوامل', en: '3 factors' },
-    kind: 'international',
+    kind: 'academic',
     confidence: 'high',
     source: imd,
     reviewedOn: REVIEWED,

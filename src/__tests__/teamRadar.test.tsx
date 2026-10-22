@@ -130,7 +130,7 @@ describe('team radar view (/ar/leaders/team)', () => {
     expect(domainBtn).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('heading', { level: 3, name: 'الأمن السيبراني والثقة الرقمية' })).toBeInTheDocument()
     fireEvent.keyDown(domainBtn, { key: 'ArrowDown' })
-    expect(screen.getByRole('button', { name: 'السحابة والبنية' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'الحوسبة السحابية' })).toHaveFocus()
 
     const overview = screen.getByText('المقارنة بمستهدفات فئة').parentElement!
     expect(overview).toHaveTextContent('«تطبيقي»') // the most common category

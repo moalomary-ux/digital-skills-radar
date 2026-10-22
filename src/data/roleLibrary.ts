@@ -26,6 +26,28 @@ export interface LibraryRole {
    * Codes are never invented; the official list is the reference.
    */
   sfiaNote?: L
+  /**
+   * Titles that entities actually use for the same function (owner directive 2026-10-22: address the
+   * function and the grade «ومن في حكمه», never one exact title). Indicative examples, not exhaustive;
+   * the wizard's role search and the role sheet match on them.
+   */
+  equivalents: L[]
+  /** «ومن في حكمه بالمرتبة …» — indicative grade band (claim `method-grade-bands`); the function decides */
+  gradeBand: L
+}
+
+/** Indicative grade bands of the civil-service HR regulation (claim `method-grade-bands`). */
+const GRADE_EXEC: L = {
+  ar: 'ومن في حكمه بالمرتبة الرابعة عشرة فما فوقها أو ما يعادلها',
+  en: 'or equivalent, at grade 14 and above or the equivalent on other scales',
+}
+const GRADE_LEAD: L = {
+  ar: 'ومن في حكمه بالمراتب من الحادية عشرة إلى الثالثة عشرة أو ما يعادلها',
+  en: 'or equivalent, at grades 11 to 13 or the equivalent on other scales',
+}
+const GRADE_SPEC: L = {
+  ar: 'ومن في حكمه بأي مرتبة حتى الثالثة عشرة أو ما يعادلها في السلالم التخصصية، والعبرة بطبيعة العمل',
+  en: 'or equivalent, at any grade up to 13 or the equivalent on specialist scales; the nature of the work decides',
 }
 
 /** The note shown next to approximate SFIA mappings. */
@@ -37,7 +59,7 @@ export const familyNames: Record<RoleFamily, L> = {
   Engineering: { ar: 'الهندسة', en: 'Engineering' },
   Design: { ar: 'التصميم', en: 'Design' },
   Policy: { ar: 'السياسات', en: 'Policy' },
-  Delivery: { ar: 'التسليم', en: 'Delivery' },
+  Delivery: { ar: 'المنتجات والتسليم', en: 'Product & Delivery' },
 }
 
 export const familyOrder: RoleFamily[] = ['Leadership', 'Data & AI', 'Engineering', 'Design', 'Policy', 'Delivery']
@@ -46,6 +68,14 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'chief_digital_officer',
     name: { ar: 'المدير التنفيذي للتحول الرقمي', en: 'Chief Digital Officer' },
+    equivalents: [
+      { ar: 'الرئيس التنفيذي للشؤون الرقمية', en: 'Chief Digital Affairs Officer' },
+      { ar: 'مدير عام التحول الرقمي', en: 'Director-General of Digital Transformation' },
+      { ar: 'وكيل الجهة للتقنية والتحول الرقمي', en: 'Deputy Head for Technology and Digital Transformation' },
+      { ar: 'المدير العام لتقنية المعلومات والتحول الرقمي', en: 'Director-General of IT and Digital Transformation' },
+      { ar: 'الرئيس التنفيذي للمعلومات', en: 'Chief Information Officer' },
+    ],
+    gradeBand: GRADE_EXEC,
     family: 'Leadership',
     mission: {
       ar: 'يضع الاستراتيجية الرقمية على مستوى الجهة ويملكها، ويوائم الاستثمار التقني مع القيمة العامة وأهداف التحول الوطنية.',
@@ -62,6 +92,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'digital_transformation_lead',
     name: { ar: 'قائد التحول الرقمي', en: 'Digital Transformation Lead' },
+    equivalents: [
+      { ar: 'مدير إدارة التحول الرقمي', en: 'Digital Transformation Department Manager' },
+      { ar: 'مدير مكتب التحول الرقمي', en: 'Digital Transformation Office Manager' },
+      { ar: 'مدير برنامج التحول', en: 'Transformation Programme Manager' },
+      { ar: 'رئيس وحدة التحول الرقمي', en: 'Head of the Digital Transformation Unit' },
+    ],
+    gradeBand: GRADE_LEAD,
     family: 'Leadership',
     mission: {
       ar: 'يقود برامج تحول متعددة السنوات تعمل على تحديث الخدمات والعمليات والثقافة.',
@@ -78,6 +115,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'data_scientist',
     name: { ar: 'عالم البيانات', en: 'Data Scientist' },
+    equivalents: [
+      { ar: 'أخصائي علم البيانات', en: 'Data Science Specialist' },
+      { ar: 'أخصائي تحليلات البيانات المتقدمة', en: 'Advanced Data Analytics Specialist' },
+      { ar: 'مهندس تعلم الآلة', en: 'Machine Learning Engineer' },
+      { ar: 'أخصائي ذكاء اصطناعي', en: 'AI Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Data & AI',
     mission: {
       ar: 'يستخلص رؤى تنبؤية من البيانات الحكومية لتحسين السياسات والخدمات وتخصيص الموارد.',
@@ -94,6 +138,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'open_data_manager',
     name: { ar: 'مدير البيانات المفتوحة', en: 'Open Data Manager' },
+    equivalents: [
+      { ar: 'مسؤول البيانات المفتوحة', en: 'Open Data Officer' },
+      { ar: 'مدير مكتب إدارة البيانات في الجهة', en: 'Head of the Entity Data Management Office' },
+      { ar: 'مدير إدارة البيانات', en: 'Data Management Manager' },
+      { ar: 'أخصائي حوكمة البيانات', en: 'Data Governance Specialist' },
+    ],
+    gradeBand: GRADE_LEAD,
     family: 'Data & AI',
     mission: {
       ar: 'ينشر مجموعات بيانات حكومية عالية الجودة تعزز الشفافية والابتكار وإعادة الاستخدام الاقتصادي.',
@@ -110,6 +161,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'gis_smart_city_analyst',
     name: { ar: 'محلل نظم المعلومات الجغرافية والمدن الذكية', en: 'GIS / Smart City Analyst' },
+    equivalents: [
+      { ar: 'أخصائي نظم المعلومات الجغرافية', en: 'GIS Specialist' },
+      { ar: 'محلل البيانات الجيومكانية', en: 'Geospatial Data Analyst' },
+      { ar: 'مهندس المساحة ونظم المعلومات الجغرافية', en: 'Surveying and GIS Engineer' },
+      { ar: 'أخصائي المدن الذكية', en: 'Smart City Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Data & AI',
     mission: {
       ar: 'يحوّل البيانات الجغرافية المكانية وبيانات مستشعرات المدن إلى رؤى لمدن أذكى وأكثر ملاءمة للعيش.',
@@ -117,7 +175,7 @@ export const libraryRoles: LibraryRole[] = [
     },
     targets: { 'ai-data': 3, cyber: 2, cloud: 3, 'service-design': 2, policy: 2, agile: 2, emerging: 3, leadership: 1 },
     responsibilities: [
-      { ar: 'تحليل البيانات المكانية لدعم قرارات التخطيط والتنقل والبيئة ومواقع الخدمات.', en: 'Analyse spatial data to support planning, mobility, environment and service-location decisions.' },
+      { ar: 'تحليل البيانات الجيومكانية لدعم قرارات التخطيط والتنقل والبيئة ومواقع الخدمات.', en: 'Analyse spatial data to support planning, mobility, environment and service-location decisions.' },
       { ar: 'بناء لوحات معلومات ونماذج جغرافية مكانية لفرق تشغيل المدن والسياسات.', en: 'Build geospatial dashboards and models for city operations and policy teams.' },
       { ar: 'تقييم مصادر بيانات إنترنت الأشياء والمدن الذكية من حيث الجودة وقابلية التشغيل البيني والقيمة.', en: 'Evaluate IoT and smart-city data sources for quality, interoperability and value.' },
     ],
@@ -127,6 +185,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'cybersecurity_analyst',
     name: { ar: 'محلل الأمن السيبراني', en: 'Cybersecurity Analyst' },
+    equivalents: [
+      { ar: 'أخصائي الأمن السيبراني', en: 'Cybersecurity Specialist' },
+      { ar: 'محلل مركز العمليات الأمنية', en: 'Security Operations Centre Analyst' },
+      { ar: 'أخصائي الاستجابة للحوادث السيبرانية', en: 'Cyber Incident Response Specialist' },
+      { ar: 'أخصائي أمن المعلومات', en: 'Information Security Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يراقب التهديدات التي تستهدف الأنظمة الحكومية وبيانات المواطنين ويكتشفها ويستجيب لها.',
@@ -143,6 +208,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'cloud_architect',
     name: { ar: 'مهندس البنية السحابية', en: 'Cloud Architect' },
+    equivalents: [
+      { ar: 'أخصائي الحوسبة السحابية', en: 'Cloud Computing Specialist' },
+      { ar: 'مهندس الحلول السحابية', en: 'Cloud Solutions Engineer' },
+      { ar: 'مهندس البنية التحتية', en: 'Infrastructure Engineer' },
+      { ar: 'مهندس المنصات', en: 'Platform Engineer' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يصمم منصات سحابية آمنة وقابلة للتوسع وفعالة التكلفة لاستضافة الخدمات الرقمية الوطنية.',
@@ -158,7 +230,14 @@ export const libraryRoles: LibraryRole[] = [
   },
   {
     id: 'emerging_tech_scout',
-    name: { ar: 'كشّاف التقنيات الناشئة', en: 'Emerging Tech Scout' },
+    name: { ar: 'أخصائي رصد التقنيات الناشئة', en: 'Emerging Technology Monitoring Specialist' },
+    equivalents: [
+      { ar: 'أخصائي التقنيات الناشئة', en: 'Emerging Technologies Specialist' },
+      { ar: 'محلل التقنيات الناشئة', en: 'Emerging Technology Analyst' },
+      { ar: 'أخصائي الابتكار', en: 'Innovation Specialist' },
+      { ar: 'أخصائي استشراف التقنية', en: 'Technology Foresight Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يمسح أفق التقنيات ويختبر القدرات الناشئة كي تعتمد الحكومة ما ينجح مبكراً وبأمان.',
@@ -175,6 +254,12 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'digital_identity_specialist',
     name: { ar: 'أخصائي الهوية الرقمية', en: 'Digital Identity Specialist' },
+    equivalents: [
+      { ar: 'أخصائي إدارة هويات الدخول والصلاحيات', en: 'Identity and Access Management Specialist' },
+      { ar: 'مهندس الهوية والوصول', en: 'Identity and Access Engineer' },
+      { ar: 'أخصائي التحقق الرقمي من الهوية', en: 'Digital Identity Verification Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يصمم ويشغّل خدمات هوية رقمية ووصول موثوقة للمواطنين والمستخدمين الحكوميين.',
@@ -191,6 +276,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'site_reliability_engineer',
     name: { ar: 'مهندس موثوقية المواقع', en: 'Site Reliability Engineer' },
+    equivalents: [
+      { ar: 'مهندس عمليات تقنية المعلومات', en: 'IT Operations Engineer' },
+      { ar: 'مهندس التطوير والتشغيل', en: 'DevOps Engineer' },
+      { ar: 'مهندس تشغيل الأنظمة', en: 'Systems Operations Engineer' },
+      { ar: 'أخصائي مراقبة الخدمات الرقمية', en: 'Digital Service Monitoring Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يحافظ على سرعة الخدمات الرقمية الوطنية وتوافرها ومرونتها عبر عمليات قائمة على الهندسة.',
@@ -208,6 +300,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'service_designer',
     name: { ar: 'مصمم الخدمات', en: 'Service Designer' },
+    equivalents: [
+      { ar: 'أخصائي تجربة المستفيد', en: 'Beneficiary Experience Specialist' },
+      { ar: 'مصمم تجربة المستخدم', en: 'User Experience Designer' },
+      { ar: 'أخصائي تطوير الخدمات الرقمية', en: 'Digital Services Development Specialist' },
+      { ar: 'أخصائي تحسين الإجراءات', en: 'Process Improvement Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Design',
     mission: {
       ar: 'يصمم خدمات عامة شاملة من البداية إلى النهاية تعمل عبر القنوات وتستند إلى احتياجات المواطنين.',
@@ -225,6 +324,12 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'ux_researcher',
     name: { ar: 'باحث تجربة المستخدم', en: 'UX Researcher' },
+    equivalents: [
+      { ar: 'باحث تجربة المستفيد', en: 'Beneficiary Experience Researcher' },
+      { ar: 'أخصائي أبحاث المستفيدين', en: 'Beneficiary Research Specialist' },
+      { ar: 'أخصائي قياس تجربة المستفيد', en: 'Beneficiary Experience Measurement Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Design',
     mission: {
       ar: 'يولّد أدلة حول سلوك المستخدم واحتياجاته كي تبني الفرق الحل الصحيح لا المفترض.',
@@ -241,6 +346,12 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'content_designer',
     name: { ar: 'مصمم المحتوى', en: 'Content Designer' },
+    equivalents: [
+      { ar: 'أخصائي المحتوى الرقمي', en: 'Digital Content Specialist' },
+      { ar: 'كاتب المحتوى', en: 'Content Writer' },
+      { ar: 'أخصائي المحتوى والاتصال الرقمي', en: 'Digital Content and Communications Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Design',
     mission: {
       ar: 'يكتب المحتوى الحكومي وينظمه بحيث يفهمه كل مستخدم ويتصرف بناءً عليه من المرة الأولى.',
@@ -257,6 +368,12 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'ai_ethics_officer',
     name: { ar: 'مسؤول أخلاقيات الذكاء الاصطناعي', en: 'AI Ethics Officer' },
+    equivalents: [
+      { ar: 'أخصائي حوكمة الذكاء الاصطناعي', en: 'AI Governance Specialist' },
+      { ar: 'مسؤول الامتثال في الذكاء الاصطناعي', en: 'AI Compliance Officer' },
+      { ar: 'أخصائي أخلاقيات البيانات والذكاء الاصطناعي', en: 'Data and AI Ethics Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Policy',
     mission: {
       ar: 'يضمن تصميم أنظمة الذكاء الاصطناعي واقتناءها وتشغيلها بما يتوافق مع المبادئ الأخلاقية وقواعد الحوكمة الوطنية للذكاء الاصطناعي.',
@@ -274,6 +391,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'digital_policy_advisor',
     name: { ar: 'مستشار السياسات الرقمية', en: 'Digital Policy Advisor' },
+    equivalents: [
+      { ar: 'أخصائي السياسات', en: 'Policy Specialist' },
+      { ar: 'مستشار التحول الرقمي', en: 'Digital Transformation Advisor' },
+      { ar: 'أخصائي التنظيم الرقمي', en: 'Digital Regulation Specialist' },
+      { ar: 'محلل السياسات الرقمية', en: 'Digital Policy Analyst' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Policy',
     mission: {
       ar: 'يطوّر سياسات وتنظيمات رقمية مبنية على الأدلة تتيح الابتكار وتحمي المجتمع في الوقت ذاته.',
@@ -289,7 +413,13 @@ export const libraryRoles: LibraryRole[] = [
   },
   {
     id: 'digital_inclusion_officer',
-    name: { ar: 'مسؤول الشمول الرقمي', en: 'Digital Inclusion Officer' },
+    name: { ar: 'مسؤول الشمولية الرقمية', en: 'Digital Inclusion Officer' },
+    equivalents: [
+      { ar: 'أخصائي الشمولية الرقمية', en: 'Digital Inclusion Specialist' },
+      { ar: 'أخصائي إمكانية الوصول', en: 'Accessibility Specialist' },
+      { ar: 'مسؤول التمكين الرقمي للمستفيدين', en: 'Beneficiary Digital Enablement Officer' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Policy',
     mission: {
       ar: 'يضمن عدم استبعاد أي مواطن من الخدمات الرقمية بسبب القدرة أو العمر أو اللغة أو الاتصال أو الدخل.',
@@ -307,6 +437,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'product_manager',
     name: { ar: 'مدير المنتج', en: 'Product Manager' },
+    equivalents: [
+      { ar: 'مالك المنتج', en: 'Product Owner' },
+      { ar: 'مدير المنتج الرقمي', en: 'Digital Product Manager' },
+      { ar: 'مدير الخدمة الرقمية', en: 'Digital Service Manager' },
+      { ar: 'قائد المنتج', en: 'Product Lead' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Delivery',
     mission: {
       ar: 'يمتلك رؤية المنتج الرقمي وقيمته، ويرتّب الأولويات وفق النتائج للمستخدمين والجهة.',
@@ -323,14 +460,21 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'delivery_manager',
     name: { ar: 'مدير التسليم', en: 'Delivery Manager' },
+    equivalents: [
+      { ar: 'مدير المشروع التقني', en: 'Technical Project Manager' },
+      { ar: 'أخصائي إدارة المشاريع', en: 'Project Management Specialist' },
+      { ar: 'مدير التنفيذ', en: 'Implementation Manager' },
+      { ar: 'ميسّر فريق سكرم', en: 'Scrum Master' },
+    ],
+    gradeBand: GRADE_LEAD,
     family: 'Delivery',
     mission: {
-      ar: 'يمهّد الطريق أمام الفرق الرشيقة كي تصل المنتجات القيّمة العاملة إلى المستخدمين مبكراً وباستمرار.',
+      ar: 'يمهّد الطريق أمام الفرق العاملة بالنهج المرن كي تصل المنتجات القيّمة العاملة إلى المستخدمين مبكراً وباستمرار.',
       en: 'Clears the path for agile teams so valuable, working products reach users early and often.',
     },
     targets: { 'ai-data': 1, cyber: 1, cloud: 2, 'service-design': 2, policy: 2, agile: 4, emerging: 1, leadership: 3 },
     responsibilities: [
-      { ar: 'تيسير اجتماعات العمل الرشيق وإيقاعات التسليم والتحسين المستمر.', en: 'Facilitate agile ceremonies, delivery rhythms and continuous improvement.' },
+      { ar: 'تيسير اجتماعات النهج المرن وإيقاعات التسليم والتحسين المستمر.', en: 'Facilitate agile ceremonies, delivery rhythms and continuous improvement.' },
       { ar: 'إزالة العوائق وإدارة التبعيات وحماية الفريق من المشتتات.', en: 'Remove blockers, manage dependencies and shield the team from disruption.' },
       { ar: 'متابعة صحة التسليم — التدفق والجودة والمخاطر — والرفع بالتقارير بشفافية إلى الحوكمة.', en: 'Track delivery health — flow, quality, risks — and report honestly to governance.' },
     ],
@@ -340,6 +484,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'business_analyst',
     name: { ar: 'محلل الأعمال', en: 'Business Analyst' },
+    equivalents: [
+      { ar: 'محلل النظم', en: 'Systems Analyst' },
+      { ar: 'محلل المتطلبات', en: 'Requirements Analyst' },
+      { ar: 'أخصائي تحليل الأعمال', en: 'Business Analysis Specialist' },
+      { ar: 'محلل إجراءات العمل', en: 'Business Process Analyst' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Delivery',
     mission: {
       ar: 'يستقصي مشكلات العمل ويحدد المتطلبات التي تربط بين مقصد السياسة والتنفيذ التقني.',
@@ -355,7 +506,13 @@ export const libraryRoles: LibraryRole[] = [
   },
   {
     id: 'ai_product_owner',
-    name: { ar: 'مالك منتجات الذكاء الاصطناعي', en: 'AI Product Owner' },
+    name: { ar: 'مالك منتج الذكاء الاصطناعي', en: 'AI Product Owner' },
+    equivalents: [
+      { ar: 'مدير منتج الذكاء الاصطناعي', en: 'AI Product Manager' },
+      { ar: 'مالك حلول الذكاء الاصطناعي', en: 'AI Solutions Owner' },
+      { ar: 'قائد مبادرات الذكاء الاصطناعي', en: 'AI Initiatives Lead' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Delivery',
     mission: {
       ar: 'يوجّه المنتجات المدعومة بالذكاء الاصطناعي من اختيار حالة الاستخدام إلى قيمة آمنة وقابلة للقياس في الإنتاج.',
@@ -373,6 +530,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'software_engineer',
     name: { ar: 'مهندس برمجيات', en: 'Software Engineer' },
+    equivalents: [
+      { ar: 'مطوّر البرمجيات', en: 'Software Developer' },
+      { ar: 'مبرمج', en: 'Programmer' },
+      { ar: 'مهندس التطبيقات', en: 'Application Engineer' },
+      { ar: 'مطوّر تطبيقات الويب والجوال', en: 'Web and Mobile Developer' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يصمم ويبني ويختبر الخدمات الرقمية الحكومية بشيفرة عالية الجودة وآمنة وقابلة للصيانة.',
@@ -382,13 +546,20 @@ export const libraryRoles: LibraryRole[] = [
     responsibilities: [
       { ar: 'تطوير مكونات الخدمات الرقمية واختبارها وفق معايير الجودة والأمن.', en: 'Develop and test digital-service components against quality and security standards.' },
       { ar: 'مراجعة الشيفرة والمساهمة في المعمارية التقنية وقرارات الأدوات.', en: 'Review code and contribute to technical architecture and tooling decisions.' },
-      { ar: 'أتمتة الاختبار والنشر ودعم التشغيل ضمن دورات التسليم الرشيقة.', en: 'Automate testing and deployment and support operations within agile delivery cycles.' },
+      { ar: 'أتمتة الاختبار والنشر ودعم التشغيل ضمن دورات التسليم بالنهج المرن.', en: 'Automate testing and deployment and support operations within agile delivery cycles.' },
     ],
     sfia: ['PROG', 'SWDN', 'TEST', 'METL'],
   },
   {
     id: 'data_engineer',
     name: { ar: 'مهندس البيانات', en: 'Data Engineer' },
+    equivalents: [
+      { ar: 'مهندس تكامل البيانات', en: 'Data Integration Engineer' },
+      { ar: 'مطوّر قواعد البيانات', en: 'Database Developer' },
+      { ar: 'مدير قواعد البيانات', en: 'Database Administrator' },
+      { ar: 'أخصائي منصات البيانات', en: 'Data Platform Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Data & AI',
     mission: {
       ar: 'يبني خطوط البيانات ومخازنها التي تغذي التحليلات والذكاء الاصطناعي ببيانات موثوقة وآمنة.',
@@ -404,7 +575,13 @@ export const libraryRoles: LibraryRole[] = [
   },
   {
     id: 'security_architect',
-    name: { ar: 'معماري الأمن السيبراني', en: 'Security Architect' },
+    name: { ar: 'مهندس بنية الأمن السيبراني', en: 'Cybersecurity Architect' },
+    equivalents: [
+      { ar: 'مصمم بنية أمن سيبراني', en: 'Cybersecurity Architecture Designer' },
+      { ar: 'مهندس الأمن السيبراني', en: 'Cybersecurity Engineer' },
+      { ar: 'أخصائي هندسة الأمن السيبراني', en: 'Security Engineering Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Engineering',
     mission: {
       ar: 'يصمم البنية الأمنية للأنظمة الحكومية ويضمن أن الأمن مدمج منذ الفكرة لا ملحق بعد البناء.',
@@ -421,6 +598,13 @@ export const libraryRoles: LibraryRole[] = [
   {
     id: 'performance_analyst',
     name: { ar: 'محلل أداء الخدمات', en: 'Performance Analyst' },
+    equivalents: [
+      { ar: 'محلل مؤشرات الأداء', en: 'KPI Analyst' },
+      { ar: 'أخصائي قياس الأداء', en: 'Performance Measurement Specialist' },
+      { ar: 'محلل بيانات الخدمات', en: 'Service Data Analyst' },
+      { ar: 'أخصائي التميز المؤسسي', en: 'Institutional Excellence Specialist' },
+    ],
+    gradeBand: GRADE_SPEC,
     family: 'Data & AI',
     mission: {
       ar: 'يقيس أداء الخدمات الرقمية بالبيانات ويحوّل المقاييس إلى قرارات تحسين ملموسة.',
@@ -455,12 +639,67 @@ export function resolveTargets(roleId: string | null | undefined): Record<string
   return generic.targets
 }
 
-/** Display name for any stored role id. */
+/** «ومن في حكمه» — the suffix every role title carries when it addresses the reader (owner directive 2026-10-22). */
+export const PEERS_SUFFIX: L = { ar: 'ومن في حكمه', en: 'or equivalent' }
+
+/** A role title with «ومن في حكمه» / "or equivalent". */
+export const withPeers = (name: L): L => ({ ar: `${name.ar} ${PEERS_SUFFIX.ar}`, en: `${name.en} ${PEERS_SUFFIX.en}` })
+
+/** Display name for any stored role id, with «ومن في حكمه»: titles differ between entities. */
 export function resolveRoleName(roleId: string | null | undefined): L {
   if (roleId && roleId.startsWith(LIB_PREFIX)) {
     const lib = libraryRoleById(roleId.slice(LIB_PREFIX.length))
-    if (lib) return lib.name
+    if (lib) return withPeers(lib.name)
   }
   const generic = roles.find((r) => r.id === roleId)
-  return generic ? generic.name : roles[0].name
+  return withPeers(generic ? generic.name : roles[0].name)
+}
+
+/**
+ * Fold a job title for matching: lower case, no diacritics or tatweel, one alef, ى→ي, ة→ه,
+ * hamza seats folded, punctuation dropped, and a leading «ال» removed from each word,
+ * so «اخصائي امن سيبراني» finds «أخصائي الأمن السيبراني».
+ */
+export function foldTitle(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ى/g, 'ي')
+    .replace(/ة/g, 'ه')
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+    .split(' ')
+    .map((w) => (w.length > 3 && w.startsWith('ال') ? w.slice(2) : w))
+    .join(' ')
+}
+
+export interface RoleMatch {
+  role: LibraryRole
+  /** the equivalent title that matched, when the role's own name did not */
+  via?: L
+}
+
+/**
+ * Roles whose name or equivalent titles contain every word of the query (either language).
+ * An empty query returns no matches.
+ */
+export function matchRoles(query: string): RoleMatch[] {
+  const words = foldTitle(query).split(' ').filter(Boolean)
+  if (words.length === 0) return []
+  const hit = (title: string) => {
+    const folded = ` ${foldTitle(title)} `
+    return words.every((w) => folded.includes(w))
+  }
+  const out: RoleMatch[] = []
+  for (const role of libraryRoles) {
+    if (hit(role.name.ar) || hit(role.name.en)) out.push({ role })
+    else {
+      const via = role.equivalents.find((e) => hit(e.ar) || hit(e.en))
+      if (via) out.push({ role, via })
+    }
+  }
+  return out
 }

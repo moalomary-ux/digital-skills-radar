@@ -680,7 +680,7 @@ export const scenarios: ScenarioItem[] = [
       {
         text: { ar: 'نحتفل بالإنجاز؛ التزمنا بالخطة ثلاث دورات، والاستخدام سيرتفع مع الوقت.', en: 'Celebrate: we kept to the plan for three sprints, and usage will rise with time.' },
         score: 0,
-        rationale: { ar: 'التسليم مخرجات؛ الاستخدام هو النتيجة — الخلط بينهما أخطر وهم في الإدارة الرشيقة.', en: 'Delivery is output; usage is outcome — conflating them is agile’s most dangerous illusion.' },
+        rationale: { ar: 'التسليم مخرجات؛ الاستخدام هو النتيجة — الخلط بينهما أخطر وهم في الإدارة بالنهج المرن.', en: 'Delivery is output; usage is outcome — conflating them is agile’s most dangerous illusion.' },
       },
       {
         text: { ar: 'الأرجح أن المؤشر لا يقيس الاستخدام بدقة؛ أراجع أداة القياس والتتبع قبل أي استنتاج.', en: 'The metric is probably not measuring usage well; I check the tracking setup before concluding anything.' },

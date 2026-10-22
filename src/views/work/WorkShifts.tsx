@@ -175,6 +175,10 @@ export default function WorkShifts() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-bold text-dga-black">{t(active.name)}</h2>
+            <p className="mt-1 text-sm text-dga-muted">
+              {t({ ar: 'ومن في حكمه: ', en: 'And equivalents: ' })}
+              {active.equivalents.map((e) => t(e)).join(lang === 'ar' ? '، ' : ', ')}
+            </p>
             <p className="mt-2 leading-relaxed text-dga-ink">{t(active.summary)}</p>
           </div>
           <button type="button" className="btn-ghost no-print" onClick={() => window.print()}>

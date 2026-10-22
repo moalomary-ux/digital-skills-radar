@@ -426,7 +426,7 @@ export const futureClaims: Claim[] = [
     value: { ar: 'أكثر من 40%', en: 'Over 40%' },
     scope: { ar: 'مشاريع الذكاء الاصطناعي الوكيل في المؤسسات حول العالم', en: 'Agentic AI projects in organisations worldwide' },
     period: '2025–2027',
-    kind: 'international',
+    kind: 'expert',
     confidence: 'medium',
     source: GARTNER_AGENTIC_2025,
     reviewedOn: REVIEWED,

@@ -323,7 +323,7 @@ describe('leaders views render', () => {
     for (const lane of ['تُؤتمت', 'تُعزَّز', 'تنشأ', 'تبقى إنسانية']) expect(screen.getByRole('heading', { level: 4, name: lane })).toBeTruthy()
     fireEvent.keyDown(tabs[0], { key: 'ArrowLeft' }) // RTL: left = next
     expect(screen.getAllByRole('tab')[1].getAttribute('aria-selected')).toBe('true')
-    expect(screen.getByRole('heading', { level: 2, name: 'مسؤول المشتريات' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'أخصائي المشتريات' })).toBeTruthy()
     fireEvent.keyDown(screen.getAllByRole('tab')[1], { key: 'End' })
     expect(screen.getByRole('heading', { level: 2, name: 'مدير المشاريع والبرامج' })).toBeTruthy()
     cleanup()
@@ -338,7 +338,10 @@ describe('leaders views render', () => {
 
   it('RoleDetail renders a role sheet, starts the assessment with the lib: id, and falls back gracefully', () => {
     renderAt('/ar/roles/data_scientist', '/:lang/roles/:roleId', h(RoleDetail), 'ar')
-    expect(screen.getByRole('heading', { level: 1, name: 'عالم البيانات' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'عالم البيانات ومن في حكمه' })).toBeTruthy()
+    // titles differ between entities: equivalent titles and the grade band are on the sheet
+    expect(within(screen.getByRole('list', { name: 'مسميات مكافئة في الجهات' })).getByText('أخصائي علم البيانات')).toBeTruthy()
+    expect(screen.getByText(/عالم البيانات ومن في حكمه بأي مرتبة حتى الثالثة عشرة/)).toBeTruthy()
     expect(screen.getByRole('heading', { level: 2, name: 'مهام تتغير في هذا الدور 2026–2030' })).toBeTruthy()
     expect(screen.getByText('DATS')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'ابدأ التقييم لهذا الدور' }))
@@ -352,7 +355,8 @@ describe('leaders views render', () => {
 
     for (const role of libraryRoles) {
       renderAt(`/en/roles/${role.id}`, '/:lang/roles/:roleId', h(RoleDetail), 'en')
-      expect(screen.getByRole('heading', { level: 1, name: role.name.en })).toBeTruthy()
+      expect(screen.getByRole('heading', { level: 1, name: `${role.name.en} or equivalent` })).toBeTruthy()
+      expect(within(screen.getByRole('list', { name: 'Equivalent titles in entities' })).getAllByRole('listitem')).toHaveLength(role.equivalents.length)
       cleanup()
     }
   })

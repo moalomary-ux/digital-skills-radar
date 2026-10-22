@@ -108,8 +108,8 @@ export const shifts: LeaderShift[] = [
       en: 'Protecting data and systems is no longer a technical matter left to one department; it is a legal duty leaders answer for. Every new service that processes personal data needs a compliance review, an impact assessment where the Implementing Regulations require one, and security controls before launch.',
     },
     requires: {
-      ar: 'الوعي الأمني، والخصوصية وحماية البيانات الشخصية، والأمن منذ التصميم، والوعي بالتشريعات الرقمية.',
-      en: 'Security awareness, privacy and personal data protection, security by design, and awareness of digital legislation.',
+      ar: 'الوعي بالأمن السيبراني، والخصوصية وحماية البيانات الشخصية، والأمن من خلال التصميم، والوعي بالتشريعات الرقمية.',
+      en: 'Cybersecurity awareness, privacy and personal data protection, secure by design, and awareness of digital legislation.',
     },
     domainId: 'cyber',
     relatedDomainIds: ['policy'],
@@ -131,8 +131,8 @@ export const shifts: LeaderShift[] = [
       en: 'Entities move from projects that end at launch to digital products with a stable team that keeps improving them. Progress is judged by what actually works for the beneficiary, not by estimated completion percentages.',
     },
     requires: {
-      ar: 'طرق العمل الرشيقة، ودورة حياة المنتج، وقياس المنافع، وشراء تقني يدفع مقابل النتائج.',
-      en: 'Agile ways of working, the product lifecycle, benefits measurement, and technology procurement that pays for outcomes.',
+      ar: 'العمل بالنهج المرن، ودورة حياة المنتج، وتحقيق المنافع، ومشتريات رقمية تدفع مقابل النتائج.',
+      en: 'Agile ways of working, the product lifecycle, benefits realisation, and digital procurement that pays for outcomes.',
     },
     domainId: 'agile',
     relatedDomainIds: ['policy'],

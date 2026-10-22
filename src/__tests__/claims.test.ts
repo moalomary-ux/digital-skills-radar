@@ -44,7 +44,7 @@ const lint = lintModule as unknown as {
 /** Files owned by packet P5a: unresolved claim ids there are failures, elsewhere warnings. */
 const P5A_FILES = ['src/components/Claim.tsx', 'src/views/Evidence.tsx', 'src/views/Methodology.tsx', 'src/views/Standards.tsx', 'src/data/standards.ts']
 
-const KINDS = ['official', 'international', 'survey', 'self-report', 'editorial']
+const KINDS = ['official', 'international', 'academic', 'expert', 'survey', 'self-report', 'editorial']
 const CONFIDENCE = ['high', 'medium', 'low']
 const EASTERN = /[٠-٩۰-۹]/
 

@@ -65,11 +65,11 @@ export const pageDescriptions: Record<View, L> = {
     en: 'A library of digital government roles: each role’s mission, responsibilities and target skill levels per domain, so you can pick the closest match.',
   },
   skills: {
-    ar: 'سجل المهارات: تعريف واضح لكل مهارة رقمية، ومستوياتها، وما يعنيه كل مستوى عملياً في العمل الحكومي.',
+    ar: 'قاموس المهارات: تعريف واضح لكل مهارة رقمية، ومستوياتها، وما يعنيه كل مستوى عملياً في العمل الحكومي.',
     en: 'The skill registry: a clear definition of each digital skill, its levels and what each level means in practice for government work.',
   },
   'future-skills': {
-    ar: 'مهارات المستقبل: المهارات الرقمية التي يتزايد الطلب عليها في العمل الحكومي، ولماذا تهم، وكيف تبدأ ببنائها.',
+    ar: 'مهارات 2030: المهارات الرقمية التي يتزايد الطلب عليها في العمل الحكومي، ولماذا تهم، وكيف تبدأ ببنائها.',
     en: 'Future skills: the digital skills gaining demand in government work, why they matter and how to start building them.',
   },
   'tech-radar': {
@@ -89,7 +89,7 @@ export const pageDescriptions: Record<View, L> = {
     en: 'Directory of government entities: search for an entity and see its sector, services and digital skill needs.',
   },
   entity: {
-    ar: 'تفاصيل الجهة: قطاعها، وخدماتها الرقمية، واحتياجها من المهارات، وما يرتبط بها من أدوار ومسارات.',
+    ar: 'تفاصيل الجهة: قطاعها، وخدماتها الرقمية، واحتياجها من المهارات، وما يرتبط بها من أدوار وخطط تطوير.',
     en: 'Entity details: its sector, digital services, skill needs and the roles and paths connected to it.',
   },
   standards: {

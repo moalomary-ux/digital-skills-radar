@@ -134,7 +134,7 @@ export const pathways: DomainPathway[] = [
         from: 1, to: 2,
         behaviors: [
           { ar: 'فعّل المصادقة الثنائية على جميع حسابات العمل وراجع صلاحيات التطبيقات على جهازك.', en: 'Enable two-factor authentication on all work accounts and review app permissions on your device.' },
-          { ar: 'أتمم تدريب الوعي الأمني الإلزامي في جهتك وشارك ثلاث نصائح مع فريقك.', en: 'Complete your organization’s mandatory security-awareness training and share three tips with your team.' },
+          { ar: 'أتمم تدريب الوعي بالأمن السيبراني الإلزامي في جهتك وشارك ثلاث نصائح مع فريقك.', en: 'Complete your organization’s mandatory security-awareness training and share three tips with your team.' },
           { ar: 'أبلغ عن رسالة مشبوهة واحدة عبر القناة الرسمية في جهتك، وراجع مع زميل علامات التصيّد التي لاحظتها.', en: 'Report one suspicious message through your entity’s official channel, and review the phishing signs you spotted with a colleague.' },
         ],
         resourceIds: ['tuwaiq', 'europass', 'mcit'],
@@ -153,13 +153,13 @@ export const pathways: DomainPathway[] = [
         behaviors: [
           { ar: 'اجعل مراجعة الأمن بندًا إلزاميًا في بوابات مشاريعك الرقمية منذ مرحلة الفكرة.', en: 'Make a security review a mandatory gate in your digital projects from the idea stage.' },
           { ar: 'ساهم في صياغة أو تحديث سياسة حماية البيانات الشخصية في جهتك.', en: 'Contribute to drafting or updating your organization’s personal-data-protection policy.' },
-          { ar: 'قِس نضج فريقك في الأمن منذ التصميم بعد تطبيق البند، وقدّم النتيجة لراعي البرنامج.', en: 'Measure your team’s security-by-design maturity once the gate is in use, and present the result to the programme sponsor.' },
+          { ar: 'قِس نضج فريقك في الأمن من خلال التصميم بعد تطبيق البند، وقدّم النتيجة لراعي البرنامج.', en: 'Measure your team’s security-by-design maturity once the gate is in use, and present the result to the programme sponsor.' },
         ],
         resourceIds: ['sfia', 'oecd-dtf', 'mcit'],
       },
     ],
   },
-  // ── Cloud & Digital Infrastructure ───────────────────────────
+  // ── Cloud Computing & Digital Infrastructure ───────────────────────────
   {
     domainId: 'cloud',
     transitions: [
@@ -167,7 +167,7 @@ export const pathways: DomainPathway[] = [
         from: 1, to: 2,
         behaviors: [
           { ar: 'صنّف ثلاث خدمات تستخدمها جهتك حسب نموذج الخدمة السحابية (IaaS/PaaS/SaaS) واشرح السبب.', en: 'Classify three services your organization uses by cloud model (IaaS/PaaS/SaaS) and explain why.' },
-          { ar: 'اطّلع على وثيقة واجهة برمجة (API) واحدة تربط نظامين في جهتك وافهم ماذا تتبادل.', en: 'Read the API documentation of one integration between two systems in your organization and understand what it exchanges.' },
+          { ar: 'اطّلع على وثيقة واجهة برمجة تطبيقات (API) واحدة تربط نظامين في جهتك وافهم ماذا تتبادل.', en: 'Read the API documentation of one integration between two systems in your organization and understand what it exchanges.' },
           { ar: 'اسأل فريق التقنية في جهتك عن خدمة نُقلت إلى السحابة: ما الذي تغيّر للمستفيد وللفريق؟ ودوّن الإجابة.', en: 'Ask your entity’s technology team about one service moved to the cloud: what changed for users and for the team? Write down the answer.' },
         ],
         resourceIds: ['sda', 'europass', 'coursera-gsr'],
@@ -177,14 +177,14 @@ export const pathways: DomainPathway[] = [
         behaviors: [
           { ar: 'ضع قائمة بالأنظمة القديمة في نطاق عملك وقيّم خيار تحديث مناسبًا لأحدها.', en: 'Inventory the legacy systems in your scope and evaluate a suitable modernization option for one of them.' },
           { ar: 'راجع اتفاقية مستوى خدمة واحدة مع مورد وحدد مخاطر الاعتماد عليه وخطط التخفيف.', en: 'Review one vendor SLA and identify dependency risks and mitigation plans.' },
-          { ar: 'وثّق تبادل بيانات واحدًا بين نظامين عبر واجهة برمجة: مالكه وصلاحياته وما يحدث عند تعطّله.', en: 'Document one data exchange between two systems via an API: its owner, its permissions and what happens when it fails.' },
+          { ar: 'وثّق تبادل بيانات واحدًا بين نظامين عبر واجهة برمجة تطبيقات: مالكه وصلاحياته وما يحدث عند تعطّله.', en: 'Document one data exchange between two systems via an API: its owner, its permissions and what happens when it fails.' },
         ],
         resourceIds: ['sda', 'sfia', 'oecd-dtf'],
       },
       {
         from: 3, to: 4,
         behaviors: [
-          { ar: 'قد استراتيجية تشغيل بيني لجهتك تعتمد المعايير المفتوحة وواجهات البرمجة الموثقة.', en: 'Lead an interoperability strategy for your organization based on open standards and documented APIs.' },
+          { ar: 'قد استراتيجية تشغيل بيني لجهتك تعتمد المعايير المفتوحة وواجهات برمجة التطبيقات الموثقة.', en: 'Lead an interoperability strategy for your organization based on open standards and documented APIs.' },
           { ar: 'صمّم اختبار تعافٍ من كارثة لخدمة حرجة وقيّد النتائج في خطة استمرارية الأعمال.', en: 'Design a disaster-recovery test for a critical service and record results in the business continuity plan.' },
           { ar: 'ضع مع الشؤون القانونية والمشتريات معايير تقلّل الاعتماد على مورد واحد في العقود الجديدة.', en: 'Set criteria with legal and procurement that reduce single-vendor lock-in in new contracts.' },
         ],
@@ -192,7 +192,7 @@ export const pathways: DomainPathway[] = [
       },
     ],
   },
-  // ── User-Centred Service Design ──────────────────────────────
+  // ── Digital Service Design & Beneficiary Experience ──────────────────────────────
   {
     domainId: 'service-design',
     transitions: [
@@ -258,7 +258,7 @@ export const pathways: DomainPathway[] = [
       },
     ],
   },
-  // ── Agile Product & Delivery ─────────────────────────────────
+  // ── Digital Products & Agile Approach ─────────────────────────────────
   {
     domainId: 'agile',
     transitions: [
@@ -285,7 +285,7 @@ export const pathways: DomainPathway[] = [
         behaviors: [
           { ar: 'قد منتجًا رقميًا عبر مراحل الاكتشاف والتجربة والإطلاق كاملة مع توثيق قرارات كل بوابة.', en: 'Lead a digital product through the full discovery–beta–launch stages, documenting each gate decision.' },
           { ar: 'ابنِ نموذج قياس منافع يُعتمد في جهتك ويربط التسليم بالأثر الفعلي.', en: 'Build a benefits-measurement model adopted by your organization that ties delivery to real impact.' },
-          { ar: 'درّب مالك منتج جديدًا على ترتيب قائمة المهام بالقيمة وقياس المنافع.', en: 'Coach a new product owner on ordering the backlog by value and measuring benefits.' },
+          { ar: 'درّب مالك منتج جديدًا على ترتيب قائمة المهام بالقيمة وتحقيق المنافع.', en: 'Coach a new product owner on ordering the backlog by value and measuring benefits.' },
         ],
         resourceIds: ['sfia', 'oecd-dtf', 'wef-foj'],
       },
@@ -316,7 +316,7 @@ export const pathways: DomainPathway[] = [
       {
         from: 3, to: 4,
         behaviors: [
-          { ar: 'ابنِ آلية دائمة لاستكشاف التقنيات في جهتك بمعايير تقييم معلنة وقرارات موثقة.', en: 'Build a standing technology-scouting mechanism in your organization with published criteria and documented decisions.' },
+          { ar: 'ابنِ آلية دائمة لرصد التقنيات الناشئة في جهتك بمعايير تقييم معلنة وقرارات موثقة.', en: 'Build a standing emerging-technology monitoring mechanism in your organization with published criteria and documented decisions.' },
           { ar: 'قد توصية اعتماد أو رفض مبنية على الأدلة لتقنية ناشئة أمام لجنة قيادية.', en: 'Present an evidence-based adopt/reject recommendation for an emerging technology to a leadership committee.' },
           { ar: 'أنشئ شراكة تعلّم مع جهة أخرى أو جامعة لتقييم تقنية ناشئة بمعايير مشتركة.', en: 'Set up a learning partnership with another entity or a university to assess an emerging technology against shared criteria.' },
         ],

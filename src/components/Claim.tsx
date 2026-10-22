@@ -12,6 +12,8 @@ import { isOutdatedSource, outdatedLabel } from '../data/claims/sources'
 export const kindLabel: Record<ClaimKind, L> = {
   official: { ar: 'مصدر رسمي', en: 'Official source' },
   international: { ar: 'تقرير أو إطار دولي', en: 'International report or framework' },
+  academic: { ar: 'بحث محكّم', en: 'Peer-reviewed' },
+  expert: { ar: 'بيت خبرة', en: 'Expert house' },
   survey: { ar: 'استطلاع', en: 'Survey' },
   'self-report': { ar: 'بيانات ذاتية الإبلاغ', en: 'Self-reported data' },
   editorial: { ar: 'تحريري', en: 'Editorial' },
@@ -26,6 +28,14 @@ export const kindHint: Record<ClaimKind, L> = {
   international: {
     ar: 'تقرير أو إطار مرجعي صادر عن منظمة دولية أو جهة معيارية.',
     en: 'A report or reference framework from an international organization or standards body.',
+  },
+  academic: {
+    ar: 'بحث منشور في مجلة محكّمة أو صادر عن جامعة أو مركز بحثي جامعي؛ يصف عينته ومنهجه لا كل الحالات.',
+    en: 'Research published in a peer-reviewed journal or by a university or university research centre; it describes its own sample and method, not every case.',
+  },
+  expert: {
+    ar: 'تقرير أو توقع من بيت خبرة معترف به (مثل غارتنر وماكنزي وديلويت)؛ تحليل مهني لا قياس رسمي.',
+    en: 'A report or forecast from a recognized expert house (such as Gartner, McKinsey or Deloitte); professional analysis, not an official measurement.',
   },
   survey: {
     ar: 'نتيجة استطلاع لعينة محددة؛ تصف من أجابوا لا الجميع.',

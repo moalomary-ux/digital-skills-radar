@@ -223,7 +223,7 @@ export const referenceSources: ReferenceSource[] = [
     yearLabel: { ar: '2025؛ 2026', en: '2025; 2026' },
     url: 'https://dga.gov.sa',
     kind: 'national',
-    covers: { ar: 'الخدمات المقاسة والمنشورة والشمول الرقمي', en: 'Measured and published services, and digital inclusion' },
+    covers: { ar: 'الخدمات المقاسة والمنشورة والشمولية الرقمية', en: 'Measured and published services, and digital inclusion' },
   },
   {
     id: 'ref-dga-emerging-tech-readiness',

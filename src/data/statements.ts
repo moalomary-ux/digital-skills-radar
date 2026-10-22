@@ -81,7 +81,7 @@ export const statements: Statement[] = [
       en: 'I can propose embedding cybersecurity considerations at the start of a new digital project.',
     },
   },
-  // ── 3. Cloud & Digital Infrastructure ────────────────────────
+  // ── 3. Cloud Computing & Digital Infrastructure ────────────────────────
   {
     id: 'cld-1', domainId: 'cloud', skillIndex: 0,
     text: {
@@ -92,7 +92,7 @@ export const statements: Statement[] = [
   {
     id: 'cld-2', domainId: 'cloud', skillIndex: 1,
     text: {
-      ar: 'أستطيع توصيف كيف يتبادل نظامان البيانات عبر واجهة برمجة (API).',
+      ar: 'أستطيع توصيف كيف يتبادل نظامان البيانات عبر واجهة برمجة تطبيقات (API).',
       en: 'I can describe how two systems exchange data through an API.',
     },
   },
@@ -117,7 +117,7 @@ export const statements: Statement[] = [
       en: 'I can define continuity and vendor-risk requirements for a critical digital service.',
     },
   },
-  // ── 4. User-Centred Service Design ───────────────────────────
+  // ── 4. Digital Service Design & Beneficiary Experience ───────────────────────────
   {
     id: 'srv-1', domainId: 'service-design', skillIndex: 0,
     text: {
@@ -189,7 +189,7 @@ export const statements: Statement[] = [
       en: 'I can draft technology procurement requirements based on outcomes rather than restrictive specifications.',
     },
   },
-  // ── 6. Agile Product & Delivery ──────────────────────────────
+  // ── 6. Digital Products & Agile Approach ──────────────────────────────
   {
     id: 'agl-1', domainId: 'agile', skillIndex: 0,
     text: {
@@ -250,7 +250,7 @@ export const statements: Statement[] = [
   {
     id: 'emg-4', domainId: 'emerging', skillIndex: 3,
     text: {
-      ar: 'أستطيع اقتراح توظيف البيانات المكانية لتحسين قرار أو خدمة.',
+      ar: 'أستطيع اقتراح توظيف البيانات الجيومكانية لتحسين قرار أو خدمة.',
       en: 'I can propose using geospatial data to improve a decision or a service.',
     },
   },

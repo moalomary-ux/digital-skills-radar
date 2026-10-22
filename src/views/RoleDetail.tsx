@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
 import { useApp } from '../store'
 import { domains, domainById } from '../data/domains'
-import { familyNames, libraryRoleById, LIB_PREFIX } from '../data/roleLibrary'
+import { familyNames, libraryRoleById, LIB_PREFIX, PEERS_SUFFIX } from '../data/roleLibrary'
 import { levels } from '../data/levels'
 import { directionMeta, roleTasksFor } from '../data/roleTasks'
 import type { TaskDirection } from '../data/roleTasks'
 import { claimById } from '../data/claims'
+import Claim from '../components/Claim'
 import type { L } from '../data/types'
 
 /**
@@ -43,6 +44,12 @@ const label = {
   backToRoles: { ar: 'عُد إلى الأدوار', en: 'Back to roles' },
   crumbs: { ar: 'الأدوار والمهارات', en: 'Roles & skills' },
   sheet: { ar: 'ورقة الدور', en: 'Role sheet' },
+  equivalents: { ar: 'مسميات مكافئة في الجهات', en: 'Equivalent titles in entities' },
+  equivalentsNote: {
+    ar: 'المسميات تختلف بين الجهات؛ هذه أمثلة استرشادية وليست حصرية، والعبرة بطبيعة العمل.',
+    en: 'Titles differ between entities; these are indicative examples, not an exhaustive list, and the nature of the work decides.',
+  },
+  grade: { ar: 'المرتبة الوظيفية:', en: 'Job grade:' },
   start: { ar: 'ابدأ التقييم لهذا الدور', en: 'Start the assessment for this role' },
   print: { ar: 'اطبع ورقة الدور', en: 'Print the role sheet' },
   tasksTitle: { ar: 'مهام تتغير في هذا الدور 2026–2030', en: 'Tasks changing in this role, 2026–2030' },
@@ -113,13 +120,28 @@ export default function RoleDetail() {
           {t(label.sheet)} · {t(familyNames[role.family])}
         </p>
         <h1 id="role-title" tabIndex={-1} className="mt-2 text-3xl font-bold text-dga-black sm:text-4xl">
-          {t(role.name)}
+          {t(role.name)} <span className="text-xl font-semibold text-dga-muted sm:text-2xl">{t(PEERS_SUFFIX)}</span>
         </h1>
         <p className="mt-1 text-sm text-dga-muted">
           <span lang={lang === 'ar' ? 'en' : 'ar'} dir={lang === 'ar' ? 'ltr' : 'rtl'}>
             {otherName}
           </span>
         </p>
+        <div className="mt-4 max-w-3xl print:mt-1 print:max-w-none">
+          <p className="text-sm font-semibold text-dga-ink">{t(label.equivalents)}</p>
+          <ul className="mt-2 flex flex-wrap gap-2" aria-label={t(label.equivalents)}>
+            {role.equivalents.map((e) => (
+              <li key={e.en} className="chip text-dga-ink">
+                {t(e)}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-sm text-dga-ink">
+            <span className="font-semibold">{t(label.grade)}</span>{' '}
+            <Claim id="method-grade-bands">{`${t(role.name)} ${t(role.gradeBand)}`}</Claim>
+          </p>
+          <p className="mt-1 text-xs text-dga-muted">{t(label.equivalentsNote)}</p>
+        </div>
         <p className="mt-4 max-w-3xl leading-relaxed text-dga-ink print:mt-1 print:max-w-none">{t(role.mission)}</p>
         <div className="no-print mt-6 flex flex-wrap gap-3">
           <button type="button" className="btn-primary" onClick={startAssessment}>

@@ -53,6 +53,12 @@ export const BANNED_TERMS = [
   { label: 'فجوة مقاسة', pattern: /فجوة مقاسة/g, fix: 'أولوية تطوير مقترحة' },
   { label: 'الذكاء التوليدي', pattern: /الذكاء التوليدي/g, fix: 'الذكاء الاصطناعي التوليدي' },
   { label: 'نامٍ', pattern: /نامٍ/g, fix: 'تطبيق (مستويات: وعي · تطبيق · إتقان · ريادة)' },
+  // Terminology audit 2026-10-22 (DECISION §5, rows added that day): the old forms must not return.
+  { label: 'التسليم الرشيق', pattern: /التسليم الرشيق/g, fix: 'النهج المرن (Agile)؛ المجال: «إدارة المنتجات الرقمية والنهج المرن»' },
+  { label: 'أجايل', pattern: /[أآ]جايل/g, fix: 'النهج المرن (Agile)' },
+  { label: 'الرسوم البيانية المعرفية', pattern: /الرسوم البيانية المعرفية/g, fix: 'المخططات المعرفية (Knowledge Graphs)' },
+  { label: 'التشفير المتماثل', pattern: /التشفير المتماثل/g, fix: 'التشفير المتجانس (Homomorphic)' },
+  { label: 'كشّاف التقنيات', pattern: /(?<!است)كشّ?اف التقنيات/g, fix: 'أخصائي رصد التقنيات الناشئة' },
 ]
 
 /** Proper nouns that may appear in Arabic script inside an English string. */
