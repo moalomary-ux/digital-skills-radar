@@ -39,6 +39,14 @@ const govRegister: ClaimSource = {
   access: 'internal',
 }
 
+/** Consulting services belong to the consulting and studies platform, not to the training program (audit U13, 2026-10-22). */
+const consultingRegister: ClaimSource = {
+  title: { ar: 'السجل الحي لمنصة الاستشارات والدراسات', en: 'Live register of the consulting and studies platform' },
+  publisher: govWorkbooks.publisher,
+  year: 2026,
+  access: 'internal',
+}
+
 const editorialCounts = {
   ar: 'عدد مأخوذ من بيانات الأداة نفسها، ويتحقق منه فحص آلي عند كل بناء.',
   en: 'A count taken from the tool’s own data, checked automatically on every build.',
@@ -534,15 +542,15 @@ export const methodClaims: Claim[] = [
   {
     id: 'method-gov-consulting-register',
     text: {
-      ar: 'يُظهر السجل الحي لبرنامج قدراتك 2,918 خدمة استشارية، بتحقق في 18 أكتوبر 2026.',
-      en: 'The program’s live register shows 2,918 consulting services, verified on 18 October 2026.',
+      ar: 'يُظهر السجل الحي لمنصة الاستشارات والدراسات 2,918 خدمة استشارية، بتحقق في 18 أكتوبر 2026.',
+      en: 'The consulting and studies platform’s live register shows 2,918 consulting services, verified on 18 October 2026.',
     },
     value: { ar: '2,918', en: '2,918' },
     unit: { ar: 'خدمة استشارية', en: 'consulting services' },
     period: '2026-10-18',
     kind: 'official',
     confidence: 'medium',
-    source: govRegister,
+    source: consultingRegister,
     reviewedOn: REVIEWED,
     caveat: {
       ar: 'يختلف عن مجموع الأوراق بسبب تاريخ القطع والتصفية.',

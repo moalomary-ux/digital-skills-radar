@@ -44,8 +44,8 @@ export const ownedDecisions: OwnedDecision[] = [
       en: 'Draw the boundaries for generative AI in your entity: where it is allowed, where it is not, and who reviews.',
     },
     why: {
-      ar: 'الموظفون يستخدمون هذه الأدوات الآن؛ غياب القاعدة لا يمنع الاستخدام بل يخفيه، ويترك البيانات والقرارات بلا حماية.',
-      en: 'Staff are using these tools now; without a rule, use does not stop but goes out of sight, leaving data and decisions unprotected.',
+      ar: 'في كثير من الجهات يستخدم الموظفون هذه الأدوات الآن؛ غياب القاعدة لا يمنع الاستخدام بل يخفيه، ويترك البيانات والقرارات بلا حماية.',
+      en: 'In many entities staff are already using these tools; without a rule, use does not stop but goes out of sight, leaving data and decisions unprotected.',
     },
     shiftIds: ['genai-casework', 'cyber-privacy-duty'],
     domainId: 'ai-data',

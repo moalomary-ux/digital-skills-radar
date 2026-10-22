@@ -406,6 +406,11 @@ export default function Methodology() {
             />
           </p>
           <ScaleBar />
+          <p className="mt-3">
+            <span className="chip border-dga-amber/40 bg-dga-amber/10 text-dga-amber-tx">
+              {t({ ar: 'أوصاف المستويات وعتباتها: تقدير تحريري', en: 'Level descriptions and thresholds: editorial estimate' })}
+            </span>
+          </p>
           <Note>
             {t({
               ar: 'العتبات تحريرية معلنة لم تُشتق من بيانات، ولم يُتحقق من صلاحية المقياس إحصائيًا. المستوى يساعدك على قراءة تقديرك، ولا يصف أداءك الفعلي.',
@@ -568,7 +573,7 @@ export default function Methodology() {
                 </tr>
                 <tr className="border-t border-dga-line align-top">
                   <th scope="row" className="p-3 text-start font-semibold">
-                    {t({ ar: 'السجل الحي لبرنامج قدراتك (تحقق أكتوبر 2026)', en: 'The program’s live register (checked October 2026)' })}
+                    {t({ ar: 'السجلان الحيان: برنامج قدراتك للتدريب، ومنصة الاستشارات والدراسات للاستشارات (تحقق أكتوبر 2026)', en: 'The live registers: the training program, and the consulting and studies platform (checked October 2026)' })}
                   </th>
                   <td className="p-3"><Claim id="method-gov-training-register" variant="icon" /></td>
                   <td className="p-3"><Claim id="method-gov-consulting-register" variant="icon" /></td>

@@ -481,11 +481,16 @@ export default function Wizard() {
           <div className="glass-strong p-6">
             <p className="leading-loose text-dga-ink">{t(scenario.situation)}</p>
             <p id={`q-${scenario.id}`} className="mt-4 font-bold text-dga-black">{t(scenario.question)}</p>
-            <p className="mt-1 text-[11px] text-dga-muted">
-              {t({
-                ar: 'الخيارات متدرجة في نضج التصرف، لا صحيح وخاطئ. تُقفل إجابتك بعد الاختيار ويظهر سببها.',
-                en: 'Options are graded by the maturity of the response, not right or wrong. Your answer locks once chosen and its reason appears.',
-              })}
+            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-dga-muted">
+              <span className="chip border-dga-amber/40 bg-dga-amber/10 text-dga-amber-tx">
+                {t({ ar: 'تحريري غير معاير', en: 'Editorial, not calibrated' })}
+              </span>
+              <span>
+                {t({
+                  ar: 'الخيارات متدرجة في نضج التصرف، لا صحيح وخاطئ. تُقفل إجابتك بعد الاختيار ويظهر سببها.',
+                  en: 'Options are graded by the maturity of the response, not right or wrong. Your answer locks once chosen and its reason appears.',
+                })}
+              </span>
             </p>
 
             {(() => {

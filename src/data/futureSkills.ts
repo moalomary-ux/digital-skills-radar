@@ -40,7 +40,7 @@ export const domainTrajectories: DomainTrajectory[] = [
       { ar: 'تأتي مهارات الذكاء الاصطناعي والبيانات الضخمة في {{future-wef-2025-ai-bigdata-top}} بين أسرع المهارات نموًا حتى 2030.', en: 'AI and big data rank {{future-wef-2025-ai-bigdata-top}} among the fastest-growing skills to 2030.' },
       { ar: 'نما تسجيل المتعلمين في المملكة في مقررات الذكاء الاصطناعي التوليدي على منصة تعلم عالمية بنحو {{future-coursera-2025-ksa-genai}} خلال عام.', en: 'Enrollments from Saudi Arabia in generative-AI courses on a global learning platform grew by about {{future-coursera-2025-ksa-genai}} in a year.' },
       { ar: 'عالميًا، تتحدث المنصة نفسها عن {{future-coursera-2026-genai-rate}} في محتوى الذكاء الاصطناعي التوليدي، محسوبةً مع بيانات منصة تعلم ثانية.', en: 'Globally, the same platform reports {{future-coursera-2026-genai-rate}} in generative-AI content, counted together with a second learning platform’s data.' },
-      { ar: 'سريان نظام حماية البيانات الشخصية (2024) واستراتيجية سدايا يجعلان حوكمة البيانات متطلب امتثال.', en: 'The Personal Data Protection Law in force (2024) and SDAIA’s strategy make data governance a compliance requirement.' },
+      { ar: 'نفاذ نظام حماية البيانات الشخصية (سبتمبر 2023) وانتهاء مهلة الامتثال (سبتمبر 2024) واستراتيجية سدايا يجعلان حوكمة البيانات متطلب امتثال.', en: 'The Personal Data Protection Law (in force since September 2023; compliance grace period ended September 2024) and SDAIA’s strategy make data governance a compliance requirement.' },
     ],
   },
   {
@@ -66,7 +66,7 @@ export const domainTrajectories: DomainTrajectory[] = [
     },
     evidence: [
       { ar: 'يرى {{future-wef-2025-digital-access}} من أصحاب العمل أن توسيع الوصول الرقمي أكثر الاتجاهات تحويلًا لأعمالهم.', en: '{{future-wef-2025-digital-access}} of employers see broadening digital access as the most transformative trend for their business.' },
-      { ar: 'سياسة الحوسبة السحابية أولًا ووصول مناطق مزودي السحابة العالميين إلى المملكة يدفعان الأعمال الحكومية نحو السحابة.', en: 'The cloud-first policy and global cloud regions arriving in the Kingdom pull government workloads to the cloud.' },
+      { ar: 'سياسة الحوسبة السحابية أولًا (2020) وضوابط الأمن السيبراني للحوسبة السحابية من الهيئة الوطنية للأمن السيبراني، مع وصول مناطق مزودي السحابة العالميين إلى المملكة، تدفع الأعمال الحكومية نحو السحابة.', en: 'The cloud-first policy (2020), the National Cybersecurity Authority’s cloud cybersecurity controls and global cloud regions arriving in the Kingdom pull government workloads to the cloud.' },
       { ar: 'منصة النفاذ الوطني الموحد (نفاذ) للهوية الرقمية، وتطبيق توكلنا للخدمات الحكومية، صارا جزءًا من البنية التشغيلية اليومية.', en: 'The national single sign-on platform (Nafath) for digital identity and the Tawakkalna app for government services are now part of everyday operational infrastructure.' },
     ],
   },
@@ -91,32 +91,32 @@ export const domainTrajectories: DomainTrajectory[] = [
       en: 'Every new digital regulation (data protection, AI, open data) creates demand for people who translate legal text into operational practice inside the entity. Digital-legislation awareness rests on judgment under regulatory ambiguity, which makes it hard to automate.',
     },
     evidence: [
-      { ar: 'سريان نظام حماية البيانات الشخصية (سبتمبر 2024) ومتطلبات البيانات المفتوحة وأطر حوكمة الذكاء الاصطناعي توسّع النطاق التنظيمي.', en: 'The Personal Data Protection Law in force (September 2024), open-data requirements and AI-governance frameworks widen the regulatory scope.' },
+      { ar: 'نفاذ نظام حماية البيانات الشخصية (سبتمبر 2023، وانتهت مهلة الامتثال في سبتمبر 2024) ومتطلبات البيانات المفتوحة وأطر حوكمة الذكاء الاصطناعي توسّع النطاق التنظيمي.', en: 'The Personal Data Protection Law (in force since September 2023; compliance grace period ended September 2024), open-data requirements and AI-governance frameworks widen the regulatory scope.' },
       { ar: 'يعدّ {{leaders-wef-2025-skill-gaps}} من أصحاب العمل فجوات المهارات عائقًا رئيسًا أمام التحول، وهي أكبر العوائق في التقرير.', en: '{{leaders-wef-2025-skill-gaps}} of employers name skill gaps a major barrier to transformation, the biggest barrier in the report.' },
-      { ar: 'إصلاح الشراء التقني أولوية حكومية معلنة.', en: 'Technology-procurement reform is a stated government priority.' },
+      { ar: 'تخصص الضوابط الأساسية للأمن السيبراني مجالًا مستقلًا للأطراف الخارجية والحوسبة السحابية، فتصبح شروط الأمن جزءًا من كل عقد تقني.', en: 'The Essential Cybersecurity Controls dedicate a domain to third-party and cloud cybersecurity, making security terms part of every technology contract.' },
     ],
   },
   {
     domainId: 'agile',
     rating: 'stable',
     rationale: {
-      ar: 'الدقة تقتضي التمييز: المسمى الوظيفي المرتبط بالعمل الرشيق تراجع عالميًا، لكن الممارسة نفسها (دورة حياة المنتج وقصص المستخدم وقياس المنافع) صارت الطريقة المعتادة لبناء الخدمات الحكومية الرقمية. لذلك يتحوّل الطلب: ثابت على الممارسة العميقة، ومنخفض على الشهادات الشكلية.',
-      en: 'Precision requires a distinction: the agile job title has declined globally, but the practice itself (product lifecycle, user stories, benefits measurement) is now the usual way government digital services are built. Demand is therefore shifting: steady for deep practice, low for formal certificates alone.',
+      ar: 'الدقة تقتضي التمييز: الطلب على المسمى الوظيفي المرتبط بالعمل الرشيق أقل ثباتًا من الطلب على الممارسة نفسها (تقدير تحريري)، والممارسة (دورة حياة المنتج وقصص المستخدم وقياس المنافع) صارت الطريقة المعتادة لبناء الخدمات الحكومية الرقمية. لذلك يتحوّل الطلب: ثابت على الممارسة العميقة، ومنخفض على الشهادات الشكلية.',
+      en: 'Precision requires a distinction: demand for the agile job title is less steady than demand for the practice itself (editorial estimate), and the practice (product lifecycle, user stories, benefits measurement) is now the usual way government digital services are built. Demand is therefore shifting: steady for deep practice, low for formal certificates alone.',
     },
     evidence: [
-      { ar: 'مسمى الوظيفة الرشيقة خفت عالميًا منذ 2023 بينما تستمر الممارسة داخل الفرق.', en: 'The agile job title has softened globally since 2023 while the practice continues inside teams.' },
+      { ar: 'يقوم دليل الخدمة الحكومية البريطاني على مراحل التسليم الرشيق (اكتشاف، ألفا، بيتا، تشغيل)، والطلب على الممارسة أثبت من الطلب على المسمى (تقدير تحريري).', en: 'The UK Government Service Manual is built on agile delivery phases (discovery, alpha, beta, live); demand for the practice is steadier than for the job title (editorial estimate).' },
     ],
   },
   {
     domainId: 'emerging',
     rating: 'surging',
     rationale: {
-      ar: 'وكلاء الذكاء الاصطناعي والتوأم الرقمي وإنترنت الأشياء انتقلت في 2025–2026 من العروض التجريبية إلى التشغيل الحكومي الفعلي (مدن ذكية، مراقبة مشاريع، خدمات استباقية). وهذا المجال هو الأسرع تغيرًا في الرادار، ولذلك يحتاج مراجعة محتوى كل ستة أشهر.',
-      en: 'AI agents, digital twins and the Internet of Things moved in 2025–2026 from demos to actual government operations (smart cities, project monitoring, proactive services). This is the radar’s fastest-changing domain, so it needs a content review every six months.',
+      ar: 'وكلاء الذكاء الاصطناعي والتوأم الرقمي وإنترنت الأشياء انتقلت في 2025–2026 من العروض إلى تجارب حكومية محدودة، بعضها تشغيلي في مواضع بعينها (مدن ذكية، مراقبة مشاريع)، وأغلب النشر ما زال تجريبيًا. وهذا المجال هو الأسرع تغيرًا في الرادار، ولذلك يحتاج مراجعة محتوى كل ستة أشهر.',
+      en: 'AI agents, digital twins and the Internet of Things moved in 2025–2026 from demos to limited government pilots, a few of them operational in specific settings (smart cities, project monitoring), while most deployments remain pilots. This is the radar’s fastest-changing domain, so it needs a content review every six months.',
     },
     evidence: [
-      { ar: 'تقول منصة تعلم عالمية إن اهتمام المتعلمين بوكلاء الذكاء الاصطناعي يكشف {{future-coursera-2026-agentic}}.', en: 'A global learning platform says learner interest in AI agents reveals {{future-coursera-2026-agentic}}.' },
       { ar: 'يتوقع {{future-wef-2025-robotics}} من أصحاب العمل أن تحوّل الروبوتات والأنظمة الذاتية أعمالهم.', en: '{{future-wef-2025-robotics}} of employers expect robots and autonomous systems to transform their business.' },
+      { ar: 'تقول منصة تعلم عالمية إن اهتمام المتعلمين بوكلاء الذكاء الاصطناعي يكشف {{future-coursera-2026-agentic}}.', en: 'A global learning platform says learner interest in AI agents reveals {{future-coursera-2026-agentic}}.' },
       { ar: 'برامج وطنية في المدن الذكية وخدمات الأقمار الصناعية والاعتمادات الرقمية توسّع الحاجة إلى هذه المهارات.', en: 'National programmes in smart cities, satellite services and digital credentials widen the need for these skills.' },
     ],
   },
@@ -130,7 +130,7 @@ export const domainTrajectories: DomainTrajectory[] = [
     evidence: [
       { ar: 'يرى نحو {{future-wef-2025-analytical}} أصحاب عمل أن التفكير التحليلي مهارة أساسية، وتأتي المرونة والقيادة والتأثير الاجتماعي ضمن المهارات الأساسية الأعلى.', en: 'About {{future-wef-2025-analytical}} employers see analytical thinking as a core skill, and resilience, leadership and social influence rank among the top core skills.' },
       { ar: 'نما التسجيل في مقررات التفكير النقدي على منصة تعلم عالمية بنحو {{future-coursera-2026-critical-thinking}} خلال عام.', en: 'Enrollments in critical-thinking courses on a global learning platform grew by about {{future-coursera-2026-critical-thinking}} in a year.' },
-      { ar: 'برامج تحقيق رؤية 2030 ترسّخ إدارة التغيير وسرد القصص بالبيانات في الجهات.', en: 'Vision 2030 realization programmes embed change management and data storytelling in entities.' },
+      { ar: 'يضع تقرير مستقبل الوظائف 2025 «القيادة والتأثير الاجتماعي» ضمن أسرع المهارات نموًا حتى 2030.', en: 'The Future of Jobs Report 2025 lists “leadership and social influence” among the fastest-growing skills to 2030.' },
     ],
   },
 ]
@@ -180,7 +180,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'أمانة البيانات (الإشراف على البيانات)', en: 'Data stewardship' },
     description: { ar: 'إدارة جودة البيانات وتعريفاتها ومصادرها وصلاحيات الوصول إليها بوصفها أصلًا مؤسسيًا موثقًا.', en: 'Managing data quality, definitions, lineage and access rights for data as a documented institutional asset.' },
     parentDomain: 'ai-data',
-    demandSignal: { ar: 'تأتي مهارات الذكاء الاصطناعي والبيانات الضخمة في {{future-wef-2025-ai-bigdata-top}} بين أسرع المهارات نموًا، ونظام حماية البيانات الشخصية يتطلب ملّاكًا معيّنين للبيانات داخل الجهات.', en: 'AI and big data rank {{future-wef-2025-ai-bigdata-top}} among the fastest-growing skills, and the Personal Data Protection Law requires named data owners inside entities.' },
+    demandSignal: { ar: 'تأتي مهارات الذكاء الاصطناعي والبيانات الضخمة في {{future-wef-2025-ai-bigdata-top}} بين أسرع المهارات نموًا، ومعايير مكتب إدارة البيانات الوطنية تُلزم الجهات الحكومية بأدوار واضحة لملكية البيانات وجودتها.', en: 'AI and big data rank {{future-wef-2025-ai-bigdata-top}} among the fastest-growing skills, and the National Data Management Office standards require government entities to assign clear data-ownership and data-quality roles.' },
     governmentRelevance: { ar: 'تبادل البيانات بين الجهات يتعثر دون تعريفات وجودة موثقة، وأمين البيانات يجعل بيانات جهته قابلة للمشاركة بأمان.', en: 'Data exchange between entities stalls without documented definitions and quality; the data steward makes the entity’s data safely shareable.' },
     firstStep: { ar: 'ابدأ بفهرس مبسط لأهم مجموعات البيانات في جهتك: التعريف، والمالك، والجودة، ودرجة الحساسية.', en: 'Start with a lean catalogue of your entity’s most important datasets: definition, owner, quality and sensitivity.' },
   },
@@ -252,7 +252,7 @@ export const microSkills: MicroSkill[] = [
     name: { ar: 'هندسة الخصوصية', en: 'Privacy engineering' },
     description: { ar: 'ترجمة متطلبات حماية البيانات إلى تصميم تقني: تقليل البيانات، وإخفاء الحقول الحساسة، وصلاحيات الوصول، وسجلات المعالجة.', en: 'Translating data-protection requirements into technical design: minimization, masking, access rights and processing records.' },
     parentDomain: 'cyber',
-    demandSignal: { ar: 'سريان نظام حماية البيانات الشخصية منذ سبتمبر 2024 يجعل الخصوصية متطلبًا هندسيًا لا نظاميًا فقط.', en: 'The Personal Data Protection Law, in force since September 2024, makes privacy an engineering requirement, not only a legal one.' },
+    demandSignal: { ar: 'انتهاء مهلة الامتثال لنظام حماية البيانات الشخصية في سبتمبر 2024 يجعل الخصوصية متطلبًا هندسيًا لا نظاميًا فقط.', en: 'The end of the Personal Data Protection Law’s compliance grace period in September 2024 makes privacy an engineering requirement, not only a legal one.' },
     governmentRelevance: { ar: 'الجهات تعالج بيانات المستفيدين على نطاق واسع، والخطأ الهندسي في الخصوصية مخالفة نظامية وإضرار بالثقة معًا.', en: 'Entities process beneficiary data at scale; a privacy engineering error is both a legal breach and a loss of trust.' },
     firstStep: { ar: 'نفّذ تقييم أثر لحماية البيانات (DPIA) على نظام قائم لتتعلم المنهجية بالممارسة.', en: 'Run a data-protection impact assessment (DPIA) on an existing system to learn the method by doing.' },
   },
@@ -320,7 +320,7 @@ export const decliningSkills: DecliningSkill[] = [
   {
     id: 'routine_bookkeeping',
     name: { ar: 'مسك الدفاتر الروتيني', en: 'Routine bookkeeping' },
-    evidence: { ar: 'يأتي موظفو المحاسبة ومسك الدفاتر {{future-wef-2025-decline-bookkeeping}} بين أسرع الوظائف تراجعًا، والفوترة الإلكترونية في المملكة تؤتمت القيود من المصدر.', en: 'Accounting and bookkeeping clerks rank in the {{future-wef-2025-decline-bookkeeping}} fastest-declining jobs, and e-invoicing in the Kingdom automates entries at the source.' },
+    evidence: { ar: 'يأتي موظفو المحاسبة ومسك الدفاتر {{future-wef-2025-decline-bookkeeping}} بين أسرع الوظائف تراجعًا، والفوترة الإلكترونية («فاتورة» من هيئة الزكاة والضريبة والجمارك) توحّد بيانات الفواتير رقميًا فيقل الإدخال اليدوي.', en: 'Accounting and bookkeeping clerks rank in the {{future-wef-2025-decline-bookkeeping}} fastest-declining jobs, and e-invoicing (ZATCA’s FATOORA) standardises invoice data digitally, reducing manual entry.' },
     nuance: { ar: 'المحاسبة مهنةٌ تتحوّل ولا تختفي: التحليل والامتثال ينموان بينما يتراجع القيد اليدوي.', en: 'Accounting as a profession is shifting, not disappearing: analysis and compliance grow while manual entry shrinks.' },
     pivot: { ar: 'امتثال الفوترة الإلكترونية والتحليل المالي للجهة، عبر شهادات قصيرة متاحة وطنيًا.', en: 'E-invoicing compliance and financial analysis for the entity, through short credentials available nationally.' },
   },
@@ -387,7 +387,7 @@ export const playbookSections: PlaybookSection[] = [
     id: 'privacy',
     title: { ar: 'الخصوصية وحماية بيانات التقييم', en: 'Privacy and assessment-data protection' },
     items: [
-      { ar: 'نتائج التقييم بيانات شخصية بموجب نظام حماية البيانات الشخصية (ساري الإلزام منذ سبتمبر 2024): عيّن مسؤول حماية بيانات، وحدّد الأساس النظامي للمعالجة (موافقة الموظف أو مصلحة مشروعة موثقة).', en: 'Assessment results are personal data under the Personal Data Protection Law (in force since September 2024): appoint a data-protection officer and document the legal basis for processing (employee consent or a documented legitimate interest).' },
+      { ar: 'نتائج التقييم بيانات شخصية بموجب نظام حماية البيانات الشخصية (ساري الإلزام منذ سبتمبر 2024): عيّن مسؤول حماية بيانات، وحدّد الأساس النظامي للمعالجة (موافقة الموظف أو مصلحة مشروعة موثقة).', en: 'Assessment results are personal data under the Personal Data Protection Law (compliance mandatory since September 2024): appoint a data-protection officer and document the legal basis for processing (employee consent or a documented legitimate interest).' },
       { ar: 'التقليل والتجميع: اجمع أقل بيانات ممكنة، واعرض على الإدارة العليا تقارير مجمّعة فقط؛ لا تُعرض نتيجة فرد إلا للفرد نفسه.', en: 'Minimization and aggregation: collect the minimum, and show senior management aggregated reports only; an individual’s result is visible to that person only.' },
       { ar: 'الإقامة والاحتفاظ: استضف بيانات التقييم داخل المملكة أو على بنية معتمدة، وحدّد مدة احتفاظ قصيرة وسياسة حذف عند الانتقال أو التقاعد.', en: 'Residency and retention: host assessment data in the Kingdom or on approved infrastructure, and set a short retention period and a deletion policy on transfer or retirement.' },
       { ar: 'حق الاطلاع والتصحيح: يستطيع الموظف رؤية نتيجته كاملة والاعتراض عليها؛ فالشفافية شرط الثقة، والثقة شرط صدق الإجابات.', en: 'Access and correction rights: every employee can see their full result and contest it; transparency is a condition of trust, and trust is a condition of honest answers.' },

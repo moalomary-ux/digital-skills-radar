@@ -348,7 +348,7 @@ export const learningResources: Record<string, Record<TransitionKey, [LearningRe
         title: { ar: 'منصة IBM لتعلم الحوسبة الكمومية', en: 'IBM Quantum Learning' },
         provider: 'IBM Quantum',
         type: 'course',
-        url: 'https://learning.quantum.ibm.com',
+        url: 'https://quantum.cloud.ibm.com/learning',
         language: 'en',
       },
       {
@@ -411,10 +411,13 @@ export const learningResources: Record<string, Record<TransitionKey, [LearningRe
     ],
     '3_to_4': [
       {
-        title: { ar: 'التحول الرقمي في الحكومة (التعليم التنفيذي)', en: 'Digital Transformation in Government (Executive Education)' },
-        provider: 'Harvard Kennedy School',
-        type: 'program',
-        url: 'https://www.hks.harvard.edu/educational-programs/executive-education/digital-transformation-government',
+        title: {
+          ar: 'الحوكمة بالذكاء الاصطناعي: الواقع الراهن والطريق إلى الأمام في وظائف الحكومة الأساسية',
+          en: 'Governing with Artificial Intelligence: The State of Play and Way Forward in Core Government Functions',
+        },
+        provider: 'OECD',
+        type: 'reference',
+        url: 'https://www.oecd.org/en/publications/governing-with-artificial-intelligence_795de142-en.html',
         language: 'en',
       },
       {
@@ -516,7 +519,7 @@ export const planTemplates: Record<TransitionKey, PlanTemplate> = {
       { w: 7, checkpoint: true, text: { ar: 'مراجعة منتصف الخطة مع راعيك ومديرك — ثم أصدر النسخة الأولى من مذكرتك الإرشادية أو معيارك، وادعُ إلى تعليقات منظمة.', en: 'Mid-plan review with your sponsor and manager — then release v1 of your guidance note or standard and invite structured comment.' } },
       { w: 8, text: { ar: 'درّب ممارسَين — جلسات تدريب كل أسبوعين؛ ووثّق تقدمهما كدليل على قدرتك التعليمية.', en: 'Coach two practitioners — run fortnightly coaching; document their progress as evidence of teaching.' } },
       { w: 9, text: { ar: 'مثّل المجال — اعرض موقف {{domain_ar}} أو تحليل مخاطره في منتدى حوكمة أو معمارية.', en: 'Represent the domain — present {{domain_en}} position or risk analysis at a governance or architecture forum.' } },
-      { w: 10, text: { ar: 'مساهمة خارجية — قدّم عرضاً أو انشر مقالاً أو ساهم في مجتمع ممارسة خارج جهتك.', en: 'External contribution — give a talk, publish an article, or contribute to a community of practice beyond your entity.' } },
+      { w: 10, text: { ar: 'مساهمة خارجية — بعد موافقة جهتك ووفق تصنيف البيانات، قدّم عرضاً أو انشر مقالاً أو ساهم في مجتمع ممارسة خارج جهتك.', en: 'External contribution — with your entity’s approval and in line with data classification, give a talk, publish an article, or contribute to a community of practice beyond your entity.' } },
       { w: 11, text: { ar: 'قِس الأثر — حدد أثر مبادرتك كمياً (التبني، الجودة، المخاطر، التكلفة) وارفع تقريراً إلى راعيك.', en: 'Measure impact — quantify the effect of your initiative (adoption, quality, risk, cost) and report to your sponsor.' } },
       { w: 12, text: { ar: 'المراجعة مع الراعي — حسّن المعيار إلى نسخته الثانية؛ وسجّل الدروس؛ وحدد الدفعة التالية التي ستطورها.', en: 'Review with sponsor — refine the standard to v2; capture lessons; define the next cohort you will develop.' } },
       { w: 13, checkpoint: true, text: { ar: 'المراجعة الختامية — اعرض ملفك (المبادرة، المعيار، التوجيه، المساهمة الخارجية) على راعيك ومديرك، ثم أعد التقييم الذاتي في الرادار.', en: 'Final review — present your portfolio (initiative, standard, coaching, external contribution) to your sponsor and manager, then retake the self-assessment in the Radar.' } },
@@ -613,11 +616,11 @@ export const calibrationQuestions: CalibrationQuestion[] = [
       { key: 'a', text: { ar: 'السرية، قابلية التشغيل البيني، المصادقة', en: 'Confidentiality, Interoperability, Authentication' } },
       { key: 'b', text: { ar: 'الامتثال، الهوية، الوصول', en: 'Compliance, Identity, Access' } },
       { key: 'c', text: { ar: 'التشفير، العزل، التدقيق', en: 'Cryptography, Isolation, Auditing' } },
-      { key: 'd', text: { ar: 'السرية، النزاهة، التوافر', en: 'Confidentiality, Integrity, Availability' } },
+      { key: 'd', text: { ar: 'السرية، السلامة، التوافر', en: 'Confidentiality, Integrity, Availability' } },
     ],
     answer: 'd',
     explanation: {
-      ar: 'الثلاثي CIA — السرية والنزاهة والتوافر — هو النموذج الأساسي لأهداف الأمن.',
+      ar: 'الثلاثي CIA — السرية والسلامة والتوافر — هو النموذج الأساسي لأهداف الأمن.',
       en: 'The CIA triad — Confidentiality, Integrity, Availability — is the foundational model for security objectives.',
     },
   },
@@ -755,7 +758,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'policy_gov_q2', domainId: 'policy', format: 'true_false',
-    q: { ar: 'تتضمن مبادئ OECD للذكاء الاصطناعي النمو الشامل، والقيم المرتكزة على الإنسان والإنصاف، والشفافية، والمتانة والسلامة، والمساءلة.', en: 'The OECD AI Principles include inclusive growth, human-centred values and fairness, transparency, robustness and safety, and accountability.' },
+    q: { ar: 'تتضمن مبادئ OECD للذكاء الاصطناعي النمو الشامل والتنمية المستدامة والرفاه، واحترام سيادة القانون وحقوق الإنسان والقيم الديمقراطية بما فيها الإنصاف والخصوصية، والشفافية وقابلية التفسير، والمتانة والأمن والسلامة، والمساءلة.', en: 'The OECD AI Principles include inclusive growth, sustainable development and well-being; respect for the rule of law, human rights and democratic values, including fairness and privacy; transparency and explainability; robustness, security and safety; and accountability.' },
     options: [
       { key: 'a', text: { ar: 'صحيح', en: 'True' } },
       { key: 'b', text: { ar: 'خطأ', en: 'False' } },
@@ -852,8 +855,8 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     ],
     answer: 'c',
     explanation: {
-      ar: 'تربط التجزئة التشفيرية كل كتلة بسابقتها؛ وأي تغيير في كتلة سابقة يبطل جميع التجزئات اللاحقة ويُكتشف فوراً.',
-      en: 'Cryptographic hashing links each block to its predecessor; changing any past block invalidates all subsequent hashes and is immediately detectable.',
+      ar: 'تربط التجزئة التشفيرية كل كتلة بسابقتها؛ وأي تغيير في كتلة سابقة يبطل جميع التجزئات اللاحقة ويُكتشف عند التحقق من السلسلة.',
+      en: 'Cryptographic hashing links each block to its predecessor; changing any past block invalidates all subsequent hashes and is detectable when the chain is verified.',
     },
   },
   {
@@ -887,7 +890,7 @@ export const calibrationQuestions: CalibrationQuestion[] = [
   },
   {
     id: 'leadership_collab_q2', domainId: 'leadership', format: 'true_false',
-    q: { ar: 'في التحول الرقمي، تغيير العمليات والثقافة أهم من شراء التقنية الجديدة.', en: 'In digital transformation, changing processes and culture matters more than buying new technology.' },
+    q: { ar: 'في التحول الرقمي، شراء التقنية الجديدة وحده لا يكفي ما لم تتغير العمليات وطريقة العمل.', en: 'In digital transformation, buying new technology is not enough on its own unless processes and ways of working change.' },
     options: [
       { key: 'a', text: { ar: 'خطأ', en: 'False' } },
       { key: 'b', text: { ar: 'صحيح', en: 'True' } },
@@ -993,8 +996,8 @@ export const calibrationQuestions: CalibrationQuestion[] = [
     ],
     answer: 'a',
     explanation: {
-      ar: 'المناطق السحابية المحلية والسحابة السيادية تبقي البيانات داخل المملكة — الموقع قرار تصميمي وتعاقدي.',
-      en: 'Local cloud regions and sovereign cloud keep data inside the Kingdom — residency is a design and contracting decision.',
+      ar: 'المناطق السحابية المحلية والسحابة السيادية تبقي البيانات داخل المملكة؛ والموقع قرار تصميمي وتعاقدي تحكمه أيضًا ضوابط الهيئة الوطنية للأمن السيبراني وتصنيف البيانات.',
+      en: 'Local cloud regions and sovereign cloud keep data inside the Kingdom; residency is a design and contracting decision also governed by NCA controls and data classification.',
     },
   },
   {

@@ -529,7 +529,8 @@ describe('5. aggregate-mode banned content', () => {
       const text = container.textContent ?? ''
       expect(container.querySelector('h1')?.textContent).toBe('سجل خدمات التمكين')
       for (const v of ['7,915', '2,873', '377', '421', '370', '7,891', '2,918', 'نهاية الربع الثالث 2026', 'ملفا المصدر حتى نهاية الربع الثالث 2026']) expect(text).toContain(v)
-      expect(text).toContain('التوفيق مع سجل البرنامج الحي')
+      expect(text).toContain('التوفيق مع السجلين الحيين')
+      expect(text).toContain('منصة الاستشارات والدراسات')
       expect(text).toContain('18 أكتوبر 2026')
       expect(text).toContain('سجل مشاركة تدريبية')
       expect(text).toContain('خدمة استشارية')

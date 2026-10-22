@@ -41,10 +41,10 @@ const ui = {
   servedOfWhich: { ar: 'منها', en: 'of which' },
   servedGov: { ar: 'جهة حكومية أو شبه حكومية بتصنيف ملف المصدر', en: 'government or quasi-government entities by the workbook’s own classing' },
   period: { ar: 'الفترة:', en: 'Period:' },
-  reconcileTitle: { ar: 'التوفيق مع سجل البرنامج الحي', en: 'Reconciliation with the program’s live register' },
+  reconcileTitle: { ar: 'التوفيق مع السجلين الحيين', en: 'Reconciliation with the live registers' },
   reconcileBody: {
-    ar: 'الأرقام المنشورة في هذه الصفحة هي مجاميع ملفي المصدر. السجل الحي لبرنامج قدراتك أظهر عند التحقق أرقامًا مختلفة قليلًا بسبب تاريخ القطع والتصفية وإزالة التكرار:',
-    en: 'The figures published on this page are the two workbooks’ totals. When verified, the program’s live register showed slightly different figures because of the cut-off date, filtering and de-duplication:',
+    ar: 'الأرقام المنشورة في هذه الصفحة هي مجاميع ملفي المصدر. السجل الحي لبرنامج قدراتك (التدريب) والسجل الحي لمنصة الاستشارات والدراسات (الاستشارات) أظهرا عند التحقق أرقامًا مختلفة قليلًا بسبب تاريخ القطع والتصفية وإزالة التكرار:',
+    en: 'The figures published on this page are the two workbooks’ totals. When verified, the training program’s live register and the consulting and studies platform’s live register showed slightly different figures because of the cut-off date, filtering and de-duplication:',
   },
   verifiedOn: { ar: 'تاريخ التحقق:', en: 'Verified on:' },
   reconcileTraining: { ar: 'سجل تدريبي في السجل الحي', en: 'training records in the live register' },

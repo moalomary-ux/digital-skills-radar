@@ -15,7 +15,7 @@ export const resources: Resource[] = [
   {
     id: 'tuwaiq',
     title: { ar: 'أكاديمية طويق', en: 'Tuwaiq Academy' },
-    org: { ar: 'الاتحاد السعودي للأمن السيبراني والبرمجة', en: 'Saudi Federation for Cybersecurity & Programming' },
+    org: { ar: 'الاتحاد السعودي للأمن السيبراني والبرمجة والدرونز', en: 'Saudi Federation for Cybersecurity, Programming & Drones' },
     url: 'https://tuwaiq.edu.sa',
     kind: 'program',
   },

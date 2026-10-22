@@ -95,6 +95,24 @@ const EDITORIAL = {
   year: 2026,
 }
 
+const GDS_SERVICE_STANDARD = {
+  title: { ar: 'معيار الخدمة الحكومية البريطاني ودليل الخدمة', en: 'GOV.UK Service Standard and Service Manual' },
+  publisher: { ar: 'الخدمة الرقمية الحكومية في المملكة المتحدة', en: 'UK Government Digital Service' },
+  url: 'https://www.gov.uk/service-manual/service-standard',
+  locator: 'Point 6 “Have a multidisciplinary team”; point 8 “Iterate and improve frequently” (living standard, checked 22 October 2026)',
+}
+
+const JELS_LEGAL_AI_2025 = {
+  title: {
+    ar: 'خالٍ من الهلوسة؟ تقييم موثوقية أدوات البحث القانوني الرائدة بالذكاء الاصطناعي',
+    en: 'Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools',
+  },
+  publisher: { ar: 'مجلة الدراسات القانونية التجريبية (بحث محكّم، Stanford RegLab)', en: 'Journal of Empirical Legal Studies (peer-reviewed; Stanford RegLab)' },
+  url: 'https://nlp.stanford.edu/~manning/papers/Magesh-Hallucination%E2%80%90Free-2025.pdf',
+  locator: 'Magesh et al., Journal of Empirical Legal Studies 22: 216–242',
+  year: 2025,
+}
+
 /** Saudi authority sites block automated reading; these claims were matched to published legal sources. */
 const SECONDARY_MATCH: { ar: string; en: string } = {
   ar: 'طوبق مع مصادر قانونية منشورة؛ موقع الهيئة يحجب القراءة الآلية، فلم تُقرأ الوثيقة الأصلية آليًا.',
@@ -336,6 +354,41 @@ export const leadersClaims: Claim[] = [
     reviewedOn: REVIEWED,
     caveat: SECONDARY_MATCH,
   },
+  // ── Added by the content-evidence audit (2026-10-22) ────────────────
+  {
+    id: 'leaders-gds-product-teams',
+    text: {
+      ar: 'يطلب معيار الخدمة الحكومية البريطاني فريقًا مستدامًا متعدد التخصصات يصمم الخدمة ويبنيها ويشغّلها (البند 6)، وتحسين الخدمة بتكرار متواصل (البند 8).',
+      en: 'The UK Government Service Standard asks for a sustainable multidisciplinary team that designs, builds and operates the service (point 6), and for frequent iteration and improvement (point 8).',
+    },
+    value: { ar: 'البندان 6 و8', en: 'Points 6 and 8' },
+    kind: 'international',
+    confidence: 'high',
+    source: GDS_SERVICE_STANDARD,
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'معيار حكومي بريطاني حيّ يُستأنس به في العمل بالمنتج، وليس متطلبًا سعوديًا.',
+      en: 'A living UK government standard used as a reference for product-based delivery, not a Saudi requirement.',
+    },
+  },
+  {
+    id: 'leaders-legal-ai-hallucination',
+    text: {
+      ar: 'في دراسة محكّمة نُشرت في 2025، أخطأت أدوات البحث القانوني الرائدة بالذكاء الاصطناعي أو اختلقت في 17–33% من الاستعلامات.',
+      en: 'In a peer-reviewed study published in 2025, leading AI legal research tools gave incorrect or fabricated answers to 17–33% of queries.',
+    },
+    value: { ar: '17–33%', en: '17–33%' },
+    scope: { ar: 'أدوات بحث قانوني تجارية رائدة، بعينة استعلامات أعدّها الباحثون', en: 'Leading commercial legal research tools, on a query set built by the researchers' },
+    period: '2025',
+    kind: 'international',
+    confidence: 'high',
+    source: JELS_LEGAL_AI_2025,
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'دراسة على أدوات وأنظمة قانونية أجنبية؛ تسند وضع البحث القانوني في حارة «تُعزَّز» مع التحقق من كل إحالة، ولا تقيس الجهات السعودية.',
+      en: 'A study of foreign tools and legal systems; it supports placing legal research in the “augmented” lane with every citation checked, and does not measure Saudi entities.',
+    },
+  },
   // ── Editorial markers (shown as «تقدير تحريري») ─────────────────────
   {
     id: 'leaders-editorial-work-map',
@@ -365,6 +418,54 @@ export const leadersClaims: Claim[] = [
     confidence: 'low',
     source: EDITORIAL,
     reviewedOn: REVIEWED,
+  },
+  {
+    id: 'leaders-editorial-decisions',
+    text: {
+      ar: 'قرارات الموجز القيادي ومبرراتها، وسطرا «القرار المطلوب منك» و«ما الذي لا يتغير» في كل تحول، صياغة تحريرية تستند إلى المصادر المسجلة، وليست توجيهًا رسميًا.',
+      en: 'The leader brief’s decisions and their reasons, and each shift’s “decision you need to make” and “what does not change” lines, are editorial wording based on the registered sources, not official guidance.',
+    },
+    value: { ar: 'تقدير تحريري', en: 'Editorial estimate' },
+    kind: 'editorial',
+    confidence: 'low',
+    source: EDITORIAL,
+    reviewedOn: REVIEWED,
+    derivation: {
+      ar: 'قراءة تحريرية لإرشادات سدايا للذكاء الاصطناعي التوليدي، ومعايير مكتب إدارة البيانات الوطنية، والضوابط الأساسية للأمن السيبراني، ونظام حماية البيانات الشخصية.',
+      en: 'An editorial reading of SDAIA’s generative AI guidelines, the National Data Management Office standards, the Essential Cybersecurity Controls and the Personal Data Protection Law.',
+    },
+  },
+  {
+    id: 'leaders-editorial-questions',
+    text: {
+      ar: 'أسئلة الموجز لمدير التقنية ومدير الموارد البشرية، وما تسمعه في الجواب المطمئن، صياغة تحريرية مبنية على الضوابط الأساسية للأمن السيبراني وإرشادات سدايا ومعايير مكتب إدارة البيانات الوطنية.',
+      en: 'The brief’s questions for the CIO and the HR director, and what a reassuring answer sounds like, are editorial wording based on the Essential Cybersecurity Controls, SDAIA’s guidelines and the National Data Management Office standards.',
+    },
+    value: { ar: 'تقدير تحريري', en: 'Editorial estimate' },
+    kind: 'editorial',
+    confidence: 'low',
+    source: EDITORIAL,
+    reviewedOn: REVIEWED,
+    derivation: {
+      ar: 'كل سؤال يحوّل متطلبًا منشورًا إلى سؤال متابعة؛ لم يُختبر مع قيادات حكومية بعد.',
+      en: 'Each question turns a published requirement into a follow-up question; not yet tested with government leaders.',
+    },
+  },
+  {
+    id: 'leaders-editorial-role-tasks',
+    text: {
+      ar: 'المهام المتغيرة ونموذج العمل في ورقة كل دور مرجع تطويري توضيحي كتبه فريق التحرير، وليس وصفًا وظيفيًا ولا متطلبًا.',
+      en: 'The changing tasks and the sample work product on each role sheet are an illustrative development reference written by the editorial team, not a job description or a requirement.',
+    },
+    value: { ar: 'تقدير تحريري', en: 'Editorial estimate' },
+    kind: 'editorial',
+    confidence: 'low',
+    source: EDITORIAL,
+    reviewedOn: REVIEWED,
+    derivation: {
+      ar: 'قراءة نوعية لاتجاهات منظمة العمل الدولية 2025 والمنتدى الاقتصادي العالمي 2025 ومهارات SFIA 9 لكل دور، بلا نسب.',
+      en: 'A qualitative reading of ILO 2025, WEF 2025 and each role’s SFIA 9 skills, with no percentages.',
+    },
   },
   {
     id: 'leaders-editorial-check',

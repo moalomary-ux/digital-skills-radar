@@ -48,7 +48,7 @@ const domainEvidence: Record<string, L> = {
   cloud: { ar: 'SFIA 9 (ARCH/IFDN/ITOP) وسياسة السحابة أولًا ومعايير التشغيل البيني الحكومية.', en: 'SFIA 9 (ARCH/IFDN/ITOP), the cloud-first policy, and government interoperability standards.' },
   'service-design': { ar: 'معايير الخدمة الحكومية الرقمية (DGA) ومنهجية GDS البريطانية وDigComp (المحتوى والتعاون).', en: 'DGA digital-service standards, the UK GDS service manual, and DigComp (content & collaboration).' },
   policy: { ar: 'أطر OECD للحكومة الرقمية والمواهب الرقمية، ونظام حماية البيانات الشخصية، وأطر الحوكمة المفتوحة.', en: 'OECD digital-government and digital-talent frameworks, PDPL, and open-government frameworks.' },
-  agile: { ar: 'SFIA 9 (PROD/REQM/BUSA) ومبادئ العمل الرشيق ومعايير قياس المنافع الحكومية.', en: 'SFIA 9 (PROD/REQM/BUSA), agile principles, and government benefits-measurement standards.' },
+  agile: { ar: 'SFIA 9 (PROD/REQM/BUSA) ومبادئ العمل الرشيق ومبادئ قياس المنافع (تقدير تحريري).', en: 'SFIA 9 (PROD/REQM/BUSA), agile principles, and benefits-measurement principles (editorial estimate).' },
   emerging: { ar: 'رادارات التقنيات الحكومية (منهجية TRL) وتقارير WEF/غارتنر للتقنيات الناشئة.', en: 'Government tech-radar methodology (TRL) and WEF/Gartner emerging-technology reporting.' },
   leadership: { ar: 'SFIA 9 (CIPM/OCEN/RLMT) وإطار OECD للقيادة الرقمية وبحوث السلامة النفسية للفرق.', en: 'SFIA 9 (CIPM/OCEN/RLMT), OECD digital-leadership frameworks, and team psychological-safety research.' },
 }
@@ -215,7 +215,7 @@ const drafts: Record<string, Draft> = {
     prereq: { ar: 'لا شيء.', en: 'None.' } },
   'leadership:2': { tracks: ALL,
     def: { ar: 'مشاركة تقدم العمل والدروس علنًا لتعميم الفائدة بين الجهات.', en: 'Sharing work progress and lessons openly to spread the benefit across entities.' },
-    task: { ar: 'انشر ملخص درس مستفاد واحدًا من مشروعك هذا الفصل.', en: 'Publish one lessons-learned summary from your project this quarter.' },
+    task: { ar: 'انشر ملخص درس مستفاد واحدًا من مشروعك هذا الفصل، بعد موافقة جهتك ووفق تصنيف البيانات.', en: 'Publish one lessons-learned summary from your project this quarter, with your entity’s approval and in line with data classification.' },
     prereq: { ar: 'لا شيء.', en: 'None.' } },
   'leadership:3': { tracks: LEAD,
     def: { ar: 'بناء سرد بالبيانات يقود جمهورًا محددًا إلى قرار محدد.', en: 'Building a data-driven narrative that leads a specific audience to a specific decision.' },

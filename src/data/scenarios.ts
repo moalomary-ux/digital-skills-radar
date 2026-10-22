@@ -118,7 +118,7 @@ export const scenarios: ScenarioItem[] = [
       {
         text: { ar: 'أرفض، وأقترح انتظار النظام الداخلي أو طلب مساحة عمل معتمدة.', en: 'Refuse, and suggest waiting for the internal system or requesting an approved workspace.' },
         score: 2,
-        rationale: { ar: 'يرفض الخطر ويعرض مسارًا مشروعًا — وهذا كافٍ للموقف.', en: 'Rejects the risk and offers a legitimate path — sufficient for the situation.' },
+        rationale: { ar: 'يرفض الخطر ويعرض مسارًا مشروعًا — لكنه يترك سبب الفكرة (بطء النظام) دون معالجة.', en: 'Rejects the risk and offers a legitimate path — but leaves the cause (the slow system) untouched.' },
       },
       {
         text: { ar: 'أقترح بديلًا معتمدًا، وأوضح خطر إقامة البيانات، وأبلغ المشرف عن بطء النظام الذي دفع إلى الفكرة.', en: 'Offer an approved alternative, explain the data-residency risk, and tell the supervisor about the slow system behind the idea.' },
@@ -452,7 +452,7 @@ export const scenarios: ScenarioItem[] = [
         rationale: { ar: 'يجعل الكلفة مرئية ويعيد القرار لصاحبه.', en: 'Makes the cost visible and returns the decision to its owner.' },
       },
       {
-        text: { ar: 'نعرض المقايضة، ونوثق الطلب وقراره في قائمة الأعمال، فإن تكرر راجعنا نمط المقاطعات في الاسترجاع.', en: 'Offer the trade-off, log the request and its decision in the backlog, and review the pattern at the retrospective if it recurs.' },
+        text: { ar: 'نعرض المقايضة على مالك المنتج ليقرر، ونوثق الطلب وقراره في قائمة الأعمال، فإن تكرر راجعنا نمط المقاطعات في الاسترجاع.', en: 'Put the trade-off to the product owner to decide, log the request and its decision in the backlog, and review the pattern at the retrospective if it recurs.' },
         score: 3,
         rationale: { ar: 'يحل اللحظة ويحمي النظام من التآكل المتكرر.', en: 'Solves the moment and protects the system from repeated erosion.' },
       },
@@ -543,7 +543,7 @@ export const scenarios: ScenarioItem[] = [
         rationale: { ar: 'شفافية ضرورية — لكن النشر بلا معالجة يشرّع الضرر.', en: 'Necessary transparency — but shipping without mitigation legitimizes the harm.' },
       },
       {
-        text: { ar: 'أعالج انحياز المنطقة (إعادة ترجيح العينة أو ضبط العتبات)، وأضيف مراقبة دورية للعدالة بعد النشر.', en: 'Correct the regional bias (reweighting the sample or adjusting thresholds) and add regular fairness monitoring after release.' },
+        text: { ar: 'أبحث عن سبب الانحياز (نقص البيانات أو طلب مسجّل أقل من الحاجة الفعلية) وأعالجه، وأضيف مراقبة دورية للعدالة بعد النشر.', en: 'Find the cause of the regional bias (missing data, or recorded demand below real need), correct it, and add regular fairness monitoring after release.' },
         score: 3,
         rationale: { ar: 'تشخيص + معالجة + مراقبة مستمرة — دورة العدالة الكاملة.', en: 'Diagnosis + mitigation + continuous monitoring — the full fairness loop.' },
       },

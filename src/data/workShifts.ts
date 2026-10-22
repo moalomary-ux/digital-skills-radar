@@ -78,7 +78,7 @@ export const workFamilies: WorkFamily[] = [
     lanes: {
       automated: [
         { ar: 'تجميع المراجع والتجارب الدولية في ملخص أولي', en: 'Compiling references and international practice into a first summary' },
-        { ar: 'تلخيص الدراسات والتقارير الطويلة', en: 'Summarising long studies and reports' },
+        { ar: 'إعداد ملخص أولي للدراسات الطويلة يطابقه المحلل مع الأصل', en: 'Producing a first-pass summary of long studies that the analyst checks against the original' },
         { ar: 'إعداد جداول المقارنة الأولية بين الدول والجهات', en: 'Drafting first-pass comparison tables across countries and entities' },
       ],
       augmented: [
@@ -249,19 +249,20 @@ export const workFamilies: WorkFamily[] = [
     },
     lanes: {
       automated: [
-        { ar: 'البحث في الأنظمة واللوائح والسوابق', en: 'Searching laws, regulations and precedents' },
+        { ar: 'تتبّع تحديثات الأنظمة واللوائح والتنبيه بها', en: 'Tracking updates to laws and regulations and sending alerts' },
         { ar: 'مقارنة نسخ العقود وإبراز الفروق', en: 'Comparing contract versions and highlighting changes' },
         { ar: 'إعداد المسودات الأولى للمذكرات والعقود القياسية', en: 'Preparing first drafts of memos and standard contracts' },
       ],
       augmented: [
         { ar: 'مراجعة العقود واستخراج البنود عالية المخاطر', en: 'Reviewing contracts and flagging high-risk clauses' },
+        { ar: 'البحث في الأنظمة واللوائح والسوابق مع التحقق من كل إحالة في مصدرها', en: 'Searching laws, regulations and precedents, checking every citation against its source' },
         { ar: 'تحليل انعكاس الأنظمة الجديدة على إجراءات الجهة', en: 'Analysing how new regulations affect the entity’s procedures' },
         { ar: 'إعداد الردود النظامية على الاستفسارات', en: 'Preparing legal responses to enquiries' },
       ],
       emerging: [
         { ar: 'تقييم الامتثال لنظام حماية البيانات الشخصية في كل خدمة جديدة', en: 'Assessing compliance with the Personal Data Protection Law for every new service' },
         { ar: 'صياغة بنود المسؤولية والملكية الفكرية في عقود الذكاء الاصطناعي', en: 'Drafting liability and intellectual-property clauses in AI contracts' },
-        { ar: 'مراجعة القرارات المؤتمتة من حيث الشفافية وحق الاعتراض', en: 'Reviewing automated decisions for transparency and the right to object' },
+        { ar: 'مراجعة القرارات المؤتمتة من حيث الشفافية وقابلية التفسير وإتاحة مراجعة بشرية لها', en: 'Reviewing automated decisions for transparency, explainability and access to human review' },
       ],
       human: [
         { ar: 'الرأي القانوني في الحالات الملتبسة', en: 'Legal opinion on ambiguous cases' },

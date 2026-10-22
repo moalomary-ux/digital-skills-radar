@@ -145,8 +145,8 @@ export const technologies: Technology[] = [
     },
     trl: 8,
     trlRationale: {
-      ar: 'منشورة تشغيليًا في حكومات عدة (مساعدات حوارية، صياغة وثائق)؛ ويصنفها غارتنر ضمن التقنيات التحويلية للحكومة خلال خمس سنوات.',
-      en: 'Deployed in production across governments (e.g., chat assistants, document drafting); Gartner places GenAI among transformational government technologies within five years.',
+      ar: 'منشورة تشغيليًا في حكومات عدة (مساعدات حوارية، صياغة وثائق) ضمن ضوابط حوكمة؛ واتساع أثرها في العمل الحكومي خلال خمس سنوات تقدير تحريري.',
+      en: 'Deployed in production across governments (e.g., chat assistants, document drafting) under governance guardrails; its wider impact on government work within five years is an editorial estimate.',
     },
     sectors: ['social-development-justice', 'education-training', 'trade-finance-economy'],
     domainIds: ['ai-data', 'policy'],
@@ -484,8 +484,8 @@ export const technologies: Technology[] = [
     },
     trl: 6,
     trlRationale: {
-      ar: 'مثبتة في السجلات الوطنية (منظومة X-Road في إستونيا ومنصات المؤسسات)؛ والطبقات الدلالية الحكومية الشاملة منشورة جزئيًا.',
-      en: 'Proven in national registries (Estonia X-Road ecosystem, enterprise graph platforms); government-wide semantic layers remain partially deployed.',
+      ar: 'مثبتة في منصات المؤسسات وفي مفردات البيانات الحكومية المشتركة (مثل المفردات الأساسية الأوروبية SEMIC وبيانات الفهرسة بمعيار DCAT-AP)؛ والطبقات الدلالية الحكومية الشاملة منشورة جزئيًا.',
+      en: 'Proven in enterprise graph platforms and shared government data vocabularies (e.g., the EU SEMIC Core Vocabularies and DCAT-AP metadata); government-wide semantic layers remain partially deployed.',
     },
     sectors: ['social-development-justice', 'trade-finance-economy'],
     domainIds: ['ai-data', 'cloud'],
@@ -615,8 +615,8 @@ export const technologies: Technology[] = [
     },
     trl: 8,
     trlRationale: {
-      ar: 'إلزامية للوكالات الفيدرالية الأمريكية ومنشورة واسعًا في مراكز العمليات الأمنية الحكومية الخليجية؛ تعمل على نطاق واسع.',
-      en: 'Mandated for US federal agencies and widely deployed in Gulf government SOCs; operational at scale.',
+      ar: 'إلزامية للوكالات الفيدرالية الأمريكية بموجب المذكرة M-22-09 (2022)، ومعرّفة في معيار NIST SP 800-207؛ والتطبيق الحكومي في المنطقة غير موثق علنًا بما يكفي.',
+      en: 'Mandated for US federal agencies by OMB M-22-09 (2022) and defined in NIST SP 800-207; public documentation of government deployment in the region is limited.',
     },
     sectors: ['social-development-justice', 'trade-finance-economy'],
     domainIds: ['cyber', 'cloud'],
@@ -740,8 +740,8 @@ export const technologies: Technology[] = [
     id: 'C3-T08', clusterId: 'trust-security-digital-identity',
     name: { ar: 'المصادقة البيومترية المتقدمة ومفاتيح المرور', en: 'Advanced Biometrics & Passkeys' },
     description: {
-      ar: 'مصادقة بدون كلمات مرور تعتمد على الوجه والبصمة ومفاتيح المرور المشفرة (FIDO2)، وتُستخدم في منصات الخدمات الحكومية السعودية كنفاذ وأبشر.',
-      en: 'Passwordless authentication using face, fingerprint, and cryptographic passkeys (FIDO2), used in Saudi government platforms such as Nafath and Absher.',
+      ar: 'مصادقة بلا كلمات مرور تعتمد على الوجه والبصمة ومفاتيح المرور المشفرة (FIDO2). في المملكة يعتمد «نفاذ» على الموافقة عبر تطبيقه مع مطابقة الرقم والتحقق الحيوي بالوجه، ومفاتيح المرور معيار عالمي ما زال يتوسع.',
+      en: 'Passwordless authentication using face, fingerprint and cryptographic passkeys (FIDO2). In Saudi Arabia, Nafath relies on in-app approval with number matching and face biometrics; passkeys are a global standard that is still spreading.',
     },
     trl: 9,
     trlRationale: {
@@ -1028,13 +1028,13 @@ export const technologies: Technology[] = [
     id: 'C5-T03', clusterId: 'smart-cities-sustainability',
     name: { ar: 'إنترنت الأشياء للبنية التحتية العامة', en: 'IoT for Public Infrastructure' },
     description: {
-      ar: 'أجهزة استشعار متصلة لإدارة الإنارة العامة والمياه والنفايات والمرافق، مطبقة فعلياً في بلديات سعودية كنظام التحكم بالإنارة عن بُعد في الرياض.',
-      en: "Connected sensors managing street lighting, water, waste, and public facilities — already operational in Saudi municipalities such as Riyadh's remote lighting control system.",
+      ar: 'أجهزة استشعار متصلة لإدارة الإنارة العامة والمياه والنفايات والمرافق في المدن.',
+      en: 'Connected sensors managing street lighting, water, waste and public facilities in cities.',
     },
     trl: 8,
     trlRationale: {
-      ar: 'حالات نجاح تشغيلية موثقة في بلديات سعودية (إنارة الرياض) وبرامج مدن ذكية عالمية؛ ناضجة وتتوسع.',
-      en: 'Documented operational success cases in Saudi municipalities (Riyadh lighting) and global smart-city programs; mature, scaling deployments.',
+      ar: 'منشورة تشغيليًا في برامج مدن ذكية عالمية؛ ناضجة وتتوسع. أما أمثلة التطبيق في البلديات السعودية فتقدير تحريري لم يُطابق بعد مع مصدر منشور.',
+      en: 'Operational in global smart-city programmes; mature, scaling deployments. Examples from Saudi municipalities are an editorial estimate not yet matched to a published source.',
     },
     sectors: ['urban-mobility-smart-cities', 'energy-natural-resources'],
     domainIds: ['emerging', 'cloud', 'cyber'],
@@ -1320,8 +1320,8 @@ export const technologies: Technology[] = [
     },
     trl: 5,
     trlRationale: {
-      ar: 'روبوتات الرعاية والتفتيش منشورة في تجارب (موثقة في my.gov.sa)؛ والذكاء المتجسد أُدرج حديثًا في غارتنر 2025 — محقَّق في بيئات ذات صلة دون نطاق واسع.',
-      en: 'Care robots and inspection robots deployed in pilots (documented on my.gov.sa); embodied/physical AI newly listed on Gartner 2025 — validated in relevant environments, not yet at scale.',
+      ar: 'روبوتات الرعاية والتفتيش منشورة في تجارب؛ والذكاء المتجسد أُدرج حديثًا في غارتنر 2025 — محقَّق في بيئات ذات صلة دون نطاق واسع.',
+      en: 'Care robots and inspection robots deployed in pilots; embodied/physical AI newly listed on Gartner 2025 — validated in relevant environments, not yet at scale.',
     },
     sectors: ['healthcare', 'social-development-justice', 'urban-mobility-smart-cities'],
     domainIds: ['emerging', 'policy', 'service-design'],
@@ -1372,8 +1372,8 @@ export const technologies: Technology[] = [
     },
     trl: 5,
     trlRationale: {
-      ar: 'مشروع «عابر» أثبت العملة الرقمية للجملة تقنيًا؛ والتجزئة تجريبية عالميًا مع إطلاقات قليلة — محقَّقة في بيئة ذات صلة وقرار التبني معلق.',
-      en: 'Project Aber validated wholesale CBDC technically; retail CBDC remains pilot-stage globally with few launches — validated in relevant environment, adoption decision pending.',
+      ar: 'أثبت مشروع «عابر» (2019–2020) العملة الرقمية للجملة تقنيًا، وانضم البنك المركزي السعودي في يونيو 2024 إلى منصة mBridge متعددة العملات الرقمية؛ والتجزئة تجريبية عالميًا مع إطلاقات قليلة — محقَّقة في بيئة ذات صلة وقرار التبني معلق.',
+      en: 'Project Aber (2019–2020) validated wholesale CBDC technically, and the Saudi Central Bank joined the multi-CBDC mBridge platform in June 2024; retail CBDC remains pilot-stage globally with few launches — validated in relevant environment, adoption decision pending.',
     },
     sectors: ['trade-finance-economy', 'social-development-justice'],
     domainIds: ['emerging', 'policy', 'cyber'],

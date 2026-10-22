@@ -56,6 +56,40 @@ const EDITORIAL: ClaimSource = {
   year: 2026,
 }
 
+/* Sources added by the content-evidence audit (reviews/content-evidence-audit-20261022.md). */
+
+const PDPL: ClaimSource = {
+  title: { ar: 'نظام حماية البيانات الشخصية ولائحته التنفيذية', en: 'Personal Data Protection Law and its Implementing Regulations' },
+  publisher: {
+    ar: 'الهيئة السعودية للبيانات والذكاء الاصطناعي (مكتب إدارة البيانات الوطنية)',
+    en: 'Saudi Data & AI Authority (SDAIA) / National Data Management Office (NDMO)',
+  },
+  url: 'https://dgp.sdaia.gov.sa/wps/portal/pdp/home',
+  locator: 'Read through Latham & Watkins, “Saudi Arabia’s data protection law enters into force” (December 2023)',
+  year: 2023,
+}
+
+const OECD_GOV_AI_2025: ClaimSource = {
+  title: {
+    ar: 'الحوكمة بالذكاء الاصطناعي: الواقع الراهن والطريق إلى الأمام في وظائف الحكومة الأساسية',
+    en: 'Governing with Artificial Intelligence: The State of Play and Way Forward in Core Government Functions',
+  },
+  publisher: { ar: 'منظمة التعاون الاقتصادي والتنمية', en: 'OECD' },
+  url: 'https://www.oecd.org/en/publications/governing-with-artificial-intelligence_795de142-en.html',
+  year: 2025,
+}
+
+const GARTNER_AGENTIC_2025: ClaimSource = {
+  title: {
+    ar: 'غارتنر تتوقع إلغاء أكثر من 40% من مشاريع الذكاء الاصطناعي الوكيل بنهاية 2027',
+    en: 'Gartner Predicts Over 40% of Agentic AI Projects Will Be Canceled by End of 2027',
+  },
+  publisher: { ar: 'غارتنر (بيت خبرة)', en: 'Gartner' },
+  url: 'https://www.gartner.com/en/newsroom',
+  locator: 'Press release, June 2025',
+  year: 2025,
+}
+
 const GLOBAL_EMPLOYERS = {
   ar: 'أصحاب عمل شملهم مسح التقرير حول العالم',
   en: 'Employers surveyed worldwide for the report',
@@ -346,6 +380,79 @@ export const futureClaims: Claim[] = [
   },
 
   // ---- editorial ratings on the page
+  // ── Corrected facts from the content-evidence audit (2026-10-22) ─────
+  {
+    id: 'future-pdpl-in-force',
+    text: {
+      ar: 'نظام حماية البيانات الشخصية نافذ منذ 14 سبتمبر 2023، وانتهت مهلة الامتثال الممنوحة للجهات في 14 سبتمبر 2024.',
+      en: 'The Personal Data Protection Law has been in force since 14 September 2023, and the compliance grace period for organisations ended on 14 September 2024.',
+    },
+    value: { ar: '14 سبتمبر 2023', en: '14 September 2023' },
+    scope: { ar: 'الجهات التي تعالج بيانات شخصية في المملكة', en: 'Organisations processing personal data in Saudi Arabia' },
+    period: '2023-09-14',
+    kind: 'official',
+    confidence: 'high',
+    source: PDPL,
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'قُرئ النص عبر تحليل قانوني منشور لأن موقع الهيئة يحجب القراءة الآلية. ومطابق للادعاء المسجل لانتهاء مهلة الامتثال في الموجز القيادي.',
+      en: 'Read through a published legal analysis because the authority’s site blocks automated reading. Consistent with the registered claim on the end of the grace period in the leader brief.',
+    },
+  },
+  {
+    id: 'future-oecd-2025-ai-pilots',
+    text: {
+      ar: 'يصف تقرير منظمة التعاون الاقتصادي والتنمية لعام 2025 استخدام الذكاء الاصطناعي في وظائف الحكومة الأساسية بأنه ما زال محدودًا، وكثير من مبادراته ما زال تجريبيًا.',
+      en: 'The OECD’s 2025 report describes the use of AI in core government functions as still limited, with many initiatives still at the pilot stage.',
+    },
+    value: { ar: 'أغلبه تجريبي', en: 'Mostly pilots' },
+    scope: { ar: 'حكومات الدول الأعضاء والشريكة في المنظمة', en: 'OECD member and partner governments' },
+    period: '2025',
+    kind: 'international',
+    confidence: 'medium',
+    source: OECD_GOV_AI_2025,
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'وصف نوعي من التقرير بلا نسبة؛ يسند تلطيف عبارات «التشغيل الفعلي» في التحولات ومهارات 2030.',
+      en: 'A qualitative finding with no percentage; it supports softening “actual operations” wording in the shifts and the 2030 skills.',
+    },
+  },
+  {
+    id: 'future-gartner-agentic-cancel',
+    text: {
+      ar: 'تتوقع غارتنر أن يُلغى أكثر من 40% من مشاريع الذكاء الاصطناعي الوكيل بنهاية 2027.',
+      en: 'Gartner predicts that over 40% of agentic AI projects will be canceled by the end of 2027.',
+    },
+    value: { ar: 'أكثر من 40%', en: 'Over 40%' },
+    scope: { ar: 'مشاريع الذكاء الاصطناعي الوكيل في المؤسسات حول العالم', en: 'Agentic AI projects in organisations worldwide' },
+    period: '2025–2027',
+    kind: 'international',
+    confidence: 'medium',
+    source: GARTNER_AGENTIC_2025,
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'توقع تحليلي من بيت خبرة لا قياس، ولا يخص القطاع الحكومي وحده.',
+      en: 'An analyst forecast from an advisory firm, not a measurement, and not specific to government.',
+    },
+  },
+  {
+    id: 'future-wef-2025-leadership',
+    text: {
+      ar: 'يضع تقرير مستقبل الوظائف 2025 «القيادة والتأثير الاجتماعي» ضمن أسرع المهارات نموًا حتى 2030.',
+      en: 'The Future of Jobs Report 2025 lists “leadership and social influence” among the fastest-growing skills to 2030.',
+    },
+    value: { ar: 'ضمن الأسرع نموًا', en: 'Among the fastest-growing' },
+    scope: GLOBAL_EMPLOYERS,
+    period: '2025–2030',
+    kind: 'international',
+    confidence: 'medium',
+    source: { ...WEF_2025, locator: 'Figure 3.4, fastest-growing skills' },
+    reviewedOn: REVIEWED,
+    caveat: {
+      ar: 'لم يُطابق ترتيب المهارة في الشكل مع النص الأصلي آليًا في هذه المراجعة؛ يُتحقق منه قبل ذكر رتبة رقمية.',
+      en: 'The skill’s position in the figure was not machine-matched to the original in this review; check it before citing a rank.',
+    },
+  },
   {
     id: 'future-editorial-trajectory',
     text: {

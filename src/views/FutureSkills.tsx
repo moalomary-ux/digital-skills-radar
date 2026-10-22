@@ -7,9 +7,33 @@ import { decliningSkills, domainTrajectories, microSkills, trajectoryMeta } from
 import type { DomainTrajectory, Trajectory } from '../data/futureSkills'
 import { headlineStats } from '../data/guidance'
 import { pathFor } from '../lib/routes'
-import Claim, { ClaimText } from '../components/Claim'
+import Claim, { CLAIM_TOKEN, ClaimText } from '../components/Claim'
+import { claimById } from '../data/claims'
 import Icon from '../components/Icon'
 import type { L, Lang } from '../data/types'
+
+/**
+ * Signals that rest on a learning platform's own learner data are marked «إشارة من منصة تعلم — تقدير تحريري»:
+ * the owner's source policy (DECISION §5-ب) accepts them only as labelled indications, never as proof.
+ */
+const LEARNING_PLATFORMS = new Set(['Coursera', 'LinkedIn'])
+
+function isLearningPlatformSignal(text: string): boolean {
+  for (const m of text.matchAll(CLAIM_TOKEN)) {
+    const c = claimById(m[1])
+    if (c && LEARNING_PLATFORMS.has(c.source.publisher.en)) return true
+  }
+  return false
+}
+
+function PlatformSignalChip() {
+  const { t } = useApp()
+  return (
+    <span className="chip ms-1.5 border-dga-amber/40 bg-dga-amber/10 !px-1.5 !py-0 align-middle text-[10.5px] text-dga-amber-tx">
+      {t({ ar: 'إشارة من منصة تعلم — تقدير تحريري', en: 'Learning-platform signal — editorial estimate' })}
+    </span>
+  )
+}
 
 /** Filter groups follow the glossary: «ينمو / يتحوّل / يتراجع». */
 type Group = 'all' | 'growing' | 'shifting' | 'declining'
@@ -298,6 +322,7 @@ export default function FutureSkills() {
                 <p className="mt-3 rounded-btn bg-dga-tag-info-bg p-2.5 text-[12px] leading-relaxed text-dga-tag-info-text">
                   <span className="font-bold">{t(ui.signal)}</span>
                   <ClaimText text={t(m.demandSignal)} />
+                  {isLearningPlatformSignal(m.demandSignal.ar) ? <PlatformSignalChip /> : null}
                 </p>
                 <p className="mt-2 rounded-btn bg-dga-bg p-2.5 text-[12px] leading-relaxed text-dga-ink">
                   <span className="font-bold text-dga-green-dark">{t(ui.inGov)}</span>
@@ -388,6 +413,7 @@ function TrajectoryCard({ tr, onAssess, skillsHref }: { tr: DomainTrajectory; on
             </span>
             <span>
               <ClaimText text={t(ev)} />
+              {isLearningPlatformSignal(ev.ar) ? <PlatformSignalChip /> : null}
             </span>
           </li>
         ))}

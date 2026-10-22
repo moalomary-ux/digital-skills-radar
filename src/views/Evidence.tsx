@@ -5,11 +5,15 @@ import type { L } from '../data/types'
 import { claims } from '../data/claims'
 import type { Claim, ClaimKind, Confidence } from '../data/claims'
 import { REVIEW_STALE_MONTHS } from '../data/claims/method'
+import { isOutdatedSource, outdatedLabel, referenceSourceKindLabel, referenceSources, SOURCE_CURRENT_FROM } from '../data/claims/sources'
+import type { ReferenceSource } from '../data/claims/sources'
 import { BidiValue, ClaimText, confHint, confLabel, confRank, formatClaimDate, kindHint, kindLabel } from '../components/Claim'
 
 /**
  * «سجل الأدلة / Evidence register» (packet P5a): every registered claim in one filterable,
  * sortable table. Route: /:lang/evidence (wired by the leader). Rows are anchored as #ev-<claim id>.
+ * Source policy (DECISION §5-ب): each row shows its source year, and sources older than
+ * SOURCE_CURRENT_FROM carry «قديم — يُحدَّث». The page ends with the approved reference sources.
  */
 
 const KINDS: ClaimKind[] = ['official', 'international', 'survey', 'self-report', 'editorial']
@@ -24,7 +28,8 @@ const PACKETS: Record<string, L> = {
   leaders: { ar: 'للقادة والفرق', en: 'Leaders & teams' },
 }
 
-type SortKey = 'text' | 'value' | 'scope' | 'source' | 'kind' | 'confidence' | 'reviewed'
+type SortKey = 'text' | 'value' | 'scope' | 'source' | 'year' | 'kind' | 'confidence' | 'reviewed'
+type Currency = '' | 'outdated' | 'undated' | 'current'
 type SortDir = 'asc' | 'desc'
 
 const packetOf = (id: string) => id.split('-')[0]
@@ -56,6 +61,7 @@ function haystack(c: Claim): string {
       c.source.title.en,
       c.source.publisher.ar,
       c.source.publisher.en,
+      c.source.year ? String(c.source.year) : undefined,
       c.caveat?.ar,
       c.caveat?.en,
     ]
@@ -85,6 +91,14 @@ function arClaimNoun(n: number): string {
   if (r === 'few') return 'ادعاءات'
   if (r === 'many') return 'ادعاءً'
   return 'ادعاء'
+}
+
+/** Same rule for «مصدر». */
+function arSourceNoun(n: number): string {
+  const r = new Intl.PluralRules('ar').select(n)
+  if (r === 'few') return 'مصادر'
+  if (r === 'many') return 'مصدرًا'
+  return 'مصدر'
 }
 
 /* -------------------------------------------------- hash → row anchoring */
@@ -131,18 +145,38 @@ function SourceCell({ c }: { c: Claim }) {
       ) : (
         <span className="font-semibold text-dga-black">{t(s.title)}</span>
       )}
-      <span className="block text-dga-muted">
-        {t(s.publisher)}
-        {s.year ? (
-          <>
-            {' · '}
-            <span dir="ltr">{s.year}</span>
-          </>
-        ) : null}
-      </span>
+      <span className="block text-dga-muted">{t(s.publisher)}</span>
       {s.locator ? <span className="block text-dga-muted">{s.locator}</span> : null}
       {s.access === 'internal' ? (
         <span className="mt-1 inline-block text-[11px] font-semibold text-dga-amber-tx">{t({ ar: 'سجل داخلي غير منشور', en: 'Internal, unpublished record' })}</span>
+      ) : null}
+    </>
+  )
+}
+
+/** «قديم — يُحدَّث»: a source published before the policy's currency year (DECISION §5-ب). */
+function OutdatedChip() {
+  const { t } = useApp()
+  return <span className="chip whitespace-nowrap border-dga-amber/60 bg-amber-50 text-dga-amber-tx">{t(outdatedLabel)}</span>
+}
+
+function SourceYearCell({ year }: { year?: number }) {
+  const { t } = useApp()
+  if (typeof year !== 'number')
+    return (
+      <span className="text-dga-muted" title={t({ ar: 'سنة الإصدار غير محددة في المصدر', en: 'The source gives no publication year' })}>
+        —<span className="sr-only">{t({ ar: 'سنة غير محددة', en: 'Year not stated' })}</span>
+      </span>
+    )
+  return (
+    <>
+      <span className="block font-semibold tabular-nums text-dga-black" dir="ltr">
+        {year}
+      </span>
+      {isOutdatedSource(year) ? (
+        <span className="mt-1 block">
+          <OutdatedChip />
+        </span>
       ) : null}
     </>
   )
@@ -195,22 +229,31 @@ export default function Evidence() {
   const [kind, setKind] = useState<'' | ClaimKind>('')
   const [conf, setConf] = useState<'' | Confidence>('')
   const [packet, setPacket] = useState('')
+  const [currency, setCurrency] = useState<Currency>('')
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir } | null>(null)
   const [target, setTarget] = useState<string | null>(null)
 
   const today = useMemo(() => new Date(), [])
-  const index = useMemo(() => claims.map((c) => ({ c, hay: haystack(c), stale: isStale(c.reviewedOn, today) })), [today])
+  const index = useMemo(
+    () => claims.map((c) => ({ c, hay: haystack(c), stale: isStale(c.reviewedOn, today), outdated: isOutdatedSource(c.source.year) })),
+    [today]
+  )
   const packets = useMemo(() => [...new Set(claims.map((c) => packetOf(c.id)))], [])
 
   const rows = useMemo(() => {
     const q = normalize(query.trim())
     const terms = q ? q.split(/\s+/) : []
+    const year = (c: Claim) => c.source.year
     let out = index.filter(
-      ({ c, hay }) =>
+      ({ c, hay, outdated }) =>
         (!kind || c.kind === kind) &&
         (!conf || c.confidence === conf) &&
         (!packet || packetOf(c.id) === packet) &&
+        (!currency ||
+          (currency === 'outdated' && outdated) ||
+          (currency === 'undated' && year(c) === undefined) ||
+          (currency === 'current' && year(c) !== undefined && !outdated)) &&
         terms.every((term) => hay.includes(term))
     )
     if (sort) {
@@ -233,6 +276,12 @@ export default function Evidence() {
             return dir * cmpText(a.scope ? t(a.scope) : a.period ?? '', b.scope ? t(b.scope) : b.period ?? '')
           case 'source':
             return dir * cmpText(t(a.source.title), t(b.source.title))
+          case 'year': {
+            const ya = a.source.year
+            const yb = b.source.year
+            if (ya === undefined || yb === undefined) return ya === yb ? 0 : ya === undefined ? 1 : -1
+            return dir * (ya - yb)
+          }
           case 'kind':
             return dir * (KINDS.indexOf(a.kind) - KINDS.indexOf(b.kind))
           case 'confidence':
@@ -245,13 +294,14 @@ export default function Evidence() {
       })
     }
     return out
-  }, [index, kind, conf, packet, query, sort, lang, t])
+  }, [index, kind, conf, packet, currency, query, sort, lang, t])
 
-  const filtered = kind !== '' || conf !== '' || packet !== '' || query.trim() !== ''
+  const filtered = kind !== '' || conf !== '' || packet !== '' || currency !== '' || query.trim() !== ''
   const reset = () => {
     setKind('')
     setConf('')
     setPacket('')
+    setCurrency('')
     setQuery('')
   }
 
@@ -282,6 +332,7 @@ export default function Evidence() {
     { key: 'value', label: { ar: 'القيمة', en: 'Value' } },
     { key: 'scope', label: { ar: 'النطاق والفترة', en: 'Scope & period' }, className: 'min-w-[11rem]' },
     { key: 'source', label: { ar: 'المصدر', en: 'Source' }, className: 'min-w-[13rem]' },
+    { key: 'year', label: { ar: 'سنة المصدر', en: 'Source year' } },
     { key: 'kind', label: { ar: 'نوع المصدر', en: 'Source type' } },
     { key: 'confidence', label: { ar: 'الثقة', en: 'Confidence' } },
     { key: 'reviewed', label: { ar: 'آخر مراجعة', en: 'Last reviewed' } },
@@ -289,6 +340,7 @@ export default function Evidence() {
 
   const byKind = KINDS.map((k) => ({ k, n: claims.filter((c) => c.kind === k).length }))
   const staleCount = index.filter((x) => x.stale).length
+  const outdatedCount = index.filter((x) => x.outdated).length
 
   const selectCls =
     'w-full rounded-btn border border-dga-line bg-white px-3 py-2 text-sm text-dga-ink focus:border-dga-green focus:outline-none focus-visible:ring-2 focus-visible:ring-dga-green/40'
@@ -312,6 +364,19 @@ export default function Evidence() {
               en: 'Source type is not confidence: an official record is strong evidence of what was recorded and weak evidence of a need that was not. A claim is flagged as needing review once {{method-review-stale}} have passed since its last review.',
             })}
           />
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-dga-muted">
+          {lang === 'ar' ? (
+            <>
+              نعتمد المصادر العلمية والرسمية المعترف بها والمحدَّثة، ونفضّل ما صدر بين <span dir="ltr">2024</span> و<span dir="ltr">2026</span>. ويُوسم كل مصدر صدر قبل{' '}
+              <span dir="ltr">{SOURCE_CURRENT_FROM}</span> بشارة <OutdatedChip /> ويُراجع في الدورة التالية.
+            </>
+          ) : (
+            <>
+              We rely on recognised, current scientific and official sources, preferably published in 2024–2026. Any source published before {SOURCE_CURRENT_FROM} is marked{' '}
+              <OutdatedChip /> and reviewed in the next cycle.
+            </>
+          )}
         </p>
       </header>
 
@@ -354,7 +419,7 @@ export default function Evidence() {
         <h2 id="ev-filters" className="sr-only">
           {t({ ar: 'تصفية السجل', en: 'Filter the register' })}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <label className="block text-xs font-semibold text-dga-muted">
             {t({ ar: 'بحث', en: 'Search' })}
             <input
@@ -398,6 +463,15 @@ export default function Evidence() {
               ))}
             </select>
           </label>
+          <label className="block text-xs font-semibold text-dga-muted">
+            {t({ ar: 'حداثة المصدر', en: 'Source currency' })}
+            <select value={currency} onChange={(e) => setCurrency(e.target.value as Currency)} className={`${selectCls} mt-1.5`}>
+              <option value="">{t({ ar: 'كل السنوات', en: 'All years' })}</option>
+              <option value="current">{lang === 'ar' ? `من ${SOURCE_CURRENT_FROM} فأحدث` : `${SOURCE_CURRENT_FROM} or later`}</option>
+              <option value="outdated">{t(outdatedLabel)}</option>
+              <option value="undated">{t({ ar: 'سنة غير محددة', en: 'Year not stated' })}</option>
+            </select>
+          </label>
         </div>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-dga-ink" aria-live="polite">
@@ -412,6 +486,14 @@ export default function Evidence() {
                     </span>
                   </>
                 ) : null}
+                {outdatedCount > 0 ? (
+                  <>
+                    {' · '}
+                    <span className="font-semibold text-dga-amber-tx">
+                      مصدره قديم: <span className="tabular-nums">{fmt(outdatedCount)}</span>
+                    </span>
+                  </>
+                ) : null}
               </>
             ) : (
               <>
@@ -421,6 +503,14 @@ export default function Evidence() {
                     {' · '}
                     <span className="font-semibold text-dga-amber-tx">
                       Needs review: <span className="tabular-nums">{fmt(staleCount)}</span>
+                    </span>
+                  </>
+                ) : null}
+                {outdatedCount > 0 ? (
+                  <>
+                    {' · '}
+                    <span className="font-semibold text-dga-amber-tx">
+                      Outdated source: <span className="tabular-nums">{fmt(outdatedCount)}</span>
                     </span>
                   </>
                 ) : null}
@@ -443,7 +533,7 @@ export default function Evidence() {
         <>
           {/* table (md and up) */}
           <div className="mt-6 hidden overflow-x-auto rounded-card border border-dga-line bg-white md:block">
-            <table className="w-full min-w-[68rem] text-[13px] leading-relaxed">
+            <table className="w-full min-w-[72rem] text-[13px] leading-relaxed">
               <caption className="sr-only">{t({ ar: 'سجل الأدلة: كل ادعاءات الأداة', en: 'Evidence register: every claim in the tool' })}</caption>
               <thead className="bg-dga-bg text-xs text-dga-muted">
                 <tr>
@@ -497,6 +587,9 @@ export default function Evidence() {
                       <SourceCell c={c} />
                     </td>
                     <td className="p-3">
+                      <SourceYearCell year={c.source.year} />
+                    </td>
+                    <td className="p-3">
                       <KindChip kind={c.kind} />
                     </td>
                     <td className="p-3">
@@ -543,6 +636,10 @@ export default function Evidence() {
                   <dd>
                     <SourceCell c={c} />
                   </dd>
+                  <dt className="font-semibold text-dga-muted">{t({ ar: 'سنة المصدر', en: 'Source year' })}</dt>
+                  <dd>
+                    <SourceYearCell year={c.source.year} />
+                  </dd>
                   <dt className="font-semibold text-dga-muted">{t({ ar: 'النوع', en: 'Type' })}</dt>
                   <dd>
                     <KindChip kind={c.kind} />
@@ -557,6 +654,97 @@ export default function Evidence() {
           </ol>
         </>
       )}
+
+      <ReferenceSources />
     </div>
+  )
+}
+
+/* ------------------------------------------------- approved reference sources */
+
+function ReferenceYear({ s }: { s: ReferenceSource }) {
+  const { t } = useApp()
+  if (s.yearLabel) return <span className="whitespace-nowrap">{t(s.yearLabel)}</span>
+  if (typeof s.year === 'number')
+    return (
+      <span className="whitespace-nowrap tabular-nums" dir="ltr">
+        {s.year}
+      </span>
+    )
+  return <span className="text-dga-muted">—</span>
+}
+
+function ReferenceLink({ s }: { s: ReferenceSource }) {
+  const { t } = useApp()
+  let host = s.url
+  try {
+    host = new URL(s.url).hostname.replace(/^www\./, '')
+  } catch {
+    /* keep the raw url */
+  }
+  return (
+    <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 break-all font-semibold text-dga-green-dark underline-offset-2 hover:underline">
+      <span dir="ltr">{host}</span>
+      <span aria-hidden>↗</span>
+      <span className="sr-only">{`${t(s.title)} ${t({ ar: '(يفتح في نافذة جديدة)', en: '(opens in a new tab)' })}`}</span>
+    </a>
+  )
+}
+
+/** «المصادر المرجعية المعتمدة»: what the tool should rest on from now on (audit 2026-10-22, DECISION §5-ب). */
+function ReferenceSources() {
+  const { t, lang } = useApp()
+  const n = referenceSources.length
+  return (
+    <section aria-labelledby="ev-refs" className="mt-14 border-t border-dga-line pt-8">
+      <h2 id="ev-refs" className="text-2xl font-bold text-dga-green-deep">
+        {t({ ar: 'المصادر المرجعية المعتمدة', en: 'Approved reference sources' })}
+      </h2>
+      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-dga-ink">
+        {lang === 'ar'
+          ? `${n} ${arSourceNoun(n)} علميًا ورسميًا معترفًا به ومحدَّثًا ينبغي أن تستند إليه الأداة من الآن: منظمات دولية، وجهات معايير، وجهات وطنية، وبيوت خبرة، وبحوث محكّمة. لا تُقبل المدونات ولا صفحات تسويق المزودين ولا ادعاءات المنصات عن نفسها سندًا لحقيقة.`
+          : `${n} recognised, current scientific and official sources the tool should rest on from now on: international organizations, standards bodies, national authorities, advisory firms and peer-reviewed research. Blogs, vendor marketing pages and platforms’ claims about themselves are not accepted as support for a fact.`}
+      </p>
+
+      <div className="mt-5 overflow-x-auto rounded-card border border-dga-line bg-white">
+        <table className="w-full min-w-[46rem] text-[13px] leading-relaxed">
+          <caption className="sr-only">{t({ ar: 'المصادر المرجعية المعتمدة', en: 'Approved reference sources' })}</caption>
+          <thead className="bg-dga-bg text-xs text-dga-muted">
+            <tr>
+              <th scope="col" className="px-3 py-3 text-start font-semibold">{t({ ar: 'المصدر', en: 'Source' })}</th>
+              <th scope="col" className="px-3 py-3 text-start font-semibold">{t({ ar: 'الناشر', en: 'Publisher' })}</th>
+              <th scope="col" className="px-3 py-3 text-start font-semibold">{t({ ar: 'السنة', en: 'Year' })}</th>
+              <th scope="col" className="px-3 py-3 text-start font-semibold">{t({ ar: 'نوع المصدر', en: 'Source type' })}</th>
+              <th scope="col" className="px-3 py-3 text-start font-semibold">{t({ ar: 'الرابط', en: 'Link' })}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {referenceSources.map((s) => (
+              <tr key={s.id} id={s.id} className="border-t border-dga-line align-top">
+                <th scope="row" className="p-3 text-start font-normal">
+                  <span className="block font-semibold text-dga-black">{t(s.title)}</span>
+                  <span className="mt-0.5 block text-xs text-dga-muted">{t(s.covers)}</span>
+                </th>
+                <td className="p-3 text-dga-ink">{t(s.publisher)}</td>
+                <td className="p-3">
+                  <ReferenceYear s={s} />
+                  {isOutdatedSource(s.year) ? (
+                    <span className="mt-1 block">
+                      <OutdatedChip />
+                    </span>
+                  ) : null}
+                </td>
+                <td className="p-3">
+                  <span className="chip whitespace-nowrap text-dga-ink">{t(referenceSourceKindLabel[s.kind])}</span>
+                </td>
+                <td className="p-3">
+                  <ReferenceLink s={s} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   )
 }

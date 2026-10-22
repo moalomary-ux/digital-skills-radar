@@ -156,6 +156,16 @@ export default function Pathways() {
         <Num>{PLAN_WEEKS}</Num> {t({ ar: 'أسبوعًا.', en: 'weeks.' })}
       </p>
 
+      <p className="mt-3 flex flex-wrap items-center gap-2 text-xs text-dga-muted">
+        <span className="chip border-dga-amber/40 bg-dga-amber/10 text-dga-amber-tx">{t({ ar: 'خطة تحريرية مقترحة', en: 'Suggested editorial plan' })}</span>
+        <span>
+          {t({
+            ar: 'الخطوات الأسبوعية وما فيها من أعداد اقتراح تحريري للتعلم بالممارسة، لا معيار منشور؛ عدّلها مع مديرك بما يناسب عملك.',
+            en: 'The weekly steps and the counts in them are an editorial suggestion for learning by doing, not a published standard; adjust them with your manager to fit your work.',
+          })}
+        </span>
+      </p>
+
       <Disclaimer compact className="mt-4" />
 
       {/* live progress */}

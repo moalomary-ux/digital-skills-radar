@@ -35,8 +35,8 @@ export const shifts: LeaderShift[] = [
     id: 'genai-casework',
     title: { ar: 'الذكاء الاصطناعي التوليدي في العمل اليومي', en: 'Generative AI in everyday casework' },
     change: {
-      ar: 'تبدأ مسودات المراسلات والتقارير والردود على المستفيدين من أداة ذكاء اصطناعي توليدي، وينتقل وقت الموظف من الكتابة إلى المراجعة والتحقق. يصبح السؤال: من راجع المخرج، وعلى أي بيانات اعتمد؟',
-      en: 'Drafts of letters, reports and replies to beneficiaries start in a generative AI tool, and staff time moves from writing to reviewing and checking. The question becomes: who reviewed the output, and what data did it rely on?',
+      ar: 'تبدأ مسودات المراسلات والتقارير والردود على المستفيدين، في عدد متزايد من الجهات، من أداة ذكاء اصطناعي توليدي معتمدة، وينتقل وقت الموظف من الكتابة إلى المراجعة والتحقق. يصبح السؤال: من راجع المخرج، وعلى أي بيانات اعتمد؟',
+      en: 'In a growing number of entities, drafts of letters, reports and replies to beneficiaries start in an approved generative AI tool, and staff time moves from writing to reviewing and checking. The question becomes: who reviewed the output, and what data did it rely on?',
     },
     requires: {
       ar: 'استخدام الذكاء الاصطناعي التوليدي بمسؤولية: صياغة الطلب، والتحقق من المخرج، وحماية البيانات المدخلة.',
@@ -104,8 +104,8 @@ export const shifts: LeaderShift[] = [
     id: 'cyber-privacy-duty',
     title: { ar: 'الأمن السيبراني والخصوصية واجب نظامي', en: 'Cybersecurity and privacy as a legal duty' },
     change: {
-      ar: 'لم تعد حماية البيانات والأنظمة شأناً تقنياً يُترك لإدارة واحدة؛ صارت التزاماً نظامياً تُسأل عنه القيادة. كل خدمة جديدة تحتاج تقييم خصوصية وضوابط أمن قبل إطلاقها.',
-      en: 'Protecting data and systems is no longer a technical matter left to one department; it is a legal duty leaders answer for. Every new service needs a privacy assessment and security controls before launch.',
+      ar: 'لم تعد حماية البيانات والأنظمة شأناً تقنياً يُترك لإدارة واحدة؛ صارت التزاماً نظامياً تُسأل عنه القيادة. كل خدمة جديدة تعالج بيانات شخصية تحتاج مراجعة امتثال، وتقييم أثر حين تشترطه اللائحة التنفيذية، وضوابط أمن قبل إطلاقها.',
+      en: 'Protecting data and systems is no longer a technical matter left to one department; it is a legal duty leaders answer for. Every new service that processes personal data needs a compliance review, an impact assessment where the Implementing Regulations require one, and security controls before launch.',
     },
     requires: {
       ar: 'الوعي الأمني، والخصوصية وحماية البيانات الشخصية، والأمن منذ التصميم، والوعي بالتشريعات الرقمية.',
@@ -140,7 +140,7 @@ export const shifts: LeaderShift[] = [
       ar: 'حوّل مشروعاً رقمياً واحداً هذا العام إلى منتج بفريق ثابت، وشروط توقف معلنة، ومؤشر منفعة يُقاس بعد الإطلاق.',
       en: 'Turn one digital project this year into a product with a stable team, declared stop conditions and a benefit indicator measured after launch.',
     },
-    claimId: 'leaders-oecd-user-driven',
+    claimId: 'leaders-gds-product-teams',
     unchanged: {
       ar: 'الانضباط المالي والمساءلة عن المال العام يبقيان كما هما؛ يتغير توقيت القرار لا معاييره.',
       en: 'Financial discipline and accountability for public money stay the same; what changes is when decisions are made, not their standards.',

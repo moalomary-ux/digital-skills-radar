@@ -5,6 +5,7 @@ import { useApp } from '../store'
 import { claimById } from '../data/claims'
 import type { Claim as ClaimRecord, ClaimKind, Confidence } from '../data/claims'
 import type { L, Lang } from '../data/types'
+import { isOutdatedSource, outdatedLabel } from '../data/claims/sources'
 
 /* ------------------------------------------------------------------ labels */
 
@@ -69,6 +70,8 @@ const ui = {
   period: { ar: 'الفترة', en: 'Period' },
   source: { ar: 'المصدر', en: 'Source' },
   locator: { ar: 'الموضع', en: 'Locator' },
+  year: { ar: 'سنة المصدر', en: 'Source year' },
+  noYear: { ar: 'غير محددة', en: 'Not stated' },
   open: { ar: 'افتح المصدر', en: 'Open the source' },
   internal: { ar: 'سجل داخلي غير منشور', en: 'Internal, unpublished record' },
   kind: { ar: 'نوع المصدر', en: 'Source type' },
@@ -372,12 +375,6 @@ function ClaimWithPopover({ claim: c, value, variant }: { claim: ClaimRecord; va
               <span className="font-semibold text-dga-black">{t(s.title)}</span>
               {' — '}
               {t(s.publisher)}
-              {s.year ? (
-                <>
-                  {sep}
-                  <span dir="ltr">{s.year}</span>
-                </>
-              ) : null}
               {s.locator ? <span className="block text-dga-muted">{`${t(ui.locator)}: ${s.locator}`}</span> : null}
               {s.access === 'internal' ? <span className="mt-0.5 block font-semibold text-dga-amber-tx">{t(ui.internal)}</span> : null}
               {s.url ? (
@@ -386,6 +383,13 @@ function ClaimWithPopover({ claim: c, value, variant }: { claim: ClaimRecord; va
                   <span aria-hidden>↗</span>
                   <span className="sr-only">{t(ui.newTab)}</span>
                 </a>
+              ) : null}
+            </span>
+            <span className="font-semibold text-dga-muted">{t(ui.year)}</span>
+            <span>
+              {typeof s.year === 'number' ? <span dir="ltr">{s.year}</span> : <span className="text-dga-muted">{t(ui.noYear)}</span>}
+              {isOutdatedSource(s.year) ? (
+                <span className="ms-1.5 inline-block rounded-pill border border-dga-amber/60 bg-amber-50 px-1.5 text-[10.5px] font-semibold text-dga-amber-tx">{t(outdatedLabel)}</span>
               ) : null}
             </span>
             <span className="font-semibold text-dga-muted">{t(ui.kind)}</span>

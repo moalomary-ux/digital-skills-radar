@@ -279,8 +279,8 @@ export const statements: Statement[] = [
   {
     id: 'led-3', domainId: 'leadership', skillIndex: 2,
     text: {
-      ar: 'أستطيع مشاركة درس مستفاد من عملي علنًا مع جهات أخرى.',
-      en: 'I can share a lesson learned from my work openly with other organizations.',
+      ar: 'أستطيع مشاركة درس مستفاد من عملي مع جهات أخرى، بعد موافقة جهتي ووفق تصنيف البيانات.',
+      en: 'I can share a lesson learned from my work with other organizations, with my entity’s approval and in line with data classification.',
     },
   },
   {

@@ -63,7 +63,7 @@ const pages: Page[] = [
         en: 'National figures: training participation records, consulting services and entities served, each in its own unit',
       },
       { ar: 'السلسلة السنوية للتدريب، والاستشارات حسب الفئة والركيزة، والانتشار حسب المنطقة', en: 'The yearly training series, consulting by category and pillar, and coverage by region' },
-      { ar: 'تاريخ القطع، والتوفيق مع السجل الحي للبرنامج', en: 'The cut-off date and the reconciliation with the program’s live register' },
+      { ar: 'تاريخ القطع، والتوفيق مع السجلين الحيين للتدريب والاستشارات', en: 'The cut-off date and the reconciliation with the live training and consulting registers' },
     ],
     never: [
       { ar: 'مجموع مركّب يخلط وحدات مختلفة', en: 'A combined total that mixes different units' },

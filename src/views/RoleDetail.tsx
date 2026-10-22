@@ -95,6 +95,7 @@ export default function RoleDetail() {
     go('wizard')
   }
   const editorial = claimById('leaders-editorial-role-targets')
+  const editorialTasks = claimById('leaders-editorial-role-tasks')
   const otherName = lang === 'ar' ? role.name.en : role.name.ar
 
   return (
@@ -138,7 +139,15 @@ export default function RoleDetail() {
               <h2 id="tasks-title" className="text-xl font-bold text-dga-black">
                 {t(label.tasksTitle)}
               </h2>
-              <p className="mt-1 text-xs text-dga-muted">{t(label.tasksNote)}</p>
+              <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-dga-muted">
+                <span>{t(label.tasksNote)}</span>
+                <span
+                  className="chip border-dga-amber/40 bg-dga-amber/10 text-dga-amber-tx"
+                  title={editorialTasks ? t(editorialTasks.text) : undefined}
+                >
+                  {t(label.editorial)}
+                </span>
+              </p>
               <ul className="mt-4 space-y-3 print:mt-2 print:space-y-1.5">
                 {profile.tasks.map((task, i) => (
                   <li key={i} className="flex flex-col gap-1.5 border-b border-dga-line/60 pb-3 last:border-0 last:pb-0 print:pb-1.5">

@@ -48,6 +48,20 @@ function ClaimSentence({ id }: { id: string }) {
   return <Claim id={id}>{t(c.text)}</Claim>
 }
 
+/** «تقدير تحريري» marker (same look as the work-shift map and role sheet); the hover text is the registered editorial claim. */
+function EditorialChip({ claimId, compact = false }: { claimId: string; compact?: boolean }) {
+  const { t } = useApp()
+  const c = claimById(claimId)
+  return (
+    <span
+      className={`chip border-dga-amber/40 bg-dga-amber/10 text-dga-amber-tx ${compact ? '!px-1.5 !py-0 text-[10.5px] font-medium' : ''}`}
+      title={c ? t(c.text) : undefined}
+    >
+      {t(label.editorial)}
+    </span>
+  )
+}
+
 function DomainChip({ id }: { id: string }) {
   const { t } = useApp()
   return <span className="chip-info whitespace-nowrap">{t(domainById(id).shortName)}</span>
@@ -62,6 +76,10 @@ function arCount(n: number, f: { one: string; two: string; few: string; many: st
 }
 
 const enCount = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+/** Registered editorial claims behind the «تقدير تحريري» markers (audit 2026-10-22, section C). */
+const EDITORIAL_DECISIONS = 'leaders-editorial-decisions'
+const EDITORIAL_QUESTIONS = 'leaders-editorial-questions'
 
 /** Counts come from the data the page shows, never typed by hand (review D11). */
 const counts = {
@@ -94,6 +112,11 @@ const label = {
     en: `${enCount(counts.questions, 'question', 'questions')} to ask your CIO and your HR director`,
   },
   listenFor: { ar: 'إجابة تطمئنك:', en: 'A reassuring answer:' },
+  editorial: { ar: 'تقدير تحريري', en: 'Editorial estimate' },
+  questionsBasis: {
+    ar: 'صياغة تحريرية مبنية على الضوابط الأساسية للأمن السيبراني وإرشادات سدايا ومعايير مكتب إدارة البيانات الوطنية.',
+    en: 'Editorial wording based on the Essential Cybersecurity Controls, SDAIA’s guidelines and the National Data Management Office standards.',
+  },
   nextTitle: { ar: 'خطوتك التالية', en: 'Your next step' },
   // no duration: none has been timed with real users, so the card names only what the check contains
   checkCard: {
@@ -207,7 +230,10 @@ export default function LeaderBrief() {
                   </dd>
                 </div>
                 <div className="rounded-btn bg-dga-green/5 px-3 py-2 print:bg-transparent print:p-0">
-                  <dt className="font-semibold text-dga-green-dark">{t(label.decision)}</dt>
+                  <dt className="flex flex-wrap items-center gap-1.5 font-semibold text-dga-green-dark">
+                    {t(label.decision)}
+                    <EditorialChip claimId={EDITORIAL_DECISIONS} compact />
+                  </dt>
                   <dd className="mt-0.5 font-medium text-dga-black">{t(s.decision)}</dd>
                 </div>
                 <div className="print-small print:order-last print:col-span-3 print:flex print:gap-1.5">
@@ -220,7 +246,10 @@ export default function LeaderBrief() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-semibold text-dga-green-dark">{t(label.unchanged)}</dt>
+                  <dt className="flex flex-wrap items-center gap-1.5 font-semibold text-dga-green-dark">
+                    {t(label.unchanged)}
+                    <EditorialChip claimId={EDITORIAL_DECISIONS} compact />
+                  </dt>
                   <dd className="mt-0.5 text-dga-muted">{t(s.unchanged)}</dd>
                 </div>
               </dl>
@@ -231,9 +260,12 @@ export default function LeaderBrief() {
 
       {/* ── 3 decisions ───────────────────────────────────────── */}
       <section aria-labelledby="decisions-title" className="mb-12 print:mb-3">
-        <h2 id="decisions-title" className="text-2xl font-bold text-dga-black">
-          {t(label.decisionsTitle)}
-        </h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 id="decisions-title" className="text-2xl font-bold text-dga-black">
+            {t(label.decisionsTitle)}
+          </h2>
+          <EditorialChip claimId={EDITORIAL_DECISIONS} />
+        </div>
         <ol className="mt-5 grid gap-5 md:grid-cols-3 print:mt-2 print:grid-cols-3 print:gap-3">
           {ownedDecisions.map((d, i) => (
             <li key={d.id} className="glass print-avoid flex flex-col p-5 print:p-2.5">
@@ -261,9 +293,13 @@ export default function LeaderBrief() {
 
       {/* ── 10 questions ──────────────────────────────────────── */}
       <section aria-labelledby="questions-title" className="mb-12 print:mb-3">
-        <h2 id="questions-title" className="text-2xl font-bold text-dga-black">
-          {t(label.questionsTitle)}
-        </h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 id="questions-title" className="text-2xl font-bold text-dga-black">
+            {t(label.questionsTitle)}
+          </h2>
+          <EditorialChip claimId={EDITORIAL_QUESTIONS} />
+        </div>
+        <p className="print-small mt-1 text-sm text-dga-muted print:mt-0">{t(label.questionsBasis)}</p>
         <div className="mt-5 grid gap-6 md:grid-cols-2 print:mt-2 print:grid-cols-2 print:gap-4">
           {audiences.map((aud) => {
             const qs = briefQuestions.filter((q) => q.to === aud)
