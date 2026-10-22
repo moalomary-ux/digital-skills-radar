@@ -4,7 +4,7 @@ import { libraryRoleById } from '../data/roleLibrary'
 import type { View } from '../store'
 import { pathFor, routeFromPath } from './routes'
 
-export const SITE_URL = 'https://omary.me'
+export const SITE_URL = 'https://radar.omary.me'
 export const SITE_NAME: L = { ar: 'رادار المهارات الرقمية', en: 'Digital Skills Radar' }
 export const OG_IMAGE_PATH = '/og/default.png'
 

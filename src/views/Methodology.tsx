@@ -55,8 +55,8 @@ const CHANGELOG: { v: string; date: string; items: L[] }[] = [
         en: 'A single claims registry and the “evidence register” page: every figure carries its source, type, confidence and review date, with automated content and terminology checks.',
       },
       {
-        ar: 'بيانات الجهات في البناء العام مجاميع وطنية وقطاعية فقط، بلا سجلات لكل جهة ولا شعارات ولا ترتيب.',
-        en: 'Government-entity data in the public build is national and sector aggregates only: no per-entity records, no logos, no rankings.',
+        ar: 'بيانات الجهات في البناء المنشور: أرقام وطنية، ومجاميع قطاعية، وسجل خدمات كل جهة حكومية وشعارها (بقرار المالك)، بلا ترتيب للجهات.',
+        en: 'Government-entity data in the published build: national figures, sector aggregates, and each government entity’s service record and logo (owner’s decision), with no ranking of entities.',
       },
       {
         ar: 'قاموس مصطلحات ملزم، وتصحيح حقائق المعايير: عدد مهارات SFIA 9، والمقابلة مع DigComp مواءمة تحريرية لا تطابق مباشر.',
@@ -588,17 +588,17 @@ export default function Methodology() {
               <ClaimText
                 key="n"
                 text={t({
-                  ar: 'البناء العام يعرض مجاميع فقط: أرقامًا وطنية ومجاميع قطاعية، ولا يظهر مجموع قطاع إلا إذا بلغ عدد جهاته ذات السجلات {{method-gov-sector-min}}.',
-                  en: 'The public build shows aggregates only, national figures and sector aggregates, and a sector total appears only when its entities with records reach {{method-gov-sector-min}}.',
+                  ar: 'البناء المنشور يعرض الطبقة التفصيلية بقرار المالك: الأرقام الوطنية، ومجاميع القطاعات التي يبلغ عدد جهاتها ذات السجلات {{method-gov-sector-min}} أو أكثر، وسجل خدمات كل جهة حكومية كما ورد في ملفي المصدر، وشعارات الجهات من الدليل الرسمي.',
+                  en: 'The published build shows the detailed layer by the owner’s decision: national figures, aggregates for sectors with {{method-gov-sector-min}} or more entities with records, each government entity’s service record as it appears in the two source workbooks, and entity logos from the official directory.',
                 })}
               />,
               t({
-                ar: 'لا سجلات لكل جهة، ولا شعارات رسمية، ولا ترتيب للجهات، ولا وصف لجهة بأنها لم تستفد، ولا احتياجات مستنتجة لجهة بعينها.',
-                en: 'No per-entity records, no official logos, no ranking of entities, no labelling of an entity as not served, and no inferred needs for a named entity.',
+                ar: 'لا ترتيب للجهات، ولا وصف لجهة بأنها لم تستفد، ولا شعار للهيئة نفسها، ولا ادعاء صفة رسمية؛ والسجلات للاستئناس في تخطيط التطوير لا لتقييم الجهة.',
+                en: 'No ranking of entities, no labelling of an entity as not served, no logo of the Authority itself and no claim of official status; the records inform development planning and never rate an entity.',
               }),
               t({
-                ar: 'الطبقة التفصيلية لكل جهة موجودة في نسخة عرض خاصة فقط، ولا تُنشر.',
-                en: 'The per-entity layer exists only in a private demonstration build and is not published.',
+                ar: 'يمكن بناء نسخة مجاميع فقط (بلا سجلات ولا شعارات) بمفتاح بناء واحد عند الحاجة.',
+                en: 'An aggregates-only build (no records, no logos) remains available through a single build flag when needed.',
               }),
               t({
                 ar: '«جهة حكومية» تعني جهة حكومية فقط؛ وتُسمّى الأنواع الأخرى (شركات مملوكة، وجهات أهلية، وأندية) بنوعها.',

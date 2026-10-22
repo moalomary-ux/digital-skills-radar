@@ -654,16 +654,16 @@ describe('6b. English pages: taxonomy labels in English on every state, proper n
 })
 
 describe('6b. the section hub promises what the aggregate pages show', () => {
-  it.each(['ar', 'en'] as const)('hub (%s): states the n ≥ 10 rule from the data constant, never promises logos, rankings or per-entity records', (lang) => {
+  it.each(['ar', 'en'] as const)('hub (%s): states the n ≥ 10 rule from the data constant, promises the full layer and never rankings or the Authority logo', (lang) => {
     const { container } = renderAt(createElement(EntitiesSectorsHub), lang, `/${lang}/entities`)
     const text = container.textContent ?? ''
     expect(text).toContain(`${SECTOR_MIN_ENTITIES}`)
     if (lang === 'ar') {
-      for (const s of ['شعارات رسمية', 'سجلات خدمة لجهة مسماة', 'ترتيب للجهات', 'مجموع مركّب', 'جهات القطاع الخاص', 'القطاعات الحكومية', 'استنتاج تحريري']) expect(text, s).toContain(s)
+      for (const s of ['شعار الهيئة نفسها', 'سجل خدماتها التدريبية والاستشارية', 'ترتيب الجهات', 'مجموع مركّب', 'جهات القطاع الخاص', 'القطاعات الحكومية', 'استنتاج تحريري']) expect(text, s).toContain(s)
       expect(text).not.toContain('مجاميع فقط')
     } else {
       expect(arabicRunsOutsideAr(container)).toEqual([])
-      for (const s of ['Official logos', 'Entity rankings', 'Private-sector entities', 'Government sectors', 'editorial inference']) expect(text, s).toContain(s)
+      for (const s of ['Authority’s own logo', 'Ranking entities', 'Private-sector entities', 'Government sectors', 'editorial inference']) expect(text, s).toContain(s)
     }
     // the public build never shows the private-demo notice
     expect(text).not.toMatch(/عرض خاص|Private demo/)

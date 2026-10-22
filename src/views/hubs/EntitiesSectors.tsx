@@ -23,8 +23,8 @@ const N = SECTOR_MIN_ENTITIES
 
 /**
  * What each page of the section shows and deliberately never shows, worded to match the public
- * (VITE_DATA_MODE=aggregate) build exactly: national figures, sector aggregates for n ≥ 10 only, and a
- * directory of entity names; no per-entity records, no logos, no rankings.
+ * build exactly. Since the owner’s decision of 2026-10-22 the published build is the full layer: national
+ * figures, sector aggregates for n ≥ 10, and the directory with per-entity records and logos; no rankings.
  */
 const pages: Page[] = [
   {
@@ -67,7 +67,7 @@ const pages: Page[] = [
     ],
     never: [
       { ar: 'مجموع مركّب يخلط وحدات مختلفة', en: 'A combined total that mixes different units' },
-      { ar: 'أرقام أو ترتيب لجهة بعينها', en: 'Figures or rankings for a single entity' },
+      { ar: 'ترتيب للجهات أو مقارنة تنافسية بينها', en: 'Rankings or competitive comparisons between entities' },
       { ar: 'ادعاء «أثر» لم يُقس', en: 'An «impact» claim that was never measured' },
     ],
   },
@@ -82,11 +82,10 @@ const pages: Page[] = [
         en: 'Active entities by name, type, sector and region; government and quasi-government entities are selected by default',
       },
       { ar: 'بحث بالاسم العربي أو الإنجليزي، وتصفية بالنوع والقطاع والمنطقة', en: 'Search by Arabic or English name, and filters by type, sector and region' },
-      { ar: 'صفحة لكل جهة تربطها بموجز قطاعها', en: 'A page per entity that links to its sector brief' },
+      { ar: 'صفحة لكل جهة: سجل خدماتها التدريبية والاستشارية كما ورد في ملفي المصدر، وشعارها من الدليل الرسمي، ورابط موجز قطاعها', en: 'A page per entity: its training and consulting record as it appears in the two source workbooks, its logo from the official directory, and a link to its sector brief' },
     ],
     never: [
-      { ar: 'شعارات رسمية', en: 'Official logos' },
-      { ar: 'سجلات خدمة لجهة مسماة، أو وصفها بأنها استفادت أو لم تستفد', en: 'Service records for a named entity, or labels saying whether it was served' },
+      { ar: 'ترتيب الجهات، أو وصف جهة بأنها لم تستفد، أو شعار الهيئة نفسها', en: 'Ranking entities, labelling an entity as not served, or the Authority’s own logo' },
       { ar: 'جهات القطاع الخاص', en: 'Private-sector entities' },
     ],
   },
@@ -104,13 +103,13 @@ export default function EntitiesSectorsHub() {
         eyebrow={{ ar: 'مجاميع ودليل، بلا ترتيب', en: 'Aggregates and a directory, no rankings' }}
         title={{ ar: 'الجهات والقطاعات', en: 'Entities & sectors' }}
         intro={{
-          ar: `سجل خدمات التمكين بأرقامه الوطنية، والقطاعات الحكومية بمجاميعها، ودليل لأسماء الجهات. البناء العام لا يعرض سجلات خدمة لجهة بعينها، ولا ترتيبًا للجهات، ولا شعارات رسمية، ولا ينشر مجاميع قطاع إلا إذا بلغ عدد جهاته ذات السجلات ${N} أو أكثر.`,
-          en: `The enablement service record with its national figures, the government sectors with their aggregates, and a directory of entity names. The public build shows no service records for a single entity, no entity rankings and no official logos, and publishes a sector’s totals only when it has ${N} or more entities with records.`,
+          ar: `سجل خدمات التمكين بأرقامه الوطنية، والقطاعات الحكومية بمجاميعها، ودليل الجهات وسجل خدمات كل جهة وشعارها (بقرار المالك، 2026-10-22). لا ترتيب للجهات ولا وصف لجهة بأنها لم تستفد، ولا تُنشر مجاميع قطاع إلا إذا بلغ عدد جهاته ذات السجلات ${N} أو أكثر.`,
+          en: `The enablement service record with its national figures, the government sectors with their aggregates, and the entity directory with each entity’s service record and logo (owner’s decision, 2026-10-22). No entity rankings, no labelling of an entity as not served, and a sector’s totals are published only when it has ${N} or more entities with records.`,
         }}
       >
         {isFullMode() ? (
           <p className="chip mt-4 border-dga-amber/60 bg-amber-50 text-dga-amber-tx">
-            {t({ ar: 'عرض خاص: هذا البناء الكامل يعرض سجلات الجهات ولا يُنشر', en: 'Private demo: this full build shows entity records and is never published' })}
+            {t({ ar: 'هذا البناء يعرض الطبقة التفصيلية — سجلات الجهات وشعاراتها — بقرار المالك (2026-10-22)', en: 'This build shows the detailed layer — entity records and logos — by the owner’s decision (2026-10-22)' })}
           </p>
         ) : null}
         <p className="mt-4 flex flex-wrap items-center gap-2 text-sm text-dga-muted">

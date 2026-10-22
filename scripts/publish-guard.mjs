@@ -184,14 +184,18 @@ if (flags.has('--require-aggregate') && mode.anyFull) {
   process.exit(1)
 }
 
-if (mode.mode === 'full') {
-  log('full build (VITE_DATA_MODE=full): entity-level content is expected here; leak checks skipped. Never publish this tree.')
-  process.exit(0)
-}
+// Owner decision 2026-10-22: the full build (entity records + entity logos) is the published site.
+// In full mode the logos/ directory and data/entities/ are expected; every other rule still applies
+// (the Authority's own logo, private-sector entities and ranking / «not served» texts never ship).
+const FULL_MODE_ALLOWED_RULES = new Set(['logos', 'entity-details'])
 
 let leaks
 try {
   leaks = findLeaks(DIST)
+  if (mode.mode === 'full') {
+    leaks = leaks.filter((l) => !FULL_MODE_ALLOWED_RULES.has(l.rule))
+    log('full build (VITE_DATA_MODE=full): logos/ and data/entities/ are expected; the remaining rules still apply')
+  }
 } catch (e) {
   err(`could not read ${rel(DIST)}: ${e instanceof Error ? e.message : String(e)}`)
   process.exit(2)
@@ -204,5 +208,5 @@ if (leaks.length > 0) {
 }
 
 const scanned = walk(DIST).length
-log(`OK - ${scanned} files scanned: none of the ${FORBIDDEN_TEXT.length} forbidden texts, no logo files, no data/entities/.`)
+log(`OK - ${scanned} files scanned: none of the ${FORBIDDEN_TEXT.length} forbidden texts${mode.mode === 'full' ? ' (full build: logos and entity details allowed)' : ', no logo files, no data/entities/'}.`)
 process.exit(0)

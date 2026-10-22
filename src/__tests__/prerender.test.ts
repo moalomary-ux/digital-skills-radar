@@ -111,7 +111,7 @@ describe('prerender manifest', () => {
     const head = headForPath(`/en/roles/${role.id}`)
     expect(head.lang).toBe('en')
     expect(head.title).toContain(role.name.en)
-    expect(head.canonical).toBe(`https://omary.me/en/roles/${role.id}/`)
+    expect(head.canonical).toBe(`https://radar.omary.me/en/roles/${role.id}/`)
     expect(headForPath('/ar/methodology').title).toBe(headFor('methodology', 'ar').title)
     expect(headForPath('/ar/assess').robots).toContain('noindex')
   })
@@ -136,8 +136,8 @@ describe('head helpers', () => {
   })
 
   it('builds canonical URLs with the language prefix and a trailing slash, without query strings', () => {
-    expect(headFor('methodology', 'en').canonical).toBe('https://omary.me/en/methodology/')
-    expect(headFor('home', 'ar').canonical).toBe('https://omary.me/ar/')
+    expect(headFor('methodology', 'en').canonical).toBe('https://radar.omary.me/en/methodology/')
+    expect(headFor('home', 'ar').canonical).toBe('https://radar.omary.me/ar/')
     expect(canonicalPath('home', 'en')).toBe('/en/')
     expect(canonicalPath('sectors', 'ar', { category: 'x' })).toBe('/ar/sectors/')
     expect(canonicalPath('role', 'en', { roleId: 'data_scientist' })).toBe('/en/roles/data_scientist/')
@@ -147,12 +147,12 @@ describe('head helpers', () => {
     const alternates = alternateLinks('methodology')
     expect(alternates.map((alt) => alt.hrefLang)).toEqual(['ar', 'en', 'x-default'])
     const byLang = Object.fromEntries(alternates.map((alt) => [alt.hrefLang, alt.href]))
-    expect(byLang.ar).toBe('https://omary.me/ar/methodology/')
-    expect(byLang.en).toBe('https://omary.me/en/methodology/')
+    expect(byLang.ar).toBe('https://radar.omary.me/ar/methodology/')
+    expect(byLang.en).toBe('https://radar.omary.me/en/methodology/')
     expect(byLang['x-default']).toBe(byLang.ar)
     expect(headFor('methodology', 'en').alternates).toEqual(alternates)
     const roleAlternates = alternateLinks('role', { roleId: 'data_scientist' })
-    expect(roleAlternates[1].href).toBe('https://omary.me/en/roles/data_scientist/')
+    expect(roleAlternates[1].href).toBe('https://radar.omary.me/en/roles/data_scientist/')
   })
 
   it('sets robots noindex only for personal views and not-found', () => {
@@ -178,7 +178,7 @@ describe('head helpers', () => {
 
   it('fills the Open Graph block from the same data', () => {
     const head = headFor('methodology', 'en')
-    expect(head.og.image).toBe('https://omary.me/og/default.png')
+    expect(head.og.image).toBe('https://radar.omary.me/og/default.png')
     expect(head.og.url).toBe(head.canonical)
     expect(head.og.title).toBe(head.title)
     expect(head.og.description).toBe(head.description)
@@ -189,7 +189,7 @@ describe('head helpers', () => {
 })
 
 function sampleHead(overrides: Partial<HeadData> = {}): HeadData {
-  const canonical = 'https://omary.me/en/sample/'
+  const canonical = 'https://radar.omary.me/en/sample/'
   return {
     lang: 'en',
     dir: 'ltr',
@@ -197,16 +197,16 @@ function sampleHead(overrides: Partial<HeadData> = {}): HeadData {
     description: 'Tom & Jerry <script>alert(1)</script> "quoted"',
     canonical,
     alternates: [
-      { hrefLang: 'ar', href: 'https://omary.me/ar/sample/' },
+      { hrefLang: 'ar', href: 'https://radar.omary.me/ar/sample/' },
       { hrefLang: 'en', href: canonical },
-      { hrefLang: 'x-default', href: 'https://omary.me/ar/sample/' },
+      { hrefLang: 'x-default', href: 'https://radar.omary.me/ar/sample/' },
     ],
     robots: null,
     og: {
       title: 'Sample <Title> & Co',
       description: 'Tom & Jerry <script>alert(1)</script> "quoted"',
       url: canonical,
-      image: 'https://omary.me/og/default.png',
+      image: 'https://radar.omary.me/og/default.png',
       type: 'website',
       locale: 'en_US',
       siteName: 'Digital Skills Radar',
@@ -222,8 +222,8 @@ describe('renderHeadTags', () => {
     expect(html).toContain('<title')
     expect(html).toContain('</title>')
     expect(html).toContain('rel="canonical"')
-    expect(html).toContain('href="https://omary.me/en/methodology/"')
-    expect(html).toContain('property="og:image" content="https://omary.me/og/default.png"')
+    expect(html).toContain('href="https://radar.omary.me/en/methodology/"')
+    expect(html).toContain('property="og:image" content="https://radar.omary.me/og/default.png"')
     expect(html).toContain('hreflang="x-default"')
     expect(html).toContain('hreflang="ar"')
     expect(html).toContain('hreflang="en"')
@@ -256,11 +256,11 @@ describe('applyHead in the browser', () => {
     expect(count('link[rel="alternate"]')).toBe(3)
     expect(count('meta[property="og:image"]')).toBe(1)
     expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toBe(head.description)
-    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://omary.me/en/methodology/')
+    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://radar.omary.me/en/methodology/')
     expect(document.head.querySelector('link[rel="alternate"][hreflang="x-default"]')?.getAttribute('href'))
-      .toBe('https://omary.me/ar/methodology/')
+      .toBe('https://radar.omary.me/ar/methodology/')
     expect(document.head.querySelector('meta[property="og:image"]')?.getAttribute('content'))
-      .toBe('https://omary.me/og/default.png')
+      .toBe('https://radar.omary.me/og/default.png')
   })
 
   it('updates existing tags when another head is applied', () => {
@@ -272,7 +272,7 @@ describe('applyHead in the browser', () => {
     expect(count('link[rel="canonical"]')).toBe(1)
     expect(count('link[rel="alternate"]')).toBe(3)
     expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toBe(next.description)
-    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://omary.me/ar/about/')
+    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://radar.omary.me/ar/about/')
     expect(document.head.querySelector('meta[property="og:locale"]')?.getAttribute('content')).toBe('ar_SA')
   })
 

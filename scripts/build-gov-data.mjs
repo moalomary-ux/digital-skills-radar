@@ -536,6 +536,7 @@ if (FULL) {
   const bySector = new Map()
   for (const e of active) {
     const slug = tax.sectorIdFromAr(e.sector)
+    if (tax.NON_GOVERNMENT_SECTOR_IDS.includes(slug)) continue // private-sector entities never ship, in any mode
     const row = {
       id: e.id,
       nameAr: e.nameAr,
@@ -568,8 +569,11 @@ if (FULL) {
   let copied = 0
   if (existsSync(P.srcLogos)) {
     mkdirSync(P.publicLogos, { recursive: true })
+    // only the logos of entities that ship (government sectors); private-sector logos stay in src/
+    const wanted = new Set()
+    for (const rows of bySector.values()) for (const r of rows) if (r.logo) wanted.add(String(r.logo).replace(/^.*\//, '').replace(/\.(png|webp)$/i, ''))
     for (const f of readdirSync(P.srcLogos)) {
-      if (!/\.webp$/i.test(f)) continue
+      if (!/\.webp$/i.test(f) || !wanted.has(f.replace(/\.webp$/i, ''))) continue
       cpSync(join(P.srcLogos, f), join(P.publicLogos, f))
       copied++
     }

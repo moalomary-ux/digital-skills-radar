@@ -28,7 +28,7 @@ const neverDo: L[] = [
   { ar: 'لا خادم ولا حسابات ولا تتبع', en: 'No server, no accounts, no tracking' },
   { ar: 'لا درجة «جاهزية» كلية ولا ترتيب للجهات أو الموظفين', en: 'No overall «readiness» score, and no ranking of entities or employees' },
   { ar: 'لا ربط بملف الموظف ولا بالتقييم الوظيفي أو الترقية', en: 'No link to employee files, performance appraisal or promotion' },
-  { ar: 'لا شعارات رسمية لأي جهة', en: 'No official logos of any entity' },
+  { ar: 'لا شعار للهيئة نفسها ولا ادعاء صفة رسمية', en: 'No logo of the Authority itself and no claim of official status' },
 ]
 
 /**

@@ -107,15 +107,15 @@ export function buildPlanIcs(input: PlanIcsInput): string {
   const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//omary.me//Digital Skills Radar//AR-EN',
+    'PRODID:-//radar.omary.me//Digital Skills Radar//AR-EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${escapeText(input.calendarName)}`,
   ]
   input.weeks.forEach((w, i) => {
-    event(lines, `dsr-${seed}-w${i + 1}@omary.me`, stamp, planDay(input.start, 1 + i * 7), w, w.title)
+    event(lines, `dsr-${seed}-w${i + 1}@radar.omary.me`, stamp, planDay(input.start, 1 + i * 7), w, w.title)
   })
-  event(lines, `dsr-${seed}-d${PLAN_DAYS}@omary.me`, stamp, planDay(input.start, PLAN_DAYS), input.recheck, input.recheck.title)
+  event(lines, `dsr-${seed}-d${PLAN_DAYS}@radar.omary.me`, stamp, planDay(input.start, PLAN_DAYS), input.recheck, input.recheck.title)
   lines.push('END:VCALENDAR')
   return lines.map(foldLine).join('\r\n') + '\r\n'
 }
