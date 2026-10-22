@@ -8,6 +8,15 @@ import Icon from '../../components/Icon'
 import { ClaimText } from '../../components/Claim'
 import { HubCard, HubHeader, HubSection } from '../../components/shell/Hub'
 import { useArrow } from '../../components/shell/hooks'
+import MapPreview from '../../components/map/MapPreview'
+import { defaultSources } from '../../components/map/sources'
+import { countOf } from '../../components/map/copy'
+import { libraryRoles } from '../../data/roleLibrary'
+import { workFamilies } from '../../data/workShifts'
+import { technologies } from '../../data/technologies'
+import type { NodeKind } from '../../lib/skillsGraph'
+import { countPhrase } from '../../lib/format'
+import { shifts } from '../../data/leaders/shifts'
 
 /** The one four-level scale (glossary: وعي · تطبيق · إتقان · ريادة). */
 const levels: { name: L; meaning: L }[] = [
@@ -17,6 +26,10 @@ const levels: { name: L; meaning: L }[] = [
   { name: { ar: 'ريادة', en: 'Leadership' }, meaning: { ar: 'تقود الممارسة في جهتك وتضع معاييرها وتطوّر غيرك.', en: 'You lead the practice in your entity, set its standards and develop others.' } },
 ]
 
+/** The hub lands on the skills map: every ring of it, previewed; the full map is one click away. */
+const HUB_MAP_SOURCES = defaultSources()
+const HUB_MAP_KINDS: NodeKind[] = ['skill', 'family', 'role', 'tech']
+
 const roleCategories: L[] = [
   { ar: 'عام', en: 'General' },
   { ar: 'تطبيقي', en: 'Applied' },
@@ -25,7 +38,7 @@ const roleCategories: L[] = [
   { ar: 'تنفيذي', en: 'Executive' },
 ]
 
-/** «الأدوار والمهارات» — hub landing with a live domain × level matrix. */
+/** «الأدوار والمهارات» — hub landing: the interactive skills map first, then the live domain × level matrix. */
 export default function RolesSkillsHub() {
   const { t, lang } = useApp()
   const arrow = useArrow()
@@ -33,6 +46,7 @@ export default function RolesSkillsHub() {
   const domain = domains[cell.d]
   const level = levels[cell.l]
   const sep = lang === 'ar' ? '، ' : ', '
+  const storySteps = countPhrase(shifts.length + 1, lang, { one: 'خطوة واحدة', two: 'خطوتين', few: 'خطوات', many: 'خطوة' }, ['step', 'steps'])
 
   return (
     <div>
@@ -44,6 +58,60 @@ export default function RolesSkillsHub() {
           en: `A shared language for development: ${domains.length} domains, five skills in each, and one scale of ${levels.length} levels. A role sets the target level in each domain; the role category sets what you are expected to show.`,
         }}
       />
+
+      <HubSection
+        id="skills-map"
+        title={{ ar: 'خريطة المهارات التفاعلية', en: 'Interactive skills map' }}
+        intro={{
+          ar: 'ابدأ من الخريطة: كل مجال في إسفينه، ومهاراته حوله، ثم الأسر الوظيفية الحكومية والأدوار الرقمية التي تستند إليه، ثم التقنيات التي تتطلب مهاراته. مرّر فوق أي نقطة، وانقر لتفتحها في الخريطة الكاملة.',
+          en: 'Start from the map: each domain in its wedge, its skills around it, then the government job families and digital roles that lean on it, then the technologies that need its skills. Hover over any point, and click to open it on the full map.',
+        }}
+      >
+        <div className="grid gap-6 rounded-card border border-dga-line bg-white p-4 shadow-card sm:p-6 lg:grid-cols-[minmax(0,1fr),minmax(0,21rem)] lg:items-center">
+          <MapPreview sources={HUB_MAP_SOURCES} kinds={HUB_MAP_KINDS} className="mx-auto w-full max-w-[32rem]" />
+          <div>
+            <ul className="flex flex-wrap gap-2">
+              {[
+                countOf('domain', domains.length, lang),
+                countOf('skill', domains.reduce((n, d) => n + d.skills.length, 0), lang),
+                countOf('family', workFamilies.length, lang),
+                countOf('role', libraryRoles.length, lang),
+                countOf('tech', technologies.length, lang),
+              ].map((c) => (
+                <li key={c} className="chip !px-3 !py-1 !text-[12.5px] !text-dga-ink">
+                  {c}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm leading-relaxed text-dga-muted">
+              {t({
+                ar: `في الخريطة الكاملة: بحث حيّ، وتصفية للحلقات، ولوحة تشرح كل عقدة، وقصة من ${storySteps} عن تحولات العمل الحكومي والأدوار التي تحملها.`,
+                en: `On the full map: live search, ring filters, a panel that explains every node, and a story in ${storySteps} about the shifts in government work and the roles that carry them.`,
+              })}
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Link to={pathFor('map', lang)} className="btn-primary px-5 py-2.5 text-sm no-underline hover:no-underline">
+                {t({ ar: 'افتح الخريطة', en: 'Open the map' })} <span aria-hidden="true">{arrow}</span>
+              </Link>
+              <Link to={`${pathFor('map', lang)}?story=1`} className="btn-ghost px-4 py-2 text-sm no-underline hover:no-underline">
+                {t({ ar: 'ابدأ القصة', en: 'Start the story' })}
+              </Link>
+            </div>
+            <ul className="mt-5 space-y-1.5 border-t border-dga-line pt-4 text-sm font-semibold">
+              <li>
+                <Link to={pathFor('roles', lang)} className="inline-flex items-center gap-1 text-dga-green-dark">
+                  {t({ ar: 'الأدوار وأوراقها', en: 'Roles and their sheets' })} <span aria-hidden="true">{arrow}</span>
+                </Link>
+              </li>
+              <li>
+                <Link to={pathFor('skills', lang)} className="inline-flex items-center gap-1 text-dga-green-dark">
+                  {t({ ar: 'قاموس المهارات', en: 'Skills dictionary' })} <span aria-hidden="true">{arrow}</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </HubSection>
 
       <HubSection
         title={{ ar: 'جرّب: المجال × المستوى', en: 'Try it: domain × level' }}
@@ -162,7 +230,17 @@ export default function RolesSkillsHub() {
       </HubSection>
 
       <HubSection title={{ ar: 'صفحات هذا القسم', en: 'Pages in this section' }}>
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <HubCard
+            view="map"
+            icon="radar"
+            highlight
+            title={{ ar: 'خريطة المهارات التفاعلية', en: 'Interactive skills map' }}
+            desc={t({
+              ar: 'المجالات ومهاراتها والأسر الوظيفية والأدوار والتقنيات في صورة واحدة تستكشفها بالنقر والتحويم ولوحة المفاتيح.',
+              en: 'Domains, skills, job families, roles and technologies in one picture you explore by click, hover and keyboard.',
+            })}
+          />
           <HubCard
             view="roles"
             icon="flag"
