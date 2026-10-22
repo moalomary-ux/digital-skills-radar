@@ -81,7 +81,8 @@ export function KnowledgeText({ e }: { e: Pick<DomainEvidence, 'knowledge' | 'ag
 export function roleLine(rec: ResultRecord): { category: L | null; role: L | null } {
   const category = isCategoryId(rec.trackId) ? trackById(rec.trackId)!.name : null
   const lib = rec.roleId.startsWith(LIB_PREFIX) ? libraryRoleById(rec.roleId.slice(LIB_PREFIX.length)) : undefined
-  return { category, role: lib ? lib.name : category ? null : resolveRoleName(rec.roleId) }
+  // a precise role renders through resolveRoleName so the «ومن في حكمه» suffix appears everywhere
+  return { category, role: lib ? resolveRoleName(rec.roleId) : category ? null : resolveRoleName(rec.roleId) }
 }
 
 /**
