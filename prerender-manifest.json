@@ -212,6 +212,27 @@
       "status": "rendered"
     },
     {
+      "path": "/ar/map",
+      "file": "ar/map/index.html",
+      "canonical": "https://radar.omary.me/ar/map/",
+      "lang": "ar",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://radar.omary.me/ar/map/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://radar.omary.me/en/map/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://radar.omary.me/ar/map/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
       "path": "/ar/method",
       "file": "ar/method/index.html",
       "canonical": "https://radar.omary.me/ar/method/",
@@ -1131,6 +1152,27 @@
         {
           "hrefLang": "x-default",
           "href": "https://radar.omary.me/ar/leaders/brief/"
+        }
+      ],
+      "status": "rendered"
+    },
+    {
+      "path": "/en/map",
+      "file": "en/map/index.html",
+      "canonical": "https://radar.omary.me/en/map/",
+      "lang": "en",
+      "alternates": [
+        {
+          "hrefLang": "ar",
+          "href": "https://radar.omary.me/ar/map/"
+        },
+        {
+          "hrefLang": "en",
+          "href": "https://radar.omary.me/en/map/"
+        },
+        {
+          "hrefLang": "x-default",
+          "href": "https://radar.omary.me/ar/map/"
         }
       ],
       "status": "rendered"

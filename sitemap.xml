@@ -61,6 +61,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://radar.omary.me/ar/leaders/brief/"/>
   </url>
   <url>
+    <loc>https://radar.omary.me/ar/map/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://radar.omary.me/ar/map/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://radar.omary.me/en/map/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://radar.omary.me/ar/map/"/>
+  </url>
+  <url>
     <loc>https://radar.omary.me/ar/method/</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://radar.omary.me/ar/method/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://radar.omary.me/en/method/"/>
@@ -323,6 +329,12 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://radar.omary.me/ar/leaders/brief/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://radar.omary.me/en/leaders/brief/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://radar.omary.me/ar/leaders/brief/"/>
+  </url>
+  <url>
+    <loc>https://radar.omary.me/en/map/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://radar.omary.me/ar/map/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://radar.omary.me/en/map/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://radar.omary.me/ar/map/"/>
   </url>
   <url>
     <loc>https://radar.omary.me/en/method/</loc>

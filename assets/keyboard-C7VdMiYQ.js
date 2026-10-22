@@ -1,0 +1,1 @@
+function o(a,t,r,s){if(r<=0)return null;const e=(t+1)%r,n=(t-1+r)%r;switch(a){case"ArrowRight":return s?n:e;case"ArrowLeft":return s?e:n;case"ArrowDown":return e;case"ArrowUp":return n;case"Home":return 0;case"End":return r-1;default:return null}}export{o as r};
