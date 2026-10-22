@@ -1,5 +1,5 @@
 {
-  "dataMode": "aggregate",
-  "source": "VITE_DATA_MODE (default)",
+  "dataMode": "full",
+  "source": "VITE_DATA_MODE (process.env)",
   "writtenBy": "scripts/publish-guard.mjs --stamp"
 }
