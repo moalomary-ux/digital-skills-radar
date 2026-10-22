@@ -6,15 +6,13 @@ import { domains } from '../../data/domains'
 import { pathFor } from '../../lib/routes'
 import Icon from '../../components/Icon'
 import { ClaimText } from '../../components/Claim'
-import { HubCard, HubHeader, HubSection } from '../../components/shell/Hub'
+import { HubCard, HubSection } from '../../components/shell/Hub'
 import { useArrow } from '../../components/shell/hooks'
 import MapExplorer from '../../components/map/MapExplorer'
-import { defaultSources } from '../../components/map/sources'
-import { countOf } from '../../components/map/copy'
+import { MAP_COPY, countOf } from '../../components/map/copy'
 import { libraryRoles } from '../../data/roleLibrary'
 import { workFamilies } from '../../data/workShifts'
 import { technologies } from '../../data/technologies'
-import type { NodeKind } from '../../lib/skillsGraph'
 import { countPhrase } from '../../lib/format'
 import { shifts } from '../../data/leaders/shifts'
 
@@ -26,10 +24,6 @@ const levels: { name: L; meaning: L }[] = [
   { name: { ar: 'ريادة', en: 'Leadership' }, meaning: { ar: 'تقود الممارسة في جهتك وتضع معاييرها وتطوّر غيرك.', en: 'You lead the practice in your entity, set its standards and develop others.' } },
 ]
 
-/** The hub lands on the skills map: every ring of it, previewed; the full map is one click away. */
-const HUB_MAP_SOURCES = defaultSources()
-const HUB_MAP_KINDS: NodeKind[] = ['skill', 'family', 'role', 'tech']
-
 const roleCategories: L[] = [
   { ar: 'عام', en: 'General' },
   { ar: 'تطبيقي', en: 'Applied' },
@@ -38,7 +32,11 @@ const roleCategories: L[] = [
   { ar: 'تنفيذي', en: 'Executive' },
 ]
 
-/** «الأدوار والمهارات» — hub landing: the interactive skills map first, then the live domain × level matrix. */
+/**
+ * «الأدوار والمهارات» — hub landing. P10b (review P0-3): the first screen is the full skills-map
+ * explorer at full width (same canvas height rule as `/map`), under a compact header; the counts
+ * and the sub-links sit below it. Then the live domain × level matrix and the section's pages.
+ */
 export default function RolesSkillsHub() {
   const { t, lang } = useApp()
   const arrow = useArrow()
@@ -50,25 +48,34 @@ export default function RolesSkillsHub() {
 
   return (
     <div>
-      <HubHeader
-        eyebrow={{ ar: 'لغة مشتركة للتطوير', en: 'A shared language for development' }}
-        title={{ ar: 'الأدوار والمهارات', en: 'Roles & skills' }}
-        intro={{
-          ar: `لغة مشتركة للتطوير: ${domains.length} مجالات، في كل مجال 5 مهارات، ومقياس واحد من ${levels.length} مستويات. الدور يحدد المستوى المستهدف في كل مجال، وفئة الدور تحدد ما يُنتظر منك إثباته.`,
-          en: `A shared language for development: ${domains.length} domains, five skills in each, and one scale of ${levels.length} levels. A role sets the target level in each domain; the role category sets what you are expected to show.`,
-        }}
-      />
+      <header className="relative overflow-hidden border-b border-dga-line bg-white">
+        <div className="dot-grid-green absolute inset-0 opacity-50" aria-hidden="true" />
+        <div className="relative mx-auto max-w-[88rem] px-4 pb-3 pt-3.5 sm:px-6">
+          <p className="eyebrow">{t({ ar: 'لغة مشتركة للتطوير', en: 'A shared language for development' })}</p>
+          <h1 className="mt-0.5 text-[clamp(1.45rem,2.3vw,1.95rem)] font-bold leading-tight text-dga-green-deep">{t({ ar: 'الأدوار والمهارات', en: 'Roles & skills' })}</h1>
+          <p className="mt-1 max-w-4xl text-[14.5px] leading-relaxed text-dga-muted">
+            {t({
+              ar: `${domains.length} مجالات، في كل مجال 5 مهارات، ومقياس واحد من ${levels.length} مستويات؛ الدور يحدد المستوى المستهدف في كل مجال.`,
+              en: `${domains.length} domains, five skills in each, and one scale of ${levels.length} levels; a role sets the target level in each domain.`,
+            })}
+          </p>
+        </div>
+      </header>
 
-      <HubSection
-        id="skills-map"
-        title={{ ar: 'خريطة المهارات التفاعلية', en: 'Interactive skills map' }}
-        intro={{
-          ar: 'ابدأ من الخريطة: كل مجال في إسفينه، ومهاراته حوله، ثم الأسر الوظيفية الحكومية والأدوار الرقمية التي تستند إليه، ثم التقنيات التي تتطلب مهاراته. مرّر فوق أي نقطة، وانقر لتفتحها في الخريطة الكاملة.',
-          en: 'Start from the map: each domain in its wedge, its skills around it, then the government job families and digital roles that lean on it, then the technologies that need its skills. Hover over any point, and click to open it on the full map.',
-        }}
-      >
-        <div className="grid gap-6 rounded-card border border-dga-line bg-white p-4 shadow-card sm:p-6 lg:grid-cols-[minmax(0,1fr),minmax(0,21rem)] lg:items-center">
-          <MapExplorer headingLevel={3} />
+      <section id="skills-map" className="mx-auto max-w-[88rem] px-4 pb-8 pt-3 sm:px-6" aria-labelledby="hub-map-title">
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 id="hub-map-title" className="text-base font-bold text-dga-green-dark">
+            {t(MAP_COPY.title)}
+          </h2>
+          <p className="text-[13px] text-dga-muted">
+            {t({
+              ar: 'انقر أي نقطة لتقرأ تفاصيلها في اللوحة بجانبها، أو افتح الخريطة في صفحتها لتشارك رابط ما تختاره.',
+              en: 'Click any point to read its details in the panel beside it, or open the map on its own page to share a link to what you pick.',
+            })}
+          </p>
+        </div>
+        <MapExplorer headingLevel={3} />
+        <div className="mt-5 grid gap-5 rounded-card border border-dga-line bg-white p-4 shadow-subtle sm:p-5 lg:grid-cols-[minmax(0,1fr),auto] lg:items-center">
           <div>
             <ul className="flex flex-wrap gap-2">
               {[
@@ -83,35 +90,26 @@ export default function RolesSkillsHub() {
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-sm leading-relaxed text-dga-muted">
+            <p className="mt-3 text-sm leading-relaxed text-dga-muted">
               {t({
-                ar: `في الخريطة الكاملة: بحث حيّ، وتصفية للحلقات، ولوحة تشرح كل عقدة، وقصة من ${storySteps} عن تحولات العمل الحكومي والأدوار التي تحملها.`,
-                en: `On the full map: live search, ring filters, a panel that explains every node, and a story in ${storySteps} about the shifts in government work and the roles that carry them.`,
+                ar: `في صفحة الخريطة: رابط لكل اختيار تشاركه، وقصة من ${storySteps} عن تحولات العمل الحكومي والأدوار التي تحملها.`,
+                en: `On the map page: a link for every choice you can share, and a story in ${storySteps} about the shifts in government work and the roles that carry them.`,
               })}
             </p>
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Link to={pathFor('map', lang)} className="btn-primary px-5 py-2.5 text-sm no-underline hover:no-underline">
-                {t({ ar: 'افتح الخريطة', en: 'Open the map' })} <span aria-hidden="true">{arrow}</span>
-              </Link>
-              <Link to={`${pathFor('map', lang)}?story=1`} className="btn-ghost px-4 py-2 text-sm no-underline hover:no-underline">
-                {t({ ar: 'ابدأ القصة', en: 'Start the story' })}
-              </Link>
-            </div>
-            <ul className="mt-5 space-y-1.5 border-t border-dga-line pt-4 text-sm font-semibold">
-              <li>
-                <Link to={pathFor('roles', lang)} className="inline-flex items-center gap-1 text-dga-green-dark">
-                  {t({ ar: 'الأدوار وأوراقها', en: 'Roles and their sheets' })} <span aria-hidden="true">{arrow}</span>
-                </Link>
-              </li>
-              <li>
-                <Link to={pathFor('skills', lang)} className="inline-flex items-center gap-1 text-dga-green-dark">
-                  {t({ ar: 'قاموس المهارات', en: 'Skills dictionary' })} <span aria-hidden="true">{arrow}</span>
-                </Link>
-              </li>
-            </ul>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link to={pathFor('map', lang)} className="btn-primary px-5 py-2.5 text-sm no-underline hover:no-underline">
+              {t({ ar: 'افتح الخريطة', en: 'Open the map' })} <span aria-hidden="true">{arrow}</span>
+            </Link>
+            <Link to={pathFor('roles', lang)} className="inline-flex items-center gap-1 text-sm font-semibold text-dga-green-dark">
+              {t({ ar: 'الأدوار وأوراقها', en: 'Roles and their sheets' })} <span aria-hidden="true">{arrow}</span>
+            </Link>
+            <Link to={pathFor('skills', lang)} className="inline-flex items-center gap-1 text-sm font-semibold text-dga-green-dark">
+              {t({ ar: 'قاموس المهارات', en: 'Skills dictionary' })} <span aria-hidden="true">{arrow}</span>
+            </Link>
           </div>
         </div>
-      </HubSection>
+      </section>
 
       <HubSection
         title={{ ar: 'جرّب: المجال × المستوى', en: 'Try it: domain × level' }}
