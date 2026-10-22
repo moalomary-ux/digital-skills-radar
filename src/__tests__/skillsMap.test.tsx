@@ -367,9 +367,9 @@ describe('P10b: map round two', () => {
     expect(document.querySelector('[data-ring] button[data-node="skill.sr-agile-0"]')).toHaveAttribute('data-state', 'dim')
     const techsLit = [...document.querySelectorAll('[data-ring] button[data-node^="tech."][data-state="near"]')]
     expect(techsLit.length).toBeGreaterThan(0)
-    const region = screen.getByRole('region', { name: 'Security Architect' })
+    const region = screen.getByRole('region', { name: 'Cybersecurity Architect' })
     expect(within(region).getByText(/The skills it needs/)).toBeInTheDocument()
-    expect(within(region.querySelector('[data-role-skills]') as HTMLElement).getByRole('button', { name: 'Security awareness' })).toBeInTheDocument()
+    expect(within(region.querySelector('[data-role-skills]') as HTMLElement).getByRole('button', { name: 'Cybersecurity awareness' })).toBeInTheDocument()
   })
 
   it('Arabic search matches stems and still answers a two-word query (review P1-3)', async () => {
@@ -482,8 +482,8 @@ describe('P10b: map round two', () => {
   it('the domain panel puts the leading roles first and replaces the generic level list with its own spread (review P2-3, P2-4)', () => {
     renderMap('/en/map?node=domain.cyber')
     const region = screen.getByRole('region', { name: 'Cybersecurity & Digital Trust' })
-    const roleChips = within(region).getAllByRole('button').filter((b) => /Leadership|Proficiency/.test(b.textContent ?? ''))
-    expect(roleChips[0].textContent).toMatch(/Leadership$/)
+    const roleChips = within(region).getAllByRole('button').filter((b) => /Leading|Proficiency/.test(b.textContent ?? ''))
+    expect(roleChips[0].textContent).toMatch(/Leading$/)
     expect(within(region).getByText('Roles by their target level in it')).toBeInTheDocument()
     expect(within(region).getByRole('link', { name: /The domain’s skills in the skills dictionary/ })).toHaveAttribute('href', '/en/skills#domain-cyber')
   })

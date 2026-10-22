@@ -51,6 +51,8 @@ export interface GraphNode {
   label: L
   /** short label (domains only) */
   short?: L
+  /** equivalent titles used across entities (roles, families): searchable, shown in the panel */
+  aliases?: L[]
   /** primary domain: the wedge the node sits in and its colour */
   domainId: string
 }
@@ -104,6 +106,8 @@ export interface SkillSource {
 export interface RoleSource {
   id: string
   name: L
+  /** equivalent titles used across entities */
+  equivalents?: L[]
   family?: string
   targets: Record<string, number>
 }
@@ -213,7 +217,7 @@ export function buildSkillsGraph(src: GraphSources, opts: GraphOptions = {}): Sk
 
   for (const r of src.roles ?? []) {
     const id = nodeId('role', r.id)
-    add({ id, kind: 'role', ref: r.id, label: r.name, domainId: rolePrimaryDomain(r, domainIds, familyDomain) })
+    add({ id, kind: 'role', ref: r.id, label: r.name, aliases: r.equivalents, domainId: rolePrimaryDomain(r, domainIds, familyDomain) })
     for (const d of domainIds) {
       const target = r.targets[d] ?? 0
       if (target >= minTarget) link(id, nodeId('domain', d), 'role-domain', target)
@@ -503,7 +507,8 @@ const haystacks = new WeakMap<GraphNode, { text: string; stems: string[] }>()
 function haystackOf(n: GraphNode) {
   let h = haystacks.get(n)
   if (!h) {
-    const text = normalizeText([n.label.ar, n.label.en, n.short?.ar ?? '', n.short?.en ?? ''].join(' '))
+    const alias = (n.aliases ?? []).flatMap((a) => [a.ar, a.en]).join(' ')
+    const text = normalizeText([n.label.ar, n.label.en, n.short?.ar ?? '', n.short?.en ?? '', alias].join(' '))
     h = { text, stems: text.split(' ').map(stemWord) }
     haystacks.set(n, h)
   }

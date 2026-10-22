@@ -33,7 +33,7 @@ export function defaultSources(): GraphSources {
   return {
     domains,
     skills: skillRecords.map((r) => ({ id: r.id, domainId: r.domainId, skillIndex: r.skillIndex, name: r.name })),
-    roles: libraryRoles.map((r) => ({ id: r.id, name: r.name, family: r.family, targets: r.targets })),
+    roles: libraryRoles.map((r) => ({ id: r.id, name: r.name, equivalents: r.equivalents, family: r.family, targets: r.targets })),
     families: workFamilies.map((f) => ({
       id: f.id,
       name: f.name,
