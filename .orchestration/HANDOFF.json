@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "RELEASED v9 at https://radar.omary.me (owner decisions 2026-10-22: full entity layer public; subdomain radar). gh-pages 27e6c97 from main b867319; omary.me apex and www restored to their previous records; HTTPS certificate for radar.omary.me pending GitHub issuance",
+  "state": "RELEASED v9.1 at https://radar.omary.me (full layer) + P10 interactive skills map (/map; home section; roles hub) — gh-pages 635b0c1 from main 53c4ac2",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -38,6 +38,12 @@
       "id": "D5",
       "date": "2026-10-22",
       "text": "Owner: publish the full layer (entity records + 474 entity logos; no DGA logo, no private entities, no rankings) and host at radar.omary.me",
+      "status": "applied"
+    },
+    {
+      "id": "D6",
+      "date": "2026-10-22",
+      "text": "Owner: an interactive map explaining domains, skills and families instead of reading-first entry → P10 skills map built (Claude Opus), /assess?domain= honoured",
       "status": "applied"
     }
   ],
