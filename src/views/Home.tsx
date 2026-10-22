@@ -12,6 +12,8 @@ import MiniSheet from '../components/shell/MiniSheet'
 import type { SheetKind } from '../components/shell/MiniSheet'
 import { useArrow, useAssessCta, useTabs } from '../components/shell/hooks'
 import { SOON } from '../components/shell/site'
+import MapPreview from '../components/map/MapPreview'
+import type { GraphSources } from '../lib/skillsGraph'
 
 /* ------------------------------------------------------------------ copy */
 
@@ -57,6 +59,9 @@ const levels: { name: L; meaning: L }[] = [
   { name: { ar: 'إتقان', en: 'Proficiency' }, meaning: { ar: 'تطبّقها باستقلالية في المواقف المعقدة وتساعد زملاءك.', en: 'You apply it independently in complex situations and help colleagues.' } },
   { name: { ar: 'ريادة', en: 'Leadership' }, meaning: { ar: 'تقود الممارسة في جهتك وتضع معاييرها وتطوّر غيرك.', en: 'You lead the practice in your entity, set its standards and develop others.' } },
 ]
+
+/** The home preview of the skills map draws the domains and their skills only (light chunk). */
+const HOME_MAP_SOURCES: GraphSources = { domains }
 
 /* ------------------------------------------------------------- the hero */
 
@@ -456,6 +461,34 @@ export default function Home() {
           </div>
         </div>
         <div className="saudi-band opacity-80" aria-hidden="true" />
+      </section>
+
+      {/* ── 1b. The interactive skills map (P10) ───────────────────── */}
+      <section className="border-b border-dga-line bg-dga-bg py-14" aria-labelledby="map-title">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr),minmax(0,25rem)]">
+          <div>
+            <p className="eyebrow">{t({ ar: 'استكشف بدل أن تقرأ', en: 'Explore instead of reading' })}</p>
+            <h2 id="map-title" className="mt-2 text-[clamp(1.5rem,2.6vw,2rem)] font-bold text-dga-green">
+              {t({ ar: 'خريطة المهارات التفاعلية', en: 'Interactive skills map' })}
+            </h2>
+            <p className="mt-3 max-w-xl text-body-lg text-dga-muted">
+              {t({
+                ar: 'المجالات الثمانية في المركز ومهاراتها حولها: مرّر فوق أي نقطة لترى ما تكون، ثم افتح الخريطة الكاملة لترى الأسر الوظيفية والأدوار والتقنيات المرتبطة بكل مهارة.',
+                en: 'The eight domains at the centre with their skills around them: hover over any point to see what it is, then open the full map to see the job families, roles and technologies linked to each skill.',
+              })}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link to={pathFor('map', lang)} className="btn-primary px-6 py-3 text-base no-underline hover:no-underline">
+                {t({ ar: 'افتح الخريطة', en: 'Open the map' })}
+                <span aria-hidden="true">{arrow}</span>
+              </Link>
+              <Link to={`${pathFor('map', lang)}?story=1`} className="btn-ghost no-underline hover:no-underline">
+                {t({ ar: 'ابدأ القصة', en: 'Start the story' })}
+              </Link>
+            </div>
+          </div>
+          <MapPreview sources={HOME_MAP_SOURCES} className="mx-auto w-full max-w-[25rem]" />
+        </div>
       </section>
 
       {/* ── 2. Persona router ──────────────────────────────────────── */}
