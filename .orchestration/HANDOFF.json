@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "RELEASED v9.1 at https://radar.omary.me (full layer) + P10 interactive skills map (/map; home section; roles hub) — gh-pages 635b0c1 from main 53c4ac2",
+  "state": "RELEASED v9.2 at https://radar.omary.me — gh-pages 96a7b44 from main e77d669: map round 2 (P10b), terminology audit applied (20 sourced renamings; domain 6 = «إدارة المنتجات الرقمية والنهج المرن»), function-and-grade addressing (equivalents + grade bands), content-evidence audit applied (33 corrections, editorial labels, 25 reference sources, source-year flags), claim kinds academic/expert",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -45,6 +45,12 @@
       "date": "2026-10-22",
       "text": "Owner: an interactive map explaining domains, skills and families instead of reading-first entry → P10 skills map built (Claude Opus), /assess?domain= honoured",
       "status": "applied"
+    },
+    {
+      "id": "D7",
+      "date": "2026-10-22",
+      "text": "Owner: sources must be scientific/recognized/current (DECISION §5-ب); address people by function and grade, not title (§5); map round 2 applied per independent visual review",
+      "status": "applied"
     }
   ],
   "outputs": {
@@ -53,7 +59,7 @@
     "plan": "repo/docs/plan/PLAN-20261021.md",
     "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "enable https_enforced when the certificate is approved (background monitor); owner to grant gh workflow scope then push ci/deploy-workflow; later: workshop mode, unit planner, gov pages prerender with data",
+  "next_step": "owner answers on open terminology questions; 35 unsettled technology terms await SDAIA glossary text; screen-reader/real-device checks; CI workflow push after gh workflow scope",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
   "leader": "fable",
   "worktrees": {
@@ -74,5 +80,6 @@
     "guidance.ts still carries dead communityFeatures (remove in final cleanup)",
     "claims written offline need the verification report applied"
   ],
-  "report": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/REPORT-20261022.md"
+  "report": "/Volumes/Alomary SSD/01-Projects/DIGITAL-SKILLS-RADAR-20261021/REPORT-20261022.md",
+  "open_owner_questions": "terminology-audit-20261022.md §د items 1,2,5,6,7,8,10 (defaults applied as stated to the owner)"
 }
