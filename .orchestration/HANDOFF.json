@@ -1,7 +1,7 @@
 {
   "project": "digital-skills-radar",
   "owner_request_2026-10-21": "Review the handed-over project with every available model, redevelop and improve the idea to the best achievable level, and publish it on omary.me (currently on https://moalomary-ux.github.io/digital-skills-radar/).",
-  "state": "RELEASED 2026-10-21T23:30Z: main 9589862 pushed; gh-pages d0b12d0 (aggregate build) live at https://omary.me via GitHub Pages custom domain; DNS switched; HTTPS certificate pending GitHub issuance; workflow deploy parked on branch ci/deploy-workflow (needs gh workflow scope)",
+  "state": "RELEASED v9 at https://radar.omary.me (owner decisions 2026-10-22: full entity layer public; subdomain radar). gh-pages 27e6c97 from main b867319; omary.me apex and www restored to their previous records; HTTPS certificate for radar.omary.me pending GitHub issuance",
   "facts": {
     "source_of_truth": "this repo; commit a7cf614 = v8 handover source (Kimi) + docs/handover archive; origin = github.com/moalomary-ux/digital-skills-radar (main + gh-pages)",
     "build_v8": "tsc+vite OK; one JS chunk 1,352 kB (414 kB gzip); dist 7.9 MB incl. 485 logos",
@@ -33,6 +33,12 @@
       "date": "2026-10-22",
       "text": "Deploy = GitHub Pages workflow build (actions/deploy-pages) switched via API at deploy time; custom domain omary.me via Pages API + Hostinger DNS (@ A -> 185.199.108.153/109/110/111, www CNAME -> moalomary-ux.github.io); deema A and mail records untouched",
       "status": "planned"
+    },
+    {
+      "id": "D5",
+      "date": "2026-10-22",
+      "text": "Owner: publish the full layer (entity records + 474 entity logos; no DGA logo, no private entities, no rankings) and host at radar.omary.me",
+      "status": "applied"
     }
   ],
   "outputs": {
@@ -41,7 +47,7 @@
     "plan": "repo/docs/plan/PLAN-20261021.md",
     "reviews_archive": "repo/docs/reviews-20261021/"
   },
-  "next_step": "verify HTTPS then enable https_enforced; owner decisions: data layer public/private, national totals, citizen lane; future: workshop mode, unit planner, gov pages prerender with data, PWA, screen-reader audit",
+  "next_step": "enable https_enforced when the certificate is approved (background monitor); owner to grant gh workflow scope then push ci/deploy-workflow; later: workshop mode, unit planner, gov pages prerender with data",
   "leader_session_note": "Claude Fable 5.1 (session cf769935)",
   "leader": "fable",
   "worktrees": {
