@@ -4,11 +4,22 @@ import { libraryRoles } from '../data/roleLibrary'
 import { workFamilies } from '../data/workShifts'
 import { technologies } from '../data/technologies'
 import { shifts } from '../data/leaders/shifts'
-import { defaultSources, sectorSources } from '../components/map/sources'
+import { defaultSources, sectorSources, STORY_SKILLS } from '../components/map/sources'
 import {
   buildSkillsGraph,
   buildStory,
+  compareTargets,
+  edgePath,
   focusOf,
+  layoutSpotlight,
+  queryTerms,
+  roleReach,
+  searchGraph,
+  skillGaps,
+  spotlightMembers,
+  stemWord,
+  truncateLabel,
+  SPOTLIGHT_RING,
   layoutGraph,
   nodeId,
   normalizeText,
@@ -231,6 +242,118 @@ describe('labels, camera, search and story', () => {
       expect(step.domains[0]).toBe(nodeId('domain', step.shift!.domainId))
       expect(step.roles.length).toBeGreaterThan(0)
       for (const id of step.focus) expect(graph.byId.has(id), id).toBe(true)
+    }
+  })
+})
+
+describe('P10b: model', () => {
+  it('stems Arabic so the forms of one word meet (سحابة ↔ السحابية ↔ سحابي)', () => {
+    expect(stemWord(normalizeText('سحابة'))).toBe('سحاب')
+    expect(stemWord(normalizeText('السحابية'))).toBe('سحاب')
+    expect(stemWord(normalizeText('سحابي'))).toBe('سحاب')
+    expect(stemWord(normalizeText('البيانات'))).toBe('بيان')
+    expect(stemWord('clouds')).toBe('cloud')
+    expect(queryTerms('الحوسبة في السحابية')).toEqual(['حوسب', 'سحاب'])
+    const ids = searchNodes(graph.nodes, 'سحابة').map((n) => n.id)
+    expect(ids).toEqual(expect.arrayContaining(['domain.cloud', 'skill.sr-cloud-0', 'role.cloud_architect']))
+    // a query whose words do not all match still answers, with the closest nodes
+    const two = searchGraph(graph.nodes, 'الحوسبة السحابية')
+    expect(two.nodes.length).toBeGreaterThan(0)
+    // domains and skills come first
+    expect(searchNodes(graph.nodes, 'السحابة')[0].kind).toBe('domain')
+  })
+
+  it('a role reaches the skills of its «إتقان»+ domains and a bounded set of technologies', () => {
+    const reach = roleReach(graph, 'role.security_architect')
+    expect(reach.domains.sort()).toEqual(['domain.cloud', 'domain.cyber', 'domain.policy'])
+    expect(reach.skills).toHaveLength(15)
+    expect(reach.techs.length).toBeGreaterThan(0)
+    expect(reach.techs.length).toBeLessThan(technologies.length / 2)
+    const focus = focusOf(graph, 'role.security_architect')
+    for (const id of [...reach.skills, ...reach.techs]) expect(focus.nodes.has(id)).toBe(true)
+    for (const e of focus.edges) {
+      const edge = graph.edgeById.get(e)!
+      expect(focus.nodes.has(edge.source) && focus.nodes.has(edge.target)).toBe(true)
+    }
+  })
+
+  it('maps the two worded rising capabilities to their nearest skill (review P2-8)', () => {
+    expect(relatedByKind(graph, 'family.policy-analyst').skill.map((n) => n.ref)).toContain('sr-ai-data-0')
+    expect(relatedByKind(graph, 'family.procurement').skill.map((n) => n.ref)).toContain('sr-cyber-1')
+  })
+
+  it('spreads sectors over the wedges by their distinctive domain, not all into the leading one (review P1-8)', () => {
+    const mk = (id: string, recs: Record<string, number>): SectorSource => ({ id, name: { ar: id, en: id }, domains: Object.entries(recs).map(([domainId, records]) => ({ domainId, records })) })
+    const sectors = [
+      mk('a', { cloud: 50, cyber: 20, policy: 30 }),
+      mk('b', { cloud: 50, cyber: 40, policy: 5 }),
+      mk('c', { cloud: 60, 'ai-data': 30, cyber: 10 }),
+    ]
+    const g = buildSkillsGraph({ ...defaultSources(), sectors })
+    const wedge = (id: string) => g.byId.get(`sector.${id}`)!.domainId
+    expect(new Set(['a', 'b', 'c'].map(wedge)).size).toBe(3)
+    expect(wedge('a')).toBe('policy')
+    expect(wedge('b')).toBe('cyber')
+    expect(wedge('c')).toBe('ai-data')
+    // the wedge it sits in is always one of its links
+    for (const id of ['a', 'b', 'c']) expect(relatedByKind(g, `sector.${id}`).domain.map((d) => d.ref)).toContain(wedge(id))
+  })
+
+  it('routes a link between opposite wedges around the centre disc', () => {
+    const plain = edgePath({ x: -300, y: 0 }, { x: 300, y: 0 })
+    expect(plain).toContain('Q0 0')
+    const routed = edgePath({ x: -300, y: 0 }, { x: 300, y: 0 }, 0.42, 140)
+    const [, cx, cy] = /Q(-?[\d.]+) (-?[\d.]+)/.exec(routed)!.map(Number)
+    // the curve's midpoint (half the control point here) sits on the disc's rim, not inside it
+    expect(Math.hypot(cx / 2, cy / 2)).toBeCloseTo(140, 0)
+  })
+
+  it('the spotlight puts the domain at the centre and every member on one ring, grouped by kind', () => {
+    const lay = layoutSpotlight(graph, 'cyber', { rtl: true })
+    const members = spotlightMembers(graph, 'cyber')
+    expect(lay.byId.get('domain.cyber')!.radius).toBe(0)
+    expect(lay.nodes).toHaveLength(members.size)
+    for (const p of lay.nodes) if (p.id !== 'domain.cyber') expect(p.radius).toBe(SPOTLIGHT_RING)
+    expect(lay.wedges).toHaveLength(domains.length - 1)
+    // grouped: the skills come first in reading order, the technologies after the roles
+    const order = [...lay.rings[1], ...lay.rings[2], ...lay.rings[3]]
+    expect(order.slice(0, 5).every((id) => id.startsWith('skill.'))).toBe(true)
+    expect(lay.rings[3].every((id) => id.startsWith('tech.'))).toBe(true)
+    // no two members share a place
+    const keys = lay.nodes.map((p) => `${p.x},${p.y}`)
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+
+  it('compares two roles domain by domain', () => {
+    const a = { 'ai-data': 2, cyber: 1, cloud: 3 }
+    const b = { 'ai-data': 4, cyber: 1, cloud: 2 }
+    const c = compareTargets(a, b, ['ai-data', 'cyber', 'cloud'])
+    expect(c.rise).toEqual([{ domainId: 'ai-data', from: 2, to: 4, delta: 2 }])
+    expect(c.fall.map((x) => x.domainId)).toEqual(['cloud'])
+    expect(c.same.map((x) => x.domainId)).toEqual(['cyber'])
+  })
+
+  it('lists the skills below a role target, largest gap first, skipping unanswered skills', () => {
+    const gaps = skillGaps(graph, { 'ai-data': 4, cyber: 2 }, (ref) => (ref.startsWith('sr-ai-data') ? 1 : ref === 'sr-cyber-0' ? 3 : undefined))
+    expect(gaps.every((g) => g.domainId === 'ai-data')).toBe(true)
+    expect(gaps).toHaveLength(5)
+    expect(gaps[0].gap).toBe(3)
+  })
+
+  it('shortens a label on word boundaries, then with an ellipsis', () => {
+    expect(truncateLabel('Cloud', 'en', 200, 12)).toBe('Cloud')
+    const short = truncateLabel('الخصوصية وحماية البيانات الشخصية', 'ar', 90, 12)
+    expect(short.endsWith('…')).toBe(true)
+    expect(short.length).toBeLessThan('الخصوصية وحماية البيانات الشخصية'.length)
+  })
+
+  it('every story step after the opening names the skills its shift asks for, in three phases', () => {
+    const story = buildStory(graph, shifts, STORY_SKILLS)
+    for (const step of story.slice(1)) {
+      expect(step.skills.length, step.id).toBeGreaterThanOrEqual(3)
+      expect(step.phases[0]).toEqual(step.domains)
+      expect(step.phases[1]).toEqual(step.skills)
+      for (const id of step.skills) expect(graph.byId.get(id)?.kind).toBe('skill')
     }
   })
 })

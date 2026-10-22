@@ -465,7 +465,7 @@ export default function Home() {
 
       {/* ── 1b. The interactive skills map (P10) ───────────────────── */}
       <section className="border-b border-dga-line bg-dga-bg py-14" aria-labelledby="map-title">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr),minmax(0,25rem)]">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr),minmax(0,27rem)]">
           <div>
             <p className="eyebrow">{t({ ar: 'استكشف بدل أن تقرأ', en: 'Explore instead of reading' })}</p>
             <h2 id="map-title" className="mt-2 text-[clamp(1.5rem,2.6vw,2rem)] font-bold text-dga-green">
@@ -473,8 +473,8 @@ export default function Home() {
             </h2>
             <p className="mt-3 max-w-xl text-body-lg text-dga-muted">
               {t({
-                ar: 'المجالات الثمانية في المركز ومهاراتها حولها: مرّر فوق أي نقطة لترى ما تكون، ثم افتح الخريطة الكاملة لترى الأسر الوظيفية والأدوار والتقنيات المرتبطة بكل مهارة.',
-                en: 'The eight domains at the centre with their skills around them: hover over any point to see what it is, then open the full map to see the job families, roles and technologies linked to each skill.',
+                ar: 'المجالات الثمانية ومهاراتها في صورة واحدة: تضيء الخريطة مجالاً بعد آخر، ومرّر فوق أي إسفين لتتوقف عنده. وفي الخريطة الكاملة تجد الأسر الوظيفية والأدوار والتقنيات، وتقارن دورين، وترى طريقك إلى دور.',
+                en: 'The eight domains and their skills in one picture: the map lights one domain after another, and hovering a wedge stops it there. The full map adds job families, roles and technologies, compares two roles and shows your path to a role.',
               })}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -487,7 +487,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <MapPreview sources={HOME_MAP_SOURCES} className="mx-auto w-full max-w-[25rem]" />
+          <MapPreview sources={HOME_MAP_SOURCES} className="mx-auto w-full max-w-[27rem]" />
         </div>
       </section>
 

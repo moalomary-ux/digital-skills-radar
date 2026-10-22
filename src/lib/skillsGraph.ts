@@ -24,7 +24,11 @@
  *            Policy→policy, Delivery→agile), then to the first domain in canonical order
  *   family → the domain of its first listed rising capability
  *   tech   → its first linked domain (`domainIds[0]`), else the domain of its first required skill
- *   sector → the domain with the most consulting records
+ *   sector → its distinctive domain: the one whose share of the sector's consulting records is
+ *            highest relative to the average share across all sectors (location quotient), among
+ *            domains with at least 5 records; ties and single-sector inputs fall back to the domain
+ *            with the most records. Every sector shares the same leading domain (cloud), so ranking
+ *            by records alone stacked all of them in one wedge. Editorial, labelled as such.
  */
 import type { L, Lang } from '../data/types'
 
@@ -106,7 +110,8 @@ export interface RoleSource {
 export interface FamilySource {
   id: string
   name: L
-  rising: { skill: L; domainId: string }[]
+  /** rising capabilities; `skillId` maps one to a skill explicitly when its wording differs from the skill name */
+  rising: { skill: L; domainId: string; skillId?: string }[]
   relatedRoleIds: string[]
 }
 export interface TechSource {
@@ -221,7 +226,8 @@ export function buildSkillsGraph(src: GraphSources, opts: GraphOptions = {}): Sk
     add({ id, kind: 'family', ref: f.id, label: f.name, domainId: primary })
     for (const r of f.rising) {
       if (known.has(r.domainId)) link(id, nodeId('domain', r.domainId), 'family-domain')
-      const skill = skillByName.get(normalizeText(r.skill.ar)) ?? skillByName.get(normalizeText(r.skill.en))
+      const explicit = r.skillId && byId.has(nodeId('skill', r.skillId)) ? nodeId('skill', r.skillId) : undefined
+      const skill = explicit ?? skillByName.get(normalizeText(r.skill.ar)) ?? skillByName.get(normalizeText(r.skill.en))
       if (skill) link(id, skill, 'family-skill')
     }
     for (const roleId of f.relatedRoleIds) link(id, nodeId('role', roleId), 'family-role')
@@ -236,12 +242,18 @@ export function buildSkillsGraph(src: GraphSources, opts: GraphOptions = {}): Sk
     for (const d of t.domainIds) if (known.has(d)) link(id, nodeId('domain', d), 'tech-domain')
   }
 
-  for (const s of src.sectors ?? []) {
+  const sectorList = src.sectors ?? []
+  const totals = sectorTotals(sectorList, known)
+  for (const s of sectorList) {
     const ranked = s.domains.filter((d) => known.has(d.domainId) && d.records > 0)
     if (ranked.length === 0) continue
     const id = nodeId('sector', s.id)
-    add({ id, kind: 'sector', ref: s.id, label: s.name, domainId: ranked[0].domainId })
+    const primary = sectorPrimaryDomain(s, totals, known)
+    add({ id, kind: 'sector', ref: s.id, label: s.name, domainId: primary })
     for (const d of ranked.slice(0, topN)) link(id, nodeId('domain', d.domainId), 'sector-domain', d.records)
+    // the wedge it sits in is always one of its links
+    const own = ranked.find((d) => d.domainId === primary)
+    if (own) link(id, nodeId('domain', primary), 'sector-domain', own.records)
   }
 
   const adjacency = new Map<string, Set<string>>()
@@ -257,6 +269,44 @@ export function buildSkillsGraph(src: GraphSources, opts: GraphOptions = {}): Sk
     incident.get(e.target)!.push(e.id)
   }
   return { nodes, edges, byId, edgeById, adjacency, incident, domainIds }
+}
+
+/** Records per domain across every sector, and their sum (the base of the location quotient). */
+export function sectorTotals(sectors: SectorSource[], known?: ReadonlySet<string>): { byDomain: Map<string, number>; all: number } {
+  const byDomain = new Map<string, number>()
+  let all = 0
+  for (const s of sectors)
+    for (const d of s.domains) {
+      if (known && !known.has(d.domainId)) continue
+      if (!(d.records > 0)) continue
+      byDomain.set(d.domainId, (byDomain.get(d.domainId) ?? 0) + d.records)
+      all += d.records
+    }
+  return { byDomain, all }
+}
+
+/** Minimum records for a domain to count as a sector's distinctive domain (small counts are noise). */
+export const SECTOR_MIN_RECORDS = 5
+
+/** The wedge of a sector: its distinctive domain (see the file header), else its strongest by records. */
+export function sectorPrimaryDomain(sector: SectorSource, totals: { byDomain: Map<string, number>; all: number }, known?: ReadonlySet<string>): string {
+  const ranked = sector.domains.filter((d) => (!known || known.has(d.domainId)) && d.records > 0)
+  if (ranked.length === 0) return sector.domains[0]?.domainId ?? ''
+  const own = ranked.reduce((n, d) => n + d.records, 0)
+  let best = ranked[0]
+  let bestLq = -Infinity
+  for (const d of ranked) {
+    if (d.records < SECTOR_MIN_RECORDS) continue
+    const share = d.records / own
+    const base = (totals.byDomain.get(d.domainId) ?? 0) / Math.max(1, totals.all)
+    const lq = base > 0 ? share / base : 0
+    // strictly greater (with a small tolerance): ties keep the domain with more records
+    if (lq > bestLq + 1e-9) {
+      bestLq = lq
+      best = d
+    }
+  }
+  return best.domainId
 }
 
 /** Resolve a `?node=` value: an exact node id, or a bare source id of any kind (domains first). */
@@ -280,9 +330,59 @@ export interface Focus {
 const otherEnd = (e: GraphEdge, id: string) => (e.source === id ? e.target : e.source)
 
 /**
+ * What a role reaches on the map (packet P10b): the domains where its target is at least «إتقان»,
+ * the skills of those domains, and its technologies — a technology counts when every skill it
+ * requires sits in those domains, or when its own domain is one the role leads («ريادة») and at least
+ * two of its skills sit in them. Documented, editorial; the panel lists the same sets.
+ */
+export interface RoleReach {
+  domains: string[]
+  skills: string[]
+  techs: string[]
+  edges: string[]
+}
+
+export function roleReach(graph: SkillsGraph, roleId: string): RoleReach {
+  const reach: RoleReach = { domains: [], skills: [], techs: [], edges: [] }
+  if (graph.byId.get(roleId)?.kind !== 'role') return reach
+  const strong = new Map<string, number>()
+  for (const eid of graph.incident.get(roleId) ?? []) {
+    const e = graph.edgeById.get(eid)!
+    if (e.kind !== 'role-domain') continue
+    const dom = otherEnd(e, roleId)
+    strong.set(graph.byId.get(dom)!.domainId, e.weight)
+    reach.domains.push(dom)
+    reach.edges.push(eid)
+  }
+  const skillSet = new Set<string>()
+  for (const dom of reach.domains)
+    for (const eid of graph.incident.get(dom) ?? []) {
+      const e = graph.edgeById.get(eid)!
+      if (e.kind !== 'domain-skill') continue
+      const sk = otherEnd(e, dom)
+      skillSet.add(sk)
+      reach.skills.push(sk)
+      reach.edges.push(eid)
+    }
+  for (const n of graph.nodes) {
+    if (n.kind !== 'tech') continue
+    const skillEdges = (graph.incident.get(n.id) ?? []).map((eid) => graph.edgeById.get(eid)!).filter((e) => e.kind === 'tech-skill')
+    if (skillEdges.length === 0) continue
+    const inside = skillEdges.filter((e) => skillSet.has(otherEnd(e, n.id)))
+    const leads = (strong.get(n.domainId) ?? 0) >= 4
+    if (inside.length === skillEdges.length || (leads && inside.length >= 2)) {
+      reach.techs.push(n.id)
+      for (const e of inside) reach.edges.push(e.id)
+    }
+  }
+  return reach
+}
+
+/**
  * What lights up when a node is hovered, focused or selected: the node, its direct neighbours and
  * the edges between them. A skill also lights the roles that need it — roles whose target in the
- * skill's domain is at least «إتقان» — through the domain (the path skill → domain → role).
+ * skill's domain is at least «إتقان» — through the domain (the path skill → domain → role). A role
+ * also lights what it reaches (see `roleReach`): its skills and technologies.
  */
 export function focusOf(graph: SkillsGraph, id: string): Focus {
   const node = graph.byId.get(id)
@@ -301,6 +401,11 @@ export function focusOf(graph: SkillsGraph, id: string): Focus {
       focus.edges.add(eid)
       focus.nodes.add(otherEnd(e, dom))
     }
+  }
+  if (node.kind === 'role') {
+    const reach = roleReach(graph, id)
+    for (const n of [...reach.skills, ...reach.techs]) focus.nodes.add(n)
+    for (const e of reach.edges) focus.edges.add(e)
   }
   return focus
 }
@@ -345,15 +450,102 @@ export function normalizeText(s: string): string {
     .trim()
 }
 
-/** Nodes whose Arabic or English label contains every word of the query (in graph order). */
+const AR_LETTER = /[\u0600-\u06FF]/
+/** Arabic prefixes (article and attached particles), longest first; only stripped when 3+ letters remain. */
+const AR_PREFIXES = ['وبال', 'وال', 'بال', 'كال', 'فال', 'لل', 'ال']
+/** Arabic suffixes after normalisation (ة→ه, ى→ي), longest first. */
+const AR_SUFFIXES = ['يات', 'يه', 'ات', 'ون', 'ين', 'ه', 'ي']
+const STOP_WORDS = new Set(['و', 'في', 'من', 'على', 'الى', 'عن', 'مع', 'او', 'the', 'and', 'of', 'in', 'for', 'to', 'a', 'an', 'or'])
+/** A few within-language equivalents the light stemmer cannot see (stems, both directions). */
+const SYNONYMS: Record<string, string[]> = {
+  امن: ['سيبران'],
+  سيبران: ['امن'],
+  حوسب: ['سحاب'],
+  security: ['cyber'],
+  cyber: ['security'],
+  computing: ['cloud'],
+}
+
+/**
+ * Light stem of one normalised word: Arabic loses its article/attached particles and its common
+ * endings (سحابة ↔ السحابية ↔ سحابي → سحاب), English loses a plural «s». Never below 3 letters.
+ */
+export function stemWord(word: string): string {
+  let w = word
+  if (AR_LETTER.test(w)) {
+    for (const p of AR_PREFIXES)
+      if (w.startsWith(p) && w.length - p.length >= 3) {
+        w = w.slice(p.length)
+        break
+      }
+    for (const x of AR_SUFFIXES)
+      if (w.endsWith(x) && w.length - x.length >= 3) {
+        w = w.slice(0, -x.length)
+        break
+      }
+    return w
+  }
+  if (w.length > 4 && w.endsWith('ies')) return `${w.slice(0, -3)}y`
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) return w.slice(0, -1)
+  return w
+}
+
+/** The search terms of a query: normalised, stemmed, stop words dropped. */
+export function queryTerms(query: string): string[] {
+  return normalizeText(query)
+    .split(' ')
+    .filter((w) => w && !STOP_WORDS.has(w))
+    .map(stemWord)
+    .filter((w) => w.length >= 2 || /\d/.test(w))
+}
+
+const haystacks = new WeakMap<GraphNode, { text: string; stems: string[] }>()
+function haystackOf(n: GraphNode) {
+  let h = haystacks.get(n)
+  if (!h) {
+    const text = normalizeText([n.label.ar, n.label.en, n.short?.ar ?? '', n.short?.en ?? ''].join(' '))
+    h = { text, stems: text.split(' ').map(stemWord) }
+    haystacks.set(n, h)
+  }
+  return h
+}
+
+/** Whether a node's label matches one search term (word-prefix on stems, synonyms, or a plain substring). */
+function termMatches(n: GraphNode, term: string): boolean {
+  const h = haystackOf(n)
+  const alts = [term, ...(SYNONYMS[term] ?? [])]
+  return alts.some((t) => h.stems.some((s) => s.startsWith(t)) || (t.length >= 4 && h.text.includes(t)))
+}
+
+export interface SearchResult {
+  nodes: GraphNode[]
+  /** 'all': every term matched; 'any': no node matched every term, so nodes matching some terms are shown */
+  mode: 'all' | 'any'
+}
+
+/**
+ * Search the map (packet P10b): Arabic is matched without hamza, alef, teh marbuta or yeh
+ * sensitivity and by light stems, English case-insensitively. Nodes matching every term come
+ * first; when none does, nodes matching the most terms are returned (mode «any»). Ordered by the
+ * number of matched terms, then by kind (domains, skills first), then graph order.
+ */
+export function searchGraph(nodes: readonly GraphNode[], query: string): SearchResult {
+  const terms = queryTerms(query)
+  if (terms.length === 0) return { nodes: [], mode: 'all' }
+  const scored = nodes
+    .map((n, order) => ({ n, order, hits: terms.filter((t) => termMatches(n, t)).length }))
+    .filter((x) => x.hits > 0)
+  const all = scored.filter((x) => x.hits === terms.length)
+  const pool = all.length ? all : scored
+  pool.sort((a, b) => b.hits - a.hits || KIND_RANK[a.n.kind] - KIND_RANK[b.n.kind] || a.order - b.order)
+  return { nodes: pool.map((x) => x.n), mode: all.length ? 'all' : 'any' }
+}
+
+const KIND_RANK: Record<NodeKind, number> = { domain: 0, skill: 1, role: 2, family: 3, tech: 4, sector: 5 }
+
+/** Nodes matching the query (see `searchGraph`). */
 export function searchNodes(nodes: readonly GraphNode[], query: string): GraphNode[] {
-  const q = normalizeText(query)
-  if (!q) return []
-  const words = q.split(' ')
-  return nodes.filter((n) => {
-    const hay = normalizeText([n.label.ar, n.label.en, n.short?.ar ?? '', n.short?.en ?? ''].join(' '))
-    return words.every((w) => hay.includes(w))
-  })
+  return searchGraph(nodes, query).nodes
 }
 
 /* ------------------------------------------------------------------ layout */
@@ -456,11 +648,119 @@ export function layoutGraph(graph: SkillsGraph, opts: LayoutOptions = {}): Graph
 
 const round = (v: number) => Math.round(v * 100) / 100
 
-/** Quadratic edge path pulled toward the centre (a light bundling effect). World units. */
-export function edgePath(a: { x: number; y: number }, b: { x: number; y: number }, pull = 0.42): string {
-  const cx = ((a.x + b.x) / 2) * (1 - pull)
-  const cy = ((a.y + b.y) / 2) * (1 - pull)
+/**
+ * Quadratic edge path pulled toward the centre (a light bundling effect). World units.
+ * With `avoid` > 0 the curve is routed around the centre disc of that radius: when its midpoint
+ * would fall inside the disc, the control point moves out along the bisector of the two ends, so
+ * links between opposite wedges bow around the centre instead of crossing it (P10b, review P2-2).
+ */
+export function edgePath(a: { x: number; y: number }, b: { x: number; y: number }, pull = 0.42, avoid = 0): string {
+  let cx = ((a.x + b.x) / 2) * (1 - pull)
+  let cy = ((a.y + b.y) / 2) * (1 - pull)
+  if (avoid > 0) {
+    const mx = 0.25 * (a.x + b.x) + 0.5 * cx
+    const my = 0.25 * (a.y + b.y) + 0.5 * cy
+    if (Math.hypot(mx, my) < avoid) {
+      const la = Math.hypot(a.x, a.y) || 1
+      const lb = Math.hypot(b.x, b.y) || 1
+      let ux = a.x / la + b.x / lb
+      let uy = a.y / la + b.y / lb
+      if (Math.hypot(ux, uy) < 1e-3) {
+        // opposite ends: go round on a fixed side (deterministic)
+        ux = -a.y / la
+        uy = a.x / la
+      }
+      const lu = Math.hypot(ux, uy)
+      ux /= lu
+      uy /= lu
+      cx = 2 * (avoid * ux - 0.25 * (a.x + b.x))
+      cy = 2 * (avoid * uy - 0.25 * (a.y + b.y))
+    }
+  }
   return `M${a.x} ${a.y}Q${round(cx)} ${round(cy)} ${b.x} ${b.y}`
+}
+
+/**
+ * «إضاءة المجال» (P10b wow 3): the chosen domain fills the whole circle. Its node moves to the
+ * centre; its skills, the job families and roles linked to it, and the technologies linked to it or
+ * to its skills share one ring, grouped by kind in arcs (skills, then families and roles, then
+ * technologies, then sectors), with one empty slot between groups — so every member can carry a
+ * radial label from the ring out to the rim. The seven other domains collapse to a thin rim
+ * (`wedges` holds their rim arcs). Same `GraphLayout` shape as `layoutGraph`, so the canvas draws
+ * and animates it the same way; nodes outside the spotlight are absent from the result.
+ */
+export const SPOTLIGHT_RING = 300
+/** labels run from the ring out to this radius; the rim sits just outside it */
+export const SPOTLIGHT_EXTENT = 590
+
+export function spotlightMembers(graph: SkillsGraph, domainId: string): Set<string> {
+  const dom = nodeId('domain', domainId)
+  const members = new Set<string>([dom])
+  for (const n of graph.adjacency.get(dom) ?? []) if (graph.byId.get(n)?.kind !== 'domain') members.add(n)
+  // technologies that require one of its skills
+  for (const n of [...members]) {
+    if (graph.byId.get(n)?.kind !== 'skill') continue
+    for (const m of graph.adjacency.get(n) ?? []) if (graph.byId.get(m)?.kind === 'tech') members.add(m)
+  }
+  return members
+}
+
+const SPOTLIGHT_GROUPS: NodeKind[][] = [['skill'], ['family', 'role'], ['tech'], ['sector']]
+
+export function layoutSpotlight(graph: SkillsGraph, domainId: string, opts: { rtl?: boolean; order?: (a: GraphNode, b: GraphNode) => number } = {}): GraphLayout {
+  const dir = opts.rtl ? -1 : 1
+  const members = spotlightMembers(graph, domainId)
+  const positioned: PositionedNode[] = []
+  const rings: string[][] = [[], [], [], [], []]
+  const place = (node: GraphNode, ring: number, angle: number, radius: number) => {
+    const a = (angle * Math.PI) / 180
+    const p: PositionedNode = { ...node, ring, angle, radius, x: round(radius * Math.cos(a)), y: round(radius * Math.sin(a)) }
+    positioned.push(p)
+    rings[ring]?.push(p.id)
+  }
+  const centreNode = graph.byId.get(nodeId('domain', domainId))
+  if (centreNode) place(centreNode, 0, -90, 0)
+
+  const groups = SPOTLIGHT_GROUPS.map((kinds) =>
+    graph.nodes
+      .map((node, order) => ({ node, order }))
+      .filter(({ node }) => members.has(node.id) && kinds.includes(node.kind))
+      .sort((x, y) => KIND_ORDER[x.node.kind] - KIND_ORDER[y.node.kind] || (opts.order ? opts.order(x.node, y.node) : 0) || x.order - y.order)
+      .map(({ node }) => node),
+  ).filter((g) => g.length > 0)
+  const slots = groups.reduce((n, g) => n + g.length, 0) + groups.length
+  const step = 360 / Math.max(1, slots)
+  let slot = 0
+  for (const g of groups) {
+    for (const node of g) {
+      place(node, RING_OF[node.kind], -90 + dir * (slot + 0.5) * step, SPOTLIGHT_RING)
+      slot++
+    }
+    slot++ // the gap after each group
+  }
+
+  // the other domains: a thin rim, in reading order from the top
+  const others = graph.domainIds.filter((d) => d !== domainId)
+  const rimSpan = 360 / Math.max(1, others.length)
+  const wedges: Wedge[] = others.map((d, i) => {
+    const mid = -90 + dir * (i + 0.5) * rimSpan
+    return { domainId: d, index: graph.domainIds.indexOf(d), start: mid - rimSpan / 2, end: mid + rimSpan / 2, mid }
+  })
+  const byId = new Map(positioned.map((p) => [p.id, p]))
+  return { nodes: positioned, byId, wedges, radii: [0, SPOTLIGHT_RING, SPOTLIGHT_RING, SPOTLIGHT_RING, SPOTLIGHT_RING], rings, extent: SPOTLIGHT_EXTENT }
+}
+
+/** Linear blend of two layouts for the spotlight animation; nodes missing from `to` keep their `from` place. */
+export function blendLayouts(from: GraphLayout, to: GraphLayout, t: number): GraphLayout {
+  if (t <= 0) return from
+  if (t >= 1) return to
+  const nodes = from.nodes.map((p) => {
+    const q = to.byId.get(p.id)
+    if (!q) return p
+    return { ...q, x: round(p.x + (q.x - p.x) * t), y: round(p.y + (q.y - p.y) * t), radius: p.radius + (q.radius - p.radius) * t, angle: p.angle + (q.angle - p.angle) * t }
+  })
+  const byId = new Map(nodes.map((p) => [p.id, p]))
+  return { ...to, nodes, byId, extent: from.extent + (to.extent - from.extent) * t }
 }
 
 /** An annular sector (wedge band) between two radii and two angles (degrees). */
@@ -573,6 +873,31 @@ export function wrapLabel(text: string, lang: Lang, maxWidth: number, maxLines =
   return { lines, w, h }
 }
 
+/**
+ * Shorten a label to fit `maxWidth` on one line: whole words first, then «…». Returns the text
+ * unchanged when it fits. The full name stays in the button's accessible name and the hover card.
+ */
+export function truncateLabel(text: string, lang: Lang, maxWidth: number, fontPx: number, measure: (s: string) => number = (x) => textWidth(x, lang, fontPx)): string {
+  if (measure(text) <= maxWidth) return text
+  const words = text.split(/\s+/).filter(Boolean)
+  let out = ''
+  for (const w of words) {
+    const next = out ? `${out} ${w}` : w
+    if (measure(`${next}…`) > maxWidth) break
+    out = next
+  }
+  if (!out) {
+    // a single long word: cut by characters
+    const chars = [...text]
+    out = ''
+    for (const ch of chars) {
+      if (measure(`${out}${ch}…`) > maxWidth) break
+      out += ch
+    }
+  }
+  return `${out.replace(/[\s،,]+$/, '')}…`
+}
+
 export interface LabelRequest {
   id: string
   text: string
@@ -648,22 +973,28 @@ export interface StoryStep {
   /** every node lit in this step */
   focus: string[]
   domains: string[]
+  /** the skills the shift asks for (editorial mapping from the shift's «ما يتطلبه» line) */
+  skills: string[]
   roles: string[]
   families: string[]
+  /** the order the highlight builds up in: domains, then skills, then the roles and families */
+  phases: string[][]
 }
 
 /**
  * The guided tour: one opening step (the eight domains), then one step per shift in government
- * work. A shift lights its domains (primary + related), the roles that carry it — roles at «ريادة»
- * in the primary domain, plus roles at «إتقان» or more there that lead a related domain — and the
- * job families whose rising capabilities sit in the primary domain.
+ * work. A shift lights its domains (primary + related), the skills it asks for (`skillsByShift`,
+ * skill-record ids), the roles that carry it — roles at «ريادة» in the primary domain, plus roles at
+ * «إتقان» or more there that lead a related domain — and the job families whose rising capabilities
+ * sit in the primary domain.
  */
-export function buildStory(graph: SkillsGraph, shifts: StoryShift[]): StoryStep[] {
+export function buildStory(graph: SkillsGraph, shifts: StoryShift[], skillsByShift: Record<string, string[]> = {}): StoryStep[] {
   const domainNodes = graph.nodes.filter((n) => n.kind === 'domain').map((n) => n.id)
-  const steps: StoryStep[] = [{ id: 'intro', shift: null, focus: domainNodes, domains: domainNodes, roles: [], families: [] }]
+  const steps: StoryStep[] = [{ id: 'intro', shift: null, focus: domainNodes, domains: domainNodes, skills: [], roles: [], families: [], phases: [domainNodes] }]
   const targetOf = (roleId: string, domainId: string) => edgeBetween(graph, roleId, nodeId('domain', domainId))?.weight ?? 0
   for (const shift of shifts) {
     const domains = [shift.domainId, ...shift.relatedDomainIds].map((d) => nodeId('domain', d)).filter((id) => graph.byId.has(id))
+    const skills = (skillsByShift[shift.id] ?? []).map((ref) => nodeId('skill', ref)).filter((id) => graph.byId.has(id))
     const roles = graph.nodes
       .filter((n) => n.kind === 'role')
       .filter((r) => {
@@ -674,7 +1005,67 @@ export function buildStory(graph: SkillsGraph, shifts: StoryShift[]): StoryStep[
     const families = graph.nodes
       .filter((n) => n.kind === 'family' && graph.edgeById.has(`${n.id}|${nodeId('domain', shift.domainId)}`))
       .map((f) => f.id)
-    steps.push({ id: shift.id, shift, focus: [...domains, ...roles, ...families], domains, roles, families })
+    steps.push({
+      id: shift.id,
+      shift,
+      focus: [...domains, ...skills, ...roles, ...families],
+      domains,
+      skills,
+      roles,
+      families,
+      phases: [domains, skills, [...roles, ...families]].filter((p) => p.length > 0),
+    })
   }
   return steps
+}
+
+/* ------------------------------------------------------- compare, path */
+
+export interface TargetDelta {
+  domainId: string
+  from: number
+  to: number
+  delta: number
+}
+
+/**
+ * «قارن دورين» (P10b wow 2): per domain, the target of role A and of role B and the step between
+ * them, in canonical domain order. `rise` lists where B asks for more than A, largest step first.
+ */
+export function compareTargets(a: Record<string, number>, b: Record<string, number>, domainIds: string[]): { all: TargetDelta[]; rise: TargetDelta[]; fall: TargetDelta[]; same: TargetDelta[] } {
+  const all = domainIds.map((d) => ({ domainId: d, from: a[d] ?? 0, to: b[d] ?? 0, delta: (b[d] ?? 0) - (a[d] ?? 0) }))
+  const order = (x: TargetDelta, y: TargetDelta) => Math.abs(y.delta) - Math.abs(x.delta) || domainIds.indexOf(x.domainId) - domainIds.indexOf(y.domainId)
+  return {
+    all,
+    rise: all.filter((x) => x.delta > 0).sort(order),
+    fall: all.filter((x) => x.delta < 0).sort(order),
+    same: all.filter((x) => x.delta === 0),
+  }
+}
+
+export interface SkillGap {
+  /** skill node id */
+  id: string
+  domainId: string
+  self: number
+  target: number
+  gap: number
+}
+
+/**
+ * «طريقي إلى هذا الدور» (P10b wow 1): the skills whose self-rating (0–4, from the last saved
+ * assessment) sits below the role's target in the skill's domain. `selfOf` returns undefined for a
+ * skill without an answer; such skills are skipped. Largest gap first.
+ */
+export function skillGaps(graph: SkillsGraph, targets: Record<string, number>, selfOf: (skillRef: string) => number | undefined): SkillGap[] {
+  const out: SkillGap[] = []
+  for (const n of graph.nodes) {
+    if (n.kind !== 'skill') continue
+    const self = selfOf(n.ref)
+    const target = targets[n.domainId] ?? 0
+    if (self === undefined || target <= 0) continue
+    const gap = Math.round((target - self) * 100) / 100
+    if (gap > 0) out.push({ id: n.id, domainId: n.domainId, self, target, gap })
+  }
+  return out.sort((a, b) => b.gap - a.gap || graph.domainIds.indexOf(a.domainId) - graph.domainIds.indexOf(b.domainId))
 }
